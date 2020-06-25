@@ -8,7 +8,7 @@ data class Customer(
     private val _slump: Int,
     private val _density: Int,
     private val _amount: Int,
-    private val _mixerCount: Int,
+    private val _mixerCount: Int, //test
     val jobType: String,
     val area: List<LatLng> //mahdude moshtari
 ) {
