@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MyRaisedButton">
+        <attr name="image" format="reference"/>
+        <attr name="text" format="string"/>
+        <attr name="backgroundColor" format="color"/>
+        <attr name="textColor" format="color"/>
+        <attr name="textSize" format="dimension"/>
+        <attr name="radius" format="dimension"/>
+        <attr name="isFlat" format="boolean"/>
+        <attr name="progressTint" format="color"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="MyFloatLabeledEditText">
+        <attr name="fletTextAppearance" format="reference" />
+        <attr name="fletPadding" format="reference|dimension" />
+        <attr name="fletPaddingLeft" format="reference|dimension" />
+        <attr name="fletPaddingTop" format="reference|dimension" />
+        <attr name="fletPaddingRight" format="reference|dimension" />
+        <attr name="fletPaddingBottom" format="reference|dimension" />
+        <attr name="fletBackground" format="reference|color" />
+        <attr name="fletTextSize" format="dimension" />
+        <attr name="fletTextColor" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="FasterMixerUserPanel">
+        <attr name="showTopHideBtn" format="boolean"/>
+        <attr name="showFrameVoip" format="boolean"/>
+        <attr name="username" format="string"/>
+        <attr name="personalCode" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="CarIdView">
+        <attr name="firstText" format="string"/>
+        <attr name="secondText" format="string"/>
+        <attr name="thirdText" format="string"/>
+        <attr name="forthText" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="FasterMixerProgressView"/>
+
+    <declare-styleable name="CardButton">
+        <attr name="android:layout_width" format="dimension"/>
+        <attr name="android:layout_height" format="dimension"/>
+        <attr name="caption" format="string"/>
+        <attr name="btn_image" format="reference"/>
+    </declare-styleable>
+
+</resources>

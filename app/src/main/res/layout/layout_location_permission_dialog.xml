@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:elevation="2dp"
+    android:orientation="vertical"
+    android:background="@drawable/bg_rect_rounded"
+    >
+
+    <RelativeLayout
+        android:id="@+id/top_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/bg_radius_primary_dark_top"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="8dp"
+            app:srcCompat="@drawable/ic_marker_1" />
+
+        <TextView
+            android:id="@+id/top_bar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toStartOf="@id/icon"
+            android:fontFamily="@font/iransans_medium"
+            android:gravity="center_vertical"
+            android:text="اجازه دسترسی"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            tools:ignore="HardcodedText" />
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/textView27"
+        style="@style/my_gray_medium_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="برنامه برای ادامه کار نیاز به دسترسی به حافظه خارجی و دانستن موقعیت دقیق شما دارد. آیا اجازه دسترسی میدهید؟"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top_bar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_rect_rounded">
+
+        <FrameLayout
+            android:id="@+id/btn_denied"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_radius_bottom_left"
+            android:foreground="?attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="بستن برنامه"
+                android:fontFamily="@font/iransans"
+                android:textColor="@color/black"
+                android:gravity="center"
+                />
+
+
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/btn_accept"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:foreground="?attr/selectableItemBackground"
+            android:background="@drawable/bg_radius_bottom_right">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:text="اجازه میدهم"
+                android:textColor="@color/white"
+                android:fontFamily="@font/iransans"
+                android:textSize="14sp"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+
+
+

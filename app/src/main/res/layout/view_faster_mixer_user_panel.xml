@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="user"
+            type="com.behraz.fastermixer.batch.models.User" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <HorizontalScrollView
+            android:id="@+id/scrollUserPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/primary_dark">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/iv_profile"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:src="@drawable/ic_worker"
+                        app:civ_border_color="@color/white"
+                        app:civ_border_width="1px"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:gravity="right"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_profile"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_profile"
+                        app:layout_constraintTop_toTopOf="@+id/iv_profile">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_username"
+                                style="@style/my_white_normal_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/tiny_margin"
+                                tools:text="امیرحسین مهدی پور" />
+
+                            <TextView
+                                android:id="@+id/textView"
+                                style="@style/my_white_normal_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="کاربر:"
+                                app:layout_constraintBottom_toBottomOf="@+id/iv_profile"
+                                app:layout_constraintTop_toTopOf="@+id/iv_profile"
+                                tools:layout_editor_absoluteX="218dp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_personal_code"
+                                style="@style/my_white_normal_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/tiny_margin"
+                                tools:text="9441973" />
+
+                            <TextView
+                                android:id="@+id/textView3"
+                                style="@style/my_white_normal_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="کد پرسنلی:"
+                                app:layout_constraintBottom_toBottomOf="@+id/iv_profile"
+                                app:layout_constraintTop_toBottomOf="@+id/textView"
+                                tools:layout_editor_absoluteX="221dp" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                        android:id="@+id/btnCall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:visibility="visible"
+                        app:backgroundColor="@color/material_green"
+                        app:image="@drawable/ic_call"
+                        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+                        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+                        app:layout_constraintTop_toTopOf="@+id/linearLayout"
+                        app:radius="5dp"
+                        app:text="هماهنگ کننده" />
+
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="@+id/btnCall"
+                        app:layout_constraintEnd_toStartOf="@+id/btnCall"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/btnLogout"
+                        app:layout_constraintTop_toTopOf="@+id/btnCall">
+
+
+                        <LinearLayout
+                            android:id="@+id/frame_voip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/standard_margin">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="8dp"
+                                android:text="Voip"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:id="@+id/ivVoip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/ic_error" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/frame_gps"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/standard_margin">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="8dp"
+                                android:fontFamily="@font/iransans"
+                                android:text="موقعیت مکانی"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:id="@+id/ivGPS"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/ic_error" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/frame_internet"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/standard_margin">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="8dp"
+                                android:fontFamily="@font/iransans"
+                                android:text="اینترنت"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:id="@+id/ivInternet"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/ic_error" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                        android:id="@+id/btnLogout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        app:backgroundColor="@color/red"
+                        app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/linearLayout2"
+                        app:radius="5dp"
+                        app:text="خروج" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </FrameLayout>
+
+        </HorizontalScrollView>
+
+<!--
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnTopHideBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            app:fabCustomSize="32dp"
+            app:layout_constraintBottom_toTopOf="@+id/scrollUserPanel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.18"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/scrollUserPanel"
+            app:srcCompat="@drawable/ic_arrow_down"
+            app:tint="@color/white" />-->
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

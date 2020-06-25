@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="120dp"
+    android:layout_height="120dp"
+    style="@style/my_clickable_card_style"
+    app:cardCornerRadius="10dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:paddingRight="@dimen/standard_margin"
+        android:paddingLeft="@dimen/standard_margin">
+
+        <ImageView
+            android:id="@+id/iv_btn_image"
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:minHeight="48dp"
+            android:minWidth="48dp"
+            tools:src="@drawable/ic_message"
+            />
+
+        <TextView
+            android:id="@+id/tvCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:textColor="@color/black"
+            tools:text="مشاهده لیست پیامها"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:lineSpacingExtra="-1dp"
+            android:gravity="center"
+            android:fontFamily="@font/iransans_medium"/>
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

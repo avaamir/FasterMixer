@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_rect_rounded"
+    android:elevation="2dp"
+    android:orientation="vertical"
+    android:padding="@dimen/medium_margin">
+
+
+    <com.behraz.fastermixer.batch.ui.customs.fastermixer.CardButton
+        android:id="@+id/btnMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:btn_image="@drawable/ic_message"
+        app:layout_constraintBottom_toBottomOf="@+id/btnStop"
+        app:layout_constraintEnd_toStartOf="@+id/btnStop"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnStop"
+        app:caption="مشاهده لیست پیامها" />
+
+
+    <com.behraz.fastermixer.batch.ui.customs.fastermixer.CardButton
+        android:id="@+id/btnStop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnMessage"
+        app:layout_constraintTop_toTopOf="parent"
+        app:btn_image="@drawable/ic_stop"
+        app:caption="اعلام توقف پروژه از سمت مشتری" />
+
+    <com.behraz.fastermixer.batch.ui.customs.fastermixer.CardButton
+        android:id="@+id/btnLab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:btn_image="@drawable/ic_lab"
+        app:layout_constraintBottom_toBottomOf="@+id/btnRepair"
+        app:layout_constraintEnd_toStartOf="@+id/btnRepair"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnRepair"
+        app:caption="اعلام حضور آزمایشگاه" />
+
+
+    <com.behraz.fastermixer.batch.ui.customs.fastermixer.CardButton
+        android:id="@+id/btnRepair"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:btn_image="@drawable/ic_repair"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnLab"
+        app:layout_constraintTop_toBottomOf="@+id/btnMessage"
+        app:caption="اعلام خراب شدن پمپ" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+

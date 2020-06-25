@@ -1,0 +1,226 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+    </style>
+
+    <style name="AppTheme.Progressbar">
+        <item name="colorAccent">@color/primary_light</item> <!-- Whatever color you want-->
+    </style>
+
+    <style name="AppTheme.ProgressbarWhite">
+        <item name="colorAccent">@color/white</item> <!-- Whatever color you want-->
+    </style>
+
+    <!--start bottom sheet-->
+    <style name="CustomBottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
+    <style name="CustomBottomSheet" parent="Widget.MaterialComponents.BottomSheet">
+        <item name="shapeAppearanceOverlay">@style/CustomShapeAppearanceBottomSheetDialog</item>
+    </style>
+
+    <style name="CustomShapeAppearanceBottomSheetDialog" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">16dp</item>
+        <item name="cornerSizeTopLeft">16dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+    <!--end bottom sheet-->
+
+
+
+    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+
+
+    <style name="my_title_text">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/gray700</item>
+        <item name="android:fontFamily">@font/iransans</item>
+        <item name="android:layout_marginTop">4dp</item>
+    </style>
+
+    <style name="my_toolbar_text">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/iransans_light</item>
+    </style>
+
+    <style name="my_dark_normal_text">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/gray900</item>
+        <item name="android:fontFamily">@font/iransans</item>
+        <item name="android:layout_gravity">right</item>
+    </style>
+
+    <style name="my_gray_normal_text">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/gray700</item>
+        <item name="android:fontFamily">@font/iransans</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:layout_gravity">right</item>
+    </style>
+
+    <style name="faster_mixer_item_data_text">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/mixer_red</item>
+        <item name="android:fontFamily">@font/iransans</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:layout_gravity">right</item>
+    </style>
+
+    <style name="my_white_normal_text">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/iransans</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:layout_gravity">right</item>
+    </style>
+
+    <style name="my_gray_desc_normal_text">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/gray700</item>
+        <item name="android:fontFamily">@font/iransans</item>
+        <item name="android:layout_gravity">right</item>
+    </style>
+
+
+    <style name="my_clickable_text">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/gray700</item>
+        <item name="android:fontFamily">@font/iransans</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="android:padding">4dp</item>
+    </style>
+
+    <style name="my_gray_medium_text">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/gray700</item>
+        <item name="android:fontFamily">@font/iransans_medium</item>
+        <item name="android:layout_gravity">right</item>
+    </style>
+
+
+    <style name="my_black_bold_text">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">@font/iransans_medium</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+
+    <style name="my_tab_layout_style" parent="Widget.MaterialComponents.TabLayout">
+        <item name="android:background">@color/primary_light</item>
+        <item name="tabGravity">fill</item>
+        <item name="tabIndicatorColor">@color/white</item>
+        <item name="tabRippleColor">@color/primary</item>
+        <item name="tabIndicatorHeight">3dp</item>
+        <item name="tabSelectedTextColor">@color/white</item>
+        <item name="tabTextColor">@color/gray300</item>
+        <item name="tabMode">fixed</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="tabTextAppearance">@style/my_gray_normal_text</item>
+    </style>
+
+
+    <style name="my_login_edit_text">
+        <item name="android:fontFamily">@font/iransans</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/gray700</item>
+        <item name="android:shadowColor">@color/gray500</item>
+        <item name="android:background">@color/nothing</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="android:maxLength">30</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:gravity">center_vertical|right</item>
+        <item name="android:textCursorDrawable">@drawable/shape_custom_cursor</item>
+    </style>
+
+    <style name="my_edit_text_style">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">@font/iransans</item>
+        <item name="android:shadowColor">@color/gray500</item>
+        <item name="android:textCursorDrawable">@drawable/shape_custom_cursor</item>
+        <item name="android:maxLength">30</item>
+        <item name="android:inputType">text</item>
+        <item name="android:layout_margin">@dimen/standard_margin</item>
+        <item name="android:gravity">right|bottom</item>
+        <item name="android:background">@drawable/bg_address_edit_text_not_focused</item>
+        <item name="android:minHeight">40dp</item>
+
+        <item name="android:textColorHint">@color/gray700</item>
+    </style>
+
+    <style name="my_card_style" parent="CardView">
+        <item name="cardCornerRadius">4dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardPreventCornerOverlap">false</item>
+        <item name="cardUseCompatPadding">true</item>
+    </style>
+
+    <style name="my_clickable_card_style" parent="CardView">
+        <item name="cardCornerRadius">10dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardPreventCornerOverlap">false</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
+
+
+    <style name="my_toolbar_style" parent="Widget.AppCompat.Toolbar">
+        <item name="contentInsetEnd">0dp</item>
+        <item name="contentInsetLeft">0dp</item>
+        <item name="contentInsetRight">0dp</item>
+        <item name="contentInsetStart">0dp</item>
+    </style>
+
+
+
+    <style name="my_dialog_animation" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="android:windowAnimationStyle">@style/address_dialog_animation</item>
+    </style>
+
+    <style name="my_alert_dialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="android:windowAnimationStyle">@style/alert_dialog_animation</item>
+    </style>
+
+    <style name="address_dialog_animation">
+        <item name="android:windowEnterAnimation">@anim/translate_top</item>
+        <item name="android:windowExitAnimation">@anim/translate_right_side</item>
+    </style>
+
+    <style name="alert_dialog_animation">
+        <item name="android:windowEnterAnimation">@anim/fade_enter</item>
+        <item name="android:windowExitAnimation">@anim/fade_exit</item>
+    </style>
+
+    <style name="my_rating_bar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/yellow</item>
+        <item name="colorControlActivated">@color/red</item>
+    </style>
+
+
+</resources>

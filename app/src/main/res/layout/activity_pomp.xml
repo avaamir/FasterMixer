@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.activities.pomp.PompActivity">
+
+
+        <FrameLayout
+            android:id="@+id/mapContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/frame_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:behavior_hideable="true"
+            app:layout_behavior=".ui.customs.general.TopSheetBehavior">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.behraz.fastermixer.batch.ui.customs.fastermixer.progressview.FasterMixerProgressView
+                    android:id="@+id/jobProgressView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    app:layout_anchorGravity="top"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:background="@color/primary"
+                    tools:layout_height="100dp" />
+
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <FrameLayout
+                        android:id="@+id/frame_customer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <include
+                            android:id="@+id/layout_customer"
+                            layout="@layout/item_customer"
+                            app:customer="@{viewModel.customer}" />
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/frameMixer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
+
+                        <include
+                            android:id="@+id/layout_mixer"
+                            layout="@layout/layout_mixer"
+                            app:mixer="@{viewModel.currentMixer}" />
+
+                    </FrameLayout>
+                </FrameLayout>
+
+
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/standard_margin"
+            android:clickable="true"
+            android:focusable="true"
+            app:backgroundTint="@color/primary_dark"
+            app:fabSize="mini"
+            app:layout_anchor="@id/frame_top"
+            app:layout_anchorGravity="right|bottom"
+            app:srcCompat="@drawable/ic_arrow_down"
+            app:tint="@color/white" />
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/btnMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|left"
+            android:layout_marginLeft="-6dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="10dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/tiny_margin"
+                android:layout_marginBottom="@dimen/tiny_margin"
+                android:minWidth="60dp"
+                android:paddingLeft="@dimen/standard_margin"
+                android:paddingRight="@dimen/tiny_margin">
+
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_message"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvMessageCount"
+                    style="@style/my_white_normal_text"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/shape_drawer_badge"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@id/imageView2"
+                    app:layout_constraintEnd_toEndOf="@+id/imageView2"
+                    app:layout_constraintStart_toEndOf="@+id/imageView2"
+                    app:layout_constraintTop_toTopOf="@+id/imageView2"
+                    app:layout_constraintVertical_bias="1.0"
+                    tools:text="22" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/bottomSheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="28dp"
+            app:behavior_hideable="true"
+            app:behavior_peekHeight="0dp"
+            app:layout_behavior=".ui.customs.general.LockableBottomSheetBehavior">
+
+
+            <com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
+                android:id="@+id/fasterMixerUserPanel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:showTopHideBtn="true" />
+
+
+        </androidx.core.widget.NestedScrollView>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            app:layout_anchor="@id/bottomSheet"
+            app:layout_anchorGravity="top">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnHideUserPanel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:backgroundTint="@color/primary_dark"
+                app:fabSize="mini"
+                app:srcCompat="@drawable/ic_person"
+                app:tint="@color/white" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnWeather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:backgroundTint="@color/primary_dark"
+                app:fabSize="mini"
+                app:srcCompat="@drawable/ic_sun"
+                app:tint="@color/white" />
+
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnMyLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:backgroundTint="@color/primary_dark"
+                app:fabSize="mini"
+                app:srcCompat="@drawable/ic_gps"
+                app:tint="@color/white" />
+
+        </LinearLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

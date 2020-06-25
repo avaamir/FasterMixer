@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data >
+        <variable
+            name="mixer"
+            type="com.behraz.fastermixer.batch.models.Mixer" />
+    </data>
+    <androidx.cardview.widget.CardView
+        style="@style/my_card_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        app:cardUseCompatPadding="false"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:id="@+id/textView11"
+                style="@style/my_gray_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="شروع بارگیری:"
+                app:layout_constraintEnd_toEndOf="@+id/tvMixerName"
+                app:layout_constraintTop_toBottomOf="@+id/tvMixerName" />
+
+            <TextView
+                android:id="@+id/tvMixerName"
+                style="@style/my_gray_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:text="@{mixer.carName}"
+                android:textColor="@color/blue"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="میکسر شماره یک" />
+
+            <TextView
+                android:id="@+id/textView12"
+                style="@style/my_gray_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="حجم بتن:"
+                app:layout_constraintEnd_toEndOf="@+id/textView11"
+                app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+            <TextView
+                android:id="@+id/textView13"
+                style="@style/my_gray_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="اسلامپ:"
+                app:layout_constraintBottom_toBottomOf="@+id/tvMixerName"
+                app:layout_constraintEnd_toEndOf="@+id/textView15"
+                app:layout_constraintTop_toTopOf="@+id/tvMixerName" />
+
+            <TextView
+                android:id="@+id/textView14"
+                style="@style/my_gray_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:text="@{mixer.loadInfo.slump}"
+                android:textColor="@color/mixer_red"
+                app:layout_constraintBottom_toBottomOf="@+id/textView13"
+                app:layout_constraintEnd_toStartOf="@+id/textView13"
+                app:layout_constraintTop_toTopOf="@+id/textView13"
+                tools:text="8" />
+
+            <TextView
+                android:id="@+id/textView15"
+                style="@style/my_gray_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="عیار:"
+                app:layout_constraintBottom_toBottomOf="@+id/textView11"
+                app:layout_constraintEnd_toEndOf="@+id/textView17"
+                app:layout_constraintTop_toTopOf="@+id/textView11" />
+
+            <TextView
+                android:id="@+id/textView16"
+                style="@style/my_gray_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:text="@{mixer.loadInfo.density}"
+                android:textColor="@color/mixer_red"
+                app:layout_constraintBottom_toBottomOf="@+id/textView15"
+                app:layout_constraintEnd_toStartOf="@+id/textView15"
+                app:layout_constraintTop_toTopOf="@+id/textView15"
+                tools:text="2" />
+
+            <TextView
+                android:id="@+id/textView17"
+                style="@style/my_gray_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:text="مالکیت:"
+                app:layout_constraintBottom_toBottomOf="@+id/textView12"
+                app:layout_constraintEnd_toStartOf="@+id/textView9"
+                app:layout_constraintTop_toTopOf="@+id/textView12" />
+
+            <TextView
+                android:id="@+id/textView18"
+                style="@style/my_gray_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:text="@{mixer.owner}"
+                android:textColor="@color/mixer_red"
+                app:layout_constraintBottom_toBottomOf="@+id/textView17"
+                app:layout_constraintEnd_toStartOf="@+id/textView17"
+                app:layout_constraintTop_toTopOf="@+id/textView17"
+                tools:text="بهراز" />
+
+
+            <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                android:id="@+id/btnCall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                app:backgroundColor="@color/material_green"
+                app:image="@drawable/ic_call"
+                app:layout_constraintBottom_toTopOf="@+id/btnShowOnMap"
+                app:layout_constraintEnd_toStartOf="@+id/textView22"
+                app:layout_constraintStart_toEndOf="@+id/btnMixerList"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:radius="10dp"
+                app:text="تماس با راننده" />
+
+            <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                android:id="@+id/btnShowOnMap"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:backgroundColor="@color/mixer_red"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/btnCall"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/btnCall"
+                app:layout_constraintTop_toBottomOf="@+id/btnCall"
+                app:radius="10dp"
+                app:text="مشاهده روی نقشه" />
+
+            <com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                app:firstText="12"
+                app:forthText="63"
+                app:layout_constraintBottom_toBottomOf="@+id/textView14"
+                app:layout_constraintEnd_toStartOf="@+id/textView18"
+                app:layout_constraintTop_toTopOf="@+id/textView14"
+                app:secondText="ب"
+                app:thirdText="242" />
+
+            <TextView
+                android:id="@+id/textView10"
+                style="@style/my_gray_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="نام راننده:"
+                app:layout_constraintBottom_toBottomOf="@+id/textView16"
+                app:layout_constraintEnd_toEndOf="@+id/textView8"
+                app:layout_constraintTop_toTopOf="@+id/textView16" />
+
+
+            <TextView
+                android:id="@+id/textView21"
+                style="@style/my_gray_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                tools:text="امیرحسین مهدی پور"
+                android:text="@{mixer.driverName}"
+                android:textColor="@color/mixer_red"
+                app:layout_constraintBottom_toBottomOf="@+id/textView10"
+                app:layout_constraintEnd_toStartOf="@+id/textView10"
+                app:layout_constraintTop_toTopOf="@+id/textView10" />
+
+            <TextView
+                android:id="@+id/textView19"
+                style="@style/my_gray_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="وضعیت:"
+                app:layout_constraintBottom_toBottomOf="@+id/textView18"
+                app:layout_constraintEnd_toEndOf="@+id/textView10"
+                app:layout_constraintTop_toTopOf="@+id/textView18" />
+
+            <TextView
+                android:id="@+id/textView9"
+                style="@style/my_gray_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:text="@{mixer.loadInfo.amount}"
+                android:textColor="@color/mixer_red"
+                app:layout_constraintBottom_toBottomOf="@+id/textView12"
+                app:layout_constraintEnd_toStartOf="@+id/textView12"
+                app:layout_constraintTop_toTopOf="@+id/textView12"
+                tools:text="6 متر مکعب" />
+
+            <TextView
+                android:id="@+id/textView20"
+                style="@style/my_gray_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:text="@{mixer.loadInfo.startTime}"
+                android:textColor="@color/mixer_red"
+                app:layout_constraintBottom_toBottomOf="@+id/textView11"
+                app:layout_constraintEnd_toStartOf="@+id/textView11"
+                app:layout_constraintTop_toTopOf="@+id/textView11"
+                tools:text="14:32" />
+
+
+            <TextView
+                android:id="@+id/textView22"
+                style="@style/my_gray_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:text="@{mixer.state}"
+                android:textColor="@color/mixer_red"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView19"
+                app:layout_constraintEnd_toStartOf="@+id/textView19"
+                app:layout_constraintTop_toTopOf="@+id/textView19"
+                tools:text="10 دقیقه تا جایگاه بچینگ" />
+
+
+            <com.behraz.fastermixer.batch.ui.customs.fastermixer.CardButton
+                android:id="@+id/btnMixerList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:btn_image="@drawable/ic_mixer"
+                app:caption="رفتن به لیست میکسرها"
+                app:layout_constraintBottom_toBottomOf="@+id/textView12"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvMixerName"
+                app:layout_constraintVertical_bias="0.506" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

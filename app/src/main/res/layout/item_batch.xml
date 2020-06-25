@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="batch"
+            type="com.behraz.fastermixer.batch.models.Batch" />
+    </data>
+
+
+
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="@dimen/tiny_margin"
+        style="@style/my_clickable_card_style"
+        app:cardCornerRadius="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvBatchName"
+                tools:text="بچ شماره یک"
+                android:text="@{batch.name}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/medium_margin"
+                style="@style/my_gray_normal_text"
+                android:textColor="@color/black"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true" />
+
+            <TextView
+                android:id="@+id/tvState"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                style="@style/my_white_normal_text"
+                tools:text="در دسترس"
+                android:text="@{batch.state}"
+                android:minWidth="150dp"
+                android:background="@color/material_green"
+                android:padding="@dimen/medium_margin"
+                android:gravity="center"
+                />
+
+        </RelativeLayout>
+
+
+
+
+
+
+
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

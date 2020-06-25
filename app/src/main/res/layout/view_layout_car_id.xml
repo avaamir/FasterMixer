@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:minHeight="20dp"
+    android:minWidth="100dp"
+    android:background="@drawable/bg_car_id">
+
+
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="20dp"
+            android:layout_height="35dp"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
+            app:srcCompat="@drawable/ic_car_id_flag" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvFirst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/iransans_medium"
+        android:textColor="@color/black"
+        android:text="24" />
+
+    <TextView
+        android:id="@+id/tvSecond"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/iransans_medium"
+        android:textColor="@color/black"
+        android:text="ب"  />
+
+    <TextView
+        android:id="@+id/tvThird"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/iransans_medium"
+        android:textColor="@color/black"
+        android:text="542"   />
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:layout_marginLeft="8dp"/>
+
+    <TextView
+        android:id="@+id/tvForth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/iransans_medium"
+        android:textColor="@color/black"
+        android:text="63"  />
+</LinearLayout>

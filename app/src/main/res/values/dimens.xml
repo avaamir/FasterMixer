@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="square_view_next_to_titles_width_height">10dp</dimen>
+    <dimen name="timer_min_view_frame">0dp</dimen>
+    <dimen name="timer_text_size">18sp</dimen>
+    <dimen name="timer_margin">0dp</dimen>
+    <dimen name="timer_padding">4dp</dimen>
+    <dimen name="item_category_width">200dp</dimen>
+    <dimen name="item_category_height">150dp</dimen>
+    <dimen name="item_product_horizontal_width">140dp</dimen>
+    <dimen name="item_product_horizontal_height">120dp</dimen>
+</resources>

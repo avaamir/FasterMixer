@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/custom_snack_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+
+    <TextView
+        android:id="@+id/snackbar_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|left|start"
+        android:ellipsize="end"
+        android:fontFamily="@font/iransans_light"
+        android:maxLines="@integer/design_snackbar_text_max_lines"
+        android:paddingLeft="@dimen/design_snackbar_padding_horizontal"
+        android:paddingTop="@dimen/design_snackbar_padding_vertical"
+        android:paddingRight="@dimen/design_snackbar_padding_horizontal"
+        android:paddingBottom="@dimen/design_snackbar_padding_vertical"
+        android:textAppearance="@style/TextAppearance.Design.Snackbar.Message"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="خطا در برقراری ارتباط با اینترنت" />
+
+    <Button
+        android:id="@+id/snackbar_action"
+        style="?attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|right|end"
+        android:fontFamily="@font/iransans_medium"
+        android:layout_marginLeft="8dp"
+        android:paddingLeft="@dimen/design_snackbar_padding_horizontal"
+        android:paddingTop="@dimen/design_snackbar_padding_vertical"
+        android:paddingRight="@dimen/design_snackbar_padding_horizontal"
+        android:paddingBottom="@dimen/design_snackbar_padding_vertical"
+        android:textColor="?attr/colorAccent"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="تلاش مجدد" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
