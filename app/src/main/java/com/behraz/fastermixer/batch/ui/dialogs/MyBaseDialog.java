@@ -32,7 +32,7 @@ public abstract class MyBaseDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+     //   requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         if (getWindow() != null)
             getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); //age radius bedim be layout khodemun, root layout khode dialog poshtesh moshkakhas mishe khater hamin transparentesh mikonim

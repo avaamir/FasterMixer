@@ -49,10 +49,9 @@ object ApiService {
                     val builder = chain.request().newBuilder()
                         .addHeader("Accept", "application/json")
                         .addHeader("Content-Type", "application/json")
-                        .addHeader("rest-api-key", "5082e90afb3aeaffd20a4f8960e69e07")
 
-                    token?.let {
-                        builder.addHeader("Authorization", "Bearer $it")
+                    token?.let { token ->
+                        builder.addHeader("Authorization", token)
                     }
                     val newRequest: Request = builder.build()
                     chain.proceed(newRequest)

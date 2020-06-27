@@ -15,12 +15,14 @@ fun Activity.alert(
     message: String,
     positiveButtonText: String,
     negativeButtonText: String,
+    isCancelable: Boolean = true,
     onNegativeClicked: (() -> Unit)? = null,
     onPositiveClicked: () -> Unit
 ) {
     val typeFace = (application as FasterMixerApplication).iransansLight
 
     val dialog = AlertDialog.Builder(this)
+        .setCancelable(isCancelable)
         .setMessage(message)
         .setCustomTitle(TextView(this).apply {
             text = title
@@ -63,8 +65,17 @@ fun Fragment.alert(
     message: String,
     positiveButtonText: String,
     negativeButtonText: String,
+    isCancelable: Boolean = true,
     onNegativeClicked: (() -> Unit)? = null,
     onPositiveClicked: () -> Unit
 ) {
-    activity?.alert(title, message, positiveButtonText, negativeButtonText, onNegativeClicked, onPositiveClicked)
+    activity?.alert(
+        title,
+        message,
+        positiveButtonText,
+        negativeButtonText,
+        isCancelable,
+        onNegativeClicked,
+        onPositiveClicked
+    )
 }

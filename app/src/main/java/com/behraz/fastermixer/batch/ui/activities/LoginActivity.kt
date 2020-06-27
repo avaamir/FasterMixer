@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
@@ -23,6 +24,11 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 
 class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
+
+    companion object {
+        private const val REQ_GO_TO_SETTINGS_PERMISSION = 12
+    }
+
 
     private lateinit var viewModel: ViewModel
     private val permissionHelper =
@@ -99,6 +105,16 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
         ivClearUsername.setOnClickListener { etUsername.text.clear() }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQ_GO_TO_SETTINGS_PERMISSION) {
+            permissionHelper.checkPermission()
+        }
+
+    }
+
+
     override fun beforeRequestPermissionsDialogMessage(
         notGrantedPermissions: ArrayList<String>,
         permissionRequesterFunction: () -> Unit
@@ -106,7 +122,7 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
         notGrantedPermissions.forEach {
             println("debug: $it not granted, request permissions now") //can show a dialog then request
         }
-        LocationPermissionDialog(this, R.style.alert_dialog_animation) { isGranted, dialog ->
+        LocationPermissionDialog(this, R.style.my_alert_dialog) { isGranted, dialog ->
             if (isGranted) {
                 permissionRequesterFunction.invoke()
                 dialog.dismiss()
@@ -121,11 +137,13 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
         println("debug:show dialog:$permission -> Go to Settings")
 
         alert(
-            "دسترسی",
-            "برنامه برای ادامه فعالیت خود به اجازه شما نیاز دارد. لطفا در تنظیمات برنامه دسترسی ها را درست کنید",
-            "رفتن به تنظیمات",
-            "بستن برنامه",
-            { finish() }) {
+            title = "دسترسی",
+            message = "برنامه برای ادامه فعالیت خود به اجازه شما نیاز دارد. لطفا در تنظیمات برنامه دسترسی ها را درست کنید",
+            positiveButtonText = "رفتن به تنظیمات",
+            negativeButtonText = "بستن برنامه",
+            isCancelable = false,
+            onNegativeClicked = { finish() }
+        ) {
             val intent = Intent().apply {
                 action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
                 addCategory(Intent.CATEGORY_DEFAULT)
@@ -134,7 +152,7 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
                 addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                 addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
             }
-            startActivity(intent)
+            startActivityForResult(intent, REQ_GO_TO_SETTINGS_PERMISSION)
         }
 
 
