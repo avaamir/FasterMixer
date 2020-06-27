@@ -7,6 +7,7 @@ import android.os.Build
 import com.behraz.fastermixer.batch.BuildConfig
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.respository.apiservice.interceptors.AuthCookieInterceptor
+import com.behraz.fastermixer.batch.respository.apiservice.interceptors.EmptyBodyInterceptor
 import com.behraz.fastermixer.batch.respository.apiservice.interceptors.NetworkConnectionInterceptor
 import com.behraz.fastermixer.batch.respository.apiservice.interceptors.UnauthorizedInterceptor
 import com.behraz.fastermixer.batch.utils.general.Event
@@ -21,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object ApiService {
-    const val Domain = "https://.behraz.ir"
+    const val Domain = "http://2.184.49.133:13013"
     private const val BASE_API_URL = "$Domain/api/"
 
 
@@ -82,6 +83,7 @@ object ApiService {
                     }
 
                 })
+                addInterceptor(EmptyBodyInterceptor())
 
                 if (BuildConfig.DEBUG) {
                     addInterceptor(HttpLoggingInterceptor().apply {
@@ -97,7 +99,7 @@ object ApiService {
     }
 
     @Synchronized
-    fun setBearerToken(token: String) {
+    fun setToken(token: String) {
         ApiService.token = token
     }
 

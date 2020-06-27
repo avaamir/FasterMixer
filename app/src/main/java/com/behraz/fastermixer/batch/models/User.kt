@@ -1,19 +1,24 @@
 package com.behraz.fastermixer.batch.models
 
-import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.android.parcel.Parcelize
+import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "user_tb")
-@Parcelize
 data class User(
     @PrimaryKey
-    private val _id: Int = 0,
+    @SerializedName("personId")
+    val personId: String,
+    @SerializedName("name")
     val name: String,
-    val phone: String,
-    val profilePic: String? = null,
-    val token: String? = null
-) : Parcelable {
-    val id: Int get() = _id
-}
+    @SerializedName("telephoneList")
+    val phones: List<Phone>,
+    @SerializedName("token")
+    val token: String,
+    @SerializedName("profilePic")
+    val profilePic: String?,
+    @SerializedName("roleId")
+    val roleId: Int,
+    @SerializedName("adminPhones")
+    val adminPhones: List<Phone>
+)

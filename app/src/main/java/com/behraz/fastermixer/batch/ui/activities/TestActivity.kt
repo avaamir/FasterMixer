@@ -1,12 +1,13 @@
 package com.behraz.fastermixer.batch.ui.activities
 
 import android.content.IntentSender
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.behraz.fastermixer.batch.R
-import com.behraz.fastermixer.batch.app.receivers.NetworkStateReceiverLiveData
-import com.behraz.fastermixer.batch.app.receivers.GpsStateReceiverLiveData
+import com.behraz.fastermixer.batch.models.requests.behraz.ChooseBatchRequest
+import com.behraz.fastermixer.batch.models.requests.behraz.LoginRequest
+import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.PendingResult
@@ -24,21 +25,53 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
         setContentView(R.layout.activity_test)
 
 
-        cardBtn.setOnClickListener { init() }
+        btnLogin.setOnClickListener {
+            /*val gson = Gson()
+
+          val x = gson.fromJson(
+               "{\"entity\":{\"id\":2,\"isAvailable\":true,\"name\":\"batch num1\"},\"isSuccess\":true,\"message\":\"fuck me\"}"
+               ,
+               EntityResponse<Batch>::class.java
+           )
+           println(x)
+
+          // println(gson.toJson(EntityRequest(Batch(2, "batch num1", true))))
+         //  println(gson.toJson(EntityResponse(Batch(2, "batch num1", true), true, "fuck me")))*/
 
 
-        NetworkStateReceiverLiveData(this).observe(this, Observer {
-            println("debug: Network is $it")
-        })
+            RemoteRepo.login(LoginRequest("Admin", "Admin")).observe(this, Observer {
+                println("debug: $it")
+            })
+        }
 
-        GpsStateReceiverLiveData(this).observe(this, Observer{
-            println("debug: Location is $it")
-        })
+
+        btnGetBatches.setOnClickListener {
+            RemoteRepo.getBatches().observe(this, Observer {
+                println("debug: $it")
+            })
+        }
+
+        btnLogout.setOnClickListener {
+            RemoteRepo.logout().observe(this, Observer {
+                println("debug: logout: $it")
+            })
+        }
+
+
+        btnChooseBatch.setOnClickListener {
+            RemoteRepo.chooseBatch(ChooseBatchRequest(
+                "14581cea-7969-478a-f515-08d80dd443ec"
+            )).observe(this, Observer {
+                println("debug: ChooseBatch: $it")
+            })
+        }
+
+
 
     }
 
 
-    private fun init() {
+    private fun enableGPSReq() {
         if (googleApiClient == null) {
             googleApiClient = GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API).addConnectionCallbacks(this)

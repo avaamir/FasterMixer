@@ -3,6 +3,7 @@ package com.behraz.fastermixer.batch.respository
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.behraz.fastermixer.batch.models.Phone
 import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
 import com.behraz.fastermixer.batch.respository.sharedprefrence.PrefsRepo
 import com.behraz.fastermixer.batch.models.User
@@ -33,7 +34,7 @@ object UserConfigs {
                 if (users.isNotEmpty()) {
                     val user = users[0]
                     println("debug: UserConfigs: $user")
-                    ApiService.setBearerToken(user.token!!)
+                    ApiService.setToken(user.token)
                     userLive.value = user
                     userVal = user //todo mishe hazfesh kard?
                 }
@@ -48,11 +49,11 @@ object UserConfigs {
     }
 
     fun updateUser(
-        phone: String = userVal!!.phone,
+        phones: List<Phone> = userVal!!.phones,
         name: String = userVal!!.name,
         image: String? = userVal!!.profilePic
     ) {
-        UserRepo.update(userVal!!.copy(phone = phone, name = name, profilePic = image))
+        UserRepo.update(userVal!!.copy(phones = phones, name = name, profilePic = image))
     }
 
     fun logout() {
