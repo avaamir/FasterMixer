@@ -28,7 +28,6 @@ class GpsStateReceiver : BroadcastReceiver() {
                         if (GpsStateReceiver.isEnabled != isEnabled) {
                             GpsStateReceiver.isEnabled = isEnabled
                             listener?.onGpsStatusChanged(isEnabled)
-                            Toast.makeText(context, "$isEnabled", Toast.LENGTH_SHORT).show()
                          //   println("debug:state changed: $isEnabled")
                         }
                     }
@@ -39,7 +38,6 @@ class GpsStateReceiver : BroadcastReceiver() {
                         isNotFirstTime = true
                         GpsStateReceiver.isEnabled = isEnabled
                         listener?.onGpsStatusChanged(isEnabled)
-                        Toast.makeText(context, "$isEnabled", Toast.LENGTH_SHORT).show()
                       //  println("debug:firstTime: state: $isEnabled")
                     }
                 }
