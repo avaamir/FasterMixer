@@ -4,21 +4,20 @@ import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
+import com.behraz.fastermixer.batch.models.enums.UserType
+import com.behraz.fastermixer.batch.ui.activities.batch.BatchActivity
 import com.behraz.fastermixer.batch.ui.activities.batch.ChooseBatchActivity
 import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
-import com.behraz.fastermixer.batch.ui.dialogs.BehrazSellingTestDialog
 import com.behraz.fastermixer.batch.ui.dialogs.LocationPermissionDialog
+import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.fastermixer.subscribeGpsStateChangeListener
 import com.behraz.fastermixer.batch.utils.fastermixer.subscribeNetworkStateChangeListener
-import com.behraz.fastermixer.batch.utils.general.PermissionHelper
-import com.behraz.fastermixer.batch.utils.general.alert
-import com.behraz.fastermixer.batch.utils.general.toast
+import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.LoginActivityViewModel
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -30,7 +29,7 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
     }
 
 
-    private lateinit var viewModel: ViewModel
+    private lateinit var viewModel: LoginActivityViewModel
     private val permissionHelper =
         PermissionHelper(
             arrayListOf(
@@ -44,7 +43,7 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
         setContentView(R.layout.activity_login)
 
 
-        if (false) {
+        if (true) {
             startActivity(Intent(this, TestActivity::class.java))
             //  finish()
             // return
@@ -53,6 +52,7 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
 
         viewModel = ViewModelProvider(this).get(LoginActivityViewModel::class.java)
         initViews()
+        observeViewModel()
 
         subscribeGpsStateChangeListener {
             ivGPS.setImageResource(if (it) R.drawable.ic_check else R.drawable.ic_error)
@@ -79,8 +79,22 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
 
     private fun initViews() {
         btnLogin.setOnClickListener {
-
-            BehrazSellingTestDialog( //TODO selling test purpose
+            val username = etUsername.text.toString()
+            val password = etPassword.text.toString()
+            when {
+                username.isEmpty() -> {
+                    toast("لطفا نام کاربری خود را وارد کنید", false)
+                }
+                password.isEmpty() -> {
+                    toast("لطفا گذرواژه خود را وارد کنید", false)
+                }
+                else -> {
+                    btnLogin.showProgressBar(true)
+                    viewModel.login(username, password)
+                }
+            }
+            //TODO test purpose
+            /*BehrazSellingTestDialog( //TODO selling test purpose
                 this,
                 R.style.my_dialog_animation,
                 object : BehrazSellingTestDialog.Interactions {
@@ -97,23 +111,49 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
                             })
                     }
 
-                }).show()
-
+                }).show() */
         }
 
         ivClearPassword.setOnClickListener { etPassword.text.clear() }
         ivClearUsername.setOnClickListener { etUsername.text.clear() }
+
+        //TODO TEST purpose
+        etUsername.setText("ali")
+        etPassword.setText("12345")
     }
+
+
+    private fun observeViewModel() {
+        viewModel.loginResponse.observe(this, Observer {
+            btnLogin.showProgressBar(false)
+            if (it != null) {
+                if (it.isSucceed) {
+                    when (it.entity.userType) {
+                        UserType.Pomp -> startActivity(Intent(this, PompActivity::class.java))
+                        UserType.Mixer -> toast("کاربر میسکر در این نسخه از برنامه تعریف نشده است. لطفا برنامه را به روز رسانی کنید")
+                        UserType.Batch -> startActivity(Intent(this, ChooseBatchActivity::class.java))
+                    }.exhaustive()
+                } else {
+                    toast(it.message ?: Constants.SERVER_ERROR)
+                }
+            } else {
+                snack(Constants.SERVER_ERROR) {
+                    btnLogin.showProgressBar(true)
+                    viewModel.tryAgain()
+                }
+            }
+        })
+    }
+
+
+    //get permission
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (requestCode == REQ_GO_TO_SETTINGS_PERMISSION) {
             permissionHelper.checkPermission()
         }
-
     }
-
 
     override fun beforeRequestPermissionsDialogMessage(
         notGrantedPermissions: ArrayList<String>,

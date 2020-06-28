@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Mixer
-import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
 import com.behraz.fastermixer.batch.ui.adapters.MessageAdapter
 import com.behraz.fastermixer.batch.ui.adapters.MixerAdapter
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeMessages
@@ -19,7 +18,6 @@ import com.behraz.fastermixer.batch.utils.fastermixer.subscribeGpsStateChangeLis
 import com.behraz.fastermixer.batch.utils.fastermixer.subscribeNetworkStateChangeListener
 import com.behraz.fastermixer.batch.utils.general.toast
 import kotlinx.android.synthetic.main.activity_batch.*
-import kotlinx.android.synthetic.main.activity_choose_batch.*
 
 class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdapter.Interaction {
     private val messageAdapter = MessageAdapter(false, this)

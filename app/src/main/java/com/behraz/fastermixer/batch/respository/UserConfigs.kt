@@ -4,31 +4,30 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.behraz.fastermixer.batch.models.Phone
-import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
-import com.behraz.fastermixer.batch.respository.sharedprefrence.PrefsRepo
 import com.behraz.fastermixer.batch.models.User
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
+import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
+import com.behraz.fastermixer.batch.respository.sharedprefrence.PrefsRepo
 
 object UserConfigs {
 
     private lateinit var context: Context
 
 
-    var userVal: User? = null
-        private set
+    //var userVal: User? = null
+      //  private set
 
     private val userLive = MutableLiveData<User?>(null)
-    val user: LiveData<User?> =
-        userLive
+    val user: LiveData<User?> get() = userLive
 
 
-    val isLoggedIn get() = userVal != null
+    val isLoggedIn get() = user.value != null
 
     fun setContext(context: Context) {
         if (!this::context.isInitialized) {
             UserConfigs.context = context.applicationContext
             UserRepo.setContext(context)
-            PrefsRepo.setContext(UserConfigs.context)
+            PrefsRepo.setContext(context)
 
             UserRepo.users.observeForever { users ->
                 if (users.isNotEmpty()) {
@@ -36,7 +35,7 @@ object UserConfigs {
                     println("debug: UserConfigs: $user")
                     ApiService.setToken(user.token)
                     userLive.value = user
-                    userVal = user //todo mishe hazfesh kard?
+                    // userVal = user //todo mishe hazfesh kard?
                 }
             }
         }
@@ -48,21 +47,14 @@ object UserConfigs {
         }
     }
 
-    fun updateUser(
-        phones: List<Phone> = userVal!!.phones,
-        name: String = userVal!!.name,
-        image: String? = userVal!!.profilePic
-    ) {
-        UserRepo.update(userVal!!.copy(phones = phones, name = name, profilePic = image))
-    }
-
     fun logout() {
         PrefsRepo.flush()
         //todo delete other databases except favorite
-        userVal?.let {
+        userLive.value?.let {
+            RemoteRepo.logout()
             UserRepo.delete(it)
         }
-        userVal = null
+       // userVal = null
         userLive.postValue(null)
     }
 

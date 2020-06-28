@@ -1,9 +1,7 @@
 package com.behraz.fastermixer.batch.ui.adapters
 
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -11,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ItemBatchBinding
 import com.behraz.fastermixer.batch.models.Batch
-import retrofit2.Response.error
 
 class BatchAdapter(private val interaction: Interaction? = null) :
     ListAdapter<Batch, RecyclerView.ViewHolder>(DIFF_CALLBACK) {

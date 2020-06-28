@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.behraz.fastermixer.batch.models.Message
 
 
-@Database(entities = [Message::class], version = 1, exportSchema = false)
+@Database(entities = [Message::class], version = 4, exportSchema = false)
 abstract class MessageDatabase  : RoomDatabase() {
 
     abstract fun getDao(): MessageDao

@@ -8,7 +8,10 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.core.content.res.ResourcesCompat
 import com.behraz.fastermixer.batch.R
+import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
+import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
+import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
 import com.behraz.fastermixer.batch.ui.activities.LoginActivity
 import com.behraz.fastermixer.batch.utils.general.fullScreen
 import com.behraz.fastermixer.batch.utils.general.hideStatusBar
@@ -44,13 +47,18 @@ class FasterMixerApplication : Application() {
 
     private fun initRepos() {
         ApiService.setContext(applicationContext)
+        UserRepo.setContext(this)
+        MessageRepo.setContext(this)
+        UserConfigs.setContext(this)
     }
 
 
     private fun registerApiInterceptorsCallbacks() {
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityResumed(activity: Activity) {
-                activity.fullScreen()
+                if (activity !is LoginActivity) {
+                    activity.fullScreen()
+                }
 
                 if (activity is ApiService.InternetConnectionListener) {
                     ApiService.setInternetConnectionListener(activity)

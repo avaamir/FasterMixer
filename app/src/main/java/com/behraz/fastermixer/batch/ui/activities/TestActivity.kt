@@ -5,9 +5,12 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.behraz.fastermixer.batch.R
+import com.behraz.fastermixer.batch.models.User
 import com.behraz.fastermixer.batch.models.requests.behraz.ChooseBatchRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.LoginRequest
 import com.behraz.fastermixer.batch.respository.RemoteRepo
+import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
+import com.behraz.fastermixer.batch.utils.general.toast
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.PendingResult
@@ -41,6 +44,8 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
             RemoteRepo.login(LoginRequest("Admin", "Admin")).observe(this, Observer {
                 println("debug: $it")
+                it?.let {  UserRepo.insert(it.entity) }
+
             })
         }
 
@@ -66,6 +71,12 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
             })
         }
 
+        btnFetch.setOnClickListener {
+        }
+
+        UserRepo.users.observe(this, Observer {
+            println("debug: room: $it")
+        })
 
 
     }
@@ -92,9 +103,9 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
             val result: PendingResult<LocationSettingsResult> = LocationServices.SettingsApi
                 .checkLocationSettings(it, builder.build())
-            result.setResultCallback { result ->
-                val status: Status = result.status
-                val state: LocationSettingsStates = result
+            result.setResultCallback {
+                val status: Status = it.status
+                val state: LocationSettingsStates = it
                     .locationSettingsStates
                 when (status.statusCode) {
                     LocationSettingsStatusCodes.SUCCESS -> {

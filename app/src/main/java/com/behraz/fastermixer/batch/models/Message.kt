@@ -9,8 +9,8 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @Entity(tableName = "messages")
 data class Message(
-    @PrimaryKey(autoGenerate = false)
-    val id: Int,
+    @PrimaryKey
+    val id: String,
     val sender: String,
     val content: String,
     val senderImage: String?,

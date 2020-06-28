@@ -168,7 +168,6 @@ public class FasterMixerUserPanel extends LinearLayout {
     }
 
     public interface Interactions {
-        void onHideBarClicked(View view);
 
         void onCallClicked(View view);
 

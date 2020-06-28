@@ -19,6 +19,6 @@ interface UserDao {
     @Delete
     suspend fun delete(item: User)
 
-    @Query("SELECT * FROM user_tb WHERE _id = :id")
+    @Query("SELECT * FROM user_tb WHERE personId = :id")
     suspend fun exists(id: Int): User?
 }

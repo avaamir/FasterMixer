@@ -4,10 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.behraz.fastermixer.batch.models.User
 
 
-//@Database(entities = [User::class], version = 3, exportSchema = false)
+@Database(entities = [User::class], version = 7, exportSchema = false)
 abstract class UserDatabase : RoomDatabase() {
 
     abstract fun getUserDao(): UserDao
@@ -28,9 +29,9 @@ abstract class UserDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context) =
             Room.databaseBuilder(
-                    context.applicationContext,
-                    UserDatabase::class.java, "user.db"
-                )
+                context.applicationContext,
+                UserDatabase::class.java, "user.db"
+            )
                 .fallbackToDestructiveMigration()
                 .build()
     }

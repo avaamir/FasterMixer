@@ -1,13 +1,13 @@
 package com.behraz.fastermixer.batch.respository
 
 import com.behraz.fastermixer.batch.models.requests.behraz.ChooseBatchRequest
-import com.behraz.fastermixer.batch.models.requests.behraz.EntityRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
+import com.behraz.fastermixer.batch.models.requests.behraz.EntityRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.LoginRequest
 import com.behraz.fastermixer.batch.models.requests.route.GetRouteResponse
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.respository.apiservice.MapService
-import com.behraz.fastermixer.batch.utils.general.Event
+import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
 import com.behraz.fastermixer.batch.utils.general.RunOnceLiveData
 import com.behraz.fastermixer.batch.utils.general.launchApi
 import kotlinx.coroutines.*
@@ -15,32 +15,11 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import org.osmdroid.util.GeoPoint
 import retrofit2.Response
-import kotlin.reflect.KSuspendFunction1
 import kotlin.reflect.KSuspendFunction0
+import kotlin.reflect.KSuspendFunction1
 
 object RemoteRepo {
     private lateinit var serverJobs: CompletableJob
-
-    /*fun getMainPage(): RunOnceLiveData<MainPageResponse?> {
-        if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
-        return object : RunOnceLiveData<MainPageResponse?>() {
-            override fun onActiveRunOnce() {
-                CoroutineScope(Dispatchers.IO + serverJobs).launchApi({
-                    val response = ApiService.getStoreClient().getMainPage()
-                    if (response.isSuccessful) {
-                        response.body()?.let { mainPageResponse ->
-                            postValue(mainPageResponse)
-                        }
-                    } else {
-                        postValue(null)
-                    }
-                }, {
-                    postValue(null)
-                })
-            }
-
-        }
-    }*/
 
     private fun <ResM, ReqM> apiReq(
         request: ReqM,
@@ -95,7 +74,8 @@ object RemoteRepo {
         if (response.isSuccessful) {
             response.body()?.let {
                 if (it.isSucceed) {
-                    ApiService.setToken(it.entity.token)
+                    //ApiService.setToken(it.entity.token)
+                    UserConfigs.loginUser(it.entity)
                 }
             }
         }

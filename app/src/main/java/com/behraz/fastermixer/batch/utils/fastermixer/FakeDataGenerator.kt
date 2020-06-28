@@ -70,14 +70,14 @@ fun fakeBatches() = listOf(
 
 
 fun fakeMessages() = listOf(
-    Message(1, "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
-    Message(2, "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
-    Message(3, "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
-    Message(4, "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
-    Message(5, "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
-    Message(6, "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
-    Message(7, "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
-    Message(8, "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false)
+    Message("1", "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
+    Message("2", "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
+    Message("3", "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
+    Message("4", "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
+    Message("5", "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
+    Message("6", "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
+    Message("7", "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
+    Message("8", "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false)
 )
 
 

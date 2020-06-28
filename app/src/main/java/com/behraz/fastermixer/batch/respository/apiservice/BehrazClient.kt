@@ -6,7 +6,6 @@ import com.behraz.fastermixer.batch.models.requests.behraz.ChooseBatchRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.EntityRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.models.requests.behraz.LoginRequest
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
