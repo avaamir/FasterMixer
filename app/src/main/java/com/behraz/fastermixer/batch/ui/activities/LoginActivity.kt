@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.models.enums.UserType
 import com.behraz.fastermixer.batch.ui.activities.batch.BatchActivity
-import com.behraz.fastermixer.batch.ui.activities.batch.ChooseBatchActivity
 import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
 import com.behraz.fastermixer.batch.ui.dialogs.LocationPermissionDialog
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
@@ -43,7 +42,7 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
         setContentView(R.layout.activity_login)
 
 
-        if (true) {
+        if (false) {
             startActivity(Intent(this, TestActivity::class.java))
             //  finish()
             // return
@@ -128,13 +127,21 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
             btnLogin.showProgressBar(false)
             if (it != null) {
                 if (it.isSucceed) {
-                    when (it.entity.userType) {
-                        UserType.Pomp -> startActivity(Intent(this, PompActivity::class.java))
-                        UserType.Mixer -> toast("کاربر میسکر در این نسخه از برنامه تعریف نشده است. لطفا برنامه را به روز رسانی کنید")
-                        UserType.Batch -> startActivity(Intent(this, ChooseBatchActivity::class.java))
-                    }.exhaustive()
+                    if (it.entity.equipmentId == null) {
+                        if (it.entity.userType == UserType.Mixer) {
+                            toast("کاربر میسکر در این نسخه از برنامه تعریف نشده است. لطفا برنامه را به روز رسانی کنید")
+                            return@Observer
+                        }
+                        startActivity(Intent(this, ChooseEquipmentActivity::class.java))
+                    } else {
+                        when (it.entity.userType) {
+                            UserType.Pomp -> startActivity(Intent(this, PompActivity::class.java))
+                            UserType.Mixer -> toast("کاربر میسکر در این نسخه از برنامه تعریف نشده است. لطفا برنامه را به روز رسانی کنید")
+                            UserType.Batch -> startActivity(Intent(this, BatchActivity::class.java))
+                        }.exhaustive()
+                    }
                 } else {
-                    toast(it.message ?: Constants.SERVER_ERROR)
+                    toast(it.message)
                 }
             } else {
                 snack(Constants.SERVER_ERROR) {

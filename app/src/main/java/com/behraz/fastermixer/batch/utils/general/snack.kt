@@ -13,8 +13,8 @@ import com.google.android.material.snackbar.Snackbar.SnackbarLayout
 
 fun Activity.snack(
     message: String,
-    onAction: (() -> Unit)? = null,
-    onDismissed: (() -> Unit)? = null
+    onDismissed: (() -> Unit)? = null,
+    onAction: (() -> Unit)? = null
 ): Snackbar {
     // Create the SnackBar
     val activityView =
@@ -40,7 +40,7 @@ fun Activity.snack(
     val btnAction = snackView.findViewById<Button>(R.id.snackbar_action)
     btnAction.text = "تلاش مجدد"
     btnAction.setOnClickListener {
-        //   onAction?.invoke()
+        onAction?.invoke()
         snackBar.dismiss()
     }
     //tvMessage.setTextColor(Color.WHITE)
@@ -58,7 +58,6 @@ fun Activity.snack(
     snackBar.addCallback(object : Snackbar.Callback() {
         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
             onDismissed?.invoke()
-            onAction?.invoke()
         }
     })
 

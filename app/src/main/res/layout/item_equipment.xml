@@ -3,7 +3,7 @@
     <data>
         <variable
             name="batch"
-            type="com.behraz.fastermixer.batch.models.Batch" />
+            type="com.behraz.fastermixer.batch.models.Equipment" />
     </data>
 
 

@@ -5,7 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -13,11 +13,10 @@
 
     <permission
         android:name="android.permission.ACCESS_FINE_LOCATION"
-        android:label="@string/permlab_callPhone"
         android:description="@string/permdesc_callPhone"
+        android:label="@string/permlab_callPhone"
         android:permissionGroup="android.Manifest.permission_group"
         android:protectionLevel="dangerous" />
-
 
     <application
         android:name=".app.FasterMixerApplication"
@@ -27,7 +26,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true" >
+        android:usesCleartextTraffic="true">
+        <activity android:name=".ui.activities.pomp.ChoosePompActivity"></activity>
         <activity android:name=".ui.activities.TestActivity" />
         <activity
             android:name=".ui.activities.pomp.PompActivity"
@@ -36,7 +36,7 @@
             android:name=".ui.activities.batch.BatchActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ui.activities.batch.ChooseBatchActivity"
+            android:name=".ui.activities.ChooseEquipmentActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name=".ui.activities.LoginActivity"

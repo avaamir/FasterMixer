@@ -19,10 +19,12 @@ import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 
 object ApiService {
-    const val Domain = "http://192.168.1.4:10101"
+    const val Domain = "http://2.184.49.133:13013"
+    //const val Domain = "http://192.168.1.4:10101"
     private const val BASE_API_URL = "$Domain/api/"
 
 
@@ -44,11 +46,9 @@ object ApiService {
         val client: OkHttpClient = OkHttpClient.Builder()
             //UnsafeOkHttpClient.getUnsafeOkHttpClientBuilder()
             .apply {
-
-
                 addInterceptor { chain ->
                     val builder = chain.request().newBuilder()
-                        .addHeader("Accept", "application/json")
+                        //   .addHeader("Accept", "application/json")
                         .addHeader("Content-Type", "application/json")
 
                     token?.let { token ->
@@ -92,6 +92,7 @@ object ApiService {
                     })
                 }
             }.build()
+
 
         Retrofit.Builder()
             .baseUrl(BASE_API_URL)

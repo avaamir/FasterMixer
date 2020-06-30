@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:elevation="2dp"
+    android:orientation="vertical"
+    android:background="@drawable/bg_rect_rounded"
+    android:backgroundTint="#BC2C353D"
+    android:gravity="center"
+    android:paddingRight="@dimen/large_margin"
+    android:paddingLeft="@dimen/large_margin"
+    android:paddingTop="32dp"
+    android:paddingBottom="32dp"
+    >
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:text="لطفا کمی صبر کنید"
+
+        style="@style/my_white_normal_text"/>
+
+
+</LinearLayout>

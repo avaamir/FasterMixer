@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.view.View;
 @SuppressWarnings("unchecked")
-public class ItemBatchBindingImpl extends ItemBatchBinding  {
+public class ItemEquipmentBindingImpl extends ItemEquipmentBinding  {
 
     @Nullable
     private static final androidx.databinding.ViewDataBinding.IncludedLayouts sIncludes;
@@ -23,10 +23,10 @@ public class ItemBatchBindingImpl extends ItemBatchBinding  {
     // listeners
     // Inverse Binding Event Handlers
 
-    public ItemBatchBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
+    public ItemEquipmentBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
         this(bindingComponent, root, mapBindings(bindingComponent, root, 3, sIncludes, sViewsWithIds));
     }
-    private ItemBatchBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
+    private ItemEquipmentBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
             , (android.widget.TextView) bindings[1]
             , (android.widget.TextView) bindings[2]
@@ -62,7 +62,7 @@ public class ItemBatchBindingImpl extends ItemBatchBinding  {
     public boolean setVariable(int variableId, @Nullable Object variable)  {
         boolean variableSet = true;
         if (BR.batch == variableId) {
-            setBatch((com.behraz.fastermixer.batch.models.Batch) variable);
+            setBatch((com.behraz.fastermixer.batch.models.Equipment) variable);
         }
         else {
             variableSet = false;
@@ -70,7 +70,7 @@ public class ItemBatchBindingImpl extends ItemBatchBinding  {
             return variableSet;
     }
 
-    public void setBatch(@Nullable com.behraz.fastermixer.batch.models.Batch Batch) {
+    public void setBatch(@Nullable com.behraz.fastermixer.batch.models.Equipment Batch) {
         this.mBatch = Batch;
         synchronized(this) {
             mDirtyFlags |= 0x1L;
@@ -94,7 +94,7 @@ public class ItemBatchBindingImpl extends ItemBatchBinding  {
             mDirtyFlags = 0;
         }
         java.lang.String batchName = null;
-        com.behraz.fastermixer.batch.models.Batch batch = mBatch;
+        com.behraz.fastermixer.batch.models.Equipment batch = mBatch;
         java.lang.String batchState = null;
 
         if ((dirtyFlags & 0x3L) != 0) {

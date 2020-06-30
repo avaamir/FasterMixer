@@ -12,6 +12,7 @@ import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
+import com.behraz.fastermixer.batch.respository.sharedprefrence.PrefsRepo
 import com.behraz.fastermixer.batch.ui.activities.LoginActivity
 import com.behraz.fastermixer.batch.utils.general.fullScreen
 import com.behraz.fastermixer.batch.utils.general.hideStatusBar
@@ -46,10 +47,11 @@ class FasterMixerApplication : Application() {
     }
 
     private fun initRepos() {
+        UserRepo.setContext(applicationContext)
         ApiService.setContext(applicationContext)
-        UserRepo.setContext(this)
-        MessageRepo.setContext(this)
-        UserConfigs.setContext(this)
+        MessageRepo.setContext(applicationContext)
+        PrefsRepo.setContext(applicationContext)
+        UserConfigs.init()
     }
 
 

@@ -1,4 +1,4 @@
-package com.behraz.fastermixer.batch.ui.activities.batch
+package com.behraz.fastermixer.batch.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,99 +9,118 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
-import com.behraz.fastermixer.batch.models.Batch
-import com.behraz.fastermixer.batch.ui.adapters.BatchAdapter
+import com.behraz.fastermixer.batch.models.Equipment
+import com.behraz.fastermixer.batch.ui.activities.batch.BatchActivity
+import com.behraz.fastermixer.batch.ui.adapters.EquipmentAdapter
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
+import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
+import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
 import com.behraz.fastermixer.batch.utils.fastermixer.subscribeGpsStateChangeListener
 import com.behraz.fastermixer.batch.utils.fastermixer.subscribeNetworkStateChangeListener
-import com.behraz.fastermixer.batch.utils.general.alert
 import com.behraz.fastermixer.batch.utils.general.snack
 import com.behraz.fastermixer.batch.utils.general.toast
-import com.behraz.fastermixer.batch.viewmodels.ChooseBatchActivityViewModel
+import com.behraz.fastermixer.batch.viewmodels.ChooseEquipmentActivityViewModel
 import kotlinx.android.synthetic.main.activity_choose_batch.*
 
-class ChooseBatchActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
-    BatchAdapter.Interaction {
+class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
+    EquipmentAdapter.Interaction {
 
-    private lateinit var viewModel: ChooseBatchActivityViewModel
-    private lateinit var mAdapter: BatchAdapter
+    private lateinit var viewModel: ChooseEquipmentActivityViewModel
+    private var mAdapter = EquipmentAdapter(this)
+    private val progressDialog: MyProgressDialog by lazy {
+        MyProgressDialog(this, R.style.my_alert_dialog)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choose_batch)
 
-        viewModel = ViewModelProvider(this).get(ChooseBatchActivityViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ChooseEquipmentActivityViewModel::class.java)
+
 
 
         initViews()
         subscribeObservers()
-        viewModel.getBatches()
+        viewModel.getEquipments()
 
         subscribeNetworkStateChangeListener { userPanel.setInternetState(it) }
         subscribeGpsStateChangeListener { userPanel.setGPSState(it) }
     }
 
     private fun subscribeObservers() {
-        viewModel.batches.observe(this, Observer {
+        viewModel.equipments.observe(this, Observer {
             progressBar.visibility = View.GONE
             if (it != null) {
                 if (it.isSucceed) {
                     mAdapter.submitList(it.entity)
                 } else {
-                    toast(it.message ?: Constants.SERVER_ERROR)
+                    toast(it.message)
                 }
             } else {
                 snack(Constants.SERVER_ERROR) {
                     progressBar.visibility = View.VISIBLE
-                    viewModel.getBatches()
+                    viewModel.getEquipments()
                 }
             }
         })
 
 
-        viewModel.chooseBatchResponse.observe(this, Observer {
+        viewModel.chooseEquipmentResponse.observe(this, Observer {
+            progressDialog?.dismiss()
             startActivity(Intent(this, BatchActivity::class.java))
             finish()
         })
 
 
-        viewModel.user.observe(this, Observer { _user ->
-            _user?.let {
+        viewModel.user.observe(this, Observer {
+            it?.let {
                 userPanel.setUsername(it.name)
-                userPanel.setPersonalCode(it.personId)
+                userPanel.setPersonalCode(it.personalCode)
+            }
+        })
+
+        viewModel.logoutResponse.observe(this, Observer {
+            progressDialog.dismiss()
+            if (it != null) {
+                if (it.isSucceed) {
+                    toast("خروج موفقیت آمیز بود")
+                    finish()
+                } else {
+                    toast(it.message)
+                }
+            } else {
+                snack(Constants.SERVER_ERROR) {
+                    progressDialog.show()
+                    viewModel.logout()
+                }
             }
         })
     }
 
     private fun initViews() {
         userPanel.setInteractions(this)
-        mAdapter = BatchAdapter(this)
         batchRecycler.adapter = mAdapter
         batchRecycler.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
     }
 
     override fun onLogoutClicked(view: View) {
-        alert(
-            title = "خروج از حساب",
-            message = "آیا از خروج اطمینان دارید؟",
-            positiveButtonText = "بله، خارج میشوم",
-            negativeButtonText = "انصراف"
-        ) {
+        logoutAlertMessage {
             viewModel.logout()
-            finish()
+            progressDialog.show()
         }
     }
 
     override fun onCallClicked(view: View) {
-        println("onCallClicked")
+        TODO("not yet implemented")
     }
 
-    override fun onItemClicked(item: Batch) {
+    override fun onItemClicked(item: Equipment) {
         if (!item.isAvailable) {
             toast("این بچ درحال استفاده توسط کاربر دیگری میباشد. در صورت وجود مشکل با هماهنگ کننده تماس بگیرید")
         } else {
-            viewModel.chooseBatch(item.id)
+            viewModel.chooseEquipment(item.id)
+            progressDialog.show()
         }
 
     }

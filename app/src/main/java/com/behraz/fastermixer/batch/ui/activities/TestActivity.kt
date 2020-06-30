@@ -2,15 +2,16 @@ package com.behraz.fastermixer.batch.ui.activities
 
 import android.content.IntentSender
 import android.os.Bundle
+import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.behraz.fastermixer.batch.R
-import com.behraz.fastermixer.batch.models.User
-import com.behraz.fastermixer.batch.models.requests.behraz.ChooseBatchRequest
+import com.behraz.fastermixer.batch.models.requests.behraz.ChooseEquipmentRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.LoginRequest
 import com.behraz.fastermixer.batch.respository.RemoteRepo
+import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
-import com.behraz.fastermixer.batch.utils.general.toast
+import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.PendingResult
@@ -23,10 +24,15 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
     private var googleApiClient: GoogleApiClient? = null
 
+    lateinit var dialog: MyProgressDialog
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test)
 
+
+        dialog = MyProgressDialog(this, R.style.my_alert_dialog)
 
         btnLogin.setOnClickListener {
             /*val gson = Gson()
@@ -42,9 +48,9 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
          //  println(gson.toJson(EntityResponse(Batch(2, "batch num1", true), true, "fuck me")))*/
 
 
-            RemoteRepo.login(LoginRequest("Admin", "Admin")).observe(this, Observer {
+            RemoteRepo.login(LoginRequest("ali", "12345")).observe(this, Observer {
                 println("debug: $it")
-                it?.let {  UserRepo.insert(it.entity) }
+                it?.let {  UserConfigs.loginUser(it.entity) }
 
             })
         }
@@ -64,7 +70,7 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
 
         btnChooseBatch.setOnClickListener {
-            RemoteRepo.chooseBatch(ChooseBatchRequest(
+            RemoteRepo.chooseBatch(ChooseEquipmentRequest(
                 "14581cea-7969-478a-f515-08d80dd443ec"
             )).observe(this, Observer {
                 println("debug: ChooseBatch: $it")
@@ -72,11 +78,16 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
         }
 
         btnFetch.setOnClickListener {
+            dialog.show()
+            Handler().postDelayed({
+                dialog.dismiss()
+            }, 5000)
         }
 
         UserRepo.users.observe(this, Observer {
             println("debug: room: $it")
         })
+
 
 
     }

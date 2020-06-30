@@ -3,7 +3,7 @@
     <color name="primary">#6A7A88</color>
     <color name="primary_light">#113B61</color>
     <color name="primary_dark">#2C353D</color>
-    <color name="accent">#5783c7</color>
+    <color name="accent">#FFFFFF</color>
     <color name="mixer_red">#E3531D</color>
 
     <color name="price">@color/accent</color>

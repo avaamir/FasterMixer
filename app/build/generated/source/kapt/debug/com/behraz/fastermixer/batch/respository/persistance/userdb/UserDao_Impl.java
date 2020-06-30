@@ -7,6 +7,7 @@ import androidx.room.EntityDeletionOrUpdateAdapter;
 import androidx.room.EntityInsertionAdapter;
 import androidx.room.RoomDatabase;
 import androidx.room.RoomSQLiteQuery;
+import androidx.room.SharedSQLiteStatement;
 import androidx.room.util.CursorUtil;
 import androidx.room.util.DBUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
@@ -36,12 +37,14 @@ public final class UserDao_Impl implements UserDao {
 
   private final EntityDeletionOrUpdateAdapter<User> __updateAdapterOfUser;
 
+  private final SharedSQLiteStatement __preparedStmtOfDeleteAll;
+
   public UserDao_Impl(RoomDatabase __db) {
     this.__db = __db;
     this.__insertionAdapterOfUser = new EntityInsertionAdapter<User>(__db) {
       @Override
       public String createQuery() {
-        return "INSERT OR REPLACE INTO `user_tb` (`phones`,`adminPhones`,`personId`,`name`,`token`,`profilePic`,`roleId`) VALUES (?,?,?,?,?,?,?)";
+        return "INSERT OR REPLACE INTO `user_tb` (`phones`,`adminPhones`,`personId`,`name`,`token`,`profilePic`,`roleId`,`personalCode`,`equipmentId`) VALUES (?,?,?,?,?,?,?,?,?)";
       }
 
       @Override
@@ -81,6 +84,16 @@ public final class UserDao_Impl implements UserDao {
           stmt.bindString(6, value.getProfilePic());
         }
         stmt.bindLong(7, value.getRoleId());
+        if (value.getPersonalCode() == null) {
+          stmt.bindNull(8);
+        } else {
+          stmt.bindString(8, value.getPersonalCode());
+        }
+        if (value.getEquipmentId() == null) {
+          stmt.bindNull(9);
+        } else {
+          stmt.bindString(9, value.getEquipmentId());
+        }
       }
     };
     this.__deletionAdapterOfUser = new EntityDeletionOrUpdateAdapter<User>(__db) {
@@ -101,7 +114,7 @@ public final class UserDao_Impl implements UserDao {
     this.__updateAdapterOfUser = new EntityDeletionOrUpdateAdapter<User>(__db) {
       @Override
       public String createQuery() {
-        return "UPDATE OR ABORT `user_tb` SET `phones` = ?,`adminPhones` = ?,`personId` = ?,`name` = ?,`token` = ?,`profilePic` = ?,`roleId` = ? WHERE `personId` = ?";
+        return "UPDATE OR ABORT `user_tb` SET `phones` = ?,`adminPhones` = ?,`personId` = ?,`name` = ?,`token` = ?,`profilePic` = ?,`roleId` = ?,`personalCode` = ?,`equipmentId` = ? WHERE `personId` = ?";
       }
 
       @Override
@@ -141,11 +154,28 @@ public final class UserDao_Impl implements UserDao {
           stmt.bindString(6, value.getProfilePic());
         }
         stmt.bindLong(7, value.getRoleId());
-        if (value.getPersonId() == null) {
+        if (value.getPersonalCode() == null) {
           stmt.bindNull(8);
         } else {
-          stmt.bindString(8, value.getPersonId());
+          stmt.bindString(8, value.getPersonalCode());
         }
+        if (value.getEquipmentId() == null) {
+          stmt.bindNull(9);
+        } else {
+          stmt.bindString(9, value.getEquipmentId());
+        }
+        if (value.getPersonId() == null) {
+          stmt.bindNull(10);
+        } else {
+          stmt.bindString(10, value.getPersonId());
+        }
+      }
+    };
+    this.__preparedStmtOfDeleteAll = new SharedSQLiteStatement(__db) {
+      @Override
+      public String createQuery() {
+        final String _query = "DELETE FROM user_tb";
+        return _query;
       }
     };
   }
@@ -202,6 +232,25 @@ public final class UserDao_Impl implements UserDao {
   }
 
   @Override
+  public Object deleteAll(final Continuation<? super Unit> p0) {
+    return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
+      @Override
+      public Unit call() throws Exception {
+        final SupportSQLiteStatement _stmt = __preparedStmtOfDeleteAll.acquire();
+        __db.beginTransaction();
+        try {
+          _stmt.executeUpdateDelete();
+          __db.setTransactionSuccessful();
+          return Unit.INSTANCE;
+        } finally {
+          __db.endTransaction();
+          __preparedStmtOfDeleteAll.release(_stmt);
+        }
+      }
+    }, p0);
+  }
+
+  @Override
   public LiveData<List<User>> getUsers() {
     final String _sql = "SELECT * FROM user_tb";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
@@ -217,6 +266,8 @@ public final class UserDao_Impl implements UserDao {
           final int _cursorIndexOfToken = CursorUtil.getColumnIndexOrThrow(_cursor, "token");
           final int _cursorIndexOfProfilePic = CursorUtil.getColumnIndexOrThrow(_cursor, "profilePic");
           final int _cursorIndexOfRoleId = CursorUtil.getColumnIndexOrThrow(_cursor, "roleId");
+          final int _cursorIndexOfPersonalCode = CursorUtil.getColumnIndexOrThrow(_cursor, "personalCode");
+          final int _cursorIndexOfEquipmentId = CursorUtil.getColumnIndexOrThrow(_cursor, "equipmentId");
           final List<User> _result = new ArrayList<User>(_cursor.getCount());
           while(_cursor.moveToNext()) {
             final User _item;
@@ -230,7 +281,11 @@ public final class UserDao_Impl implements UserDao {
             _tmpProfilePic = _cursor.getString(_cursorIndexOfProfilePic);
             final int _tmpRoleId;
             _tmpRoleId = _cursor.getInt(_cursorIndexOfRoleId);
-            _item = new User(_tmpPersonId,_tmpName,_tmpToken,_tmpProfilePic,_tmpRoleId);
+            final String _tmpPersonalCode;
+            _tmpPersonalCode = _cursor.getString(_cursorIndexOfPersonalCode);
+            final String _tmpEquipmentId;
+            _tmpEquipmentId = _cursor.getString(_cursorIndexOfEquipmentId);
+            _item = new User(_tmpPersonId,_tmpName,_tmpToken,_tmpProfilePic,_tmpRoleId,_tmpPersonalCode,_tmpEquipmentId);
             final List<Phone> _tmpPhones;
             final String _tmp;
             _tmp = _cursor.getString(_cursorIndexOfPhones);
@@ -274,6 +329,8 @@ public final class UserDao_Impl implements UserDao {
           final int _cursorIndexOfToken = CursorUtil.getColumnIndexOrThrow(_cursor, "token");
           final int _cursorIndexOfProfilePic = CursorUtil.getColumnIndexOrThrow(_cursor, "profilePic");
           final int _cursorIndexOfRoleId = CursorUtil.getColumnIndexOrThrow(_cursor, "roleId");
+          final int _cursorIndexOfPersonalCode = CursorUtil.getColumnIndexOrThrow(_cursor, "personalCode");
+          final int _cursorIndexOfEquipmentId = CursorUtil.getColumnIndexOrThrow(_cursor, "equipmentId");
           final User _result;
           if(_cursor.moveToFirst()) {
             final String _tmpPersonId;
@@ -286,7 +343,11 @@ public final class UserDao_Impl implements UserDao {
             _tmpProfilePic = _cursor.getString(_cursorIndexOfProfilePic);
             final int _tmpRoleId;
             _tmpRoleId = _cursor.getInt(_cursorIndexOfRoleId);
-            _result = new User(_tmpPersonId,_tmpName,_tmpToken,_tmpProfilePic,_tmpRoleId);
+            final String _tmpPersonalCode;
+            _tmpPersonalCode = _cursor.getString(_cursorIndexOfPersonalCode);
+            final String _tmpEquipmentId;
+            _tmpEquipmentId = _cursor.getString(_cursorIndexOfEquipmentId);
+            _result = new User(_tmpPersonId,_tmpName,_tmpToken,_tmpProfilePic,_tmpRoleId,_tmpPersonalCode,_tmpEquipmentId);
             final List<Phone> _tmpPhones;
             final String _tmp;
             _tmp = _cursor.getString(_cursorIndexOfPhones);

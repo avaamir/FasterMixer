@@ -1,14 +1,16 @@
 package com.behraz.fastermixer.batch.respository
 
-import com.behraz.fastermixer.batch.models.requests.behraz.ChooseBatchRequest
+import com.behraz.fastermixer.batch.models.enums.UserType
+import com.behraz.fastermixer.batch.models.requests.behraz.ChooseEquipmentRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.models.requests.behraz.EntityRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.LoginRequest
 import com.behraz.fastermixer.batch.models.requests.route.GetRouteResponse
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.respository.apiservice.MapService
-import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
 import com.behraz.fastermixer.batch.utils.general.RunOnceLiveData
+import com.behraz.fastermixer.batch.utils.general.exhaustive
+import com.behraz.fastermixer.batch.utils.general.exhaustiveAsExpression
 import com.behraz.fastermixer.batch.utils.general.launchApi
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
@@ -74,20 +76,27 @@ object RemoteRepo {
         if (response.isSuccessful) {
             response.body()?.let {
                 if (it.isSucceed) {
-                    //ApiService.setToken(it.entity.token)
-                    UserConfigs.loginUser(it.entity)
+                    UserConfigs.loginUser(
+                        it.entity,
+                        blocking = true
+                    ) //block the response till changes saved to db
                 }
             }
         }
     }
 
-    fun logout() = apiReq(ApiService.client::logout)
+    fun logout() = apiReq(ApiService.client::logout) {
+        UserConfigs.logout()
+    }
 
     fun getBatches() = apiReq(ApiService.client::getBatches)
-    fun chooseBatch(chooseBatchRequest: ChooseBatchRequest) = apiReq(
-        chooseBatchRequest,
-        ApiService.client::chooseBatch
-    )
+    fun getPomps() = apiReq(ApiService.client::getPomps)
+
+    fun chooseBatch(chooseEquipmentRequest: ChooseEquipmentRequest) = apiReq(chooseEquipmentRequest, ApiService.client::chooseBatch)
+    fun choosePomp(chooseEquipmentRequest: ChooseEquipmentRequest) = apiReq(chooseEquipmentRequest, ApiService.client::chooseBatch)
+
+
+
 
 
     fun getRoute(coordinates: List<GeoPoint>): RunOnceLiveData<GetRouteResponse?> {

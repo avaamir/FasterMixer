@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import com.behraz.fastermixer.batch.models.User
 
 
-@Database(entities = [User::class], version = 7, exportSchema = false)
+@Database(entities = [User::class], version = 1, exportSchema = false)
 abstract class UserDatabase : RoomDatabase() {
 
     abstract fun getUserDao(): UserDao

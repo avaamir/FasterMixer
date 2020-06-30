@@ -7,21 +7,21 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
-import com.behraz.fastermixer.batch.databinding.ItemBatchBinding
-import com.behraz.fastermixer.batch.models.Batch
+import com.behraz.fastermixer.batch.databinding.ItemEquipmentBinding
+import com.behraz.fastermixer.batch.models.Equipment
 
-class BatchAdapter(private val interaction: Interaction? = null) :
-    ListAdapter<Batch, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
+class EquipmentAdapter(private val interaction: Interaction? = null) :
+    ListAdapter<Equipment, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Batch>() {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Equipment>() {
 
-            override fun areItemsTheSame(oldItem: Batch, newItem: Batch): Boolean {
+            override fun areItemsTheSame(oldItem: Equipment, newItem: Equipment): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: Batch, newItem: Batch): Boolean {
-                return oldItem == newItem
+            override fun areContentsTheSame(oldItem: Equipment, newItem: Equipment): Boolean {
+                return oldItem.isAvailable == newItem.isAvailable && oldItem.name == newItem.name && oldItem.state == newItem.state
             }
 
         }
@@ -29,9 +29,9 @@ class BatchAdapter(private val interaction: Interaction? = null) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        return BatchViewHolder(
+        return EquipmentViewHolder(
             DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context), R.layout.item_batch,
+                LayoutInflater.from(parent.context), R.layout.item_equipment,
                 parent,
                 false
             )
@@ -40,7 +40,7 @@ class BatchAdapter(private val interaction: Interaction? = null) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is BatchViewHolder -> {
+            is EquipmentViewHolder -> {
                 holder.bind(currentList[position])
             }
         }
@@ -50,11 +50,11 @@ class BatchAdapter(private val interaction: Interaction? = null) :
         return currentList.size
     }
 
-    inner class BatchViewHolder(
-        private val mBinding: ItemBatchBinding
+    inner class EquipmentViewHolder(
+        private val mBinding: ItemEquipmentBinding
     ) : RecyclerView.ViewHolder(mBinding.root) {
 
-        fun bind(item: Batch) {
+        fun bind(item: Equipment) {
             itemView.setOnClickListener {
                 interaction?.onItemClicked(item)
             }
@@ -71,6 +71,6 @@ class BatchAdapter(private val interaction: Interaction? = null) :
     }
 
     interface Interaction {
-        fun onItemClicked(item: Batch)
+        fun onItemClicked(item: Equipment)
     }
 }

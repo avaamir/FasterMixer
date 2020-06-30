@@ -61,11 +61,11 @@ fun fakeProgresses(isMixer: Boolean) = if (isMixer) {
 
 
 fun fakeBatches() = listOf(
-    Batch("1", "بچ شماره یک", true),
-    Batch("2", "بچ شماره دو", false),
-    Batch("3", "بچ شماره سه", true),
-    Batch("4", "بچ شماره چهار", true),
-    Batch("5", "بچ شماره پنج", false)
+    Equipment("1", "بچ شماره یک", true),
+    Equipment("2", "بچ شماره دو", false),
+    Equipment("3", "بچ شماره سه", true),
+    Equipment("4", "بچ شماره چهار", true),
+    Equipment("5", "بچ شماره پنج", false)
 )
 
 

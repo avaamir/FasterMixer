@@ -2,7 +2,7 @@ package com.behraz.fastermixer.batch.models.requests.behraz
 
 import com.google.gson.annotations.SerializedName
 
-class ChooseBatchRequest(
+class ChooseEquipmentRequest(
     @SerializedName("id")
     val batchId: String
 )

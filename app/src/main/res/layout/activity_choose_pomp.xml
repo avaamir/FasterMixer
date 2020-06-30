@@ -38,7 +38,7 @@
                 android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/userPanel"
-                app:srcCompat="@drawable/ic_batch" />
+                app:srcCompat="@drawable/ic_factory" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -46,13 +46,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 style="@style/my_white_normal_text"
-                android:text="لطفا بچ خود را انتخاب کنید"
+                android:text="لطفا پمپ خود را انتخاب کنید"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView"
                 app:layout_constraintEnd_toStartOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="@+id/imageView" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/batchRecycler"
+                android:id="@+id/pompRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="8dp"

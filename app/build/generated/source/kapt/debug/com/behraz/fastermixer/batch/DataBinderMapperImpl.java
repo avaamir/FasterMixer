@@ -7,12 +7,13 @@ import androidx.databinding.DataBinderMapper;
 import androidx.databinding.DataBindingComponent;
 import androidx.databinding.ViewDataBinding;
 import com.behraz.fastermixer.batch.databinding.ActivityChooseBatchBindingImpl;
+import com.behraz.fastermixer.batch.databinding.ActivityChoosePompBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ActivityPompBindingImpl;
 import com.behraz.fastermixer.batch.databinding.FragmentCustomerListBindingImpl;
 import com.behraz.fastermixer.batch.databinding.FragmentMessageListBindingImpl;
 import com.behraz.fastermixer.batch.databinding.FragmentMixerListBindingImpl;
-import com.behraz.fastermixer.batch.databinding.ItemBatchBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ItemCustomerBindingImpl;
+import com.behraz.fastermixer.batch.databinding.ItemEquipmentBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ItemMessageBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ItemMessageVerticalBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ItemMixerBindingImpl;
@@ -34,44 +35,47 @@ import java.util.List;
 public class DataBinderMapperImpl extends DataBinderMapper {
   private static final int LAYOUT_ACTIVITYCHOOSEBATCH = 1;
 
-  private static final int LAYOUT_ACTIVITYPOMP = 2;
+  private static final int LAYOUT_ACTIVITYCHOOSEPOMP = 2;
 
-  private static final int LAYOUT_FRAGMENTCUSTOMERLIST = 3;
+  private static final int LAYOUT_ACTIVITYPOMP = 3;
 
-  private static final int LAYOUT_FRAGMENTMESSAGELIST = 4;
+  private static final int LAYOUT_FRAGMENTCUSTOMERLIST = 4;
 
-  private static final int LAYOUT_FRAGMENTMIXERLIST = 5;
+  private static final int LAYOUT_FRAGMENTMESSAGELIST = 5;
 
-  private static final int LAYOUT_ITEMBATCH = 6;
+  private static final int LAYOUT_FRAGMENTMIXERLIST = 6;
 
   private static final int LAYOUT_ITEMCUSTOMER = 7;
 
-  private static final int LAYOUT_ITEMMESSAGE = 8;
+  private static final int LAYOUT_ITEMEQUIPMENT = 8;
 
-  private static final int LAYOUT_ITEMMESSAGEVERTICAL = 9;
+  private static final int LAYOUT_ITEMMESSAGE = 9;
 
-  private static final int LAYOUT_ITEMMIXER = 10;
+  private static final int LAYOUT_ITEMMESSAGEVERTICAL = 10;
 
-  private static final int LAYOUT_ITEMPOMPMIXER = 11;
+  private static final int LAYOUT_ITEMMIXER = 11;
 
-  private static final int LAYOUT_LAYOUTMAP = 12;
+  private static final int LAYOUT_ITEMPOMPMIXER = 12;
 
-  private static final int LAYOUT_LAYOUTMIXER = 13;
+  private static final int LAYOUT_LAYOUTMAP = 13;
 
-  private static final int LAYOUT_VIEWFASTERMIXERUSERPANEL = 14;
+  private static final int LAYOUT_LAYOUTMIXER = 14;
 
-  private static final int LAYOUT_VIEWITEMPROGRESS = 15;
+  private static final int LAYOUT_VIEWFASTERMIXERUSERPANEL = 15;
 
-  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(15);
+  private static final int LAYOUT_VIEWITEMPROGRESS = 16;
+
+  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(16);
 
   static {
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.activity_choose_batch, LAYOUT_ACTIVITYCHOOSEBATCH);
+    INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.activity_choose_pomp, LAYOUT_ACTIVITYCHOOSEPOMP);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.activity_pomp, LAYOUT_ACTIVITYPOMP);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.fragment_customer_list, LAYOUT_FRAGMENTCUSTOMERLIST);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.fragment_message_list, LAYOUT_FRAGMENTMESSAGELIST);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.fragment_mixer_list, LAYOUT_FRAGMENTMIXERLIST);
-    INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_batch, LAYOUT_ITEMBATCH);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_customer, LAYOUT_ITEMCUSTOMER);
+    INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_equipment, LAYOUT_ITEMEQUIPMENT);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_message, LAYOUT_ITEMMESSAGE);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_message_vertical, LAYOUT_ITEMMESSAGEVERTICAL);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_mixer, LAYOUT_ITEMMIXER);
@@ -97,6 +101,12 @@ public class DataBinderMapperImpl extends DataBinderMapper {
           }
           throw new IllegalArgumentException("The tag for activity_choose_batch is invalid. Received: " + tag);
         }
+        case  LAYOUT_ACTIVITYCHOOSEPOMP: {
+          if ("layout/activity_choose_pomp_0".equals(tag)) {
+            return new ActivityChoosePompBindingImpl(component, view);
+          }
+          throw new IllegalArgumentException("The tag for activity_choose_pomp is invalid. Received: " + tag);
+        }
         case  LAYOUT_ACTIVITYPOMP: {
           if ("layout/activity_pomp_0".equals(tag)) {
             return new ActivityPompBindingImpl(component, view);
@@ -121,17 +131,17 @@ public class DataBinderMapperImpl extends DataBinderMapper {
           }
           throw new IllegalArgumentException("The tag for fragment_mixer_list is invalid. Received: " + tag);
         }
-        case  LAYOUT_ITEMBATCH: {
-          if ("layout/item_batch_0".equals(tag)) {
-            return new ItemBatchBindingImpl(component, view);
-          }
-          throw new IllegalArgumentException("The tag for item_batch is invalid. Received: " + tag);
-        }
         case  LAYOUT_ITEMCUSTOMER: {
           if ("layout/item_customer_0".equals(tag)) {
             return new ItemCustomerBindingImpl(component, view);
           }
           throw new IllegalArgumentException("The tag for item_customer is invalid. Received: " + tag);
+        }
+        case  LAYOUT_ITEMEQUIPMENT: {
+          if ("layout/item_equipment_0".equals(tag)) {
+            return new ItemEquipmentBindingImpl(component, view);
+          }
+          throw new IllegalArgumentException("The tag for item_equipment is invalid. Received: " + tag);
         }
         case  LAYOUT_ITEMMESSAGE: {
           if ("layout/item_message_0".equals(tag)) {
@@ -241,16 +251,17 @@ public class DataBinderMapperImpl extends DataBinderMapper {
   }
 
   private static class InnerLayoutIdLookup {
-    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(15);
+    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(16);
 
     static {
       sKeys.put("layout/activity_choose_batch_0", com.behraz.fastermixer.batch.R.layout.activity_choose_batch);
+      sKeys.put("layout/activity_choose_pomp_0", com.behraz.fastermixer.batch.R.layout.activity_choose_pomp);
       sKeys.put("layout/activity_pomp_0", com.behraz.fastermixer.batch.R.layout.activity_pomp);
       sKeys.put("layout/fragment_customer_list_0", com.behraz.fastermixer.batch.R.layout.fragment_customer_list);
       sKeys.put("layout/fragment_message_list_0", com.behraz.fastermixer.batch.R.layout.fragment_message_list);
       sKeys.put("layout/fragment_mixer_list_0", com.behraz.fastermixer.batch.R.layout.fragment_mixer_list);
-      sKeys.put("layout/item_batch_0", com.behraz.fastermixer.batch.R.layout.item_batch);
       sKeys.put("layout/item_customer_0", com.behraz.fastermixer.batch.R.layout.item_customer);
+      sKeys.put("layout/item_equipment_0", com.behraz.fastermixer.batch.R.layout.item_equipment);
       sKeys.put("layout/item_message_0", com.behraz.fastermixer.batch.R.layout.item_message);
       sKeys.put("layout/item_message_vertical_0", com.behraz.fastermixer.batch.R.layout.item_message_vertical);
       sKeys.put("layout/item_mixer_0", com.behraz.fastermixer.batch.R.layout.item_mixer);

@@ -9,6 +9,7 @@ import android.view.animation.OvershootInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ActivityPompBinding
@@ -17,16 +18,17 @@ import com.behraz.fastermixer.batch.models.ProgressState
 import com.behraz.fastermixer.batch.ui.animations.closeReveal
 import com.behraz.fastermixer.batch.ui.animations.crossfade
 import com.behraz.fastermixer.batch.ui.animations.startReveal
+import com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.progressview.FasterMixerProgressView
 import com.behraz.fastermixer.batch.ui.customs.general.LockableBottomSheetBehavior
 import com.behraz.fastermixer.batch.ui.customs.general.TopSheetBehavior
 import com.behraz.fastermixer.batch.ui.dialogs.MessageDialog
+import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.ui.fragments.CustomerListFragment
 import com.behraz.fastermixer.batch.ui.fragments.MapFragment
 import com.behraz.fastermixer.batch.ui.fragments.MixerListFragment
-import com.behraz.fastermixer.batch.utils.fastermixer.fakeProgresses
-import com.behraz.fastermixer.batch.utils.fastermixer.subscribeGpsStateChangeListener
-import com.behraz.fastermixer.batch.utils.fastermixer.subscribeNetworkStateChangeListener
+import com.behraz.fastermixer.batch.utils.fastermixer.*
+import com.behraz.fastermixer.batch.utils.general.snack
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -34,7 +36,11 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class PompActivity : AppCompatActivity(),
     FasterMixerProgressView.OnStateChangedListener,
-    MessageDialog.Interactions {
+    MessageDialog.Interactions, FasterMixerUserPanel.Interactions {
+
+    private val progressDialog by lazy {
+        MyProgressDialog(this, R.style.my_alert_dialog)
+    }
 
     private lateinit var viewModel: PompActivityViewModel
     private lateinit var bottomSheetBehavior: LockableBottomSheetBehavior<View>
@@ -53,23 +59,10 @@ class PompActivity : AppCompatActivity(),
         mBinding.viewModel = viewModel
 
         initViews()
+        subscribeObservers()
 
         subscribeNetworkStateChangeListener { mBinding.fasterMixerUserPanel.setInternetState(it) }
         subscribeGpsStateChangeListener { mBinding.fasterMixerUserPanel.setGPSState(it) }
-    }
-
-
-    override fun onBackPressed() {
-
-        if (supportFragmentManager.backStackEntryCount == 1) {
-            mBinding.btnArrow.visibility = View.VISIBLE
-            mBinding.btnMyLocation.visibility = View.VISIBLE
-            startReveal(mBinding.btnArrow) {}
-            startReveal(mBinding.btnMyLocation) {}
-        }
-
-        super.onBackPressed()
-
     }
 
     private fun initViews() {
@@ -134,7 +127,6 @@ class PompActivity : AppCompatActivity(),
             )
         }
 
-        mBinding.tvMessageCount.text = "2"
         mBinding.btnMessage.setOnClickListener {
             MessageDialog(
                 this,
@@ -142,10 +134,6 @@ class PompActivity : AppCompatActivity(),
                 this
             ).show()
         }
-
-
-
-
 
         bottomSheetBehavior = LockableBottomSheetBehavior.from(mBinding.bottomSheet)
         bottomSheetBehavior.setSwipeEnabled(false)
@@ -174,12 +162,64 @@ class PompActivity : AppCompatActivity(),
         }
 
 
+        mBinding.fasterMixerUserPanel.setInteractions(this)
+
+
         mBinding.jobProgressView.addOnStateChangedListener(this)
         mBinding.jobProgressView.setProgressItems(
             fakeProgresses(
                 false
             )
         ) //todo ui test purpose get it from viewModel
+
+    }
+
+    private fun subscribeObservers() {
+        viewModel.user.observe(this, Observer {
+            it?.let {
+                mBinding.fasterMixerUserPanel.setUsername(it.name)
+                mBinding.fasterMixerUserPanel.setPersonalCode(it.personalCode)
+            }
+        })
+
+
+        viewModel.logoutResponse.observe(this, Observer {
+            progressDialog.dismiss()
+            if (it != null) {
+                if (it.isSucceed) {
+                    toast("خروج موفقیت آمیز بود")
+                    finish()
+                } else {
+                    toast(it.message)
+                }
+            } else {
+                snack(Constants.SERVER_ERROR) {
+                    progressDialog.show()
+                    viewModel.logout()
+                }
+            }
+        })
+
+
+        /*todo viewModel.message.observe {
+            mBinding.tvMessageCount.text = "${it.count}"
+        }*/
+    }
+
+
+
+
+
+    override fun onBackPressed() {
+
+        if (supportFragmentManager.backStackEntryCount == 1) {
+            mBinding.btnArrow.visibility = View.VISIBLE
+            mBinding.btnMyLocation.visibility = View.VISIBLE
+            startReveal(mBinding.btnArrow) {}
+            startReveal(mBinding.btnMyLocation) {}
+        }
+
+        super.onBackPressed()
 
     }
 
@@ -215,5 +255,16 @@ class PompActivity : AppCompatActivity(),
 
     override fun onRepairClicked() {
         toast("Not yet implemented")
+    }
+
+    override fun onLogoutClicked(view: View) {
+       logoutAlertMessage {
+            viewModel.logout()
+            progressDialog.show()
+        }
+    }
+
+    override fun onCallClicked(view: View?) {
+        TODO("Not yet implemented")
     }
 }
