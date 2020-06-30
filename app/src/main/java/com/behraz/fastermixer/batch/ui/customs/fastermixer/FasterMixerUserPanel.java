@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.behraz.fastermixer.batch.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class FasterMixerUserPanel extends LinearLayout {
 
@@ -21,12 +22,13 @@ public class FasterMixerUserPanel extends LinearLayout {
     private ImageView ivVoipState;
     private ImageView ivProfile;
     //private View btnBottomHideBar;
-   // private View btnTopHideBar;
+    // private View btnTopHideBar;
     private View btnCall;
     private View btnLogout;
     private TextView tvUsername;
     private TextView tvPersonalCode;
     private View frameVOIP;
+    private FloatingActionButton btnRecord;
 
 
     public FasterMixerUserPanel(Context context) {
@@ -58,7 +60,7 @@ public class FasterMixerUserPanel extends LinearLayout {
 
         ivProfile = root.findViewById(R.id.iv_profile);
         //btnBottomHideBar = root.findViewById(R.id.btnHideBar);
-       // btnTopHideBar = root.findViewById(R.id.btnTopHideBar);
+        // btnTopHideBar = root.findViewById(R.id.btnTopHideBar);
         ivNetState = root.findViewById(R.id.ivInternet);
         ivGpsState = root.findViewById(R.id.ivGPS);
         ivVoipState = root.findViewById(R.id.ivVoip);
@@ -67,7 +69,7 @@ public class FasterMixerUserPanel extends LinearLayout {
         tvUsername = root.findViewById(R.id.tv_username);
         tvPersonalCode = root.findViewById(R.id.tv_personal_code);
         frameVOIP = root.findViewById(R.id.frame_voip);
-
+        btnRecord = root.findViewById(R.id.btnRecord);
 
         TypedArray attributes = getContext().obtainStyledAttributes(attrs, R.styleable.FasterMixerUserPanel);
 
@@ -108,6 +110,12 @@ public class FasterMixerUserPanel extends LinearLayout {
                 interactions.onLogoutClicked(btnLogout);
             }
         });
+
+        btnRecord.setOnClickListener(btnRecord -> {
+            if (interactions != null)
+                interactions.onRecordClicked(this.btnRecord);
+        });
+
         /*btnTopHideBar.setOnClickListener(btnHideBar -> {
             if (interactions != null) {
                 interactions.onHideBarClicked(btnHideBar);
@@ -172,6 +180,8 @@ public class FasterMixerUserPanel extends LinearLayout {
         void onCallClicked(View view);
 
         void onLogoutClicked(View view);
+
+        void onRecordClicked(FloatingActionButton btnRecord);
     }
 
 }

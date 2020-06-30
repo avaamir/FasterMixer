@@ -26,17 +26,29 @@ import com.behraz.fastermixer.batch.ui.dialogs.MessageDialog
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.ui.fragments.CustomerListFragment
 import com.behraz.fastermixer.batch.ui.fragments.MapFragment
+import com.behraz.fastermixer.batch.ui.fragments.MessageListFragment
 import com.behraz.fastermixer.batch.ui.fragments.MixerListFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.*
+import com.behraz.fastermixer.batch.utils.general.compass.TimerLiveData
 import com.behraz.fastermixer.batch.utils.general.snack
+import com.behraz.fastermixer.batch.utils.general.subscribeGpsStateChangeListener
+import com.behraz.fastermixer.batch.utils.general.subscribeNetworkStateChangeListener
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.activity_batch.*
 
 
 class PompActivity : AppCompatActivity(),
     FasterMixerProgressView.OnStateChangedListener,
     MessageDialog.Interactions, FasterMixerUserPanel.Interactions {
+
+    private companion object {
+        private const val FRAGMENT_MIXER_LIST_TAG = "mixer-list_frag"
+        private const val FRAGMENT_CUSTOMER_LIST_TAG = "customer-list_frag"
+        private const val FRAGMENT_MESSAGE_LIST_TAG = "msg-list_frag"
+    }
 
     private val progressDialog by lazy {
         MyProgressDialog(this, R.style.my_alert_dialog)
@@ -63,6 +75,10 @@ class PompActivity : AppCompatActivity(),
 
         subscribeNetworkStateChangeListener { mBinding.fasterMixerUserPanel.setInternetState(it) }
         subscribeGpsStateChangeListener { mBinding.fasterMixerUserPanel.setGPSState(it) }
+
+        TimerLiveData(1000L).observe(this, Observer {
+            viewModel.getMessages()
+        })
     }
 
     private fun initViews() {
@@ -96,7 +112,7 @@ class PompActivity : AppCompatActivity(),
                 mBinding.btnArrow.visibility = View.GONE
             }
             supportFragmentManager.beginTransaction().apply {
-                add(R.id.mapContainer, MixerListFragment(), "frag-mixer-list")
+                add(R.id.mapContainer, MixerListFragment(), FRAGMENT_MIXER_LIST_TAG)
                 addToBackStack(null)
                 setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 commit()
@@ -110,7 +126,7 @@ class PompActivity : AppCompatActivity(),
                 mBinding.btnArrow.visibility = View.GONE
             }
             supportFragmentManager.beginTransaction().apply {
-                add(R.id.mapContainer, CustomerListFragment(), "frag-mixer-list")
+                add(R.id.mapContainer, CustomerListFragment(), FRAGMENT_CUSTOMER_LIST_TAG)
                 addToBackStack(null)
                 setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 commit()
@@ -201,13 +217,30 @@ class PompActivity : AppCompatActivity(),
         })
 
 
-        /*todo viewModel.message.observe {
-            mBinding.tvMessageCount.text = "${it.count}"
-        }*/
+        viewModel.messages.observe(this, Observer {
+            if (it != null) {
+                if (it.isSucceed) {
+                    it.entity?.let { messages ->
+                        supportFragmentManager.findFragmentByTag(FRAGMENT_MESSAGE_LIST_TAG)
+                            ?.let { fragment ->
+                                if (fragment.isVisible) {
+                                    (fragment as MessageListFragment).submitMessages(messages)
+                                }
+                            }
+                        tvMessageCount.text = messages.size.toString()
+                        //TODO check if a message is critical and new show in dialog to user
+                    }
+                } else {
+                    //TODO is not succeed what should i do??
+                    println("debug: ${it.message}")
+                }
+            } else {
+
+                println("debug: getMessages() -> Server Error: returning `null`")
+                //todo Server Error chekar konam??
+            }
+        })
     }
-
-
-
 
 
     override fun onBackPressed() {
@@ -258,10 +291,14 @@ class PompActivity : AppCompatActivity(),
     }
 
     override fun onLogoutClicked(view: View) {
-       logoutAlertMessage {
+        logoutAlertMessage {
             viewModel.logout()
             progressDialog.show()
         }
+    }
+
+    override fun onRecordClicked(btnRecord: FloatingActionButton?) {
+        toast("not yet implemented")
     }
 
     override fun onCallClicked(view: View?) {

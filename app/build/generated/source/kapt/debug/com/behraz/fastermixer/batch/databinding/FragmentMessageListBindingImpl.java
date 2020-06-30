@@ -19,7 +19,7 @@ public class FragmentMessageListBindingImpl extends FragmentMessageListBinding  
         sViewsWithIds.put(R.id.tvMessageCount, 3);
         sViewsWithIds.put(R.id.btnMap, 4);
         sViewsWithIds.put(R.id.btnMessage, 5);
-        sViewsWithIds.put(R.id.mixerRecycler, 6);
+        sViewsWithIds.put(R.id.messageRecycler, 6);
     }
     // views
     @NonNull

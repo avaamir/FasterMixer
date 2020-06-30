@@ -40,7 +40,7 @@ public final class MessageDao_Impl implements MessageDao {
     this.__insertionAdapterOfMessage = new EntityInsertionAdapter<Message>(__db) {
       @Override
       public String createQuery() {
-        return "INSERT OR REPLACE INTO `messages` (`id`,`sender`,`content`,`senderImage`,`isEmergency`) VALUES (?,?,?,?,?)";
+        return "INSERT OR REPLACE INTO `messages` (`id`,`sender`,`senderId`,`content`,`senderImage`,`viewed`,`isDelivered`,`priority`,`isSendMessage`) VALUES (?,?,?,?,?,?,?,?,?)";
       }
 
       @Override
@@ -55,19 +55,31 @@ public final class MessageDao_Impl implements MessageDao {
         } else {
           stmt.bindString(2, value.getSender());
         }
-        if (value.getContent() == null) {
+        if (value.getSenderId() == null) {
           stmt.bindNull(3);
         } else {
-          stmt.bindString(3, value.getContent());
+          stmt.bindString(3, value.getSenderId());
         }
-        if (value.getSenderImage() == null) {
+        if (value.getContent() == null) {
           stmt.bindNull(4);
         } else {
-          stmt.bindString(4, value.getSenderImage());
+          stmt.bindString(4, value.getContent());
+        }
+        if (value.getSenderImage() == null) {
+          stmt.bindNull(5);
+        } else {
+          stmt.bindString(5, value.getSenderImage());
         }
         final int _tmp;
-        _tmp = value.isEmergency() ? 1 : 0;
-        stmt.bindLong(5, _tmp);
+        _tmp = value.getViewed() ? 1 : 0;
+        stmt.bindLong(6, _tmp);
+        final int _tmp_1;
+        _tmp_1 = value.isDelivered() ? 1 : 0;
+        stmt.bindLong(7, _tmp_1);
+        stmt.bindLong(8, value.getPriority());
+        final int _tmp_2;
+        _tmp_2 = value.isSendMessage() ? 1 : 0;
+        stmt.bindLong(9, _tmp_2);
       }
     };
     this.__deletionAdapterOfMessage = new EntityDeletionOrUpdateAdapter<Message>(__db) {
@@ -88,7 +100,7 @@ public final class MessageDao_Impl implements MessageDao {
     this.__updateAdapterOfMessage = new EntityDeletionOrUpdateAdapter<Message>(__db) {
       @Override
       public String createQuery() {
-        return "UPDATE OR ABORT `messages` SET `id` = ?,`sender` = ?,`content` = ?,`senderImage` = ?,`isEmergency` = ? WHERE `id` = ?";
+        return "UPDATE OR ABORT `messages` SET `id` = ?,`sender` = ?,`senderId` = ?,`content` = ?,`senderImage` = ?,`viewed` = ?,`isDelivered` = ?,`priority` = ?,`isSendMessage` = ? WHERE `id` = ?";
       }
 
       @Override
@@ -103,23 +115,35 @@ public final class MessageDao_Impl implements MessageDao {
         } else {
           stmt.bindString(2, value.getSender());
         }
-        if (value.getContent() == null) {
+        if (value.getSenderId() == null) {
           stmt.bindNull(3);
         } else {
-          stmt.bindString(3, value.getContent());
+          stmt.bindString(3, value.getSenderId());
         }
-        if (value.getSenderImage() == null) {
+        if (value.getContent() == null) {
           stmt.bindNull(4);
         } else {
-          stmt.bindString(4, value.getSenderImage());
+          stmt.bindString(4, value.getContent());
+        }
+        if (value.getSenderImage() == null) {
+          stmt.bindNull(5);
+        } else {
+          stmt.bindString(5, value.getSenderImage());
         }
         final int _tmp;
-        _tmp = value.isEmergency() ? 1 : 0;
-        stmt.bindLong(5, _tmp);
+        _tmp = value.getViewed() ? 1 : 0;
+        stmt.bindLong(6, _tmp);
+        final int _tmp_1;
+        _tmp_1 = value.isDelivered() ? 1 : 0;
+        stmt.bindLong(7, _tmp_1);
+        stmt.bindLong(8, value.getPriority());
+        final int _tmp_2;
+        _tmp_2 = value.isSendMessage() ? 1 : 0;
+        stmt.bindLong(9, _tmp_2);
         if (value.getId() == null) {
-          stmt.bindNull(6);
+          stmt.bindNull(10);
         } else {
-          stmt.bindString(6, value.getId());
+          stmt.bindString(10, value.getId());
         }
       }
     };
@@ -230,9 +254,13 @@ public final class MessageDao_Impl implements MessageDao {
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
           final int _cursorIndexOfSender = CursorUtil.getColumnIndexOrThrow(_cursor, "sender");
+          final int _cursorIndexOfSenderId = CursorUtil.getColumnIndexOrThrow(_cursor, "senderId");
           final int _cursorIndexOfContent = CursorUtil.getColumnIndexOrThrow(_cursor, "content");
           final int _cursorIndexOfSenderImage = CursorUtil.getColumnIndexOrThrow(_cursor, "senderImage");
-          final int _cursorIndexOfIsEmergency = CursorUtil.getColumnIndexOrThrow(_cursor, "isEmergency");
+          final int _cursorIndexOfViewed = CursorUtil.getColumnIndexOrThrow(_cursor, "viewed");
+          final int _cursorIndexOfIsDelivered = CursorUtil.getColumnIndexOrThrow(_cursor, "isDelivered");
+          final int _cursorIndexOfPriority = CursorUtil.getColumnIndexOrThrow(_cursor, "priority");
+          final int _cursorIndexOfIsSendMessage = CursorUtil.getColumnIndexOrThrow(_cursor, "isSendMessage");
           final List<Message> _result = new ArrayList<Message>(_cursor.getCount());
           while(_cursor.moveToNext()) {
             final Message _item;
@@ -240,15 +268,27 @@ public final class MessageDao_Impl implements MessageDao {
             _tmpId = _cursor.getString(_cursorIndexOfId);
             final String _tmpSender;
             _tmpSender = _cursor.getString(_cursorIndexOfSender);
+            final String _tmpSenderId;
+            _tmpSenderId = _cursor.getString(_cursorIndexOfSenderId);
             final String _tmpContent;
             _tmpContent = _cursor.getString(_cursorIndexOfContent);
             final String _tmpSenderImage;
             _tmpSenderImage = _cursor.getString(_cursorIndexOfSenderImage);
-            final boolean _tmpIsEmergency;
+            final boolean _tmpViewed;
             final int _tmp;
-            _tmp = _cursor.getInt(_cursorIndexOfIsEmergency);
-            _tmpIsEmergency = _tmp != 0;
-            _item = new Message(_tmpId,_tmpSender,_tmpContent,_tmpSenderImage,_tmpIsEmergency);
+            _tmp = _cursor.getInt(_cursorIndexOfViewed);
+            _tmpViewed = _tmp != 0;
+            final boolean _tmpIsDelivered;
+            final int _tmp_1;
+            _tmp_1 = _cursor.getInt(_cursorIndexOfIsDelivered);
+            _tmpIsDelivered = _tmp_1 != 0;
+            final int _tmpPriority;
+            _tmpPriority = _cursor.getInt(_cursorIndexOfPriority);
+            final boolean _tmpIsSendMessage;
+            final int _tmp_2;
+            _tmp_2 = _cursor.getInt(_cursorIndexOfIsSendMessage);
+            _tmpIsSendMessage = _tmp_2 != 0;
+            _item = new Message(_tmpId,_tmpSender,_tmpSenderId,_tmpContent,_tmpSenderImage,_tmpViewed,_tmpIsDelivered,_tmpPriority,_tmpIsSendMessage);
             _result.add(_item);
           }
           return _result;
@@ -277,24 +317,40 @@ public final class MessageDao_Impl implements MessageDao {
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
           final int _cursorIndexOfSender = CursorUtil.getColumnIndexOrThrow(_cursor, "sender");
+          final int _cursorIndexOfSenderId = CursorUtil.getColumnIndexOrThrow(_cursor, "senderId");
           final int _cursorIndexOfContent = CursorUtil.getColumnIndexOrThrow(_cursor, "content");
           final int _cursorIndexOfSenderImage = CursorUtil.getColumnIndexOrThrow(_cursor, "senderImage");
-          final int _cursorIndexOfIsEmergency = CursorUtil.getColumnIndexOrThrow(_cursor, "isEmergency");
+          final int _cursorIndexOfViewed = CursorUtil.getColumnIndexOrThrow(_cursor, "viewed");
+          final int _cursorIndexOfIsDelivered = CursorUtil.getColumnIndexOrThrow(_cursor, "isDelivered");
+          final int _cursorIndexOfPriority = CursorUtil.getColumnIndexOrThrow(_cursor, "priority");
+          final int _cursorIndexOfIsSendMessage = CursorUtil.getColumnIndexOrThrow(_cursor, "isSendMessage");
           final Message _result;
           if(_cursor.moveToFirst()) {
             final String _tmpId;
             _tmpId = _cursor.getString(_cursorIndexOfId);
             final String _tmpSender;
             _tmpSender = _cursor.getString(_cursorIndexOfSender);
+            final String _tmpSenderId;
+            _tmpSenderId = _cursor.getString(_cursorIndexOfSenderId);
             final String _tmpContent;
             _tmpContent = _cursor.getString(_cursorIndexOfContent);
             final String _tmpSenderImage;
             _tmpSenderImage = _cursor.getString(_cursorIndexOfSenderImage);
-            final boolean _tmpIsEmergency;
+            final boolean _tmpViewed;
             final int _tmp;
-            _tmp = _cursor.getInt(_cursorIndexOfIsEmergency);
-            _tmpIsEmergency = _tmp != 0;
-            _result = new Message(_tmpId,_tmpSender,_tmpContent,_tmpSenderImage,_tmpIsEmergency);
+            _tmp = _cursor.getInt(_cursorIndexOfViewed);
+            _tmpViewed = _tmp != 0;
+            final boolean _tmpIsDelivered;
+            final int _tmp_1;
+            _tmp_1 = _cursor.getInt(_cursorIndexOfIsDelivered);
+            _tmpIsDelivered = _tmp_1 != 0;
+            final int _tmpPriority;
+            _tmpPriority = _cursor.getInt(_cursorIndexOfPriority);
+            final boolean _tmpIsSendMessage;
+            final int _tmp_2;
+            _tmp_2 = _cursor.getInt(_cursorIndexOfIsSendMessage);
+            _tmpIsSendMessage = _tmp_2 != 0;
+            _result = new Message(_tmpId,_tmpSender,_tmpSenderId,_tmpContent,_tmpSenderImage,_tmpViewed,_tmpIsDelivered,_tmpPriority,_tmpIsSendMessage);
           } else {
             _result = null;
           }

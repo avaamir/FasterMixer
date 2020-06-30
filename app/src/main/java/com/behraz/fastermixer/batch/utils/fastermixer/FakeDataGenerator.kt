@@ -70,14 +70,47 @@ fun fakeBatches() = listOf(
 
 
 fun fakeMessages() = listOf(
-    Message("1", "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
-    Message("2", "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
-    Message("3", "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
-    Message("4", "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
-    Message("5", "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
-    Message("6", "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
-    Message("7", "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false),
-    Message("8", "باسکول", "مغیارت بار برای میکسر یک", null, isEmergency = false)
+    Message(
+        id = "1",
+        sender = "باسکول",
+        content = "مغیارت بار برای میکسر یک",
+        priority = 1,
+        senderId = "1",
+        senderImage = null,
+        viewed = false,
+        isDelivered = false,
+        isSendMessage = false
+    ), Message(
+        id = "2",
+        sender = "باسکول",
+        content = "مغیارت بار برای میکسر یک",
+        priority = 1,
+        senderId = "1",
+        senderImage = null,
+        viewed = false,
+        isDelivered = false,
+        isSendMessage = false
+    ), Message(
+        id = "3",
+        sender = "باسکول",
+        content = "مغیارت بار برای میکسر یک",
+        priority = 1,
+        senderId = "1",
+        senderImage = null,
+        viewed = false,
+        isDelivered = false,
+        isSendMessage = false
+    ), Message(
+        id = "4",
+        sender = "باسکول",
+        content = "مغیارت بار برای میکسر یک",
+        priority = 1,
+        senderId = "1",
+        senderImage = null,
+        viewed = false,
+        isDelivered = false,
+        isSendMessage = false
+    )
 )
 
 

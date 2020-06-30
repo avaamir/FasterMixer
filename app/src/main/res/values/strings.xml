@@ -5,8 +5,8 @@
     cause unexpected calls on your phone bill. Note that this does not
     allow the app to call emergency numbers.</string>
 
-    <string name="app_name">Fast Mixer</string>
-    <string name="app_name_fa">فست میکسر</string>
+    <string name="app_name">Faster Mixer</string>
+    <string name="app_name_fa">فستر میکسر</string>
 
     <string name="size_count">%1$d سایز</string>
     <string name="color_count">%1$d رنگ</string>

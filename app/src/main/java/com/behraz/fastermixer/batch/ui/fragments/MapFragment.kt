@@ -28,6 +28,7 @@ import com.behraz.fastermixer.batch.ui.osm.WorkerMarker
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.MapViewModel
+import com.behraz.fastermixer.batch.viewmodels.MapViewModel.Companion.MIN_LOCATION_UPDATE_TIME
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -38,14 +39,15 @@ import org.osmdroid.views.overlay.Polyline
 class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListener {
 
 
-    private var btnMyLocationId: Int =
-        0 //btnMylocation Mitune tu activity bashe niaz hast refrencesh ro dashte bashim age tu activity hast
+    private var isFlag = true
+
+    private var btnMyLocationId: Int = 0 //btnMylocation Mitune tu activity bashe niaz hast refrencesh ro dashte bashim age tu activity hast
     private lateinit var viewModel: MapViewModel
     private lateinit var mBinding: LayoutMapBinding
     private lateinit var btnMyLocation: FloatingActionButton
 
     private lateinit var userMarker: Marker
-    private val truckMarker by lazy { SimpleMarker(mBinding.map) } //todo test purpose
+    private lateinit var truckMarker: SimpleMarker
     private var routePolyline: Polyline? = null
 
     companion object {
@@ -158,8 +160,9 @@ class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListene
         mapController.setCenter(startPoint)
 
 
-        userMarker = addMarkerToMap(
-            marker = WorkerMarker(mBinding.map),
+        userMarker = WorkerMarker(mBinding.map)
+        addMarkerToMap(
+            marker = userMarker,
             point = startPoint
         )
 
@@ -182,11 +185,10 @@ class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListene
     private fun addMarkerToMap(
         marker: Marker,
         point: GeoPoint
-    ): Marker {
+    ) {
         marker.position = point
         marker.title = "مکان شما"
         mBinding.map.overlays.add(marker)
-        return marker
     }
 
 
@@ -210,7 +212,7 @@ class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListene
             println("debug: allProviders contains NETWORK_PROVIDER")
             locationManager.requestLocationUpdates(
                 LocationManager.NETWORK_PROVIDER,
-                0L,
+                MIN_LOCATION_UPDATE_TIME,
                 0f,
                 this
             )
@@ -229,7 +231,7 @@ class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListene
             println("debug: allProviders contains GPS_PROVIDER")
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
-                0L,
+                MIN_LOCATION_UPDATE_TIME,
                 0f,
                 this
             )
@@ -247,7 +249,7 @@ class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListene
             println("debug: allProviders contains GPS_PROVIDER")
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
-                0L,
+                MIN_TIME,
                 0f,
                 this
             )
@@ -319,8 +321,8 @@ class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListene
     }
 
     override fun onLocationChanged(location: Location) {
-        viewModel.myLocation.latitude = location.latitude
-        viewModel.myLocation.longitude = location.longitude
+        viewModel.myLocation = GeoPoint(location.latitude, location.longitude)
+        viewModel.addLocation(location)
     }
 
     override fun onStatusChanged(
@@ -354,13 +356,12 @@ class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListene
         )
     }
 
-
-    private var isFlag = true
     override fun onMapTapped(geoPoint: GeoPoint) {
         println("debug: onMapTapped: " + geoPoint.latitude + " , " + geoPoint.longitude)
 
         if (isFlag) {
             isFlag = false
+            truckMarker = SimpleMarker(mBinding.map)
             addMarkerToMap(truckMarker, geoPoint)
         }
         truckMarker.position = geoPoint

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:elevation="2dp"
+    android:orientation="vertical"
+    android:background="@drawable/bg_rect_rounded"
+    android:backgroundTint="#BC2C353D"
+    android:gravity="center"
+    android:paddingRight="@dimen/large_margin"
+    android:paddingLeft="@dimen/large_margin"
+    android:paddingTop="32dp"
+    android:paddingBottom="32dp"
+    >
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnRecord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="@color/deep_red"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/ic_mic"
+        app:tint="@color/white" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:text="در حال ضبط کردن.."
+
+        style="@style/my_white_normal_text"/>
+
+    <TextView
+        android:id="@+id/tvTick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_margin="@dimen/tiny_margin"
+        android:textColor="@color/red"
+        tools:text="3:25"
+
+        style="@style/my_white_normal_text"/>
+
+
+</LinearLayout>

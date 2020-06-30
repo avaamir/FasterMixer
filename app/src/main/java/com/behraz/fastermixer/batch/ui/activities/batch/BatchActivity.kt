@@ -17,11 +17,17 @@ import com.behraz.fastermixer.batch.ui.adapters.MessageAdapter
 import com.behraz.fastermixer.batch.ui.adapters.MixerAdapter
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
-import com.behraz.fastermixer.batch.utils.fastermixer.*
+import com.behraz.fastermixer.batch.utils.fastermixer.Constants
+import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
+import com.behraz.fastermixer.batch.utils.general.compass.TimerLiveData
 import com.behraz.fastermixer.batch.utils.general.snack
+import com.behraz.fastermixer.batch.utils.general.subscribeGpsStateChangeListener
+import com.behraz.fastermixer.batch.utils.general.subscribeNetworkStateChangeListener
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.BatchActivityViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_batch.*
+import kotlin.concurrent.fixedRateTimer
 
 class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdapter.Interaction,
     FasterMixerUserPanel.Interactions {
@@ -30,7 +36,7 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdap
     private val progressDialog by lazy {
         MyProgressDialog(this, R.style.my_alert_dialog)
     }
-    private  lateinit var viewModel: BatchActivityViewModel
+    private lateinit var viewModel: BatchActivityViewModel
 
     private val messageAdapter = MessageAdapter(false, this)
     private val mixerAdapter = MixerAdapter(false, this)
@@ -46,16 +52,13 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdap
 
         subscribeNetworkStateChangeListener { fasterMixerUserPanel.setInternetState(it) }
         subscribeGpsStateChangeListener { fasterMixerUserPanel.setGPSState(it) }
+
+        TimerLiveData(1000L).observe(this, Observer {
+            viewModel.getMessages()
+        })
     }
 
     private fun subscribeObservers() {
-        tvMessageCount.text = "12"
-
-        //TODO ui test purpose
-        messageAdapter.submitList(fakeMessages())
-        mixerAdapter.submitList(fakeMixers())
-
-
         viewModel.logoutResponse.observe(this, Observer {
             progressDialog.dismiss()
             if (it != null) {
@@ -72,6 +75,27 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdap
                 }
             }
         })
+
+
+        viewModel.messages.observe(this, Observer {
+            if (it != null) {
+                if (it.isSucceed) {
+                    it.entity?.let { messages ->
+                        messageAdapter.submitList(messages)
+                        tvMessageCount.text = messages.size.toString()
+                    }
+                } else {
+                    //TODO is not succeed what should i do??
+                    println("debug: ${it.message}")
+                }
+            } else {
+
+                println("debug: getMessages() -> Server Error: returning `null`")
+                //todo Server Error chekar konam??
+            }
+        })
+
+        //todo get from server mixerAdapter.submitList(fakeMixers())
 
     }
 
@@ -119,6 +143,10 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdap
             viewModel.logout()
             progressDialog.show()
         }
+    }
+
+    override fun onRecordClicked(btnRecord: FloatingActionButton) {
+        toast("not yet implemented")
     }
 
     override fun onCallClicked(view: View?) {

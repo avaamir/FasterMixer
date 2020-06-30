@@ -30,6 +30,7 @@ public class ViewFasterMixerUserPanelBindingImpl extends ViewFasterMixerUserPane
         sViewsWithIds.put(R.id.frame_internet, 14);
         sViewsWithIds.put(R.id.ivInternet, 15);
         sViewsWithIds.put(R.id.btnLogout, 16);
+        sViewsWithIds.put(R.id.btnRecord, 17);
     }
     // views
     @NonNull
@@ -40,12 +41,13 @@ public class ViewFasterMixerUserPanelBindingImpl extends ViewFasterMixerUserPane
     // Inverse Binding Event Handlers
 
     public ViewFasterMixerUserPanelBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 17, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 18, sIncludes, sViewsWithIds));
     }
     private ViewFasterMixerUserPanelBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
             , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[8]
             , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[16]
+            , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[17]
             , (android.widget.LinearLayout) bindings[12]
             , (android.widget.LinearLayout) bindings[14]
             , (android.widget.LinearLayout) bindings[10]

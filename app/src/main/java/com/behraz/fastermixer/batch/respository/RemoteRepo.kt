@@ -1,6 +1,5 @@
 package com.behraz.fastermixer.batch.respository
 
-import com.behraz.fastermixer.batch.models.enums.UserType
 import com.behraz.fastermixer.batch.models.requests.behraz.ChooseEquipmentRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.models.requests.behraz.EntityRequest
@@ -9,8 +8,6 @@ import com.behraz.fastermixer.batch.models.requests.route.GetRouteResponse
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.respository.apiservice.MapService
 import com.behraz.fastermixer.batch.utils.general.RunOnceLiveData
-import com.behraz.fastermixer.batch.utils.general.exhaustive
-import com.behraz.fastermixer.batch.utils.general.exhaustiveAsExpression
 import com.behraz.fastermixer.batch.utils.general.launchApi
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
@@ -77,7 +74,7 @@ object RemoteRepo {
             response.body()?.let {
                 if (it.isSucceed) {
                     UserConfigs.loginUser(
-                        it.entity,
+                        it.entity!!,
                         blocking = true
                     ) //block the response till changes saved to db
                 }
@@ -92,18 +89,21 @@ object RemoteRepo {
     fun getBatches() = apiReq(ApiService.client::getBatches)
     fun getPomps() = apiReq(ApiService.client::getPomps)
 
-    fun chooseBatch(chooseEquipmentRequest: ChooseEquipmentRequest) = apiReq(chooseEquipmentRequest, ApiService.client::chooseBatch)
-    fun choosePomp(chooseEquipmentRequest: ChooseEquipmentRequest) = apiReq(chooseEquipmentRequest, ApiService.client::chooseBatch)
+    fun chooseBatch(chooseEquipmentRequest: ChooseEquipmentRequest) =
+        apiReq(chooseEquipmentRequest, ApiService.client::chooseBatch)
+
+    fun choosePomp(chooseEquipmentRequest: ChooseEquipmentRequest) =
+        apiReq(chooseEquipmentRequest, ApiService.client::chooseBatch)
 
 
-
+    fun getMessages() = apiReq(ApiService.client::getMessages)
 
 
     fun getRoute(coordinates: List<GeoPoint>): RunOnceLiveData<GetRouteResponse?> {
         if (!RemoteRepo::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         return object : RunOnceLiveData<GetRouteResponse?>() {
             override fun onActiveRunOnce() {
-                CoroutineScope(Dispatchers.IO + serverJobs).launchApi({
+                CoroutineScope(IO + serverJobs).launchApi({
                     var strCoordinates = ""
                     coordinates.forEach {
                         //origin_longitude,origin_latitude; destination_longitude,destination_latitude

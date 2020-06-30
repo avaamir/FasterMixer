@@ -5,11 +5,11 @@ import com.google.gson.annotations.SerializedName
 
 data class Entity<Entity>(
     @SerializedName("entity")
-    val entity: Entity,
+    val entity: Entity?,
     @SerializedName("isSuccess")
     val isSucceed: Boolean,
     @SerializedName("message")
-    val _message: String?
+    private val _message: String?
 ) {
     val message get() = _message ?: Constants.SERVER_ERROR
 }

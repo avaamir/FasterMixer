@@ -125,7 +125,7 @@
                         app:backgroundColor="@color/material_green"
                         app:image="@drawable/ic_call"
                         app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-                        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+                        app:layout_constraintEnd_toStartOf="@+id/btnRecord"
                         app:layout_constraintTop_toTopOf="@+id/linearLayout"
                         app:radius="5dp"
                         app:text="هماهنگ کننده" />
@@ -228,6 +228,23 @@
                         app:layout_constraintTop_toTopOf="@+id/linearLayout2"
                         app:radius="5dp"
                         app:text="خروج" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/btnRecord"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:backgroundTint="@color/amber"
+                        app:fabSize="normal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_mic"
+                        app:tint="@color/white" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

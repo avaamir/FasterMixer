@@ -1,12 +1,10 @@
 package com.behraz.fastermixer.batch.respository.apiservice
 
 import com.behraz.fastermixer.batch.models.Batch
+import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Pomp
 import com.behraz.fastermixer.batch.models.User
-import com.behraz.fastermixer.batch.models.requests.behraz.ChooseEquipmentRequest
-import com.behraz.fastermixer.batch.models.requests.behraz.EntityRequest
-import com.behraz.fastermixer.batch.models.requests.behraz.Entity
-import com.behraz.fastermixer.batch.models.requests.behraz.LoginRequest
+import com.behraz.fastermixer.batch.models.requests.behraz.*
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -36,6 +34,10 @@ interface BehrazClient {
 
     @POST("Equipment/ChosePomp")//todo not implemented server side check URL
     suspend fun choosePomp(@Body chooseEquipmentRequest: ChooseEquipmentRequest): Response<Entity<Unit>>
+
+
+    @POST("SendMessage/FindAllSendMessageByReceiverId")
+    suspend fun getMessages(): Response<Entity<List<Message>>>
 
 
 

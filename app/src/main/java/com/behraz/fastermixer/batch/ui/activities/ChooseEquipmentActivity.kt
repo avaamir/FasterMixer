@@ -16,11 +16,12 @@ import com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
-import com.behraz.fastermixer.batch.utils.fastermixer.subscribeGpsStateChangeListener
-import com.behraz.fastermixer.batch.utils.fastermixer.subscribeNetworkStateChangeListener
+import com.behraz.fastermixer.batch.utils.general.subscribeGpsStateChangeListener
+import com.behraz.fastermixer.batch.utils.general.subscribeNetworkStateChangeListener
 import com.behraz.fastermixer.batch.utils.general.snack
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.ChooseEquipmentActivityViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_choose_batch.*
 
 class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
@@ -109,6 +110,11 @@ class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Intera
             viewModel.logout()
             progressDialog.show()
         }
+    }
+
+    override fun onRecordClicked(btnRecord: FloatingActionButton?) {
+
+        toast("not yet implemented")
     }
 
     override fun onCallClicked(view: View) {

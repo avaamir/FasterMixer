@@ -14,8 +14,8 @@ import com.behraz.fastermixer.batch.ui.activities.batch.BatchActivity
 import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
 import com.behraz.fastermixer.batch.ui.dialogs.LocationPermissionDialog
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
-import com.behraz.fastermixer.batch.utils.fastermixer.subscribeGpsStateChangeListener
-import com.behraz.fastermixer.batch.utils.fastermixer.subscribeNetworkStateChangeListener
+import com.behraz.fastermixer.batch.utils.general.subscribeGpsStateChangeListener
+import com.behraz.fastermixer.batch.utils.general.subscribeNetworkStateChangeListener
 import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.LoginActivityViewModel
 import kotlinx.android.synthetic.main.activity_login.*
@@ -117,6 +117,11 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
         ivClearUsername.setOnClickListener { etUsername.text.clear() }
 
         //TODO TEST purpose
+        //Pomp
+        /*etUsername.setText("bagher")
+        etPassword.setText("12345")*/
+
+        //Batch
         etUsername.setText("ali")
         etPassword.setText("12345")
     }
@@ -127,7 +132,7 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
             btnLogin.showProgressBar(false)
             if (it != null) {
                 if (it.isSucceed) {
-                    if (it.entity.equipmentId == null) {
+                    if (it.entity!!.equipmentId == null) {
                         if (it.entity.userType == UserType.Mixer) {
                             toast("کاربر میسکر در این نسخه از برنامه تعریف نشده است. لطفا برنامه را به روز رسانی کنید")
                             return@Observer

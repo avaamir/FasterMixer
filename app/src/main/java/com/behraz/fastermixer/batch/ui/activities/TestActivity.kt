@@ -1,8 +1,17 @@
 package com.behraz.fastermixer.batch.ui.activities
 
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.IntentSender
+import android.os.BatteryManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.telephony.PhoneStateListener
+import android.telephony.SignalStrength
+import android.telephony.TelephonyManager
+import android.view.animation.RotateAnimation
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.behraz.fastermixer.batch.R
@@ -11,20 +20,45 @@ import com.behraz.fastermixer.batch.models.requests.behraz.LoginRequest
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
-import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
+import com.behraz.fastermixer.batch.utils.general.compass.Compass
+import com.behraz.fastermixer.batch.utils.general.subscribeSignalStrengthChangeListener
+import com.behraz.fastermixer.batch.utils.general.toast
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.PendingResult
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_test.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.ticker
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.concurrent.fixedRateTimer
+import kotlin.concurrent.timer
+import kotlin.math.sign
+
 
 class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
-    GoogleApiClient.OnConnectionFailedListener {
+    GoogleApiClient.OnConnectionFailedListener, Compass.Interactions {
 
     private var googleApiClient: GoogleApiClient? = null
 
-    lateinit var dialog: MyProgressDialog
+
+
+    private val batteryLevel: Float
+        get() {
+            val batteryIntent =
+                registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+            val level = batteryIntent!!.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
+            val scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
+
+            // Error checking that probably isn't needed but I added just in case.
+            return if (level == -1 || scale == -1) {
+                50.0f
+            } else level.toFloat() / scale.toFloat() * 100.0f
+        }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +66,12 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
         setContentView(R.layout.activity_test)
 
 
-        dialog = MyProgressDialog(this, R.style.my_alert_dialog)
+
+        val x = subscribeSignalStrengthChangeListener(true) {
+            toast(
+                "singal: $it"
+            )
+        }
 
         btnLogin.setOnClickListener {
             /*val gson = Gson()
@@ -50,7 +89,7 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
             RemoteRepo.login(LoginRequest("ali", "12345")).observe(this, Observer {
                 println("debug: $it")
-                it?.let {  UserConfigs.loginUser(it.entity) }
+                it?.let { UserConfigs.loginUser(it.entity!!) }
 
             })
         }
@@ -70,18 +109,18 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
 
         btnChooseBatch.setOnClickListener {
-            RemoteRepo.chooseBatch(ChooseEquipmentRequest(
-                "14581cea-7969-478a-f515-08d80dd443ec"
-            )).observe(this, Observer {
+            RemoteRepo.chooseBatch(
+                ChooseEquipmentRequest(
+                    "14581cea-7969-478a-f515-08d80dd443ec"
+                )
+            ).observe(this, Observer {
                 println("debug: ChooseBatch: $it")
             })
         }
 
         btnFetch.setOnClickListener {
-            dialog.show()
-            Handler().postDelayed({
-                dialog.dismiss()
-            }, 5000)
+            val currentTime: Date = Calendar.getInstance().time
+            println("debug: currentTime : $currentTime, Battery:$batteryLevel")
         }
 
         UserRepo.users.observe(this, Observer {
@@ -90,8 +129,28 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
 
 
+
+        val timer = fixedRateTimer(period = 1000L) {
+            val currentTime: Date = Calendar.getInstance().time
+            println("debug: time; $currentTime")
+            runOnUiThread {
+                btnFetch.text = currentTime.toString()
+            }
+        }
+
+        Handler().postDelayed({
+            timer.cancel()
+        }, 5000)
+
     }
 
+
+    override fun onNewAzimuth(azimuth: Float, animation: RotateAnimation) {
+        btnFetch.startAnimation(animation)
+        println("debug: azimuth: $azimuth")
+    }
+
+    //enable GPS req by google Play--------------------------------------------
 
     private fun enableGPSReq() {
         if (googleApiClient == null) {
@@ -162,4 +221,6 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
     override fun onConnectionFailed(p0: ConnectionResult) {
         println("debug: onConnectionFailed -> $p0")
     }
+
+
 }
