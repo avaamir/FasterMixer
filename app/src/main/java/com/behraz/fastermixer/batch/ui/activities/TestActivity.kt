@@ -1,16 +1,10 @@
 package com.behraz.fastermixer.batch.ui.activities
 
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.IntentSender
 import android.os.BatteryManager
-import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.telephony.PhoneStateListener
-import android.telephony.SignalStrength
-import android.telephony.TelephonyManager
 import android.view.animation.RotateAnimation
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -20,7 +14,8 @@ import com.behraz.fastermixer.batch.models.requests.behraz.LoginRequest
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
-import com.behraz.fastermixer.batch.utils.general.compass.Compass
+import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
+import com.behraz.fastermixer.batch.utils.general.hardware.compass.Compass
 import com.behraz.fastermixer.batch.utils.general.subscribeSignalStrengthChangeListener
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.google.android.gms.common.ConnectionResult
@@ -29,19 +24,12 @@ import com.google.android.gms.common.api.PendingResult
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_test.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.channels.ticker
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import java.io.File
 import java.util.*
-import kotlin.concurrent.fixedRateTimer
-import kotlin.concurrent.timer
-import kotlin.math.sign
 
 
 class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
-    GoogleApiClient.OnConnectionFailedListener, Compass.Interactions {
+    GoogleApiClient.OnConnectionFailedListener, Compass.Interactions, RecordingDialogFragment.Interactions {
 
     private var googleApiClient: GoogleApiClient? = null
 
@@ -68,9 +56,7 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
 
         val x = subscribeSignalStrengthChangeListener(true) {
-            toast(
-                "singal: $it"
-            )
+            println("debug:signal: $it")
         }
 
         btnLogin.setOnClickListener {
@@ -121,6 +107,9 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
         btnFetch.setOnClickListener {
             val currentTime: Date = Calendar.getInstance().time
             println("debug: currentTime : $currentTime, Battery:$batteryLevel")
+
+
+            RecordingDialogFragment().show(supportFragmentManager, "sa")
         }
 
         UserRepo.users.observe(this, Observer {
@@ -128,19 +117,6 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
         })
 
 
-
-
-        val timer = fixedRateTimer(period = 1000L) {
-            val currentTime: Date = Calendar.getInstance().time
-            println("debug: time; $currentTime")
-            runOnUiThread {
-                btnFetch.text = currentTime.toString()
-            }
-        }
-
-        Handler().postDelayed({
-            timer.cancel()
-        }, 5000)
 
     }
 
@@ -220,6 +196,10 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
     override fun onConnectionFailed(p0: ConnectionResult) {
         println("debug: onConnectionFailed -> $p0")
+    }
+
+    override fun onSendClicked(file: File) {
+        toast("toast form activity : StopClicked")
     }
 
 

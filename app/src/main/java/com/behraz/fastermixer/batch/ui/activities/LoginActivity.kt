@@ -14,8 +14,6 @@ import com.behraz.fastermixer.batch.ui.activities.batch.BatchActivity
 import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
 import com.behraz.fastermixer.batch.ui.dialogs.LocationPermissionDialog
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
-import com.behraz.fastermixer.batch.utils.general.subscribeGpsStateChangeListener
-import com.behraz.fastermixer.batch.utils.general.subscribeNetworkStateChangeListener
 import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.LoginActivityViewModel
 import kotlinx.android.synthetic.main.activity_login.*
@@ -33,7 +31,8 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
         PermissionHelper(
             arrayListOf(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.RECORD_AUDIO
             ), this, this
         )
 
@@ -42,7 +41,7 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
         setContentView(R.layout.activity_login)
 
 
-        if (false) {
+        if (true) {
             startActivity(Intent(this, TestActivity::class.java))
             //  finish()
             // return

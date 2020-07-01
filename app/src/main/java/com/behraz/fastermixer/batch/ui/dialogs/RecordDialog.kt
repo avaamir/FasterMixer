@@ -2,6 +2,7 @@ package com.behraz.fastermixer.batch.ui.dialogs
 
 import android.content.Context
 import com.behraz.fastermixer.batch.R
+import com.behraz.fastermixer.batch.utils.general.millisToTimeString
 import kotlinx.android.synthetic.main.layout_record_dialog.*
 import kotlin.concurrent.fixedRateTimer
 
@@ -23,8 +24,7 @@ class RecordDialog(
 
         fixedRateTimer(period = 1000L) {
             tick++
-                ...
-            tvTick.text = tick.toString()
+            tvTick.text = millisToTimeString(tick * 1000L).substring(10)
         }
 
     }

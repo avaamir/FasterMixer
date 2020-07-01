@@ -19,7 +19,7 @@ import com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
-import com.behraz.fastermixer.batch.utils.general.compass.TimerLiveData
+import com.behraz.fastermixer.batch.utils.general.hardware.compass.TimerLiveData
 import com.behraz.fastermixer.batch.utils.general.snack
 import com.behraz.fastermixer.batch.utils.general.subscribeGpsStateChangeListener
 import com.behraz.fastermixer.batch.utils.general.subscribeNetworkStateChangeListener
@@ -27,7 +27,6 @@ import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.BatchActivityViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_batch.*
-import kotlin.concurrent.fixedRateTimer
 
 class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdapter.Interaction,
     FasterMixerUserPanel.Interactions {

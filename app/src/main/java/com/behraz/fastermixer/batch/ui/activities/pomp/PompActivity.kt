@@ -29,7 +29,7 @@ import com.behraz.fastermixer.batch.ui.fragments.MapFragment
 import com.behraz.fastermixer.batch.ui.fragments.MessageListFragment
 import com.behraz.fastermixer.batch.ui.fragments.MixerListFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.*
-import com.behraz.fastermixer.batch.utils.general.compass.TimerLiveData
+import com.behraz.fastermixer.batch.utils.general.hardware.compass.TimerLiveData
 import com.behraz.fastermixer.batch.utils.general.snack
 import com.behraz.fastermixer.batch.utils.general.subscribeGpsStateChangeListener
 import com.behraz.fastermixer.batch.utils.general.subscribeNetworkStateChangeListener

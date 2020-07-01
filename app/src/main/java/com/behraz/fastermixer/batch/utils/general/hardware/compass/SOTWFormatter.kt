@@ -1,4 +1,4 @@
-package com.behraz.fastermixer.batch.utils.general.compass
+package com.behraz.fastermixer.batch.utils.general.hardware.compass
 
 /**
  * SOTW is short Side Of The World

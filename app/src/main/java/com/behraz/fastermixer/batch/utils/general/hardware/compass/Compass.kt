@@ -1,4 +1,4 @@
-package com.behraz.fastermixer.batch.utils.general.compass
+package com.behraz.fastermixer.batch.utils.general.hardware.compass
 
 import android.content.Context
 import android.content.Context.SENSOR_SERVICE

@@ -20,6 +20,7 @@ import com.behraz.fastermixer.batch.databinding.ItemMixerBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ItemPompMixerBindingImpl;
 import com.behraz.fastermixer.batch.databinding.LayoutMapBindingImpl;
 import com.behraz.fastermixer.batch.databinding.LayoutMixerBindingImpl;
+import com.behraz.fastermixer.batch.databinding.LayoutRecordDialogBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ViewFasterMixerUserPanelBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ViewItemProgressBindingImpl;
 import java.lang.IllegalArgumentException;
@@ -61,11 +62,13 @@ public class DataBinderMapperImpl extends DataBinderMapper {
 
   private static final int LAYOUT_LAYOUTMIXER = 14;
 
-  private static final int LAYOUT_VIEWFASTERMIXERUSERPANEL = 15;
+  private static final int LAYOUT_LAYOUTRECORDDIALOG = 15;
 
-  private static final int LAYOUT_VIEWITEMPROGRESS = 16;
+  private static final int LAYOUT_VIEWFASTERMIXERUSERPANEL = 16;
 
-  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(16);
+  private static final int LAYOUT_VIEWITEMPROGRESS = 17;
+
+  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(17);
 
   static {
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.activity_choose_batch, LAYOUT_ACTIVITYCHOOSEBATCH);
@@ -82,6 +85,7 @@ public class DataBinderMapperImpl extends DataBinderMapper {
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_pomp_mixer, LAYOUT_ITEMPOMPMIXER);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.layout_map, LAYOUT_LAYOUTMAP);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.layout_mixer, LAYOUT_LAYOUTMIXER);
+    INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.layout_record_dialog, LAYOUT_LAYOUTRECORDDIALOG);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.view_faster_mixer_user_panel, LAYOUT_VIEWFASTERMIXERUSERPANEL);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.view_item_progress, LAYOUT_VIEWITEMPROGRESS);
   }
@@ -179,6 +183,12 @@ public class DataBinderMapperImpl extends DataBinderMapper {
           }
           throw new IllegalArgumentException("The tag for layout_mixer is invalid. Received: " + tag);
         }
+        case  LAYOUT_LAYOUTRECORDDIALOG: {
+          if ("layout/layout_record_dialog_0".equals(tag)) {
+            return new LayoutRecordDialogBindingImpl(component, view);
+          }
+          throw new IllegalArgumentException("The tag for layout_record_dialog is invalid. Received: " + tag);
+        }
         case  LAYOUT_VIEWFASTERMIXERUSERPANEL: {
           if ("layout/view_faster_mixer_user_panel_0".equals(tag)) {
             return new ViewFasterMixerUserPanelBindingImpl(component, view);
@@ -251,7 +261,7 @@ public class DataBinderMapperImpl extends DataBinderMapper {
   }
 
   private static class InnerLayoutIdLookup {
-    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(16);
+    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(17);
 
     static {
       sKeys.put("layout/activity_choose_batch_0", com.behraz.fastermixer.batch.R.layout.activity_choose_batch);
@@ -268,6 +278,7 @@ public class DataBinderMapperImpl extends DataBinderMapper {
       sKeys.put("layout/item_pomp_mixer_0", com.behraz.fastermixer.batch.R.layout.item_pomp_mixer);
       sKeys.put("layout/layout_map_0", com.behraz.fastermixer.batch.R.layout.layout_map);
       sKeys.put("layout/layout_mixer_0", com.behraz.fastermixer.batch.R.layout.layout_mixer);
+      sKeys.put("layout/layout_record_dialog_0", com.behraz.fastermixer.batch.R.layout.layout_record_dialog);
       sKeys.put("layout/view_faster_mixer_user_panel_0", com.behraz.fastermixer.batch.R.layout.view_faster_mixer_user_panel);
       sKeys.put("layout/view_item_progress_0", com.behraz.fastermixer.batch.R.layout.view_item_progress);
     }
