@@ -8,6 +8,11 @@
         <item name="colorAccent">@color/accent</item>
     </style>
 
+    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+    </style>
+
     <style name="AppTheme.Progressbar">
         <item name="colorAccent">@color/primary_light</item> <!-- Whatever color you want-->
     </style>
@@ -36,11 +41,6 @@
     <!--end bottom sheet-->
 
 
-
-    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_background</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-    </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
