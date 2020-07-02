@@ -5,6 +5,7 @@ import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Pomp
 import com.behraz.fastermixer.batch.models.User
 import com.behraz.fastermixer.batch.models.requests.behraz.*
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -14,6 +15,7 @@ interface BehrazClient {
     //Main Pages
     // @POST("login")
     //suspend fun login(@Body loginRequest: LoginRequest): Response<OnLoggedInResponse>
+
 
 
     @POST("Person/LoginDriver")
@@ -35,6 +37,8 @@ interface BehrazClient {
     @POST("Equipment/ChosePomp")//todo not implemented server side check URL
     suspend fun choosePomp(@Body chooseEquipmentRequest: ChooseEquipmentRequest): Response<Entity<Unit>>
 
+    @POST("")                           //todo not implemented server side check URL
+    suspend fun sendVoiceMessage(voice: MultipartBody.Part): Response<Entity<Unit>>
 
     @POST("SendMessage/FindAllSendMessageByReceiverId")
     suspend fun getMessages(): Response<Entity<List<Message>>>

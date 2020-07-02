@@ -1,6 +1,5 @@
 package com.behraz.fastermixer.batch.ui.dialogs
 
-import android.Manifest
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -16,10 +15,13 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.LayoutRecordDialogBinding
-import com.behraz.fastermixer.batch.utils.general.PermissionHelper
+import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.millisToTimeString
+import com.behraz.fastermixer.batch.utils.general.toast
+import com.behraz.fastermixer.batch.viewmodels.RecordingFragmentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -27,27 +29,26 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.concurrent.fixedRateTimer
 
 
-class RecordingDialogFragment : DialogFragment()  {
+class RecordingDialogFragment : DialogFragment() {
 
     companion object {
         private const val LOG_TAG = "debug:AudioRecord"
     }
 
-    private var recorder: MediaRecorder? = null
-    private var player: MediaPlayer? = null
+    private lateinit var viewModel: RecordingFragmentViewModel
     private lateinit var mBinding: LayoutRecordDialogBinding
 
-
+    private var recorder: MediaRecorder? = null
+    private var player: MediaPlayer? = null
     private val fileName: String by lazy {
         "${activity!!.externalCacheDir!!.absolutePath}/audiorecordtest.3gp"
     }
 
     private lateinit var timer: Timer
-    private var interactions: Interactions? = null
+    //private var interactions: Interactions? = null
     private var tick = 0
 
 
@@ -57,11 +58,29 @@ class RecordingDialogFragment : DialogFragment()  {
         savedInstanceState: Bundle?
     ): View? {
         roundDialog()
+        viewModel = ViewModelProvider(this).get(RecordingFragmentViewModel::class.java)
         mBinding =
             DataBindingUtil.inflate(inflater, R.layout.layout_record_dialog, container, false)
         initViews()
         startRecording()
+        observeViewModel()
         return mBinding.root
+    }
+
+    private fun observeViewModel() {
+        viewModel.sendVoiceResponse.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            showProgress(false)
+            if (it != null) {
+                if (it.isSucceed) {
+                    toast("پیام ارسال شد")
+                    dismiss()
+                } else {
+                    toast(it.message)
+                }
+            } else {
+                toast(Constants.SERVER_ERROR)
+            }
+        })
     }
 
     private fun initViews() {
@@ -76,16 +95,14 @@ class RecordingDialogFragment : DialogFragment()  {
         }
 
         mBinding.btnSend.setOnClickListener {
-            startPlaying()
-
-            //todo uncomment this interactions?.onSendClicked(File(fileName))
+            viewModel.sendRecordFile(File(fileName))
         }
 
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        interactions = activity as Interactions
+      //  interactions = activity as Interactions
     }
 
 
@@ -97,6 +114,21 @@ class RecordingDialogFragment : DialogFragment()  {
                 window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                 window.requestFeature(Window.FEATURE_NO_TITLE)
             }
+        }
+    }
+
+
+    fun showProgress(shouldShow: Boolean) {
+        if (shouldShow) {
+            mBinding.progressBar.visibility = View.VISIBLE
+            mBinding.frameBtns.visibility = View.GONE
+            mBinding.tvRecordMessage.text = "لطفا کمی صبر کنید.."
+            mBinding.tvTick.visibility = View.GONE
+        } else {
+            mBinding.progressBar.visibility = View.GONE
+            mBinding.frameBtns.visibility = View.VISIBLE
+            mBinding.tvRecordMessage.text = "ضبط پایان یافت"
+            mBinding.tvTick.visibility = View.VISIBLE
         }
     }
 
@@ -180,15 +212,8 @@ class RecordingDialogFragment : DialogFragment()  {
         timer.cancel()
         timer.purge()
         tick = 0
-
-
-
     }
+//---------------
 
-    //---------------
 
-
-    interface Interactions {
-        fun onSendClicked(file : File)
-    }
 }

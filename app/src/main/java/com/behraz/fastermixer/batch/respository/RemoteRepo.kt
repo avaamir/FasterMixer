@@ -12,6 +12,8 @@ import com.behraz.fastermixer.batch.utils.general.launchApi
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.osmdroid.util.GeoPoint
 import retrofit2.Response
 import kotlin.reflect.KSuspendFunction0
@@ -97,6 +99,10 @@ object RemoteRepo {
 
 
     fun getMessages() = apiReq(ApiService.client::getMessages)
+
+
+    fun sendVoice(imageRequest: MultipartBody.Part) =
+        apiReq(imageRequest, ApiService.client::sendVoiceMessage)
 
 
     fun getRoute(coordinates: List<GeoPoint>): RunOnceLiveData<GetRouteResponse?> {

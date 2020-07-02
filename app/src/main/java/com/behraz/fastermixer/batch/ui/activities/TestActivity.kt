@@ -17,22 +17,19 @@ import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
 import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
 import com.behraz.fastermixer.batch.utils.general.hardware.compass.Compass
 import com.behraz.fastermixer.batch.utils.general.subscribeSignalStrengthChangeListener
-import com.behraz.fastermixer.batch.utils.general.toast
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.PendingResult
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_test.*
-import java.io.File
 import java.util.*
 
 
 class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
-    GoogleApiClient.OnConnectionFailedListener, Compass.Interactions, RecordingDialogFragment.Interactions {
+    GoogleApiClient.OnConnectionFailedListener, Compass.Interactions {
 
     private var googleApiClient: GoogleApiClient? = null
-
 
 
     private val batteryLevel: Float
@@ -52,7 +49,6 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test)
-
 
 
         val x = subscribeSignalStrengthChangeListener(true) {
@@ -115,7 +111,6 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
         UserRepo.users.observe(this, Observer {
             println("debug: room: $it")
         })
-
 
 
     }
@@ -196,10 +191,6 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
     override fun onConnectionFailed(p0: ConnectionResult) {
         println("debug: onConnectionFailed -> $p0")
-    }
-
-    override fun onSendClicked(file: File) {
-        toast("toast form activity : StopClicked")
     }
 
 
