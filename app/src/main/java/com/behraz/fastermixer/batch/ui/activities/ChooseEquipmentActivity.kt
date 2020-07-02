@@ -2,6 +2,7 @@ package com.behraz.fastermixer.batch.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -14,6 +15,7 @@ import com.behraz.fastermixer.batch.ui.activities.batch.BatchActivity
 import com.behraz.fastermixer.batch.ui.adapters.EquipmentAdapter
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
+import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
 import com.behraz.fastermixer.batch.utils.general.subscribeGpsStateChangeListener
@@ -22,11 +24,13 @@ import com.behraz.fastermixer.batch.utils.general.snack
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.ChooseEquipmentActivityViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_choose_batch.*
 
 class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
     EquipmentAdapter.Interaction {
 
+    private var snackbar: Snackbar? = null
     private lateinit var viewModel: ChooseEquipmentActivityViewModel
     private var mAdapter = EquipmentAdapter(this)
     private val progressDialog: MyProgressDialog by lazy {
@@ -59,16 +63,19 @@ class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Intera
                     toast(it.message)
                 }
             } else {
-                snack(Constants.SERVER_ERROR) {
+                snackbar?.dismiss()
+                //  Handler().postDelayed({
+                this.snackbar = snack(Constants.SERVER_ERROR) {
                     progressBar.visibility = View.VISIBLE
                     viewModel.getEquipments()
                 }
+                //   }, 500)
             }
         })
 
 
         viewModel.chooseEquipmentResponse.observe(this, Observer {
-            progressDialog?.dismiss()
+            progressDialog.dismiss()
             startActivity(Intent(this, BatchActivity::class.java))
             finish()
         })
@@ -91,7 +98,8 @@ class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Intera
                     toast(it.message)
                 }
             } else {
-                snack(Constants.SERVER_ERROR) {
+                snackbar?.dismiss()
+                snackbar = snack(Constants.SERVER_ERROR) {
                     progressDialog.show()
                     viewModel.logout()
                 }
@@ -113,8 +121,7 @@ class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Intera
     }
 
     override fun onRecordClicked(btnRecord: FloatingActionButton?) {
-
-        toast("not yet implemented")
+        RecordingDialogFragment().show(supportFragmentManager, null)
     }
 
     override fun onCallClicked(view: View) {

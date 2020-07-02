@@ -105,7 +105,7 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
             println("debug: currentTime : $currentTime, Battery:$batteryLevel")
 
 
-            RecordingDialogFragment().show(supportFragmentManager, "sa")
+            RecordingDialogFragment().show(supportFragmentManager, null)
         }
 
         UserRepo.users.observe(this, Observer {

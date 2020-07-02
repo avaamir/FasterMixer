@@ -31,7 +31,7 @@ fun Activity.snack(
 
     // Inflate our custom view
     val snackView: View =
-        layoutInflater.inflate(R.layout.view_my_snackbar, findViewById(R.id.custom_snack_container))
+        layoutInflater.inflate(R.layout.view_my_snackbar, findViewById(R.id.custom_snack_container), false)
 
     // Configure the view
     val tvMessage = snackView.findViewById<TextView>(R.id.snackbar_text)
@@ -51,7 +51,7 @@ fun Activity.snack(
     // Add the view to the SnackBar's layout
     layout.addView(snackView, 0)
 
-    snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
+    snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
 
     //snackBar.view.setBackgroundColor(ContextCompat.getColor(this, R.color.toast_background))
 

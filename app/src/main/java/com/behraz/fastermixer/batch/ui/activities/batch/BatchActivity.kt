@@ -17,6 +17,7 @@ import com.behraz.fastermixer.batch.ui.adapters.MessageAdapter
 import com.behraz.fastermixer.batch.ui.adapters.MixerAdapter
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
+import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
 import com.behraz.fastermixer.batch.utils.general.hardware.compass.TimerLiveData
@@ -145,7 +146,7 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdap
     }
 
     override fun onRecordClicked(btnRecord: FloatingActionButton) {
-        toast("not yet implemented")
+        RecordingDialogFragment().show(supportFragmentManager, null)
     }
 
     override fun onCallClicked(view: View?) {

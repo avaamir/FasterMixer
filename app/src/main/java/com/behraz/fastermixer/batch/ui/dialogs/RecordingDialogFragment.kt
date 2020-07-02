@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -43,11 +44,13 @@ class RecordingDialogFragment : DialogFragment() {
 
     private var recorder: MediaRecorder? = null
     private var player: MediaPlayer? = null
-    private val fileName: String by lazy {
-        "${activity!!.externalCacheDir!!.absolutePath}/audiorecordtest.3gp"
-    }
+    private val fileName: String
+        get() =
+            "${activity!!.externalCacheDir!!.absolutePath}/${System.currentTimeMillis()}.3gp"
+
 
     private lateinit var timer: Timer
+
     //private var interactions: Interactions? = null
     private var tick = 0
 
@@ -95,14 +98,20 @@ class RecordingDialogFragment : DialogFragment() {
         }
 
         mBinding.btnSend.setOnClickListener {
-            viewModel.sendRecordFile(File(fileName))
+            showProgress(true)
+            //todo uncomment this line viewModel.sendRecordFile(File(fileName))
+            Handler().postDelayed({ //TODO ui test purpose
+                showProgress(false)
+                dismiss()
+            }, 2000)
+
         }
 
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-      //  interactions = activity as Interactions
+        //  interactions = activity as Interactions
     }
 
 
@@ -118,14 +127,16 @@ class RecordingDialogFragment : DialogFragment() {
     }
 
 
-    fun showProgress(shouldShow: Boolean) {
+    private fun showProgress(shouldShow: Boolean) {
         if (shouldShow) {
             mBinding.progressBar.visibility = View.VISIBLE
+            mBinding.rippleAnimView.visibility = View.VISIBLE
             mBinding.frameBtns.visibility = View.GONE
             mBinding.tvRecordMessage.text = "لطفا کمی صبر کنید.."
-            mBinding.tvTick.visibility = View.GONE
+            mBinding.tvTick.visibility = View.VISIBLE
         } else {
             mBinding.progressBar.visibility = View.GONE
+            mBinding.rippleAnimView.visibility = View.GONE
             mBinding.frameBtns.visibility = View.VISIBLE
             mBinding.tvRecordMessage.text = "ضبط پایان یافت"
             mBinding.tvTick.visibility = View.VISIBLE
@@ -193,6 +204,8 @@ class RecordingDialogFragment : DialogFragment() {
 
     private fun stopRecording() {
         recorder?.apply {
+            mBinding.tvRecordMessage.text = "لطفا کمی صبر کنید.."
+            mBinding.rippleAnimView.stopRippleAnimation()
             mBinding.btnRecord.visibility = View.GONE
             mBinding.progressBar.visibility = View.VISIBLE
             CoroutineScope(IO).launch {
@@ -200,7 +213,6 @@ class RecordingDialogFragment : DialogFragment() {
                 release()
                 CoroutineScope(Main).launch {
                     mBinding.progressBar.visibility = View.GONE
-                    mBinding.rippleAnimView.stopRippleAnimation()
                     mBinding.rippleAnimView.visibility = View.GONE
                     mBinding.frameBtns.visibility = View.VISIBLE
                     mBinding.tvRecordMessage.text = "ضبط پایان یافت"

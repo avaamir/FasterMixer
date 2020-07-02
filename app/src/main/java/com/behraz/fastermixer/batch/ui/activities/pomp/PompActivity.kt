@@ -24,6 +24,7 @@ import com.behraz.fastermixer.batch.ui.customs.general.LockableBottomSheetBehavi
 import com.behraz.fastermixer.batch.ui.customs.general.TopSheetBehavior
 import com.behraz.fastermixer.batch.ui.dialogs.MessageDialog
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
+import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
 import com.behraz.fastermixer.batch.ui.fragments.CustomerListFragment
 import com.behraz.fastermixer.batch.ui.fragments.MapFragment
 import com.behraz.fastermixer.batch.ui.fragments.MessageListFragment
@@ -298,7 +299,7 @@ class PompActivity : AppCompatActivity(),
     }
 
     override fun onRecordClicked(btnRecord: FloatingActionButton?) {
-        toast("not yet implemented")
+        RecordingDialogFragment().show(supportFragmentManager, null)
     }
 
     override fun onCallClicked(view: View?) {

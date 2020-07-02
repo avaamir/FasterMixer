@@ -4,11 +4,16 @@ import com.behraz.fastermixer.batch.models.Batch
 import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Pomp
 import com.behraz.fastermixer.batch.models.User
-import com.behraz.fastermixer.batch.models.requests.behraz.*
+import com.behraz.fastermixer.batch.models.requests.behraz.ChooseEquipmentRequest
+import com.behraz.fastermixer.batch.models.requests.behraz.Entity
+import com.behraz.fastermixer.batch.models.requests.behraz.EntityRequest
+import com.behraz.fastermixer.batch.models.requests.behraz.LoginRequest
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 
 interface BehrazClient {
 
@@ -37,8 +42,9 @@ interface BehrazClient {
     @POST("Equipment/ChosePomp")//todo not implemented server side check URL
     suspend fun choosePomp(@Body chooseEquipmentRequest: ChooseEquipmentRequest): Response<Entity<Unit>>
 
-    @POST("")                           //todo not implemented server side check URL
-    suspend fun sendVoiceMessage(voice: MultipartBody.Part): Response<Entity<Unit>>
+    @Multipart
+    @POST("SendMessage/FindAllSendMessageByReceiverId")                           //todo not implemented server side check URL
+    suspend fun sendVoiceMessage(@Part voice: MultipartBody.Part): Response<Entity<Unit>>
 
     @POST("SendMessage/FindAllSendMessageByReceiverId")
     suspend fun getMessages(): Response<Entity<List<Message>>>
