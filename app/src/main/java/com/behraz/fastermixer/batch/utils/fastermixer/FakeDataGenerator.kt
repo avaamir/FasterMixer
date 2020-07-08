@@ -3,6 +3,29 @@ package com.behraz.fastermixer.batch.utils.fastermixer
 import com.behraz.fastermixer.batch.models.*
 
 
+fun fakeAdminEquipments() = listOf(
+    AdminEquipment("1", "میکسر زرد", "24 ب 623 53", 1),
+    AdminEquipment("2", "لودر زرد", "14 ب 603 63", 2),
+    AdminEquipment("3", "پمپ زرد", "24 ب 613 53", 3),
+    AdminEquipment("4", "فرغون زرد", "22 ب 421 53", 4),
+    AdminEquipment("5", "پمپ زرد", "22 ب 433 53", 1)
+)
+
+fun fakePlans() = listOf(
+    Plan("1", "علی اکبری", "یزد - صفاییه", 50, 10, 4),
+    Plan("2", "علی اکبری", "یزد - صفاییه", 30, 10, 5),
+    Plan("3", "علی اکبری", "یزد - صفاییه", 10, 7, 6),
+    Plan("4", "علی اکبری", "یزد - صفاییه", 10, 7, 6),
+    Plan("5", "علی اکبری", "یزد - صفاییه", 10, 7, 6),
+    Plan("6", "علی اکبری", "یزد - صفاییه", 10, 7, 6),
+    Plan("7", "علی اکبری", "یزد - صفاییه", 10, 7, 6),
+    Plan("8", "علی اکبری", "یزد - صفاییه", 10, 7, 6),
+    Plan("9", "علی اکبری", "یزد - صفاییه", 10, 7, 6),
+    Plan("10", "علی اکبری", "یزد - صفاییه", 10, 7, 6),
+    Plan("11", "علی اکبری", "یزد - صفاییه", 20, 10, 7)
+)
+
+
 fun fakeCustomers() = listOf(
     Customer(
         id = 1,
@@ -119,23 +142,20 @@ fun fakeMixers(): List<Mixer> {
     for (i in 1..6) {
         mixers.add(
             Mixer(
-                id = i,
-                carName = "امیرحسین مهدی پور",
+                id = "$i",
+                carName = "امیرحسین مهدی پور$i",
                 phone = "0936216381$i",
                 carId = "12,ب,234,63",
                 state = "ده دقیقه تا پمپ",
                 driverName = "حسن جعفری",
                 owner = "بهراز$i",
-                latLng = LatLng(0.0, 0.0),
-                loadInfo =
-                LoadInfo(
-                    startTime = "14:32",
-                    _slump = i,
-                    _density = 7,
-                    _amount = 6,
-                    _totalAmount = 20,
-                    isDelivered = false
-                )
+                lat = "${i}",
+                lng =  "42.2${7-i}",
+                amount = 4f,
+                capacity = 6f,
+                ended = false,
+                productTypeName = "8,2",
+                totalAmount = 300f
             )
         )
     }

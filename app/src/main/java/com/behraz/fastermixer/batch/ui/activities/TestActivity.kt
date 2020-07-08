@@ -7,14 +7,20 @@ import android.os.BatteryManager
 import android.os.Bundle
 import android.view.animation.RotateAnimation
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
+import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.behraz.ChooseEquipmentRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.LoginRequest
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
-import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
+import com.behraz.fastermixer.batch.ui.adapters.MixerAdapter
+import com.behraz.fastermixer.batch.utils.fastermixer.fakeMixers
 import com.behraz.fastermixer.batch.utils.general.hardware.compass.Compass
 import com.behraz.fastermixer.batch.utils.general.subscribeSignalStrengthChangeListener
 import com.google.android.gms.common.ConnectionResult
@@ -23,14 +29,17 @@ import com.google.android.gms.common.api.PendingResult
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_test.*
-import java.util.*
+import org.osmdroid.util.GeoPoint
 
 
 class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
-    GoogleApiClient.OnConnectionFailedListener, Compass.Interactions {
+    GoogleApiClient.OnConnectionFailedListener, Compass.Interactions, MixerAdapter.Interaction {
 
     private var googleApiClient: GoogleApiClient? = null
 
+
+    var batchLocation: GeoPoint? = null
+    private val mixerAdapter = MixerAdapter(false, this)
 
     private val batteryLevel: Float
         get() {
@@ -47,6 +56,7 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test)
 
@@ -56,19 +66,6 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
         }
 
         btnLogin.setOnClickListener {
-            /*val gson = Gson()
-
-          val x = gson.fromJson(
-               "{\"entity\":{\"id\":2,\"isAvailable\":true,\"name\":\"batch num1\"},\"isSuccess\":true,\"message\":\"fuck me\"}"
-               ,
-               EntityResponse<Batch>::class.java
-           )
-           println(x)
-
-          // println(gson.toJson(EntityRequest(Batch(2, "batch num1", true))))
-         //  println(gson.toJson(EntityResponse(Batch(2, "batch num1", true), true, "fuck me")))*/
-
-
             RemoteRepo.login(LoginRequest("ali", "12345")).observe(this, Observer {
                 println("debug: $it")
                 it?.let { UserConfigs.loginUser(it.entity!!) }
@@ -101,16 +98,64 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
         }
 
         btnFetch.setOnClickListener {
-            val currentTime: Date = Calendar.getInstance().time
-            println("debug: currentTime : $currentTime, Battery:$batteryLevel")
+            /*  val currentTime: Date = Calendar.getInstance().time
+              println("debug: currentTime : $currentTime, Battery:$batteryLevel")
 
-
-            RecordingDialogFragment().show(supportFragmentManager, null)
+              val persianCaldroidDialog = PersianCaldroidDialog()
+                  .setOnDateSetListener { dialog, date -> //do something when a date is picked
+                      dialog.dismiss()
+                  }
+              persianCaldroidDialog.typeface = ResourcesCompat.getFont(this, R.font.iransans);
+              //set a date to be selected and shown on calendar
+              persianCaldroidDialog.selectedDate = (PersianDate(1396, 9, 24))
+              persianCaldroidDialog.show(supportFragmentManager,  PersianCaldroidDialog::class.java.name)
+  */
         }
 
         UserRepo.users.observe(this, Observer {
             println("debug: room: $it")
         })
+
+
+
+        recycler_view.adapter = mixerAdapter
+        recycler_view.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        recycler_view.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                RecyclerView.VERTICAL
+            )
+        )
+
+
+
+
+        btnGetBatchLoc.setOnClickListener {
+            RemoteRepo.getEquipmentLocation("d675641c-5c11-4d43-f79f-08d82268081d") {
+                batchLocation = it
+            }
+        }
+
+        btnGetMixers.setOnClickListener {
+
+            fakeMixers().let { mixers ->
+                val xx = batchLocation?.let { batchLocation ->
+                    mixers.sortedWith(compareBy { mixer ->
+                        val y = mixer.latLng.distanceToAsDouble(batchLocation)
+                        println("debug:batchLoc=$batchLocation, distance:$y,mixer:${mixer.id}")
+                        y
+                    })
+                }
+                mixerAdapter.submitList(xx ?: mixers)
+            }
+
+        }
+
+
+/*
+        calendarView.setOnDateChangeListener { calendarView, year, month, day ->
+            println("debug: cal: $year/$month/$day -> ${JalaliCalendar.gregorianToJalali(JalaliCalendar.YearMonthDate(year, month, day))}")
+        }*/
 
 
     }
@@ -191,6 +236,14 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
     override fun onConnectionFailed(p0: ConnectionResult) {
         println("debug: onConnectionFailed -> $p0")
+    }
+
+    override fun onCallClicked(mixer: Mixer) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onEndLoadingClicked(mixer: Mixer) {
+        TODO("Not yet implemented")
     }
 
 

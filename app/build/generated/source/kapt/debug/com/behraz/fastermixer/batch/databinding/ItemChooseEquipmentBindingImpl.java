@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.view.View;
 @SuppressWarnings("unchecked")
-public class ItemEquipmentBindingImpl extends ItemEquipmentBinding  {
+public class ItemChooseEquipmentBindingImpl extends ItemChooseEquipmentBinding  {
 
     @Nullable
     private static final androidx.databinding.ViewDataBinding.IncludedLayouts sIncludes;
@@ -23,10 +23,10 @@ public class ItemEquipmentBindingImpl extends ItemEquipmentBinding  {
     // listeners
     // Inverse Binding Event Handlers
 
-    public ItemEquipmentBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
+    public ItemChooseEquipmentBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
         this(bindingComponent, root, mapBindings(bindingComponent, root, 3, sIncludes, sViewsWithIds));
     }
-    private ItemEquipmentBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
+    private ItemChooseEquipmentBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
             , (android.widget.TextView) bindings[1]
             , (android.widget.TextView) bindings[2]
@@ -93,19 +93,19 @@ public class ItemEquipmentBindingImpl extends ItemEquipmentBinding  {
             dirtyFlags = mDirtyFlags;
             mDirtyFlags = 0;
         }
+        java.lang.String batchAvailabilityMessage = null;
         java.lang.String batchName = null;
         com.behraz.fastermixer.batch.models.Equipment batch = mBatch;
-        java.lang.String batchState = null;
 
         if ((dirtyFlags & 0x3L) != 0) {
 
 
 
                 if (batch != null) {
+                    // read batch.availabilityMessage
+                    batchAvailabilityMessage = batch.getAvailabilityMessage();
                     // read batch.name
                     batchName = batch.getName();
-                    // read batch.state
-                    batchState = batch.getState();
                 }
         }
         // batch finished
@@ -113,7 +113,7 @@ public class ItemEquipmentBindingImpl extends ItemEquipmentBinding  {
             // api target 1
 
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.tvBatchName, batchName);
-            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.tvState, batchState);
+            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.tvState, batchAvailabilityMessage);
         }
     }
     // Listener Stub Implementations

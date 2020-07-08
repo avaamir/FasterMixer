@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="equipment"
+            type="com.behraz.fastermixer.batch.models.AdminEquipment" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="120dp">
+
+
+        <com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView
+            android:id="@+id/pelakView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:firstText="12"
+            app:forthText="63"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/ivEquipment"
+            app:layout_constraintHorizontal_bias="0.67"
+            app:layout_constraintTop_toBottomOf="@+id/ivEquipment"
+            app:secondText="ب"
+            app:thirdText="242" />
+
+        <ImageView
+            android:id="@+id/ivEquipment"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_mixer" />
+
+
+        <LinearLayout
+            android:id="@+id/frame_state"
+            android:layout_width="wrap_content"
+            android:minWidth="120dp"
+            android:layout_height="0dp"
+            tools:background="@color/red"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivState"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                android:tint="@color/white"
+                tools:srcCompat="@drawable/ic_block" />
+
+            <TextView
+                android:id="@+id/textView53"
+                style="@style/my_white_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@{equipment.state.desc}"
+                tools:text="در حال تعمیر" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView54"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/iransans"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            tools:text="میکسر سبز"
+            android:text="@{equipment.name}"
+            style="@style/my_black_bold_text"
+            app:layout_constraintBottom_toBottomOf="@+id/ivEquipment"
+            app:layout_constraintEnd_toStartOf="@+id/ivEquipment"
+            app:layout_constraintTop_toTopOf="@+id/ivEquipment" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

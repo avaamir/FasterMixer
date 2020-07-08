@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+
+    <item android:id="@+id/nav_account"
+        android:title="حساب من"
+        android:icon="@drawable/ic_person"
+        app:iconTint="@color/yellow" />
+
+    <item android:id="@+id/nav_home"
+        android:title="پنل مدیریت"
+        android:icon="@drawable/ic_calendar"/>
+    `
+    <item android:id="@+id/nav_equipments"
+        android:title="تجهیزات"
+        android:icon="@drawable/ic_agriculture"/>
+
+</menu>

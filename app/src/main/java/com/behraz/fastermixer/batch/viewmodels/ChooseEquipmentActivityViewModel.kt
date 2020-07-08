@@ -1,9 +1,6 @@
 package com.behraz.fastermixer.batch.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.behraz.fastermixer.batch.models.Equipment
 import com.behraz.fastermixer.batch.models.enums.UserType
 import com.behraz.fastermixer.batch.models.requests.behraz.ChooseEquipmentRequest
@@ -24,12 +21,17 @@ class ChooseEquipmentActivityViewModel : ViewModel() {
     val user get() = UserConfigs.user
 
     private val chooseEquipmentRequest = MutableLiveData<ChooseEquipmentRequest>()
-    val chooseEquipmentResponse = Transformations.switchMap(chooseEquipmentRequest) {
+    val chooseEquipmentResponse = Transformations.switchMap(chooseEquipmentRequest) { request ->
         when (UserConfigs.user.value!!.userType) {
-            UserType.Pomp -> RemoteRepo.choosePomp(it)
+            UserType.Pomp -> RemoteRepo.choosePomp(request)
             UserType.Mixer -> TODO()
-            UserType.Batch -> RemoteRepo.chooseBatch(it)
-        }.exhaustiveAsExpression()
+            UserType.Batch -> RemoteRepo.chooseBatch(request)
+        }.exhaustiveAsExpression().map { response ->
+            if (response?.isSucceed == true) {
+                UserConfigs.updateUser(request.equipmentId)
+            }
+            response
+        }
     }
 
     private val getEquipmentEvent = MutableLiveData<Event<UserType>>()

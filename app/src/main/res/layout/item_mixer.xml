@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="شروع بارگیری:"
+                android:text="ظرفیت میکسر:"
                 app:layout_constraintEnd_toEndOf="@+id/tvMixerName"
                 app:layout_constraintTop_toBottomOf="@+id/tvMixerName" />
 
@@ -220,12 +220,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
-                android:text="@{mixer.loadInfo.startTime}"
+                android:text="@{mixer.capacity + ``}"
                 android:textColor="@color/mixer_red"
                 app:layout_constraintBottom_toBottomOf="@+id/textView11"
                 app:layout_constraintEnd_toStartOf="@+id/textView11"
                 app:layout_constraintTop_toTopOf="@+id/textView11"
-                tools:text="14:32" />
+                tools:text="12" />
 
 
             <TextView

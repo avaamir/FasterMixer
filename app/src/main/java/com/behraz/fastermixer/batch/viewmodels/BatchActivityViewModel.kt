@@ -7,9 +7,32 @@ import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.utils.general.Event
+import org.osmdroid.util.GeoPoint
 import kotlin.concurrent.fixedRateTimer
 
 class BatchActivityViewModel : ViewModel() {
+
+    private var batchLocation: GeoPoint? = null //TODO implement this // get from server
+
+    private val getMixersEvent = MutableLiveData(Event(Unit))
+    val mixers = Transformations.switchMap(getMixersEvent) {
+        RemoteRepo.getBatchMixers().map { response ->
+            val sortedMixers = batchLocation?.let { batchLocation ->
+                response?.entity?.sortedWith(
+                    compareBy { mixer ->
+                        mixer.latLng.distanceToAsDouble(batchLocation).also { distance ->
+                            println("debug:batchLoc=$batchLocation, distance:$distance,mixer:${mixer.id}")
+                        }
+                    }
+                )
+            }
+            if (sortedMixers != null)
+                response?.copy(entity = sortedMixers)
+            else
+                response
+        }
+    }
+
 
     private var isGetMessageRequestActive = false
     private val getMessageEvent = MutableLiveData<Event<Unit>>()
@@ -27,6 +50,18 @@ class BatchActivityViewModel : ViewModel() {
     }
 
 
+    private val timer = fixedRateTimer(period = 10000L) {
+        getMixersEvent.postValue(Event(Unit))
+        getMessageEvent.postValue(Event(Unit))
+    }
+
+    init {
+        RemoteRepo.getEquipmentLocation(UserConfigs.user.value!!.equipmentId!!) {
+            batchLocation = it
+        }
+    }
+
+
     fun getMessages() {
         if (!isGetMessageRequestActive) {
             isGetMessageRequestActive = true
@@ -34,8 +69,18 @@ class BatchActivityViewModel : ViewModel() {
         }
     }
 
+    fun refreshMixers() {
+        getMixersEvent.value = Event(Unit)
+    }
+
 
     fun logout() {
         logOutEvent.value = Event(Unit)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        timer.cancel()
+        timer.purge()
     }
 }

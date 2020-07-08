@@ -2,7 +2,6 @@ package com.behraz.fastermixer.batch.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -12,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.models.Equipment
 import com.behraz.fastermixer.batch.ui.activities.batch.BatchActivity
-import com.behraz.fastermixer.batch.ui.adapters.EquipmentAdapter
+import com.behraz.fastermixer.batch.ui.adapters.ChooseEquipmentAdapter
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
@@ -28,11 +27,11 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_choose_batch.*
 
 class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
-    EquipmentAdapter.Interaction {
+    ChooseEquipmentAdapter.Interaction {
 
     private var snackbar: Snackbar? = null
     private lateinit var viewModel: ChooseEquipmentActivityViewModel
-    private var mAdapter = EquipmentAdapter(this)
+    private var mAdapter = ChooseEquipmentAdapter(this)
     private val progressDialog: MyProgressDialog by lazy {
         MyProgressDialog(this, R.style.my_alert_dialog)
     }

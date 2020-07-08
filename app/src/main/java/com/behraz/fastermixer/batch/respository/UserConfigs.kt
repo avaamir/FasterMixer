@@ -42,5 +42,9 @@ object UserConfigs {
         userLive.postValue(null)
     }
 
+    fun updateUser(equipmentId: String) {
+        UserRepo.update(user.value!!.copy(equipmentId = equipmentId))
+    }
+
 
 }

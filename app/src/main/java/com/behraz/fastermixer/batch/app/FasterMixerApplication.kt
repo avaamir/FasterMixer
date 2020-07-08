@@ -14,6 +14,7 @@ import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRep
 import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
 import com.behraz.fastermixer.batch.respository.sharedprefrence.PrefsRepo
 import com.behraz.fastermixer.batch.ui.activities.LoginActivity
+import com.behraz.fastermixer.batch.ui.activities.admin.AdminActivity
 import com.behraz.fastermixer.batch.utils.general.fullScreen
 import com.behraz.fastermixer.batch.utils.general.hideStatusBar
 
@@ -58,7 +59,7 @@ class FasterMixerApplication : Application() {
     private fun registerApiInterceptorsCallbacks() {
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityResumed(activity: Activity) {
-                if (activity !is LoginActivity) {
+                if (activity !is LoginActivity && activity !is AdminActivity) {
                     activity.fullScreen()
                 }
 
@@ -85,18 +86,20 @@ class FasterMixerApplication : Application() {
             override fun onActivityStopped(activity: Activity?) {}
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
 
-                if (resources.getBoolean(R.bool.landscape_only)) {
-                    activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                } else {
-                    activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                    //todo activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT //todo make another layout for phones
+                if (activity !is LoginActivity) {
+                    if (resources.getBoolean(R.bool.landscape_only)) {
+                        activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                    } else {
+                        activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                        //todo activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT //todo make another layout for phones
+                    }
                 }
                 if (activity is ApiService.InternetConnectionListener) {
                     ApiService.setInternetConnectionListener(activity)
                 }
 
                 activity.hideStatusBar()
-                if (activity !is LoginActivity) {
+                if (activity !is LoginActivity && activity !is AdminActivity) {
                     activity.fullScreen()
                 }
 

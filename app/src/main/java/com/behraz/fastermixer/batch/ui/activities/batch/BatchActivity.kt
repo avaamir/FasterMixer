@@ -20,7 +20,6 @@ import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
-import com.behraz.fastermixer.batch.utils.general.hardware.compass.TimerLiveData
 import com.behraz.fastermixer.batch.utils.general.snack
 import com.behraz.fastermixer.batch.utils.general.subscribeGpsStateChangeListener
 import com.behraz.fastermixer.batch.utils.general.subscribeNetworkStateChangeListener
@@ -52,10 +51,6 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdap
 
         subscribeNetworkStateChangeListener { fasterMixerUserPanel.setInternetState(it) }
         subscribeGpsStateChangeListener { fasterMixerUserPanel.setGPSState(it) }
-
-        TimerLiveData(1000L).observe(this, Observer {
-            viewModel.getMessages()
-        })
     }
 
     private fun subscribeObservers() {
@@ -95,7 +90,21 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdap
             }
         })
 
-        //todo get from server mixerAdapter.submitList(fakeMixers())
+
+        viewModel.mixers.observe(this, Observer {
+            if (it != null) {
+                if (it.isSucceed) {
+                    mixerAdapter.submitList(it.entity)
+                    println("debug:mixers:${it.entity}")
+                } else {
+                    toast(it.message)
+                }
+            } else {
+                snack(Constants.SERVER_ERROR) {
+                    viewModel.refreshMixers()
+                }
+            }
+        })
 
     }
 

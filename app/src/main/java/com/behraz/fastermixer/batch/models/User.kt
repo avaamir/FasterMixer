@@ -16,15 +16,15 @@ data class User(
     @SerializedName("personId")
     var personId: String,
     @SerializedName("name")
-    var name: String,
+    var name: String?,
     @SerializedName("token")
     var token: String,
     @SerializedName("profilePic")
     var profilePic: String?,
     @SerializedName("roleId")
-    var roleId: Int,
+    var roleId: Int?,
     @SerializedName("personalCode")
-    var personalCode: String,
+    var personalCode: String?,
     @SerializedName("equipmentId")
     var equipmentId: String?
 )  {
@@ -42,7 +42,7 @@ data class User(
             1 -> UserType.Pomp
             2 -> UserType.Mixer
             3 -> UserType.Batch
-            else -> throw IllegalAccessError("userType can be 1..3")
+            else -> UserType.Batch//throw IllegalAccessError("userType can be 1..3")
         }
 
 

@@ -5,11 +5,11 @@ import java.util.*
 
 open class Equipment(
     @SerializedName("equipmentID")
-    val id: String ,
+    val id: String,
     @SerializedName("name")
     val name: String,
     @SerializedName("isAvailable")
-    val isAvailable: Boolean
+    val isAvailable: Boolean  // this is for choose equipment
 ) {
-    val state get() = if (isAvailable) "در دسترس" else "در حال استفاده"
+    val availabilityMessage get() = if (isAvailable) "در دسترس" else "در حال استفاده"
 }

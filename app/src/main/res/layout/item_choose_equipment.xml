@@ -40,7 +40,7 @@
                 android:layout_height="match_parent"
                 style="@style/my_white_normal_text"
                 tools:text="در دسترس"
-                android:text="@{batch.state}"
+                android:text="@{batch.availabilityMessage}"
                 android:minWidth="150dp"
                 android:background="@color/material_green"
                 android:padding="@dimen/medium_margin"

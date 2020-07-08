@@ -103,4 +103,10 @@ dependencies {
 
     implementation 'com.skyfishjy.ripplebackground:library:1.0.1'
 
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+
+    implementation 'com.github.dariushm2:PersianCaldroid:1.0.1'
+
+    //implementation("io.coil-kt:coil:0.11.0")
 }

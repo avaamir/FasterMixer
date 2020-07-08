@@ -15,6 +15,7 @@ import com.behraz.fastermixer.batch.models.Phone;
 import com.behraz.fastermixer.batch.models.User;
 import com.behraz.fastermixer.batch.respository.persistance.typeconverter.PhoneListConverter;
 import java.lang.Exception;
+import java.lang.Integer;
 import java.lang.Object;
 import java.lang.Override;
 import java.lang.String;
@@ -83,7 +84,11 @@ public final class UserDao_Impl implements UserDao {
         } else {
           stmt.bindString(6, value.getProfilePic());
         }
-        stmt.bindLong(7, value.getRoleId());
+        if (value.getRoleId() == null) {
+          stmt.bindNull(7);
+        } else {
+          stmt.bindLong(7, value.getRoleId());
+        }
         if (value.getPersonalCode() == null) {
           stmt.bindNull(8);
         } else {
@@ -153,7 +158,11 @@ public final class UserDao_Impl implements UserDao {
         } else {
           stmt.bindString(6, value.getProfilePic());
         }
-        stmt.bindLong(7, value.getRoleId());
+        if (value.getRoleId() == null) {
+          stmt.bindNull(7);
+        } else {
+          stmt.bindLong(7, value.getRoleId());
+        }
         if (value.getPersonalCode() == null) {
           stmt.bindNull(8);
         } else {
@@ -279,8 +288,12 @@ public final class UserDao_Impl implements UserDao {
             _tmpToken = _cursor.getString(_cursorIndexOfToken);
             final String _tmpProfilePic;
             _tmpProfilePic = _cursor.getString(_cursorIndexOfProfilePic);
-            final int _tmpRoleId;
-            _tmpRoleId = _cursor.getInt(_cursorIndexOfRoleId);
+            final Integer _tmpRoleId;
+            if (_cursor.isNull(_cursorIndexOfRoleId)) {
+              _tmpRoleId = null;
+            } else {
+              _tmpRoleId = _cursor.getInt(_cursorIndexOfRoleId);
+            }
             final String _tmpPersonalCode;
             _tmpPersonalCode = _cursor.getString(_cursorIndexOfPersonalCode);
             final String _tmpEquipmentId;
@@ -341,8 +354,12 @@ public final class UserDao_Impl implements UserDao {
             _tmpToken = _cursor.getString(_cursorIndexOfToken);
             final String _tmpProfilePic;
             _tmpProfilePic = _cursor.getString(_cursorIndexOfProfilePic);
-            final int _tmpRoleId;
-            _tmpRoleId = _cursor.getInt(_cursorIndexOfRoleId);
+            final Integer _tmpRoleId;
+            if (_cursor.isNull(_cursorIndexOfRoleId)) {
+              _tmpRoleId = null;
+            } else {
+              _tmpRoleId = _cursor.getInt(_cursorIndexOfRoleId);
+            }
             final String _tmpPersonalCode;
             _tmpPersonalCode = _cursor.getString(_cursorIndexOfPersonalCode);
             final String _tmpEquipmentId;

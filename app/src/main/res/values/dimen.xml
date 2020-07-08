@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="tiny_margin">4dp</dimen>
     <dimen name="standard_margin">8dp</dimen>
     <dimen name="medium_margin">16dp</dimen>
     <dimen name="large_margin">48dp</dimen>
+
+    <dimen name="bottom_navigation_active_text_size"
+        tools:override="true">14sp</dimen>
 </resources>

@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
-import com.behraz.fastermixer.batch.databinding.ItemEquipmentBinding
+import com.behraz.fastermixer.batch.databinding.ItemChooseEquipmentBinding
 import com.behraz.fastermixer.batch.models.Equipment
 
-class EquipmentAdapter(private val interaction: Interaction? = null) :
+class ChooseEquipmentAdapter(private val interaction: Interaction? = null) :
     ListAdapter<Equipment, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
     companion object {
@@ -21,7 +21,7 @@ class EquipmentAdapter(private val interaction: Interaction? = null) :
             }
 
             override fun areContentsTheSame(oldItem: Equipment, newItem: Equipment): Boolean {
-                return oldItem.isAvailable == newItem.isAvailable && oldItem.name == newItem.name && oldItem.state == newItem.state
+                return oldItem.isAvailable == newItem.isAvailable && oldItem.name == newItem.name && oldItem.availabilityMessage == newItem.availabilityMessage
             }
 
         }
@@ -31,7 +31,7 @@ class EquipmentAdapter(private val interaction: Interaction? = null) :
 
         return EquipmentViewHolder(
             DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context), R.layout.item_equipment,
+                LayoutInflater.from(parent.context), R.layout.item_choose_equipment,
                 parent,
                 false
             )
@@ -51,7 +51,7 @@ class EquipmentAdapter(private val interaction: Interaction? = null) :
     }
 
     inner class EquipmentViewHolder(
-        private val mBinding: ItemEquipmentBinding
+        private val mBinding: ItemChooseEquipmentBinding
     ) : RecyclerView.ViewHolder(mBinding.root) {
 
         fun bind(item: Equipment) {

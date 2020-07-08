@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.models.enums.UserType
+import com.behraz.fastermixer.batch.ui.activities.admin.AdminActivity
 import com.behraz.fastermixer.batch.ui.activities.batch.BatchActivity
 import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
 import com.behraz.fastermixer.batch.ui.dialogs.LocationPermissionDialog
@@ -44,8 +45,8 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
 
         if (false) {
             startActivity(Intent(this, TestActivity::class.java))
-            //  finish()
-            // return
+            finish()
+            return
         }
 
 
@@ -122,8 +123,8 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
         etPassword.setText("12345")*/
 
         //Batch
-        etUsername.setText("ali")
-        etPassword.setText("12345")
+        etUsername.setText("Admin")
+        etPassword.setText("Admin")
     }
 
 
