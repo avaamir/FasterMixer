@@ -5,14 +5,13 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/bg_rect_rounded"
-    android:backgroundTint="@color/white"
     android:gravity="center"
     android:padding="16dp">
 
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:tint="@color/gray700"
+        android:tint="@color/white"
         app:srcCompat="@drawable/ic_wifi_off"/>
 
     <TextView
@@ -23,6 +22,7 @@
         android:layout_gravity="center"
         style="@style/my_gray_normal_text"
         android:layout_marginTop="16dp"
+        android:textColor="@color/white"
         android:text="خطا در اتصال به شبکه"/>
 
 
@@ -33,6 +33,7 @@
         android:textSize="14sp"
         android:layout_gravity="center"
         style="@style/my_gray_normal_text"
+        android:textColor="@color/white"
         android:layout_marginTop="8dp"
         android:text="لطفا وافای یا دیتای خود را روشن کنید"/>
 
@@ -54,13 +55,14 @@
             android:singleLine="true"
             style="@style/my_gray_medium_text"
             android:textSize="14sp"
-            android:textColor="@color/primary_light"
+            android:textColor="@color/light_blue"
             android:text="بررسی تنظیمات شبکه" />
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginLeft="4dp"
+            android:tint="@color/light_blue"
             app:srcCompat="@drawable/ic_wifi_settings" />
 
 

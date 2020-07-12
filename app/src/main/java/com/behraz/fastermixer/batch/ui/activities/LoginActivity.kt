@@ -10,17 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.models.enums.UserType
+import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.activities.admin.AdminActivity
 import com.behraz.fastermixer.batch.ui.activities.batch.BatchActivity
 import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
 import com.behraz.fastermixer.batch.ui.dialogs.LocationPermissionDialog
+import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.LoginActivityViewModel
 import kotlinx.android.synthetic.main.activity_login.*
 
 
-class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
+class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions,
+    ApiService.InternetConnectionListener {
 
     companion object {
         private const val REQ_GO_TO_SETTINGS_PERMISSION = 12
@@ -44,7 +47,7 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
 
 
         if (false) {
-            startActivity(Intent(this, TestActivity::class.java))
+            startActivity(Intent(this, AdminActivity::class.java))
             finish()
             return
         }
@@ -215,5 +218,10 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions {
         deniedPermissions.forEach { println("debug: $it denied") }
         toast("اجازه دسترسی داده نشد")
         finish()
+    }
+
+    //todo test this
+    override fun onInternetUnavailable() {
+        NoNetworkDialog(this, R.style.my_alert_dialog).show()
     }
 }
