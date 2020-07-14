@@ -22,7 +22,7 @@ class BatchActivityViewModel : ViewModel() {
                     compareBy { mixer ->
                         mixer.latLng.distanceToAsDouble(batchLocation).also { distance ->
                             println("debug:batchLoc=$batchLocation, distance:$distance,mixer:${mixer.id}")
-                            mixer.state = "$distance" //TODO ino dorstesh kon, KM benvise
+                            mixer.state = distanceTextNormalizer(distance)
                         }
                     }
                 )
@@ -85,4 +85,23 @@ class BatchActivityViewModel : ViewModel() {
         timer.cancel()
         timer.purge()
     }
+
+
+
+
+    fun distanceTextNormalizer(meterDistance: Double): String {
+        val temp = meterDistance.toInt() / 100
+        return when {
+            meterDistance < 20 -> "به بچ رسید"
+            temp == 0 || temp / 10 == 0 -> "${meterDistance.toInt()} متر" //meter
+            temp % 10 == 0 -> "${temp / 10} کیلومتر" //km
+            else -> "${temp / 10}.${temp % 10} کیلومتر" //km
+        }.let {
+            if (it.contains("رسید"))
+                it
+            else
+                "$it مانده"
+        }
+    }
+
 }
