@@ -26,12 +26,7 @@ class ChooseEquipmentActivityViewModel : ViewModel() {
             UserType.Pomp -> RemoteRepo.choosePomp(request)
             UserType.Mixer -> TODO()
             UserType.Batch -> RemoteRepo.chooseBatch(request)
-        }.exhaustiveAsExpression().map { response ->
-            if (response?.isSucceed == true) {
-                UserConfigs.updateUser(request.equipmentId)
-            }
-            response
-        }
+        }.exhaustiveAsExpression()
     }
 
     private val getEquipmentEvent = MutableLiveData<Event<UserType>>()

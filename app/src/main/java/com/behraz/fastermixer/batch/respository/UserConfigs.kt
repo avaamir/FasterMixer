@@ -42,8 +42,14 @@ object UserConfigs {
         userLive.postValue(null)
     }
 
-    fun updateUser(equipmentId: String) {
-        UserRepo.update(user.value!!.copy(equipmentId = equipmentId))
+    fun updateUser(equipmentId: String, blocking: Boolean) {
+        user.value!!.copy(equipmentId = equipmentId).let { user ->
+            if (!blocking) {
+                UserRepo.update(user)
+            } else {
+                UserRepo.updateBlocking(user)
+            }
+        }
     }
 
 

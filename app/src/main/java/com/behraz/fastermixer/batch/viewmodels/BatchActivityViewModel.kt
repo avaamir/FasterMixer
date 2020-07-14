@@ -22,6 +22,7 @@ class BatchActivityViewModel : ViewModel() {
                     compareBy { mixer ->
                         mixer.latLng.distanceToAsDouble(batchLocation).also { distance ->
                             println("debug:batchLoc=$batchLocation, distance:$distance,mixer:${mixer.id}")
+                            mixer.state = "$distance" //TODO ino dorstesh kon, KM benvise
                         }
                     }
                 )
@@ -56,6 +57,7 @@ class BatchActivityViewModel : ViewModel() {
     }
 
     init {
+        println("debug:" + UserConfigs.user.value)
         RemoteRepo.getEquipmentLocation(UserConfigs.user.value!!.equipmentId!!) {
             batchLocation = it
         }

@@ -41,6 +41,12 @@ object UserRepo {
         }
     }
 
+    fun updateBlocking(user: User) {
+        runBlocking {
+            userDao.update(user)
+        }
+    }
+
     fun delete(item: User) {
         if (!UserRepo::job.isInitialized || !job.isActive)
             job = Job()
@@ -78,4 +84,8 @@ object UserRepo {
             userDao.insert(user)
         }
     }
+
+
+
+
 }

@@ -94,7 +94,13 @@ object RemoteRepo {
     fun getPomps() = apiReq(ApiService.client::getPomps)
 
     fun chooseBatch(chooseEquipmentRequest: ChooseEquipmentRequest) =
-        apiReq(chooseEquipmentRequest, ApiService.client::chooseBatch)
+        apiReq(chooseEquipmentRequest, ApiService.client::chooseBatch) {
+            if (it.isSuccessful) {
+                if (it.body()?.isSucceed == true) {
+                    UserConfigs.updateUser(chooseEquipmentRequest.equipmentId, blocking = true)
+                }
+            }
+        }
 
     fun choosePomp(chooseEquipmentRequest: ChooseEquipmentRequest) =
         apiReq(chooseEquipmentRequest, ApiService.client::chooseBatch)

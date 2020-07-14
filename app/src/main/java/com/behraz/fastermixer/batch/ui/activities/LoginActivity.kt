@@ -126,8 +126,8 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions,
         etPassword.setText("12345")*/
 
         //Batch
-        etUsername.setText("Admin")
-        etPassword.setText("Admin")
+        etUsername.setText("hasan")
+        etPassword.setText("12211221")
     }
 
 
