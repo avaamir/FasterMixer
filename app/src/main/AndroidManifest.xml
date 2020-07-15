@@ -41,7 +41,6 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".ui.activities.LoginActivity"
-            android:screenOrientation="landscape"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

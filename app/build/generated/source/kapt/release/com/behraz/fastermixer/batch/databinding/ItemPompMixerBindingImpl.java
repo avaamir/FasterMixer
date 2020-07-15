@@ -126,8 +126,9 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
         java.lang.String mixerState = null;
         java.lang.String mixerLoadInfoAmountFromTotal = null;
         java.lang.String mixerLoadInfoAmount = null;
+        float mixerCapacity = 0f;
         com.behraz.fastermixer.batch.models.LoadInfo mixerLoadInfo = null;
-        java.lang.String mixerLoadInfoStartTime = null;
+        java.lang.String mixerCapacityJavaLangString = null;
         com.behraz.fastermixer.batch.models.Mixer mixer = mMixer;
         java.lang.String mixerLoadInfoDensity = null;
         java.lang.String mixerCarName = null;
@@ -141,6 +142,8 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
                 if (mixer != null) {
                     // read mixer.state
                     mixerState = mixer.getState();
+                    // read mixer.capacity
+                    mixerCapacity = mixer.getCapacity();
                     // read mixer.loadInfo
                     mixerLoadInfo = mixer.getLoadInfo();
                     // read mixer.carName
@@ -150,13 +153,13 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
                 }
 
 
+                // read (mixer.capacity) + ("")
+                mixerCapacityJavaLangString = (mixerCapacity) + ("");
                 if (mixerLoadInfo != null) {
                     // read mixer.loadInfo.amountFromTotal
                     mixerLoadInfoAmountFromTotal = mixerLoadInfo.getAmountFromTotal();
                     // read mixer.loadInfo.amount
                     mixerLoadInfoAmount = mixerLoadInfo.getAmount();
-                    // read mixer.loadInfo.startTime
-                    mixerLoadInfoStartTime = mixerLoadInfo.getStartTime();
                     // read mixer.loadInfo.density
                     mixerLoadInfoDensity = mixerLoadInfo.getDensity();
                     // read mixer.loadInfo.slump
@@ -170,7 +173,7 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView14, mixerLoadInfoSlump);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView16, mixerLoadInfoDensity);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView18, mixerLoadInfoAmountFromTotal);
-            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView20, mixerLoadInfoStartTime);
+            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView20, mixerCapacityJavaLangString);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView21, mixerDriverName);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView22, mixerState);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView9, mixerLoadInfoAmount);

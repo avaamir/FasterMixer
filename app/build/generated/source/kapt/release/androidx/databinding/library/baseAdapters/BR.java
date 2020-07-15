@@ -7,13 +7,17 @@ public class BR {
 
   public static final int customer = 2;
 
-  public static final int message = 3;
+  public static final int equipment = 3;
 
-  public static final int mixer = 4;
+  public static final int message = 4;
 
-  public static final int progress = 5;
+  public static final int mixer = 5;
 
-  public static final int user = 6;
+  public static final int plan = 6;
 
-  public static final int viewModel = 7;
+  public static final int progress = 7;
+
+  public static final int user = 8;
+
+  public static final int viewModel = 9;
 }

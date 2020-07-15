@@ -127,8 +127,9 @@ public class ItemMixerBindingImpl extends ItemMixerBinding  {
         }
         java.lang.String mixerState = null;
         java.lang.String mixerLoadInfoAmount = null;
+        float mixerCapacity = 0f;
         com.behraz.fastermixer.batch.models.LoadInfo mixerLoadInfo = null;
-        java.lang.String mixerLoadInfoStartTime = null;
+        java.lang.String mixerCapacityJavaLangString = null;
         com.behraz.fastermixer.batch.models.Mixer mixer = mMixer;
         java.lang.String mixerOwner = null;
         java.lang.String mixerLoadInfoDensity = null;
@@ -143,6 +144,8 @@ public class ItemMixerBindingImpl extends ItemMixerBinding  {
                 if (mixer != null) {
                     // read mixer.state
                     mixerState = mixer.getState();
+                    // read mixer.capacity
+                    mixerCapacity = mixer.getCapacity();
                     // read mixer.loadInfo
                     mixerLoadInfo = mixer.getLoadInfo();
                     // read mixer.owner
@@ -154,11 +157,11 @@ public class ItemMixerBindingImpl extends ItemMixerBinding  {
                 }
 
 
+                // read (mixer.capacity) + ("")
+                mixerCapacityJavaLangString = (mixerCapacity) + ("");
                 if (mixerLoadInfo != null) {
                     // read mixer.loadInfo.amount
                     mixerLoadInfoAmount = mixerLoadInfo.getAmount();
-                    // read mixer.loadInfo.startTime
-                    mixerLoadInfoStartTime = mixerLoadInfo.getStartTime();
                     // read mixer.loadInfo.density
                     mixerLoadInfoDensity = mixerLoadInfo.getDensity();
                     // read mixer.loadInfo.slump
@@ -172,7 +175,7 @@ public class ItemMixerBindingImpl extends ItemMixerBinding  {
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView14, mixerLoadInfoSlump);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView16, mixerLoadInfoDensity);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView18, mixerOwner);
-            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView20, mixerLoadInfoStartTime);
+            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView20, mixerCapacityJavaLangString);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView21, mixerDriverName);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView22, mixerState);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView9, mixerLoadInfoAmount);

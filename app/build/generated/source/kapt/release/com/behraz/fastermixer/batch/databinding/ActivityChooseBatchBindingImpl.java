@@ -18,6 +18,7 @@ public class ActivityChooseBatchBindingImpl extends ActivityChooseBatchBinding  
         sViewsWithIds.put(R.id.imageView, 2);
         sViewsWithIds.put(R.id.textView4, 3);
         sViewsWithIds.put(R.id.batchRecycler, 4);
+        sViewsWithIds.put(R.id.progressBar, 5);
     }
     // views
     @NonNull
@@ -28,12 +29,13 @@ public class ActivityChooseBatchBindingImpl extends ActivityChooseBatchBinding  
     // Inverse Binding Event Handlers
 
     public ActivityChooseBatchBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 5, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 6, sIncludes, sViewsWithIds));
     }
     private ActivityChooseBatchBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
             , (androidx.recyclerview.widget.RecyclerView) bindings[4]
             , (android.widget.ImageView) bindings[2]
+            , (android.widget.ProgressBar) bindings[5]
             , (android.widget.TextView) bindings[3]
             , (com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel) bindings[1]
             );
