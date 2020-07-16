@@ -74,8 +74,19 @@ class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Intera
 
         viewModel.chooseEquipmentResponse.observe(this, Observer {
             progressDialog.dismiss()
-            startActivity(Intent(this, BatchActivity::class.java))
-            finish()
+            if (it != null) {
+                if (it.isSucceed) {
+                    startActivity(Intent(this, BatchActivity::class.java))
+                    finish()
+                } else {
+
+                }
+            } else {
+                snack(Constants.SERVER_ERROR) {
+                    progressDialog.show()
+                    viewModel.chooseEquipment(retryLastRequest = true)
+                }
+            }
         })
 
 
