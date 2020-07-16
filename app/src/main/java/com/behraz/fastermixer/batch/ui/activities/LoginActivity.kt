@@ -137,36 +137,51 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions,
         etPassword.setText("12345")*/
 
         //Batch
-     //   etUsername.setText("alikave")
-     //   etPassword.setText("12211221")
+        etUsername.setText("sara")
+        etPassword.setText("1234")
     }
 
 
     private fun observeViewModel() {
-        viewModel.loginResponse.observe(this, Observer {
-            btnLogin.showProgressBar(false)
-            if (it != null) {
-                if (it.isSucceed) {
-                    if (it.entity!!.equipmentId == null) {
-                        if (it.entity.userType == UserType.Mixer) {
-                            toast("کاربر میسکر در این نسخه از برنامه تعریف نشده است. لطفا برنامه را به روز رسانی کنید")
-                            return@Observer
+        viewModel.loginResponse.observe(this, Observer { event ->
+            if (!event.hasBeenHandled) {
+                event.getEventIfNotHandled().let {
+                    println("debug: loginResponse Observed")
+                    btnLogin.showProgressBar(false)
+                    if (it != null) {
+                        if (it.isSucceed) {
+                            if (it.entity!!.equipmentId == null) {
+                                if (it.entity.userType == UserType.Mixer) {
+                                    toast("کاربر میسکر در این نسخه از برنامه تعریف نشده است. لطفا برنامه را به روز رسانی کنید")
+                                    return@Observer
+                                }
+                                startActivity(Intent(this, ChooseEquipmentActivity::class.java))
+                            } else {
+                                when (it.entity.userType) {
+                                    UserType.Pomp -> startActivity(
+                                        Intent(
+                                            this,
+                                            PompActivity::class.java
+                                        )
+                                    )
+                                    UserType.Mixer -> toast("کاربر میسکر در این نسخه از برنامه تعریف نشده است. لطفا برنامه را به روز رسانی کنید")
+                                    UserType.Batch -> startActivity(
+                                        Intent(
+                                            this,
+                                            BatchActivity::class.java
+                                        )
+                                    )
+                                }.exhaustive()
+                            }
+                        } else {
+                            toast(it.message)
                         }
-                        startActivity(Intent(this, ChooseEquipmentActivity::class.java))
                     } else {
-                        when (it.entity.userType) {
-                            UserType.Pomp -> startActivity(Intent(this, PompActivity::class.java))
-                            UserType.Mixer -> toast("کاربر میسکر در این نسخه از برنامه تعریف نشده است. لطفا برنامه را به روز رسانی کنید")
-                            UserType.Batch -> startActivity(Intent(this, BatchActivity::class.java))
-                        }.exhaustive()
+                        snack(Constants.SERVER_ERROR) {
+                            btnLogin.showProgressBar(true)
+                            viewModel.tryAgain()
+                        }
                     }
-                } else {
-                    toast(it.message)
-                }
-            } else {
-                snack(Constants.SERVER_ERROR) {
-                    btnLogin.showProgressBar(true)
-                    viewModel.tryAgain()
                 }
             }
         })

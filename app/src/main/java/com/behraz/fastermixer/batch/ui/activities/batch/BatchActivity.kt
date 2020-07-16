@@ -166,11 +166,10 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdap
     }
 
     override fun onCallClicked(view: View?) {
-        TODO("Not yet implemented")
+        toast("Not yet implemented")
     }
 
 
-    //todo test this
     override fun onInternetUnavailable() {
         NoNetworkDialog(this, R.style.my_alert_dialog).show()
     }

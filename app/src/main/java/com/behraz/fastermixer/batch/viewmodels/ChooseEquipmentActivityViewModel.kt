@@ -40,7 +40,9 @@ class ChooseEquipmentActivityViewModel : ViewModel() {
         }
 
     fun getEquipments() {
-        getEquipmentEvent.value = Event(user.value!!.userType)
+        user.value?.let {
+            getEquipmentEvent.value = Event(it.userType)
+        }
     }
 
     fun logout() {

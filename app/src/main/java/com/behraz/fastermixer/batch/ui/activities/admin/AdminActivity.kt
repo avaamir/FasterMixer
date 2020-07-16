@@ -6,11 +6,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ActivityAdminBinding
+import com.behraz.fastermixer.batch.respository.apiservice.ApiService
+import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.ui.fragments.admin.AdminPanelFragment
 import com.behraz.fastermixer.batch.ui.fragments.admin.EquipmentsFragment
 import com.behraz.fastermixer.batch.ui.fragments.admin.ManageAccountFragment
+import com.behraz.fastermixer.batch.utils.general.Event
+import com.behraz.fastermixer.batch.utils.general.toast
 
-class AdminActivity : AppCompatActivity() {
+class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener, ApiService.InternetConnectionListener {
     private lateinit var mBinding: ActivityAdminBinding
 
     private var currentFragmentTag = HOME_TAG
@@ -70,6 +74,15 @@ class AdminActivity : AppCompatActivity() {
         }
 
         transaction.commit()
+    }
+
+    override fun onUnauthorizedAction(event: Event<Unit>) {
+        toast("شما نیاز به ورود مجدد دارید")
+        finish()
+    }
+
+    override fun onInternetUnavailable() {
+        NoNetworkDialog(this, R.style.my_alert_dialog).show()
     }
 
 }

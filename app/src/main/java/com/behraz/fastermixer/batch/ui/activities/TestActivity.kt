@@ -23,6 +23,7 @@ import com.behraz.fastermixer.batch.ui.adapters.MixerAdapter
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeMixers
 import com.behraz.fastermixer.batch.utils.general.hardware.compass.Compass
 import com.behraz.fastermixer.batch.utils.general.subscribeSignalStrengthChangeListener
+import com.behraz.fastermixer.batch.utils.general.toast
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.PendingResult
@@ -245,11 +246,11 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
     }
 
     override fun onCallClicked(mixer: Mixer) {
-        TODO("Not yet implemented")
+        toast("Not yet implemented")
     }
 
     override fun onEndLoadingClicked(mixer: Mixer) {
-        TODO("Not yet implemented")
+        toast("Not yet implemented")
     }
 
 
