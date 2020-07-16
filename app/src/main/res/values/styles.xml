@@ -21,7 +21,7 @@
     </style>
 
     <style name="AppTheme.Progressbar">
-        <item name="colorAccent">@color/primary_light</item> <!-- Whatever color you want-->
+        <item name="colorAccent">@color/btn_yellow</item> <!-- Whatever color you want-->
     </style>
 
     <style name="AppTheme.ProgressbarWhite">

@@ -29,6 +29,7 @@ import com.google.android.gms.common.api.PendingResult
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_test.*
+import kotlinx.android.synthetic.main.view_numeric_keyboard.*
 import org.osmdroid.util.GeoPoint
 
 
@@ -60,6 +61,9 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test)
 
+        numericKeyboard.setInteractions {
+            println("debug: $it")
+        }
 
         val x = subscribeSignalStrengthChangeListener(true) {
             println("debug:signal: $it")
@@ -150,6 +154,8 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
             }
 
         }
+
+
 
 
 /*

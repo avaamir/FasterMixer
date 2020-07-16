@@ -27,6 +27,7 @@ import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.BatchActivityViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_batch.*
+import kotlinx.android.synthetic.main.activity_choose_batch.*
 
 class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdapter.Interaction,
     FasterMixerUserPanel.Interactions, ApiService.InternetConnectionListener,
@@ -55,6 +56,15 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdap
     }
 
     private fun subscribeObservers() {
+        viewModel.user.observe(this, Observer {
+            it?.let {
+                fasterMixerUserPanel.setUsername(it.name)
+                fasterMixerUserPanel.setPersonalCode(it.personalCode)
+            }
+        })
+
+
+
         viewModel.logoutResponse.observe(this, Observer {
             progressDialog.dismiss()
             if (it != null) {
@@ -106,15 +116,10 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdap
                 }
             }
         })
-
     }
 
 
     private fun initViews() {
-        //todo ui test get it from viewModel
-        fasterMixerUserPanel.setPersonalCode("9441973")
-        fasterMixerUserPanel.setUsername("امیرحسین مهدی پور")
-
         fasterMixerUserPanel.setInteractions(this)
 
 

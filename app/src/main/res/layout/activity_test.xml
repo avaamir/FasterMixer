@@ -4,96 +4,105 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <LinearLayout
-        android:layout_width="match_parent"
+
+
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@color/gray200"
+      android:orientation="vertical"
+      android:padding="@dimen/standard_margin"
+      tools:context=".ui.activities.TestActivity"
+      android:gravity="center">
+
+    <com.behraz.fastermixer.batch.ui.customs.fastermixer.NumericKeyboard
+        android:id="@+id/numericKeyboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!--  <CalendarView
+          android:id="@+id/calendarView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/standard_margin"
+          />-->
+
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:background="@color/gray200"
-        android:orientation="vertical"
-        android:padding="@dimen/standard_margin"
-        tools:context=".ui.activities.TestActivity"
-        android:gravity="center">
+        android:textAllCaps="false"
+        android:text="btnLogin" />
+
+    <Button
+        android:id="@+id/btnGetBatches"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="btnGetBatches" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="logout" />
+
+    <Button
+        android:id="@+id/btnChooseBatch"
+        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:textAllCaps="false"
+        android:text="chooseBatch" />
+
+    <Button
+        android:id="@+id/btnInsert"
+        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:textAllCaps="false"
+        android:text="insert" />
+
+    <Button
+        android:id="@+id/btnFetch"
+        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:textAllCaps="false"
+        android:text="fetch" />
 
 
-      <!--  <CalendarView
-            android:id="@+id/calendarView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/standard_margin"
-            />-->
+    <Button
+        android:id="@+id/btnGetBatchLoc"
+        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:textAllCaps="false"
+        android:text="Get Batch Loc" />
 
 
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:text="btnLogin" />
-
-        <Button
-            android:id="@+id/btnGetBatches"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:text="btnGetBatches" />
-
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:text="logout" />
-
-        <Button
-            android:id="@+id/btnChooseBatch"
-            android:layout_height="wrap_content"
-            android:layout_width="200dp"
-            android:textAllCaps="false"
-            android:text="chooseBatch" />
-
-        <Button
-            android:id="@+id/btnInsert"
-            android:layout_height="wrap_content"
-            android:layout_width="200dp"
-            android:textAllCaps="false"
-            android:text="insert" />
-
-        <Button
-            android:id="@+id/btnFetch"
-            android:layout_height="wrap_content"
-            android:layout_width="200dp"
-            android:textAllCaps="false"
-            android:text="fetch" />
+    <Button
+        android:id="@+id/btnGetMixers"
+        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:textAllCaps="false"
+        android:text="Get Mixers" />
 
 
-        <Button
-            android:id="@+id/btnGetBatchLoc"
-            android:layout_height="wrap_content"
-            android:layout_width="200dp"
-            android:textAllCaps="false"
-            android:text="Get Batch Loc" />
+    <ProgressBar
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:progress="10"
+        style="?android:progressBarStyleHorizontal"
+        android:progressDrawable="@drawable/bg_determined_progress"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
 
-        <Button
-            android:id="@+id/btnGetMixers"
-            android:layout_height="wrap_content"
-            android:layout_width="200dp"
-            android:textAllCaps="false"
-            android:text="Get Mixers" />
+  </LinearLayout>
 
 
-        <ProgressBar
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:progress="10"
-            style="?android:progressBarStyleHorizontal"
-            android:progressDrawable="@drawable/bg_determined_progress"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-
-
-    </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -62,9 +62,9 @@ class ChooseEquipmentAdapter(private val interaction: Interaction? = null) :
             mBinding.executePendingBindings()
 
             if(item.isAvailable) {
-                mBinding.tvState.setBackgroundResource(R.color.material_green)
+                mBinding.tvState.setBackgroundResource(R.color.btn_yellow)
             } else {
-                mBinding.tvState.setBackgroundResource(R.color.red)
+                mBinding.tvState.setBackgroundResource(R.color.btn_blue)
             }
 
         }

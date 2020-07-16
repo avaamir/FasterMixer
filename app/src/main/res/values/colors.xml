@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <color name="primary">#6A7A88</color>
-    <color name="primary_light">#113B61</color>
-    <color name="primary_dark">#2C353D</color>
-    <color name="accent">#FFFFFF</color>
+
+    <color name="primary">#4b636e</color>
+    <color name="primary_dark">#404040</color>
+    <color name="primary_light">#ECC462</color>
     <color name="mixer_red">#E3531D</color>
 
-    <color name="price">@color/accent</color>
+    <color name="nav_bars">#4b636e</color>
+    <color name="btn_blue">#0090ff</color>
+    <color name="btn_yellow">#fbc02d</color>
+
+    <color name="accent">@color/btn_yellow</color>
 
     <color name="green">#00E676</color>
 
@@ -76,5 +80,6 @@
 
     <color name="bg_login_shadow">#73000000</color>
     <color name="timer_text_color">@color/primary_dark</color>
+    <color name="dialer_nums">#ffffff</color>
 
 </resources>

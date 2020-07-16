@@ -14,6 +14,7 @@ import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRep
 import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
 import com.behraz.fastermixer.batch.respository.sharedprefrence.PrefsRepo
 import com.behraz.fastermixer.batch.ui.activities.LoginActivity
+import com.behraz.fastermixer.batch.ui.activities.TestActivity
 import com.behraz.fastermixer.batch.ui.activities.admin.AdminActivity
 import com.behraz.fastermixer.batch.utils.general.fullScreen
 import com.behraz.fastermixer.batch.utils.general.hideStatusBar
@@ -86,7 +87,8 @@ class FasterMixerApplication : Application() {
             override fun onActivityStopped(activity: Activity?) {}
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
 
-                if (activity !is LoginActivity) {
+
+                if (activity !is LoginActivity && activity !is TestActivity) {
                     if (resources.getBoolean(R.bool.landscape_only)) {
                         activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                     } else {

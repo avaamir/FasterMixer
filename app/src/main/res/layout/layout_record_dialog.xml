@@ -44,7 +44,8 @@
                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true"
+                android:theme="@style/AppTheme.Progressbar"/>
 
 
         </com.skyfishjy.library.RippleBackground>
@@ -63,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
-                app:backgroundTint="@color/blue"
+                app:backgroundTint="@color/btn_blue"
                 app:fabSize="normal"
                 android:layout_centerInParent="true"
                 app:srcCompat="@drawable/ic_repeat"
@@ -78,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
-                app:backgroundTint="@color/blue"
+                app:backgroundTint="@color/btn_yellow"
                 app:fabSize="normal"
                 app:srcCompat="@drawable/ic_send"
                 app:tint="@color/white" />

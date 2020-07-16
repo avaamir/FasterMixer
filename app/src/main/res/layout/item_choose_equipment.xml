@@ -42,7 +42,7 @@
                 tools:text="در دسترس"
                 android:text="@{batch.availabilityMessage}"
                 android:minWidth="150dp"
-                android:background="@color/material_green"
+                android:background="@color/btn_yellow"
                 android:padding="@dimen/medium_margin"
                 android:gravity="center"
                 />

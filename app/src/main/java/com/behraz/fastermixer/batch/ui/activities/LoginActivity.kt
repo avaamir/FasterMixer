@@ -47,7 +47,7 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions,
 
 
         if (false) {
-            startActivity(Intent(this, AdminActivity::class.java))
+            startActivity(Intent(this, TestActivity::class.java))
             finish()
             return
         }
@@ -63,6 +63,11 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions,
         subscribeNetworkStateChangeListener {
             ivInternet.setImageResource(if (it) R.drawable.ic_check else R.drawable.ic_error)
         }
+
+
+        //TODO UI Test Purpose
+        imageView5.setOnClickListener { startActivity(Intent(this, AdminActivity::class.java)) }
+
 
         permissionHelper.checkPermission()
     }
@@ -81,6 +86,12 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions,
 
 
     private fun initViews() {
+        numericKeyboard?.setInteractions {
+            if (etUsername.hasFocus()) etUsername.append("$it")
+            if (etUsername.hasFocus()) etPassword.append("$it")
+        }
+
+
         btnLogin.setOnClickListener {
             val username = etUsername.text.toString()
             val password = etPassword.text.toString()
@@ -126,8 +137,8 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions,
         etPassword.setText("12345")*/
 
         //Batch
-        etUsername.setText("alikave")
-        etPassword.setText("12211221")
+     //   etUsername.setText("alikave")
+     //   etPassword.setText("12211221")
     }
 
 
