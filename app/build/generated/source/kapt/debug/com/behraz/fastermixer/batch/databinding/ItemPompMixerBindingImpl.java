@@ -20,7 +20,7 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
         sViewsWithIds.put(R.id.textView15, 12);
         sViewsWithIds.put(R.id.textView17, 13);
         sViewsWithIds.put(R.id.btnCall, 14);
-        sViewsWithIds.put(R.id.textView8, 15);
+        sViewsWithIds.put(R.id.carId, 15);
         sViewsWithIds.put(R.id.textView10, 16);
         sViewsWithIds.put(R.id.textView19, 17);
     }
@@ -38,6 +38,7 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
     private ItemPompMixerBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
             , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[14]
+            , (com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView) bindings[15]
             , (android.widget.TextView) bindings[16]
             , (android.widget.TextView) bindings[9]
             , (android.widget.TextView) bindings[10]
@@ -51,7 +52,6 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
             , (android.widget.TextView) bindings[7]
             , (android.widget.TextView) bindings[5]
             , (android.widget.TextView) bindings[8]
-            , (com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView) bindings[15]
             , (android.widget.TextView) bindings[6]
             , (android.widget.TextView) bindings[1]
             );

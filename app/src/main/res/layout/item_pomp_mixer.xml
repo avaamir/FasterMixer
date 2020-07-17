@@ -138,19 +138,15 @@
                 app:text="تماس با راننده" />
 
             <com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView
-                android:id="@+id/textView8"
+                android:id="@+id/carId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                app:firstText="12"
-                app:forthText="63"
                 app:layout_constraintBottom_toBottomOf="@+id/textView14"
                 app:layout_constraintEnd_toStartOf="@+id/textView14"
                 app:layout_constraintHorizontal_bias="0.67"
                 app:layout_constraintStart_toEndOf="@+id/btnCall"
-                app:layout_constraintTop_toTopOf="@+id/textView14"
-                app:secondText="ب"
-                app:thirdText="242" />
+                app:layout_constraintTop_toTopOf="@+id/textView14"  />
 
             <TextView
                 android:id="@+id/textView10"
@@ -159,7 +155,7 @@
                 android:layout_height="wrap_content"
                 android:text="نام راننده:"
                 app:layout_constraintBottom_toBottomOf="@+id/textView16"
-                app:layout_constraintEnd_toEndOf="@+id/textView8"
+                app:layout_constraintEnd_toEndOf="@+id/carId"
                 app:layout_constraintTop_toTopOf="@+id/textView16" />
 
 
