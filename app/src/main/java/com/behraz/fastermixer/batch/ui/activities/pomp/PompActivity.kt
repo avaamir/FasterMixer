@@ -15,6 +15,7 @@ import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ActivityPompBinding
 import com.behraz.fastermixer.batch.models.Progress
 import com.behraz.fastermixer.batch.models.ProgressState
+import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.animations.closeReveal
 import com.behraz.fastermixer.batch.ui.animations.crossfade
 import com.behraz.fastermixer.batch.ui.animations.startReveal
@@ -24,6 +25,7 @@ import com.behraz.fastermixer.batch.ui.customs.general.LockableBottomSheetBehavi
 import com.behraz.fastermixer.batch.ui.customs.general.TopSheetBehavior
 import com.behraz.fastermixer.batch.ui.dialogs.MessageDialog
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
+import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
 import com.behraz.fastermixer.batch.ui.fragments.CustomerListFragment
 import com.behraz.fastermixer.batch.ui.fragments.MapFragment
@@ -32,20 +34,18 @@ import com.behraz.fastermixer.batch.ui.fragments.MixerListFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeProgresses
 import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
+import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.utils.general.hardware.compass.TimerLiveData
-import com.behraz.fastermixer.batch.utils.general.snack
-import com.behraz.fastermixer.batch.utils.general.subscribeGpsStateChangeListener
-import com.behraz.fastermixer.batch.utils.general.subscribeNetworkStateChangeListener
-import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.activity_pomp.*
+import kotlinx.android.synthetic.main.activity_batch.*
 
 
 class PompActivity : AppCompatActivity(),
-    FasterMixerProgressView.OnStateChangedListener,
-    MessageDialog.Interactions, FasterMixerUserPanel.Interactions {
+    FasterMixerProgressView.OnStateChangedListener, ApiService.InternetConnectionListener,
+    MessageDialog.Interactions, FasterMixerUserPanel.Interactions,
+    ApiService.OnUnauthorizedListener {
 
     private companion object {
         private const val FRAGMENT_MIXER_LIST_TAG = "mixer-list_frag"
@@ -230,7 +230,7 @@ class PompActivity : AppCompatActivity(),
                                     (fragment as MessageListFragment).submitMessages(messages)
                                 }
                             }
-                        //tvMessageCount.text = messages.size.toString()
+                        tvMessageCount.text = messages.size.toString()
                         //TODO check if a message is critical and new show in dialog to user
                     }
                 } else {
@@ -307,4 +307,14 @@ class PompActivity : AppCompatActivity(),
     override fun onCallClicked(view: View?) {
         TODO("Not yet implemented")
     }
+
+    override fun onUnauthorizedAction(event: Event<Unit>) {
+        toast("شما نیاز به ورود مجدد دارید")
+        finish()
+    }
+
+    override fun onInternetUnavailable() {
+        NoNetworkDialog(this, R.style.my_alert_dialog).show()
+    }
+
 }

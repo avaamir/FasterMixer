@@ -1,6 +1,9 @@
 package com.behraz.fastermixer.batch.viewmodels
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import com.behraz.fastermixer.batch.models.Equipment
 import com.behraz.fastermixer.batch.models.enums.UserType
 import com.behraz.fastermixer.batch.models.requests.behraz.ChooseEquipmentRequest
@@ -9,6 +12,7 @@ import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.utils.general.Event
 import com.behraz.fastermixer.batch.utils.general.exhaustiveAsExpression
+import java.lang.IllegalStateException
 
 class ChooseEquipmentActivityViewModel : ViewModel() {
 
@@ -40,7 +44,9 @@ class ChooseEquipmentActivityViewModel : ViewModel() {
         }
 
     fun getEquipments() {
-        getEquipmentEvent.value = Event(user.value!!.userType)
+        user.value?.let {
+            getEquipmentEvent.value = Event(it.userType)
+        }
     }
 
     fun logout() {
@@ -48,7 +54,10 @@ class ChooseEquipmentActivityViewModel : ViewModel() {
     }
 
 
-    fun chooseEquipment(equipmentId: String) {
-        chooseEquipmentRequest.value = ChooseEquipmentRequest(equipmentId)
+    fun chooseEquipment(equipmentId: String? = null, retryLastRequest: Boolean? = null) {
+        if (retryLastRequest == true)
+            chooseEquipmentRequest.value.let { if (it != null) chooseEquipmentRequest.value = it else throw IllegalStateException("not requested before") }
+        else
+            chooseEquipmentRequest.value = ChooseEquipmentRequest(equipmentId!!)
     }
 }

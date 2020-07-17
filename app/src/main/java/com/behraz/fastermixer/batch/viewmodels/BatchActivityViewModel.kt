@@ -21,7 +21,6 @@ class BatchActivityViewModel : ViewModel() {
                 response?.entity?.sortedWith(
                     compareBy { mixer ->
                         mixer.latLng.distanceToAsDouble(batchLocation).also { distance ->
-                            println("debug:batchLoc=$batchLocation, distance:$distance,mixer:${mixer.id}")
                             mixer.state = distanceTextNormalizer(distance)
                         }
                     }

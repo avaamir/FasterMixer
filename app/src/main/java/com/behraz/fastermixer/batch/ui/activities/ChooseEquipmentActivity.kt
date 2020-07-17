@@ -10,24 +10,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.models.Equipment
+import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.activities.batch.BatchActivity
 import com.behraz.fastermixer.batch.ui.adapters.ChooseEquipmentAdapter
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
+import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
-import com.behraz.fastermixer.batch.utils.general.subscribeGpsStateChangeListener
-import com.behraz.fastermixer.batch.utils.general.subscribeNetworkStateChangeListener
-import com.behraz.fastermixer.batch.utils.general.snack
-import com.behraz.fastermixer.batch.utils.general.toast
+import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.ChooseEquipmentActivityViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_choose_batch.*
 
 class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
-    ChooseEquipmentAdapter.Interaction {
+    ChooseEquipmentAdapter.Interaction, ApiService.OnUnauthorizedListener, ApiService.InternetConnectionListener {
 
     private var snackbar: Snackbar? = null
     private lateinit var viewModel: ChooseEquipmentActivityViewModel
@@ -75,8 +74,19 @@ class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Intera
 
         viewModel.chooseEquipmentResponse.observe(this, Observer {
             progressDialog.dismiss()
-            startActivity(Intent(this, BatchActivity::class.java))
-            finish()
+            if (it != null) {
+                if (it.isSucceed) {
+                    startActivity(Intent(this, BatchActivity::class.java))
+                    finish()
+                } else {
+
+                }
+            } else {
+                snack(Constants.SERVER_ERROR) {
+                    progressDialog.show()
+                    viewModel.chooseEquipment(retryLastRequest = true)
+                }
+            }
         })
 
 
@@ -124,7 +134,7 @@ class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Intera
     }
 
     override fun onCallClicked(view: View) {
-        TODO("not yet implemented")
+        toast("not yet implemented")
     }
 
     override fun onItemClicked(item: Equipment) {
@@ -136,4 +146,14 @@ class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Intera
         }
 
     }
+
+    override fun onUnauthorizedAction(event: Event<Unit>) {
+        toast("شما نیاز به ورود مجدد دارید")
+        finish()
+    }
+
+    override fun onInternetUnavailable() {
+        NoNetworkDialog(this, R.style.my_alert_dialog).show()
+    }
+
 }
