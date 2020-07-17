@@ -1,6 +1,5 @@
 package com.behraz.fastermixer.batch.viewmodels
 
-import android.view.animation.Transformation
 import androidx.lifecycle.*
 import com.behraz.fastermixer.batch.models.Customer
 import com.behraz.fastermixer.batch.models.Mixer

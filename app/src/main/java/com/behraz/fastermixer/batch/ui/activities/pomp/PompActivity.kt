@@ -29,7 +29,9 @@ import com.behraz.fastermixer.batch.ui.fragments.CustomerListFragment
 import com.behraz.fastermixer.batch.ui.fragments.MapFragment
 import com.behraz.fastermixer.batch.ui.fragments.MessageListFragment
 import com.behraz.fastermixer.batch.ui.fragments.MixerListFragment
-import com.behraz.fastermixer.batch.utils.fastermixer.*
+import com.behraz.fastermixer.batch.utils.fastermixer.Constants
+import com.behraz.fastermixer.batch.utils.fastermixer.fakeProgresses
+import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
 import com.behraz.fastermixer.batch.utils.general.hardware.compass.TimerLiveData
 import com.behraz.fastermixer.batch.utils.general.snack
 import com.behraz.fastermixer.batch.utils.general.subscribeGpsStateChangeListener
@@ -38,7 +40,7 @@ import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.activity_batch.*
+import kotlinx.android.synthetic.main.activity_pomp.*
 
 
 class PompActivity : AppCompatActivity(),
@@ -228,7 +230,7 @@ class PompActivity : AppCompatActivity(),
                                     (fragment as MessageListFragment).submitMessages(messages)
                                 }
                             }
-                        tvMessageCount.text = messages.size.toString()
+                        //tvMessageCount.text = messages.size.toString()
                         //TODO check if a message is critical and new show in dialog to user
                     }
                 } else {
