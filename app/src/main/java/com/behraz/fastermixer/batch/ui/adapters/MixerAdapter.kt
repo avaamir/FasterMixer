@@ -60,14 +60,18 @@ class MixerAdapter(private val isForPomp: Boolean, private val interaction: Inte
             if (isForPomp) {
                 (mBinding as ItemPompMixerBinding).mixer = mixer
                 mBinding.btnCall.setOnClickListener { interaction?.onCallClicked(mixer) }
-                mixer.carId.split(",")
-                    .run { mBinding.carId.setText(get(0), get(1), get(2), get(3)) }
+                if(mixer.carId.isNotBlank()) {
+                    mixer.carId.split(",")
+                        .run { mBinding.carId.setText(get(0), get(1), get(2), get(3)) }
+                }
             } else {
                 (mBinding as ItemMixerBinding).mixer = mixer
                 mBinding.btnEndLoading.setOnClickListener { interaction?.onEndLoadingClicked(mixer) }
                 mBinding.btnCall.setOnClickListener { interaction?.onCallClicked(mixer) }
-                mixer.carId.split(",")
-                    .run { mBinding.carId.setText(get(0), get(1), get(2), get(3)) }
+                if(mixer.carId.isNotBlank()) {
+                    mixer.carId.split(",")
+                        .run { mBinding.carId.setText(get(0), get(1), get(2), get(3)) }
+                }
             }
             mBinding.executePendingBindings()
 

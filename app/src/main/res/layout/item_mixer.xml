@@ -140,10 +140,11 @@
 
             <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
                 android:id="@+id/btnEndLoading"
+                android:visibility="invisible"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:backgroundColor="@color/mixer_red"
+                app:backgroundColor="@color/btn_yellow"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/btnCall"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -161,7 +162,12 @@
                 app:layout_constraintEnd_toStartOf="@+id/textView14"
                 app:layout_constraintHorizontal_bias="0.67"
                 app:layout_constraintStart_toEndOf="@+id/btnCall"
-                app:layout_constraintTop_toTopOf="@+id/textView14"  />
+                app:layout_constraintTop_toTopOf="@+id/textView14"
+                tools:firstText="12"
+                tools:secondText="ب"
+                tools:thirdText="134"
+                tools:forthText="54"
+                />
 
             <TextView
                 android:id="@+id/textView10"

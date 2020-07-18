@@ -9,6 +9,7 @@ import android.graphics.Canvas
 import android.os.Bundle
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
+import org.osmdroid.util.GeoPoint
 import java.util.concurrent.TimeUnit
 
 
@@ -84,3 +85,26 @@ fun setClipboard(context: Context, s: String?) {
     val clip = ClipData.newPlainText("invite_code", s)
     clipboard.setPrimaryClip(clip)
 }
+
+
+fun distanceTextNormalizer(meterDistance: Double): String {
+    val temp = meterDistance.toInt() / 100
+    return when {
+        meterDistance < 40 -> "به بچ رسید"
+        temp == 0 || temp / 10 == 0 -> "${meterDistance.toInt()} متر" //meter
+        temp % 10 == 0 -> "${temp / 10} کیلومتر" //km
+        else -> "${temp / 10}.${temp % 10} کیلومتر" //km
+    }.let {
+        if (it.contains("رسید"))
+            it
+        else
+            "$it مانده"
+    }
+}
+
+fun circleFenceToCenterGeoPoint(
+    geofencepoint: String
+) =
+    geofencepoint.substring(8, geofencepoint.indexOf(",")).split(" ").let {
+        GeoPoint(it[0].toDouble(), it[1].toDouble())
+    }

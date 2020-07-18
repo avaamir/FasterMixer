@@ -25,6 +25,7 @@ fun fakePlans() = listOf(
     Plan("11", "علی اکبری", "یزد - صفاییه", 20, 10, 7)
 )
 
+/*
 
 fun fakeCustomers() = listOf(
     Customer(
@@ -37,7 +38,6 @@ fun fakeCustomers() = listOf(
         _density = 4,
         _mixerCount = 2,
         jobType = "سقف",
-        area = listOf(LatLng(0.0, 0.0))
     ),
     Customer(
         id = 2,
@@ -49,7 +49,6 @@ fun fakeCustomers() = listOf(
         _density = 4,
         _mixerCount = 2,
         jobType = "سقف",
-        area = listOf(LatLng(0.0, 0.0))
     ),
     Customer(
         id = 3,
@@ -61,9 +60,9 @@ fun fakeCustomers() = listOf(
         _density = 4,
         _mixerCount = 2,
         jobType = "سقف",
-        area = listOf(LatLng(0.0, 0.0))
     )
 )
+*/
 
 fun fakeProgresses(isMixer: Boolean) = if (isMixer) {
     listOf(

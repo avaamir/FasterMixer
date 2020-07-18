@@ -7,16 +7,17 @@ import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.utils.general.Event
+import com.behraz.fastermixer.batch.utils.general.distanceTextNormalizer
 import org.osmdroid.util.GeoPoint
 import kotlin.concurrent.fixedRateTimer
 
 class BatchActivityViewModel : ViewModel() {
 
-    private var batchLocation: GeoPoint? = null //TODO implement this // get from server
+    private var batchLocation: GeoPoint? = null
 
     private val getMixersEvent = MutableLiveData(Event(Unit))
     val mixers = Transformations.switchMap(getMixersEvent) {
-        RemoteRepo.getBatchMixers().map { response ->
+        RemoteRepo.getRequestMixers(batchNotPomp = true).map { response ->
             val sortedMixers = batchLocation?.let { batchLocation ->
                 response?.entity?.sortedWith(
                     compareBy { mixer ->
@@ -57,7 +58,7 @@ class BatchActivityViewModel : ViewModel() {
 
     init {
         println("debug:" + UserConfigs.user.value)
-        RemoteRepo.getEquipmentLocation(UserConfigs.user.value!!.equipmentId!!) {
+        RemoteRepo.getBatchLocation(UserConfigs.user.value!!.equipmentId!!) {
             batchLocation = it
         }
     }
@@ -83,24 +84,6 @@ class BatchActivityViewModel : ViewModel() {
         super.onCleared()
         timer.cancel()
         timer.purge()
-    }
-
-
-
-
-    fun distanceTextNormalizer(meterDistance: Double): String {
-        val temp = meterDistance.toInt() / 100
-        return when {
-            meterDistance < 20 -> "به بچ رسید"
-            temp == 0 || temp / 10 == 0 -> "${meterDistance.toInt()} متر" //meter
-            temp % 10 == 0 -> "${temp / 10} کیلومتر" //km
-            else -> "${temp / 10}.${temp % 10} کیلومتر" //km
-        }.let {
-            if (it.contains("رسید"))
-                it
-            else
-                "$it مانده"
-        }
     }
 
 }

@@ -20,7 +20,7 @@ class AdminPanelFragmentViewModel : ViewModel() {
     private var getPlansEvent = MutableLiveData(Event(Unit))
 
     val plans = Transformations.switchMap(getPlansEvent) {
-        RemoteRepo.getPlans()
+        RemoteRepo.getAdminPlans()
     }
 
 

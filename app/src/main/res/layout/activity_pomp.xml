@@ -59,8 +59,7 @@
 
                         <include
                             android:id="@+id/layout_customer"
-                            layout="@layout/item_customer"
-                            app:customer="@{viewModel.customer}" />
+                            layout="@layout/item_customer" />
 
                     </FrameLayout>
 
@@ -72,8 +71,7 @@
 
                         <include
                             android:id="@+id/layout_mixer"
-                            layout="@layout/layout_mixer"
-                            app:mixer="@{viewModel.currentMixer}" />
+                            layout="@layout/layout_mixer" />
 
                     </FrameLayout>
                 </FrameLayout>
@@ -92,7 +90,7 @@
             android:layout_margin="@dimen/standard_margin"
             android:clickable="true"
             android:focusable="true"
-            app:backgroundTint="@color/primary_dark"
+            app:backgroundTint="@color/btn_yellow"
             app:fabSize="mini"
             app:layout_anchor="@id/frame_top"
             app:layout_anchorGravity="right|bottom"
@@ -135,8 +133,8 @@
                     android:layout_height="20dp"
                     android:background="@drawable/shape_drawer_badge"
                     android:gravity="center"
-                    android:textSize="12sp"
                     android:text="0"
+                    android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="@id/imageView2"
                     app:layout_constraintEnd_toEndOf="@+id/imageView2"
                     app:layout_constraintStart_toEndOf="@+id/imageView2"
@@ -188,7 +186,7 @@
                 android:layout_marginRight="8dp"
                 android:clickable="true"
                 android:focusable="true"
-                app:backgroundTint="@color/primary_dark"
+                app:backgroundTint="@color/btn_blue"
                 app:fabSize="mini"
                 app:srcCompat="@drawable/ic_person"
                 app:tint="@color/white" />
@@ -200,7 +198,7 @@
                 android:layout_marginRight="8dp"
                 android:clickable="true"
                 android:focusable="true"
-                app:backgroundTint="@color/primary_dark"
+                app:backgroundTint="@color/btn_yellow"
                 app:fabSize="mini"
                 app:srcCompat="@drawable/ic_sun"
                 app:tint="@color/white" />
@@ -213,7 +211,7 @@
                 android:layout_marginRight="8dp"
                 android:clickable="true"
                 android:focusable="true"
-                app:backgroundTint="@color/primary_dark"
+                app:backgroundTint="@color/btn_blue"
                 app:fabSize="mini"
                 app:srcCompat="@drawable/ic_gps"
                 app:tint="@color/white" />

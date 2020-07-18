@@ -13,6 +13,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ActivityPompBinding
+import com.behraz.fastermixer.batch.models.Customer
+import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.Progress
 import com.behraz.fastermixer.batch.models.ProgressState
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
@@ -27,15 +29,13 @@ import com.behraz.fastermixer.batch.ui.dialogs.MessageDialog
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
-import com.behraz.fastermixer.batch.ui.fragments.CustomerListFragment
 import com.behraz.fastermixer.batch.ui.fragments.MapFragment
-import com.behraz.fastermixer.batch.ui.fragments.MessageListFragment
-import com.behraz.fastermixer.batch.ui.fragments.MixerListFragment
+import com.behraz.fastermixer.batch.ui.fragments.pomp.CustomerListFragment
+import com.behraz.fastermixer.batch.ui.fragments.pomp.MixerListFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeProgresses
 import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
 import com.behraz.fastermixer.batch.utils.general.*
-import com.behraz.fastermixer.batch.utils.general.hardware.compass.TimerLiveData
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -52,6 +52,36 @@ class PompActivity : AppCompatActivity(),
         private const val FRAGMENT_CUSTOMER_LIST_TAG = "customer-list_frag"
         private const val FRAGMENT_MESSAGE_LIST_TAG = "msg-list_frag"
     }
+
+    private val blankMixer = Mixer(
+        id = "0",
+        carName = "نامشخص",
+        phone = null,
+        carId = "--,-,---,--",
+        state = "ندارد",
+        driverName = "نامشخص",
+        owner = "نامشخص",
+        lat = "0",
+        lng = "0",
+        amount = 0f,
+        capacity = 0f,
+        ended = false,
+        productTypeName = "-,-",
+        totalAmount = 0f
+    )
+
+    private val blankCustomer = Customer(
+        id = "0",
+        name = "نامشخص",
+        startTime = "نامشخص",
+        address = "نامشخص",
+        _slump = 0,
+        _amount = 0,
+        _density = 0,
+        _mixerCount = 0,
+        jobType = "نامشخص",
+        areaStr = "CIRCLE (0, 0)"
+    )
 
     private val progressDialog by lazy {
         MyProgressDialog(this, R.style.my_alert_dialog)
@@ -78,10 +108,6 @@ class PompActivity : AppCompatActivity(),
 
         subscribeNetworkStateChangeListener { mBinding.fasterMixerUserPanel.setInternetState(it) }
         subscribeGpsStateChangeListener { mBinding.fasterMixerUserPanel.setGPSState(it) }
-
-        TimerLiveData(1000L).observe(this, Observer {
-            viewModel.getMessages()
-        })
     }
 
     private fun initViews() {
@@ -115,7 +141,10 @@ class PompActivity : AppCompatActivity(),
                 mBinding.btnArrow.visibility = View.GONE
             }
             supportFragmentManager.beginTransaction().apply {
-                add(R.id.mapContainer, MixerListFragment(), FRAGMENT_MIXER_LIST_TAG)
+                add(
+                    R.id.mapContainer,
+                    MixerListFragment(), FRAGMENT_MIXER_LIST_TAG
+                )
                 addToBackStack(null)
                 setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 commit()
@@ -129,7 +158,10 @@ class PompActivity : AppCompatActivity(),
                 mBinding.btnArrow.visibility = View.GONE
             }
             supportFragmentManager.beginTransaction().apply {
-                add(R.id.mapContainer, CustomerListFragment(), FRAGMENT_CUSTOMER_LIST_TAG)
+                add(
+                    R.id.mapContainer,
+                    CustomerListFragment(), FRAGMENT_CUSTOMER_LIST_TAG
+                )
                 addToBackStack(null)
                 setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 commit()
@@ -141,7 +173,7 @@ class PompActivity : AppCompatActivity(),
             startActivity(
                 Intent(
                     Intent.ACTION_DIAL,
-                    Uri.parse("tel:" + viewModel.currentMixer.value!!.phone)
+                    Uri.parse("tel:" + viewModel.mixers.value!!.entity!![0].phone) //current mixer
                 )
             )
         }
@@ -191,6 +223,9 @@ class PompActivity : AppCompatActivity(),
             )
         ) //todo ui test purpose get it from viewModel
 
+        mBinding.layoutMixer.mixer = blankMixer
+        mBinding.layoutMixer.carId.setText(blankMixer.carId)
+        mBinding.layoutCustomer.customer = blankCustomer
     }
 
     private fun subscribeObservers() {
@@ -200,7 +235,6 @@ class PompActivity : AppCompatActivity(),
                 mBinding.fasterMixerUserPanel.setPersonalCode(it.personalCode)
             }
         })
-
 
         viewModel.logoutResponse.observe(this, Observer {
             progressDialog.dismiss()
@@ -220,16 +254,51 @@ class PompActivity : AppCompatActivity(),
         })
 
 
+        viewModel.mixers.observe(this, Observer {
+            if (it != null) {
+                if (it.isSucceed) {
+                    it.entity?.let { mixers ->
+                        if(mixers.isNotEmpty()) {
+                            mBinding.layoutMixer.mixer = mixers[0]
+                            if (mixers[0].carId.isNotBlank()) {
+                                mBinding.layoutMixer.carId.setText(mixers[0].carId)
+                            }
+                        }
+                    }
+                } else {
+                    //TODO is not succeed what should i do??
+                    println("debug: ${it.message}")
+                }
+            } else {
+                println("debug: getMessages() -> Server Error: returning `null`")
+                //todo Server Error chekar konam??
+            }
+        })
+
+
+        viewModel.customers.observe(this, Observer {
+            if (it != null) {
+                if (it.isSucceed) {
+                    it.entity?.let { customers ->
+                        //TODO customers[0] hamishegi nist va vaghti darkhast aval tamum shod bayad customers[1] ro neshun bede
+                        if (customers.isNotEmpty()) {
+                            mBinding.layoutCustomer.customer = customers[0]
+                        }
+                    }
+                } else {
+                    //TODO is not succeed what should i do??
+                    println("debug: ${it.message}")
+                }
+            } else {
+                println("debug: getMessages() -> Server Error: returning `null`")
+                //todo Server Error chekar konam??
+            }
+        })
+
         viewModel.messages.observe(this, Observer {
             if (it != null) {
                 if (it.isSucceed) {
                     it.entity?.let { messages ->
-                        supportFragmentManager.findFragmentByTag(FRAGMENT_MESSAGE_LIST_TAG)
-                            ?.let { fragment ->
-                                if (fragment.isVisible) {
-                                    (fragment as MessageListFragment).submitMessages(messages)
-                                }
-                            }
                         tvMessageCount.text = messages.size.toString()
                         //TODO check if a message is critical and new show in dialog to user
                     }
@@ -304,8 +373,8 @@ class PompActivity : AppCompatActivity(),
         RecordingDialogFragment().show(supportFragmentManager, null)
     }
 
-    override fun onCallClicked(view: View?) {
-        TODO("Not yet implemented")
+    override fun onCallClicked(view: View) {
+        toast("Not yet implemented")
     }
 
     override fun onUnauthorizedAction(event: Event<Unit>) {

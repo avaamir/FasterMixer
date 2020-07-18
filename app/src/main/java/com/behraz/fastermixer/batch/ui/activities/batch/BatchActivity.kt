@@ -20,14 +20,12 @@ import com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
-import com.behraz.fastermixer.batch.ui.fragments.MapFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
 import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.BatchActivityViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_batch.*
-import kotlinx.android.synthetic.main.activity_choose_batch.*
 
 class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdapter.Interaction,
     FasterMixerUserPanel.Interactions, ApiService.InternetConnectionListener,

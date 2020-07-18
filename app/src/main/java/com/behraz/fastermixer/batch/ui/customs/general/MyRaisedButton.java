@@ -104,15 +104,15 @@ public class MyRaisedButton extends LinearLayout {
     public void showProgressBar(boolean shouldShow) { //age progress bar show beshe listener button disable mishe
         if (shouldShow) {
             progressBar.setVisibility(VISIBLE);
-            ivPic.setVisibility(GONE);
-            tvCaption.setVisibility(GONE);
+            ivPic.setVisibility(INVISIBLE);
+            tvCaption.setVisibility(INVISIBLE);
             btnFrame.setOnClickListener(null);
         } else {
             progressBar.setVisibility(GONE);
             if (hasPic) {
                 ivPic.setVisibility(VISIBLE);
             } else {
-                ivPic.setVisibility(GONE);
+                ivPic.setVisibility(INVISIBLE);
             }
             tvCaption.setVisibility(VISIBLE);
             btnFrame.setOnClickListener(listener);

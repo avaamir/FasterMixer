@@ -1,4 +1,4 @@
-package com.behraz.fastermixer.batch.ui.fragments
+package com.behraz.fastermixer.batch.ui.fragments.pomp
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,10 +15,10 @@ import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentCustomerListBinding
 import com.behraz.fastermixer.batch.ui.adapters.CustomerAdapter
 import com.behraz.fastermixer.batch.viewmodels.CustomerListFragmentViewModel
-import com.behraz.fastermixer.batch.viewmodels.MixerListFragmentViewModel
+import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 
 class CustomerListFragment: Fragment() {
-    private lateinit var viewModel: CustomerListFragmentViewModel
+    private lateinit var viewModel: PompActivityViewModel
     private lateinit var mBinding: FragmentCustomerListBinding
     private val mAdapter = CustomerAdapter( )
 
@@ -28,7 +28,7 @@ class CustomerListFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this).get(CustomerListFragmentViewModel::class.java)
+        viewModel = ViewModelProvider(activity!!).get(PompActivityViewModel::class.java)
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_customer_list, container, false)
         initViews()
         subscribeObservers()
@@ -38,7 +38,15 @@ class CustomerListFragment: Fragment() {
 
     private fun subscribeObservers() {
         viewModel.customers.observe(viewLifecycleOwner, Observer {
-            mAdapter.submitList(it)
+            if (it != null) {
+                if (it.isSucceed) {
+                    mAdapter.submitList(it.entity)
+                } else {
+                    //TODo
+                }
+            } else {
+                //TODo
+            }
         })
     }
 

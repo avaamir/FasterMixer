@@ -58,6 +58,15 @@ public class CarIdView extends LinearLayout {
     }
 
 
+
+    public void setText(String carId) {
+        String[] parts = carId.split(",");
+        tvFirst.setText(parts[0]);
+        tvSecond.setText(parts[1]);
+        tvThird.setText(parts[2]);
+        tvForth.setText(parts[3]);
+    }
+
     public void setText(String first, String second, String third, String forth) {
         tvFirst.setText(first);
         tvSecond.setText(second);

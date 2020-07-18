@@ -106,7 +106,8 @@ object RemoteRepo {
         apiReq(chooseEquipmentRequest, ApiService.client::chooseBatch)
 
 
-    fun getBatchMixers() = apiReq(ApiService.client::getBatchMixers)
+    fun getRequestMixers(batchNotPomp: Boolean) =
+        if (batchNotPomp) apiReq(ApiService.client::getBatchMixers) else apiReq(ApiService.client::getPompMixers)
 
 
     fun getMessages() = apiReq(ApiService.client::getMessages)
@@ -115,7 +116,7 @@ object RemoteRepo {
     fun sendVoice(imageRequest: MultipartBody.Part) =
         apiReq(imageRequest, ApiService.client::sendVoiceMessage)
 
-    fun getPlans(): RunOnceLiveData<List<Plan>?> {
+    fun getAdminPlans(): RunOnceLiveData<List<Plan>?> {
         return object : RunOnceLiveData<List<Plan>?>() {
             override fun onActiveRunOnce() {
                 postValue(fakePlans())
@@ -123,13 +124,13 @@ object RemoteRepo {
         }
     }
 
-    fun getEquipmentLocation(
+    fun getBatchLocation( //be khater in ke mikhastam callback dar bashe va niazi be liveData nabud az Reflection estefade nakardam va dasti code zadam
         equipmentId: String,
         onResponse: (GeoPoint?) -> Unit
     ) {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         CoroutineScope(IO + serverJobs).launchApi({
-            val response = ApiService.client.getEquipmentLocation(GetEquipmentRequest(equipmentId))
+            val response = ApiService.client.getBatchLocation(GetEquipmentRequest(equipmentId))
             CoroutineScope(Main).launch {
                 onResponse(response.body()?.entity?.equipmentLocation)
             }
@@ -142,6 +143,8 @@ object RemoteRepo {
     }
 
 
+
+    fun getCustomers() = apiReq(ApiService.client::getCustomers)
 
     fun getRoute(coordinates: List<GeoPoint>): RunOnceLiveData<GetRouteResponse?> {
         if (!RemoteRepo::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
@@ -175,6 +178,5 @@ object RemoteRepo {
             }
         }
     }
-
 
 }

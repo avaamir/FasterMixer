@@ -133,8 +133,8 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions,
 
         //TODO TEST purpose
         //Pomp
-        etUsername.setText("alii")
-        etPassword.setText("12211221")
+        etUsername.setText("1215")
+        etPassword.setText("1215")
 
         //Batch
         /*etUsername.setText("sara")
@@ -150,13 +150,6 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions,
                     btnLogin.showProgressBar(false)
                     if (it != null) {
                         if (it.isSucceed) {
-
-                            //TODO test purpose------------------
-                            startActivity(Intent(this, PompActivity::class.java))
-                            return@Observer
-                            //TODO-------------------------------
-
-
                             if (it.entity!!.equipmentId == null) {
                                 if (it.entity.userType == UserType.Mixer) {
                                     toast("کاربر میسکر در این نسخه از برنامه تعریف نشده است. لطفا برنامه را به روز رسانی کنید")
