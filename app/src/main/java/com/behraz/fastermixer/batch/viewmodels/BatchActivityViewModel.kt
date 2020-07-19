@@ -4,28 +4,39 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
+import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.utils.general.Event
-import com.behraz.fastermixer.batch.utils.general.distanceTextNormalizer
 import org.osmdroid.util.GeoPoint
 import kotlin.concurrent.fixedRateTimer
 
 class BatchActivityViewModel : ViewModel() {
 
-    private var batchLocation: GeoPoint? = null
+    private var batchLocation: CircleFence? = null
 
     private val getMixersEvent = MutableLiveData(Event(Unit))
     val mixers = Transformations.switchMap(getMixersEvent) {
         RemoteRepo.getRequestMixers(batchNotPomp = true).map { response ->
             val sortedMixers = batchLocation?.let { batchLocation ->
-                response?.entity?.sortedWith(
-                    compareBy { mixer ->
-                        mixer.latLng.distanceToAsDouble(batchLocation).also { distance ->
-                            mixer.state = distanceTextNormalizer(distance)
-                        }
+                response?.entity?.let {
+                    if (it.size == 1) {
+                        it[0].normalizeStateByDistance(batchLocation)
+                        it
+                    } else {
+                        it.sortedWith(
+                            compareBy { mixer ->
+                                mixer.latLng.distanceToAsDouble(batchLocation.center)
+                                    .also { distance ->
+                                        mixer.normalizeStateByDistance(
+                                            distance,
+                                            batchLocation.radius
+                                        )
+                                    }
+                            }
+                        )
                     }
-                )
+                }
             }
             if (sortedMixers != null)
                 response?.copy(entity = sortedMixers)

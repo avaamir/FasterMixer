@@ -24,7 +24,7 @@ class MixerAdapter(private val isForPomp: Boolean, private val interaction: Inte
             }
 
             override fun areContentsTheSame(oldItem: Mixer, newItem: Mixer): Boolean {
-                return oldItem == newItem
+                return oldItem == newItem //TODO mitavan location(lat, lng) ra az ghias hazf kard ta hey cheshmak nazanad vali dar ui chizi taghir nakonad
             }
 
         }

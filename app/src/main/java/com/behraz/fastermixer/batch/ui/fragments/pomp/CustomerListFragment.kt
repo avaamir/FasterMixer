@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentCustomerListBinding
 import com.behraz.fastermixer.batch.ui.adapters.CustomerAdapter
-import com.behraz.fastermixer.batch.viewmodels.CustomerListFragmentViewModel
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 
 class CustomerListFragment: Fragment() {

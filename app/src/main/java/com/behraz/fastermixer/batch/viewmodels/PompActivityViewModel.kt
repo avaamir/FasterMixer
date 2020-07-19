@@ -1,17 +1,14 @@
 package com.behraz.fastermixer.batch.viewmodels
 
 import androidx.lifecycle.*
-import com.behraz.fastermixer.batch.models.Customer
-import com.behraz.fastermixer.batch.models.Mixer
+import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
-import com.behraz.fastermixer.batch.utils.fastermixer.fakeMixers
 import com.behraz.fastermixer.batch.utils.general.Event
-import com.behraz.fastermixer.batch.utils.general.distanceTextNormalizer
-import org.osmdroid.util.GeoPoint
 import kotlin.concurrent.fixedRateTimer
 
 class PompActivityViewModel : ViewModel() {
+
 
     val user get() = UserConfigs.user
 
@@ -20,20 +17,30 @@ class PompActivityViewModel : ViewModel() {
     private var isGetMixerRequestActive = false
 
 
-    private var pompLocation: GeoPoint? = null //TODO implement this // get from GPS
+    val pompArea = MutableLiveData<CircleFence?>(null) //TODO implement this // get from GPS
 
     private val getMixersEvent = MutableLiveData(Event(Unit))
     val mixers = Transformations.switchMap(getMixersEvent) {
         RemoteRepo.getRequestMixers(batchNotPomp = false).map { response ->
             isGetMixerRequestActive = false
-            val sortedMixers = pompLocation?.let { pompLocation ->
-                response?.entity?.sortedWith(
-                    compareBy { mixer ->
-                        mixer.latLng.distanceToAsDouble(pompLocation).also { distance ->
-                            mixer.state = distanceTextNormalizer(distance)
-                        }
-                    }
-                )
+            val sortedMixers = pompArea.value?.let { pompLocation ->
+                response?.entity?.let {
+                    if (it.size == 1) {
+                        if (it[0].state != "تخلیه") it[0].normalizeStateByDistance(pompLocation)
+                        it
+                    } else
+                        it.sortedWith(
+                            compareBy { mixer ->
+                                mixer.latLng.distanceToAsDouble(pompLocation.center)
+                                    .also { distance ->
+                                        mixer.normalizeStateByDistance(
+                                            distance,
+                                            pompLocation.radius
+                                        )
+                                    }
+                            }
+                        )
+                }
             }
             if (sortedMixers != null)
                 response?.copy(entity = sortedMixers)
@@ -68,6 +75,21 @@ class PompActivityViewModel : ViewModel() {
         refreshCustomers()
         refreshMixers()
         getMessages()
+        getPompLocation()
+    }
+
+
+    private fun getPompLocation() {
+        RemoteRepo.getPompLocation(user.value!!.equipmentId!!) {
+            if (it != null) {
+                if (it.isSucceed) {
+                    pompArea.value =
+                        it.entity!!.location //age observer nadashte bashe set nemishe, age scenario avaz shod deghat kon, alan mapFragment Observersh hast
+                } else {
+                    //TODO what should i do?
+                }
+            }
+        }
     }
 
 

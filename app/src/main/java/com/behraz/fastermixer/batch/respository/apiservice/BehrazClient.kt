@@ -44,14 +44,12 @@ interface BehrazClient {
     suspend fun getPompMixers() : Response<Entity<List<Mixer>>>
 
     @POST("Equipment/FindLocationBatch")
-    suspend fun getBatchLocation(@Body getEquipmentRequest: GetEquipmentRequest): Response<Entity<GetEquipmentLocationResponse>>
+    suspend fun getBatchLocation(@Body getEquipmentRequest: GetEquipmentRequest): Response<Entity<GetBatchLocationResponse>>
 
     @POST("Customer/FindAllCustomerWithRequest")
     suspend fun getCustomers(): Response<Entity<List<Customer>>>
 
 
-    @POST("")
-    suspend fun getVehicleLocation(@Body getEquipmentRequest: GetEquipmentRequest): Response<Entity<GetEquipmentRequest>>..
-
-
+    @POST("InputLastData/FindLocationByVehicleId")
+    suspend fun getVehicleLocation(@Body getEquipmentRequest: GetEquipmentRequest): Response<Entity<GetVehicleLocationResponse>>
 }

@@ -17,10 +17,6 @@ import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentMixerListBinding
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.ui.adapters.MixerAdapter
-import com.behraz.fastermixer.batch.utils.fastermixer.Constants
-import com.behraz.fastermixer.batch.utils.general.snack
-import com.behraz.fastermixer.batch.utils.general.toast
-import com.behraz.fastermixer.batch.viewmodels.MixerListFragmentViewModel
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 
 class MixerListFragment : Fragment(), MixerAdapter.Interaction {

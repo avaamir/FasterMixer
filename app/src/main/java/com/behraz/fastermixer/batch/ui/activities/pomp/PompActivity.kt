@@ -51,6 +51,7 @@ class PompActivity : AppCompatActivity(),
         private const val FRAGMENT_MIXER_LIST_TAG = "mixer-list_frag"
         private const val FRAGMENT_CUSTOMER_LIST_TAG = "customer-list_frag"
         private const val FRAGMENT_MESSAGE_LIST_TAG = "msg-list_frag"
+        private const val FRAGMENT_MAP_TAG = "map_frag"
     }
 
     private val blankMixer = Mixer(
@@ -113,7 +114,11 @@ class PompActivity : AppCompatActivity(),
     private fun initViews() {
 
         supportFragmentManager.beginTransaction().apply {
-            add(R.id.mapContainer, MapFragment.newInstance(mBinding.btnMyLocation.id), "frag-map")
+            add(
+                R.id.mapContainer,
+                MapFragment.newInstance(mBinding.btnMyLocation.id),
+                FRAGMENT_MAP_TAG
+            )
             commit()
         }
 
@@ -134,7 +139,13 @@ class PompActivity : AppCompatActivity(),
             isTopExpanded = !isTopExpanded
         }
 
-        mBinding.layoutMixer.btnShowOnMap.setOnClickListener { toast("not yet implemented") }
+        mBinding.layoutMixer.btnShowOnMap.setOnClickListener {
+            val mapFragment =
+                supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as MapFragment
+            viewModel.mixers.value?.entity?.get(0)?.latLng?.let {
+                mapFragment.moveCamera(it)
+            }
+        }
         mBinding.layoutMixer.btnMixerList.setOnClickListener {
             if (isTopExpanded) {
                 mBinding.btnArrow.callOnClick()
@@ -258,7 +269,7 @@ class PompActivity : AppCompatActivity(),
             if (it != null) {
                 if (it.isSucceed) {
                     it.entity?.let { mixers ->
-                        if(mixers.isNotEmpty()) {
+                        if (mixers.isNotEmpty()) {
                             mBinding.layoutMixer.mixer = mixers[0]
                             if (mixers[0].carId.isNotBlank()) {
                                 mBinding.layoutMixer.carId.setText(mixers[0].carId)

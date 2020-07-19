@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.models.Mixer
+import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.models.requests.behraz.ChooseEquipmentRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.LoginRequest
 import com.behraz.fastermixer.batch.respository.RemoteRepo
@@ -38,7 +39,7 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
     private var googleApiClient: GoogleApiClient? = null
 
 
-    var batchLocation: GeoPoint? = null
+    var batchLocation: CircleFence? = null
     private val mixerAdapter = MixerAdapter(false, this)
 
     private val batteryLevel: Float
@@ -144,7 +145,7 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
             fakeMixers().let { mixers ->
                 val xx = batchLocation?.let { batchLocation ->
                     mixers.sortedWith(compareBy { mixer ->
-                        val y = mixer.latLng.distanceToAsDouble(batchLocation)
+                        val y = mixer.latLng.distanceToAsDouble(batchLocation.center)
                         println("debug:batchLoc=$batchLocation, distance:$y,mixer:${mixer.id}")
                         y
                     })

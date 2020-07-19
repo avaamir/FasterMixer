@@ -6,18 +6,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.route.GetRouteResponse
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.utils.general.FIFO
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.overlay.Marker
 
 class MapViewModel : ViewModel() {
+
 
     companion object {
         const val MIN_LOCATION_UPDATE_TIME = 5L
         const val LOCATION_CAPACITY = 100
     }
 
+
+    val markers =  HashMap<String, Marker>()
 
     private var distanceSum: Float = 0f
 
@@ -38,7 +43,7 @@ class MapViewModel : ViewModel() {
         }
 
     private val locations = FIFO<Location>(LOCATION_CAPACITY)
-    var myLocation = GeoPoint(31.891413345001638, 54.35357135720551)
+    var myLocation =  GeoPoint(31.891413345001638, 54.35357135720551)
 
     private var coordinates: MutableLiveData<List<GeoPoint>> = MutableLiveData()
     val getRouteResponse: LiveData<GetRouteResponse?> =
@@ -51,7 +56,7 @@ class MapViewModel : ViewModel() {
     }
 
 
-    fun addLocation(location: Location) {
+    fun saveLocation(location: Location) {
         if (locations.size > 1) {
             if (locations.size == LOCATION_CAPACITY) {
                 distanceSum -= (locations[0].distanceTo(locations[1])) //remove first distance from sum

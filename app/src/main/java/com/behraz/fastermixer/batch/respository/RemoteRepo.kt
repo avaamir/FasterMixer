@@ -1,6 +1,7 @@
 package com.behraz.fastermixer.batch.respository
 
 import com.behraz.fastermixer.batch.models.Plan
+import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.models.requests.behraz.*
 import com.behraz.fastermixer.batch.models.requests.route.GetRouteResponse
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
@@ -126,7 +127,7 @@ object RemoteRepo {
 
     fun getBatchLocation( //be khater in ke mikhastam callback dar bashe va niazi be liveData nabud az Reflection estefade nakardam va dasti code zadam
         equipmentId: String,
-        onResponse: (GeoPoint?) -> Unit
+        onResponse: (CircleFence?) -> Unit
     ) {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         CoroutineScope(IO + serverJobs).launchApi({
@@ -139,7 +140,23 @@ object RemoteRepo {
                 onResponse(null)
             }
         }
+    }
 
+    fun getPompLocation( //be khater in ke mikhastam callback dar bashe va niazi be liveData nabud az Reflection estefade nakardam va dasti code zadam
+        equipmentId: String,
+        onResponse: (Entity<GetVehicleLocationResponse>?) -> Unit
+    ) {
+        if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
+        CoroutineScope(IO + serverJobs).launchApi({
+            val response = ApiService.client.getVehicleLocation(GetEquipmentRequest(equipmentId))
+            CoroutineScope(Main).launch {
+                onResponse(response.body())
+            }
+        }) {
+            CoroutineScope(Main).launch {
+                onResponse(null)
+            }
+        }
     }
 
 

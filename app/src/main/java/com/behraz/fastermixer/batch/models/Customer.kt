@@ -1,6 +1,6 @@
 package com.behraz.fastermixer.batch.models
 
-import com.behraz.fastermixer.batch.utils.general.circleFenceToCenterGeoPoint
+import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.google.gson.annotations.SerializedName
 import org.osmdroid.util.GeoPoint
 
@@ -27,7 +27,7 @@ data class Customer(
     //TODO not yet implemented server side
     val jobType: String
 ) {
-    val location: GeoPoint get() = circleFenceToCenterGeoPoint(areaStr)
+    val location: CircleFence get() = CircleFence.circleFenceToCenterGeoPoint(areaStr)
     val amount get() = "$_amount متر مکعب"
     val slump get() = "$_slump"
     val density get() = "$_density"
