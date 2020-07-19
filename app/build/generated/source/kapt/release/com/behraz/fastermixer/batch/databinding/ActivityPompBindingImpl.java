@@ -47,7 +47,7 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
         this(bindingComponent, root, mapBindings(bindingComponent, root, 17, sIncludes, sViewsWithIds));
     }
     private ActivityPompBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
-        super(bindingComponent, root, 4
+        super(bindingComponent, root, 2
             , (androidx.core.widget.NestedScrollView) bindings[12]
             , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[8]
             , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[14]
@@ -77,7 +77,7 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
     @Override
     public void invalidateAll() {
         synchronized(this) {
-                mDirtyFlags = 0x20L;
+                mDirtyFlags = 0x8L;
         }
         layoutCustomer.invalidateAll();
         layoutMixer.invalidateAll();
@@ -114,11 +114,6 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
 
     public void setViewModel(@Nullable com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel ViewModel) {
         this.mViewModel = ViewModel;
-        synchronized(this) {
-            mDirtyFlags |= 0x10L;
-        }
-        notifyPropertyChanged(BR.viewModel);
-        super.requestRebind();
     }
 
     @Override
@@ -132,17 +127,13 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
     protected boolean onFieldChange(int localFieldId, Object object, int fieldId) {
         switch (localFieldId) {
             case 0 :
-                return onChangeViewModelCurrentMixer((androidx.lifecycle.LiveData<com.behraz.fastermixer.batch.models.Mixer>) object, fieldId);
-            case 1 :
                 return onChangeLayoutCustomer((com.behraz.fastermixer.batch.databinding.ItemCustomerBinding) object, fieldId);
-            case 2 :
+            case 1 :
                 return onChangeLayoutMixer((com.behraz.fastermixer.batch.databinding.LayoutMixerBinding) object, fieldId);
-            case 3 :
-                return onChangeViewModelCustomer((androidx.lifecycle.LiveData<com.behraz.fastermixer.batch.models.Customer>) object, fieldId);
         }
         return false;
     }
-    private boolean onChangeViewModelCurrentMixer(androidx.lifecycle.LiveData<com.behraz.fastermixer.batch.models.Mixer> ViewModelCurrentMixer, int fieldId) {
+    private boolean onChangeLayoutCustomer(com.behraz.fastermixer.batch.databinding.ItemCustomerBinding LayoutCustomer, int fieldId) {
         if (fieldId == BR._all) {
             synchronized(this) {
                     mDirtyFlags |= 0x1L;
@@ -151,28 +142,10 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
         }
         return false;
     }
-    private boolean onChangeLayoutCustomer(com.behraz.fastermixer.batch.databinding.ItemCustomerBinding LayoutCustomer, int fieldId) {
-        if (fieldId == BR._all) {
-            synchronized(this) {
-                    mDirtyFlags |= 0x2L;
-            }
-            return true;
-        }
-        return false;
-    }
     private boolean onChangeLayoutMixer(com.behraz.fastermixer.batch.databinding.LayoutMixerBinding LayoutMixer, int fieldId) {
         if (fieldId == BR._all) {
             synchronized(this) {
-                    mDirtyFlags |= 0x4L;
-            }
-            return true;
-        }
-        return false;
-    }
-    private boolean onChangeViewModelCustomer(androidx.lifecycle.LiveData<com.behraz.fastermixer.batch.models.Customer> ViewModelCustomer, int fieldId) {
-        if (fieldId == BR._all) {
-            synchronized(this) {
-                    mDirtyFlags |= 0x8L;
+                    mDirtyFlags |= 0x2L;
             }
             return true;
         }
@@ -186,55 +159,7 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
             dirtyFlags = mDirtyFlags;
             mDirtyFlags = 0;
         }
-        com.behraz.fastermixer.batch.models.Mixer viewModelCurrentMixerGetValue = null;
-        com.behraz.fastermixer.batch.models.Customer viewModelCustomerGetValue = null;
-        androidx.lifecycle.LiveData<com.behraz.fastermixer.batch.models.Mixer> viewModelCurrentMixer = null;
-        com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel viewModel = mViewModel;
-        androidx.lifecycle.LiveData<com.behraz.fastermixer.batch.models.Customer> viewModelCustomer = null;
-
-        if ((dirtyFlags & 0x39L) != 0) {
-
-
-            if ((dirtyFlags & 0x31L) != 0) {
-
-                    if (viewModel != null) {
-                        // read viewModel.currentMixer
-                        viewModelCurrentMixer = viewModel.getCurrentMixer();
-                    }
-                    updateLiveDataRegistration(0, viewModelCurrentMixer);
-
-
-                    if (viewModelCurrentMixer != null) {
-                        // read viewModel.currentMixer.getValue()
-                        viewModelCurrentMixerGetValue = viewModelCurrentMixer.getValue();
-                    }
-            }
-            if ((dirtyFlags & 0x38L) != 0) {
-
-                    if (viewModel != null) {
-                        // read viewModel.customer
-                        viewModelCustomer = viewModel.getCustomer();
-                    }
-                    updateLiveDataRegistration(3, viewModelCustomer);
-
-
-                    if (viewModelCustomer != null) {
-                        // read viewModel.customer.getValue()
-                        viewModelCustomerGetValue = viewModelCustomer.getValue();
-                    }
-            }
-        }
         // batch finished
-        if ((dirtyFlags & 0x38L) != 0) {
-            // api target 1
-
-            this.layoutCustomer.setCustomer(viewModelCustomerGetValue);
-        }
-        if ((dirtyFlags & 0x31L) != 0) {
-            // api target 1
-
-            this.layoutMixer.setMixer(viewModelCurrentMixerGetValue);
-        }
         executeBindingsOn(layoutCustomer);
         executeBindingsOn(layoutMixer);
     }
@@ -243,12 +168,10 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
     // dirty flag
     private  long mDirtyFlags = 0xffffffffffffffffL;
     /* flag mapping
-        flag 0 (0x1L): viewModel.currentMixer
-        flag 1 (0x2L): layoutCustomer
-        flag 2 (0x3L): layoutMixer
-        flag 3 (0x4L): viewModel.customer
-        flag 4 (0x5L): viewModel
-        flag 5 (0x6L): null
+        flag 0 (0x1L): layoutCustomer
+        flag 1 (0x2L): layoutMixer
+        flag 2 (0x3L): viewModel
+        flag 3 (0x4L): null
     flag mapping end*/
     //end
 }

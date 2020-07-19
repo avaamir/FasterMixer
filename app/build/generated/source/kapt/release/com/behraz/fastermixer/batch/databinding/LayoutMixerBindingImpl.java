@@ -21,7 +21,7 @@ public class LayoutMixerBindingImpl extends LayoutMixerBinding  {
         sViewsWithIds.put(R.id.textView17, 13);
         sViewsWithIds.put(R.id.btnCall, 14);
         sViewsWithIds.put(R.id.btnShowOnMap, 15);
-        sViewsWithIds.put(R.id.textView8, 16);
+        sViewsWithIds.put(R.id.carId, 16);
         sViewsWithIds.put(R.id.textView10, 17);
         sViewsWithIds.put(R.id.textView19, 18);
         sViewsWithIds.put(R.id.btnMixerList, 19);
@@ -42,6 +42,7 @@ public class LayoutMixerBindingImpl extends LayoutMixerBinding  {
             , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[14]
             , (com.behraz.fastermixer.batch.ui.customs.fastermixer.CardButton) bindings[19]
             , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[15]
+            , (com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView) bindings[16]
             , (android.widget.TextView) bindings[17]
             , (android.widget.TextView) bindings[9]
             , (android.widget.TextView) bindings[10]
@@ -55,7 +56,6 @@ public class LayoutMixerBindingImpl extends LayoutMixerBinding  {
             , (android.widget.TextView) bindings[7]
             , (android.widget.TextView) bindings[5]
             , (android.widget.TextView) bindings[8]
-            , (com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView) bindings[16]
             , (android.widget.TextView) bindings[6]
             , (android.widget.TextView) bindings[1]
             );
