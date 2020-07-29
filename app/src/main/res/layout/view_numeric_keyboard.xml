@@ -200,7 +200,7 @@
         android:background="@drawable/bg_dialer_buttons"
         android:fontFamily="@font/belham"
         android:gravity="center"
-        android:padding="8dp"
+        android:padding="16dp"
         android:text="بعدی"
         android:textColor="@color/btn_yellow"
         android:textSize="@dimen/dialer_nums"
@@ -238,7 +238,7 @@
             android:fontFamily="@font/belham"
             android:gravity="center"
             android:lines="1"
-            android:padding="8dp"
+            android:padding="16dp"
             android:text="@string/btn_backspace"
             android:textColor="@color/dialer_nums"
             android:layout_marginBottom="4dp"
@@ -250,6 +250,7 @@
 
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/btn_prev"
             android:layout_width="match_parent"
             android:layout_weight="1"

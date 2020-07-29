@@ -8,5 +8,5 @@ class LoginRequest(
     @SerializedName("Password")
     val password: String,
     @SerializedName("CompanyCode")
-    val companyCode: String
+    val factoryCode: String
 )

@@ -81,7 +81,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
 
 
         //TODO UI Test Purpose
-        imageView5.setOnClickListener { startActivity(Intent(this, AdminActivity::class.java)) }
+        imageView5?.setOnClickListener { startActivity(Intent(this, AdminActivity::class.java)) }
 
 
         permissionHelper.checkPermission()
