@@ -99,6 +99,7 @@ object RemoteRepo {
             if (it.isSuccessful) {
                 if (it.body()?.isSucceed == true) {
                     UserConfigs.updateUser(chooseEquipmentRequest.equipmentId, blocking = true)
+                    println("debugx: RemoteRepo: blocking finished, User db updated, Now Activity Will Call..")
                 }
             }
         }

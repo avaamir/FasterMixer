@@ -10,5 +10,6 @@
     <dimen name="item_product_horizontal_width">140dp</dimen>
     <dimen name="item_product_horizontal_height">120dp</dimen>
     <dimen name="dialer_nums">44sp</dimen>
-    <dimen name="dialer_num">100dp</dimen>
+    <dimen name="dialer_num_width">100dp</dimen>
+    <dimen name="dialer_num_height">100dp</dimen>
 </resources>

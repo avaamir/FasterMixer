@@ -26,7 +26,8 @@
 
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/frame_username"
+                android:visibility="visible"
+                android:id="@+id/frameFactoryCode"
                 style="@style/my_card_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,6 +38,71 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/etFactoryCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="0dp"
+                        android:layout_toLeftOf="@id/iv_img_3"
+                        android:layout_toRightOf="@+id/ivClearFactory"
+                        android:background="@null"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/iransans_light"
+                        android:gravity="right|center_vertical"
+                        android:hint="شناسه شرکت خود را وارد کنید"
+                        android:imeOptions="actionNext|flagNoExtractUi"
+                        android:inputType="numberDecimal"
+                        android:lines="1"
+                        android:maxLength="20"
+                        android:maxLines="1"
+                        android:scrollHorizontally="true"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/iv_img_3"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="16dp"
+                        app:srcCompat="@drawable/ic_factory" />
+
+
+                    <ImageView
+                        android:id="@+id/ivClearFactory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:background="?attr/actionBarItemBackground"
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/ic_delete" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/frame_username"
+                app:layout_goneMarginTop="32dp"
+                style="@style/my_card_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameFactoryCode">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -56,7 +122,7 @@
                         android:gravity="right|center_vertical"
                         android:hint="کد پرسنلی خود را وارد کنید"
                         android:imeOptions="actionNext|flagNoExtractUi"
-                        android:inputType="text"
+                        android:inputType="numberDecimal"
                         android:lines="1"
                         android:maxLength="20"
                         android:maxLines="1"
@@ -121,7 +187,7 @@
                         android:gravity="right|center_vertical"
                         android:hint="گذرواژه خود را وارد کنید"
                         android:imeOptions="actionDone|flagNoExtractUi"
-                        android:inputType="textPassword"
+                        android:inputType="numberPassword"
                         android:lines="1"
                         android:maxLength="20"
                         android:maxLines="1"
@@ -268,6 +334,27 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_logo_svg" />
+
+            <CheckBox
+                android:id="@+id/checkBoxRememberMe"
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
+                app:layout_constraintEnd_toEndOf="@+id/frame_password"
+                app:layout_constraintTop_toBottomOf="@+id/frame_password" />
+
+            <TextView
+                android:id="@+id/textView8"
+                style="@style/my_white_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:text="مرا بخاطر بسپار"
+                app:layout_constraintBottom_toBottomOf="@+id/checkBoxRememberMe"
+                app:layout_constraintEnd_toStartOf="@+id/checkBoxRememberMe"
+                app:layout_constraintTop_toTopOf="@+id/checkBoxRememberMe" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

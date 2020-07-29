@@ -5,23 +5,14 @@ import android.content.IntentFilter
 import android.content.IntentSender
 import android.os.BatteryManager
 import android.os.Bundle
-import android.view.animation.RotateAnimation
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.CircleFence
-import com.behraz.fastermixer.batch.models.requests.behraz.ChooseEquipmentRequest
-import com.behraz.fastermixer.batch.models.requests.behraz.LoginRequest
-import com.behraz.fastermixer.batch.respository.RemoteRepo
-import com.behraz.fastermixer.batch.respository.UserConfigs
-import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
 import com.behraz.fastermixer.batch.ui.adapters.MixerAdapter
-import com.behraz.fastermixer.batch.utils.fastermixer.fakeMixers
-import com.behraz.fastermixer.batch.utils.general.hardware.compass.Compass
 import com.behraz.fastermixer.batch.utils.general.subscribeSignalStrengthChangeListener
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.google.android.gms.common.ConnectionResult
@@ -30,11 +21,10 @@ import com.google.android.gms.common.api.PendingResult
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_test.*
-import org.osmdroid.util.GeoPoint
 
 
 class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
-    GoogleApiClient.OnConnectionFailedListener, Compass.Interactions, MixerAdapter.Interaction {
+    GoogleApiClient.OnConnectionFailedListener,  MixerAdapter.Interaction {
 
     private var googleApiClient: GoogleApiClient? = null
 
@@ -70,38 +60,6 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
         }
 
         btnLogin.setOnClickListener {
-            RemoteRepo.login(LoginRequest("ali", "12345")).observe(this, Observer {
-                println("debug: $it")
-                it?.let { UserConfigs.loginUser(it.entity!!) }
-
-            })
-        }
-
-
-        btnGetBatches.setOnClickListener {
-            RemoteRepo.getBatches().observe(this, Observer {
-                println("debug: $it")
-            })
-        }
-
-        btnLogout.setOnClickListener {
-            RemoteRepo.logout().observe(this, Observer {
-                println("debug: logout: $it")
-            })
-        }
-
-
-        btnChooseBatch.setOnClickListener {
-            RemoteRepo.chooseBatch(
-                ChooseEquipmentRequest(
-                    "14581cea-7969-478a-f515-08d80dd443ec"
-                )
-            ).observe(this, Observer {
-                println("debug: ChooseBatch: $it")
-            })
-        }
-
-        btnFetch.setOnClickListener {
             /*  val currentTime: Date = Calendar.getInstance().time
               println("debug: currentTime : $currentTime, Battery:$batteryLevel")
 
@@ -116,9 +74,6 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
   */
         }
 
-        UserRepo.users.observe(this, Observer {
-            println("debug: room: $it")
-        })
 
 
 
@@ -134,27 +89,6 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
 
 
-        btnGetBatchLoc.setOnClickListener {
-            RemoteRepo.getBatchLocation("d675641c-5c11-4d43-f79f-08d82268081d") {
-                batchLocation = it
-            }
-        }
-
-        btnGetMixers.setOnClickListener {
-
-            fakeMixers().let { mixers ->
-                val xx = batchLocation?.let { batchLocation ->
-                    mixers.sortedWith(compareBy { mixer ->
-                        val y = mixer.latLng.distanceToAsDouble(batchLocation.center)
-                        println("debug:batchLoc=$batchLocation, distance:$y,mixer:${mixer.id}")
-                        y
-                    })
-                }
-                mixerAdapter.submitList(xx ?: mixers)
-            }
-
-        }
-
 
 
 
@@ -166,11 +100,6 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
     }
 
-
-    override fun onNewAzimuth(azimuth: Float, animation: RotateAnimation) {
-        btnFetch.startAnimation(animation)
-        println("debug: azimuth: $azimuth")
-    }
 
     //enable GPS req by google Play--------------------------------------------
 

@@ -142,8 +142,12 @@ class PompActivity : AppCompatActivity(),
         mBinding.layoutMixer.btnShowOnMap.setOnClickListener {
             val mapFragment =
                 supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as MapFragment
-            viewModel.mixers.value?.entity?.get(0)?.latLng?.let {
-                mapFragment.moveCamera(it)
+            viewModel.mixers.value?.entity?.let { mixers ->
+                if (mixers.isNotEmpty()) {
+                    mixers[0].latLng.let {
+                        mapFragment.moveCamera(it)
+                    }
+                }
             }
         }
         mBinding.layoutMixer.btnMixerList.setOnClickListener {

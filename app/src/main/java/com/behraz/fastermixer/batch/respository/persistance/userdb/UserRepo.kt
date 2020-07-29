@@ -44,6 +44,7 @@ object UserRepo {
     fun updateBlocking(user: User) {
         runBlocking {
             userDao.update(user)
+            println("debugx: UserRepo: blocking finished, User db updated")
         }
     }
 

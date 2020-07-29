@@ -72,15 +72,17 @@ class PompActivityViewModel : ViewModel() {
     }
 
     private val timer = fixedRateTimer(period = 10000L) {
-        refreshCustomers()
-        refreshMixers()
-        getMessages()
-        getPompLocation()
+        user.value?.let { user ->  //TODO albate bazam momkene unauthorized bede chun shyad moghe check kardan login bashe ama bad if logout etefagh biofte, AMA jelo exception ro migire
+            refreshCustomers()
+            refreshMixers()
+            getMessages()
+            getPompLocation(user.equipmentId!!)
+        }
     }
 
 
-    private fun getPompLocation() {
-        RemoteRepo.getPompLocation(user.value!!.equipmentId!!) {
+    private fun getPompLocation(equipmentId: String) {
+        RemoteRepo.getPompLocation(equipmentId) {
             if (it != null) {
                 if (it.isSucceed) {
                     pompArea.value =

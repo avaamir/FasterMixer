@@ -66,7 +66,7 @@ class MixerAdapter(private val isForPomp: Boolean, private val interaction: Inte
                 }
             } else {
                 (mBinding as ItemMixerBinding).mixer = mixer
-                mBinding.btnEndLoading.setOnClickListener { interaction?.onEndLoadingClicked(mixer) }
+                //todo addThis When btnOnLoacEnding added:: mBinding.btnEndLoading.setOnClickListener { interaction?.onEndLoadingClicked(mixer) }
                 mBinding.btnCall.setOnClickListener { interaction?.onCallClicked(mixer) }
                 if(mixer.carId.isNotBlank()) {
                     mixer.carId.split(",")

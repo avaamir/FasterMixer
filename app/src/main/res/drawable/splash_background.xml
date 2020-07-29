@@ -3,8 +3,9 @@
     <item android:drawable="@color/white" />
     <item>
         <!--hatman bayad png ya jpg bashad-->
+        <!--android:src="@drawable/ic_launcher_foreground" dar tag bitmap gharar begirad-->
         <bitmap
-        android:src="@drawable/ic_logo"
+
         android:gravity="center" />
 
     </item>

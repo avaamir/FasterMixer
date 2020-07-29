@@ -1,4 +1,5 @@
 package com.behraz.fastermixer.batch.utils.fastermixer
+
 object Constants {
     private val INTENT_CHOOSE_EQ_USER by lazy { "user" }
     private val packageName by lazy { "com.behraz.fastermixer.batch" }
@@ -9,5 +10,9 @@ object Constants {
 
     val UNAUTHORIZED_MSG by lazy { "حساب کاربری شما در دستگاه دیگری فعال است. لطفا دوباره وارد شوید" }
 
-
+    const val PREF_CREDENTIAL_NAME = "credential"
+    const val PREF_CREDENTIAL_USER = "username"
+    const val PREF_CREDENTIAL_PASSWORD = "password"
+    const val PREF_CREDENTIAL_FACTORY_ID = "factoryId"
+    const val PREF_CREDENTIAL_REMEMBERED = "remembered"
 }

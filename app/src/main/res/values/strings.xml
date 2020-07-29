@@ -103,4 +103,6 @@
     </string>
     <string name="post_method_desc">در صورت استفاده از این روش، پرداخت درب منزل امکان پذیر نمیباشد</string>
     <string name="bike_method_desc">توضیحات مربوط به ارسال با پیک</string>
+    <string name="btn_backspace">پاک
+        کردن</string>
 </resources>

@@ -6,5 +6,7 @@ class LoginRequest(
     @SerializedName("UserName")
     val username: String,
     @SerializedName("Password")
-    val password: String
+    val password: String,
+    @SerializedName("CompanyCode")
+    val companyCode: String
 )

@@ -63,14 +63,17 @@ class BatchActivityViewModel : ViewModel() {
 
 
     private val timer = fixedRateTimer(period = 10000L) {
-        getMixersEvent.postValue(Event(Unit))
-        getMessageEvent.postValue(Event(Unit))
+        if (UserConfigs.isLoggedIn) { //TODO albate bazam momkene unauthorized bede chun shyad moghe check kardan login bashe ama bad if logout etefagh biofte
+            refreshMixers()
+            getMessages()
+        }
     }
 
     init {
-        println("debug:" + UserConfigs.user.value)
-        RemoteRepo.getBatchLocation(UserConfigs.user.value!!.equipmentId!!) {
-            batchLocation = it
+        UserConfigs.user.value!!.let { user -> //TODO get this location again if not receiver from server
+            RemoteRepo.getBatchLocation(user.equipmentId!!) {
+                batchLocation = it
+            }
         }
     }
 
@@ -83,7 +86,7 @@ class BatchActivityViewModel : ViewModel() {
     }
 
     fun refreshMixers() {
-        getMixersEvent.value = Event(Unit)
+        getMixersEvent.postValue(Event(Unit))
     }
 
 

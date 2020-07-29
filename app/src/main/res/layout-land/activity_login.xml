@@ -26,12 +26,83 @@
 
             <com.behraz.fastermixer.batch.ui.customs.fastermixer.NumericKeyboard
                 android:id="@+id/numericKeyboard"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="32dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/frameFactoryCode"
+                app:layout_constraintVertical_bias="1.0" />
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/frameFactoryCode"
+                style="@style/my_card_style"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginEnd="16dp"
+                android:visibility="visible"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/frame_username"
+                app:layout_constraintTop_toBottomOf="@+id/imageView5">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/etFactoryCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="0dp"
+                        android:layout_toLeftOf="@id/iv_img_3"
+                        android:layout_toRightOf="@+id/ivClearFactory"
+                        android:background="@null"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/iransans_light"
+                        android:gravity="right|center_vertical"
+                        android:hint="شناسه شرکت خود را وارد کنید"
+                        android:imeOptions="actionNext|flagNoExtractUi"
+                        android:inputType="numberDecimal"
+                        android:lines="1"
+                        android:maxLength="20"
+                        android:maxLines="1"
+                        android:scrollHorizontally="true"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/iv_img_3"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="16dp"
+                        app:srcCompat="@drawable/ic_factory" />
+
+
+                    <ImageView
+                        android:id="@+id/ivClearFactory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:background="?attr/actionBarItemBackground"
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/ic_delete" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/frame_username"
@@ -39,12 +110,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 app:cardCornerRadius="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/numericKeyboard"
-                app:layout_constraintTop_toBottomOf="@+id/imageView5">
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/frameFactoryCode"
+                app:layout_goneMarginTop="8dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -64,7 +136,7 @@
                         android:gravity="right|center_vertical"
                         android:hint="کد پرسنلی خود را وارد کنید"
                         android:imeOptions="actionNext|flagNoExtractUi"
-                        android:inputType="text"
+                        android:inputType="numberDecimal"
                         android:lines="1"
                         android:maxLength="20"
                         android:maxLines="1"
@@ -97,7 +169,6 @@
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
 
-
             <androidx.cardview.widget.CardView
                 android:id="@+id/frame_password"
                 style="@style/my_card_style"
@@ -127,7 +198,7 @@
                         android:gravity="right|center_vertical"
                         android:hint="گذرواژه خود را وارد کنید"
                         android:imeOptions="actionDone|flagNoExtractUi"
-                        android:inputType="textPassword"
+                        android:inputType="numberPassword"
                         android:lines="1"
                         android:maxLength="20"
                         android:maxLines="1"
@@ -169,15 +240,38 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:fontFamily="@font/belham"
+                android:gravity="center"
+                android:lines="2"
                 android:text="سامانه هوشمند سازی بتن فستر میکسر"
                 android:textColor="@color/white"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView5"
                 app:layout_constraintEnd_toStartOf="@+id/imageView5"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/numericKeyboard"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="@+id/imageView5" />
 
+
+            <CheckBox
+                android:id="@+id/checkBoxRememberMe"
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
+                app:layout_constraintEnd_toEndOf="@+id/frame_password"
+                app:layout_constraintTop_toBottomOf="@+id/frame_password" />
+
+            <TextView
+                android:id="@+id/textView8"
+                style="@style/my_white_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:text="مرا بخاطر بسپار"
+                app:layout_constraintBottom_toBottomOf="@+id/checkBoxRememberMe"
+                app:layout_constraintEnd_toStartOf="@+id/checkBoxRememberMe"
+                app:layout_constraintTop_toTopOf="@+id/checkBoxRememberMe" />
 
             <LinearLayout
                 android:id="@+id/linearLayout3"
@@ -185,9 +279,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="right"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="@+id/frame_password"
-                app:layout_constraintTop_toBottomOf="@+id/frame_password">
+                app:layout_constraintTop_toBottomOf="@+id/checkBoxRememberMe">
 
 
                 <LinearLayout
@@ -211,6 +305,31 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/ic_error" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/frame_gps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/standard_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:fontFamily="@font/iransans"
+                        android:text="موقعیت مکانی"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/ivGPS"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_check" />
 
                 </LinearLayout>
 
@@ -238,31 +357,6 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/frame_gps"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/standard_margin">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:fontFamily="@font/iransans"
-                        android:text="موقعیت مکانی"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:id="@+id/ivGPS"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_check" />
-
-                </LinearLayout>
-
-
             </LinearLayout>
 
             <ImageView
@@ -281,15 +375,24 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:text="Button"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 app:backgroundColor="@color/btn_yellow"
-                app:isFlat="true"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:isFlat="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/numericKeyboard"
-                app:radius="0dp"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+                app:radius="5dp"
                 app:text="ورود به سامانه"
                 app:textSize="10sp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

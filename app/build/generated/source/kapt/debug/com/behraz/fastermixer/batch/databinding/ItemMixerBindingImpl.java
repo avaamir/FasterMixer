@@ -14,16 +14,17 @@ public class ItemMixerBindingImpl extends ItemMixerBinding  {
     static {
         sIncludes = null;
         sViewsWithIds = new android.util.SparseIntArray();
-        sViewsWithIds.put(R.id.textView11, 9);
-        sViewsWithIds.put(R.id.textView12, 10);
-        sViewsWithIds.put(R.id.textView13, 11);
-        sViewsWithIds.put(R.id.textView15, 12);
-        sViewsWithIds.put(R.id.textView17, 13);
-        sViewsWithIds.put(R.id.btnCall, 14);
-        sViewsWithIds.put(R.id.btnEndLoading, 15);
-        sViewsWithIds.put(R.id.carId, 16);
-        sViewsWithIds.put(R.id.textView10, 17);
-        sViewsWithIds.put(R.id.textView19, 18);
+        sViewsWithIds.put(R.id.textView12, 7);
+        sViewsWithIds.put(R.id.textView13, 8);
+        sViewsWithIds.put(R.id.textView15, 9);
+        sViewsWithIds.put(R.id.btnCall, 10);
+        sViewsWithIds.put(R.id.carId, 11);
+        sViewsWithIds.put(R.id.textView10, 12);
+        sViewsWithIds.put(R.id.textView19, 13);
+        sViewsWithIds.put(R.id.gpSlump, 14);
+        sViewsWithIds.put(R.id.gpDriver, 15);
+        sViewsWithIds.put(R.id.gpAmount, 16);
+        sViewsWithIds.put(R.id.gpCondition, 17);
     }
     // views
     @NonNull
@@ -34,35 +35,32 @@ public class ItemMixerBindingImpl extends ItemMixerBinding  {
     // Inverse Binding Event Handlers
 
     public ItemMixerBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 19, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 18, sIncludes, sViewsWithIds));
     }
     private ItemMixerBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
-            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[14]
-            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[15]
-            , (com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView) bindings[16]
-            , (android.widget.TextView) bindings[17]
-            , (android.widget.TextView) bindings[9]
-            , (android.widget.TextView) bindings[10]
-            , (android.widget.TextView) bindings[11]
-            , (android.widget.TextView) bindings[2]
+            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[10]
+            , (com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView) bindings[11]
+            , (androidx.constraintlayout.widget.Group) bindings[16]
+            , (androidx.constraintlayout.widget.Group) bindings[17]
+            , (androidx.constraintlayout.widget.Group) bindings[15]
+            , (androidx.constraintlayout.widget.Group) bindings[14]
             , (android.widget.TextView) bindings[12]
+            , (android.widget.TextView) bindings[7]
+            , (android.widget.TextView) bindings[8]
+            , (android.widget.TextView) bindings[2]
+            , (android.widget.TextView) bindings[9]
             , (android.widget.TextView) bindings[3]
             , (android.widget.TextView) bindings[13]
             , (android.widget.TextView) bindings[4]
-            , (android.widget.TextView) bindings[18]
-            , (android.widget.TextView) bindings[7]
-            , (android.widget.TextView) bindings[5]
-            , (android.widget.TextView) bindings[8]
             , (android.widget.TextView) bindings[6]
+            , (android.widget.TextView) bindings[5]
             , (android.widget.TextView) bindings[1]
             );
         this.mboundView0 = (androidx.cardview.widget.CardView) bindings[0];
         this.mboundView0.setTag(null);
         this.textView14.setTag(null);
         this.textView16.setTag(null);
-        this.textView18.setTag(null);
-        this.textView20.setTag(null);
         this.textView21.setTag(null);
         this.textView22.setTag(null);
         this.textView9.setTag(null);
@@ -127,11 +125,8 @@ public class ItemMixerBindingImpl extends ItemMixerBinding  {
         }
         java.lang.String mixerState = null;
         java.lang.String mixerLoadInfoAmount = null;
-        float mixerCapacity = 0f;
         com.behraz.fastermixer.batch.models.LoadInfo mixerLoadInfo = null;
-        java.lang.String mixerCapacityJavaLangString = null;
         com.behraz.fastermixer.batch.models.Mixer mixer = mMixer;
-        java.lang.String mixerOwner = null;
         java.lang.String mixerLoadInfoDensity = null;
         java.lang.String mixerCarName = null;
         java.lang.String mixerDriverName = null;
@@ -144,12 +139,8 @@ public class ItemMixerBindingImpl extends ItemMixerBinding  {
                 if (mixer != null) {
                     // read mixer.state
                     mixerState = mixer.getState();
-                    // read mixer.capacity
-                    mixerCapacity = mixer.getCapacity();
                     // read mixer.loadInfo
                     mixerLoadInfo = mixer.getLoadInfo();
-                    // read mixer.owner
-                    mixerOwner = mixer.getOwner();
                     // read mixer.carName
                     mixerCarName = mixer.getCarName();
                     // read mixer.driverName
@@ -157,8 +148,6 @@ public class ItemMixerBindingImpl extends ItemMixerBinding  {
                 }
 
 
-                // read (mixer.capacity) + ("")
-                mixerCapacityJavaLangString = (mixerCapacity) + ("");
                 if (mixerLoadInfo != null) {
                     // read mixer.loadInfo.amount
                     mixerLoadInfoAmount = mixerLoadInfo.getAmount();
@@ -174,8 +163,6 @@ public class ItemMixerBindingImpl extends ItemMixerBinding  {
 
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView14, mixerLoadInfoSlump);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView16, mixerLoadInfoDensity);
-            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView18, mixerOwner);
-            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView20, mixerCapacityJavaLangString);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView21, mixerDriverName);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView22, mixerState);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView9, mixerLoadInfoAmount);

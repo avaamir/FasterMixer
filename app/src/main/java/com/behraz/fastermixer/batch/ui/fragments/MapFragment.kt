@@ -21,7 +21,7 @@ import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.LayoutMapBinding
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.osm.MyOSMMapView
-import com.behraz.fastermixer.batch.ui.osm.TruckMarker
+import com.behraz.fastermixer.batch.ui.osm.MixerMarker
 import com.behraz.fastermixer.batch.ui.osm.WorkerMarker
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.toast
@@ -38,6 +38,7 @@ import org.osmdroid.views.overlay.Polyline
 class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListener {
 
 
+    private var isFirstTime = true
     private var btnMyLocationId: Int =
         0 //btnMylocation Mitune tu activity bashe niaz hast refrencesh ro dashte bashim age tu activity hast
     private lateinit var mapViewModel: MapViewModel
@@ -88,13 +89,16 @@ class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListene
         return mBinding.root
     }
 
-
     private fun subscribeObservers() {
 
         pompViewModel.pompArea.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 mapViewModel.myLocation = it.center
                 userMarker.position = it.center
+                if (isFirstTime) {
+                    isFirstTime = false
+                    moveCamera(it.center)
+                }
             }
         })
 
@@ -109,16 +113,18 @@ class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListene
                     if (mixerMarker == null) { //new mixer in pomp incoming list (taze az batch kharej shode va dare be pomp mire)
                         //add to marker hash map and MapView
                         mapViewModel.markers[mixer.id] =
-                            TruckMarker(mBinding.map).also { _marker ->
+                            MixerMarker(mBinding.map).also { _marker ->
                                 _marker.position = mixer.latLng
-                                addMarkerToMap(_marker, mixer.latLng, mixer.carName)
+                                addMarkerToMap(_marker, mixer.latLng, "${mixer.carName} ${mixer.driverName}")
                             }
                     } else { //mixer already exists, update location
                         mixerMarker.position = mixer.latLng
                     }
                 }
                 excludeMarkerList.forEach { mixerId ->
-                    mBinding.map.overlayManager.remove(mapViewModel.markers.remove(mixerId))
+                    mBinding.map.overlayManager.remove(
+                        mapViewModel.markers.remove(mixerId)
+                    )
                 }
             }
         })

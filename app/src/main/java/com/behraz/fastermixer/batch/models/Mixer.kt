@@ -1,6 +1,5 @@
 package com.behraz.fastermixer.batch.models
 
-import android.location.Location
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.google.gson.annotations.SerializedName
 import org.osmdroid.util.GeoPoint

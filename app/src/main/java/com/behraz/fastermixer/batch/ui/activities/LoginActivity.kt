@@ -1,10 +1,14 @@
 package com.behraz.fastermixer.batch.ui.activities
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.view.View
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,6 +18,7 @@ import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.activities.admin.AdminActivity
 import com.behraz.fastermixer.batch.ui.activities.batch.BatchActivity
 import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
+import com.behraz.fastermixer.batch.ui.customs.fastermixer.NumericKeyboard
 import com.behraz.fastermixer.batch.ui.dialogs.LocationPermissionDialog
 import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
@@ -22,12 +27,21 @@ import com.behraz.fastermixer.batch.viewmodels.LoginActivityViewModel
 import kotlinx.android.synthetic.main.activity_login.*
 
 
-class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions,
+class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
+    PermissionHelper.Interactions,
     ApiService.InternetConnectionListener {
+
 
     companion object {
         private const val REQ_GO_TO_SETTINGS_PERMISSION = 12
+        private var focusedEditTextId: Int? = null
     }
+
+    private var focusedEditText: EditText? = null
+        set(value) {
+            field = value
+            focusedEditTextId = value?.id
+        }
 
 
     private lateinit var viewModel: LoginActivityViewModel
@@ -85,18 +99,67 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions,
         )
     }
 
-
     private fun initViews() {
+        loadCredentialIfExists()
+
+        val orientation = resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            /*TODO momkene niaz bashe Factory Code bardashte beshe, dar in soorat bayad dar NumericKeyBoard va Listener inja taghirati ijad beshavad*/
+            etFactoryCode.disableKeyboardFromAppearing()
+            etUsername.disableKeyboardFromAppearing()
+            etPassword.disableKeyboardFromAppearing()
+            etFactoryCode.onFocusChangeListener = this
+            etUsername.onFocusChangeListener = this
+            etPassword.onFocusChangeListener = this
+        } else {
+            etFactoryCode.enableKeyboardAppearing()
+            etUsername.enableKeyboardAppearing()
+            etPassword.enableKeyboardAppearing()
+            etFactoryCode.onFocusChangeListener = null
+            etUsername.onFocusChangeListener = null
+            etPassword.onFocusChangeListener = null
+            focusedEditTextId?.run {
+                showSoftKeyboard(findViewById(this))
+            }
+        }
+
+
+
         numericKeyboard?.setInteractions {
-            if (etUsername.hasFocus()) etUsername.append("$it")
-            if (etUsername.hasFocus()) etPassword.append("$it")
+            //toast("هنوز پیاده سازی نشده است. لطفا از کیبرد گوشی خود استفاده کنید")
+            when (it) {
+                NumericKeyboard.State.Password.name -> {
+                    etPassword.requestFocus()
+                }
+                NumericKeyboard.State.Username.name -> {
+                    etUsername.requestFocus()
+                }
+                NumericKeyboard.State.FactoryCode.name -> {
+                    etFactoryCode.requestFocus()
+                }
+                "backspace" -> focusedEditText?.text?.let { editable ->
+                    if (editable.isNotEmpty()) {
+                        editable.delete(
+                            editable.length - 1,
+                            editable.length
+                        )
+                    }
+                }
+                else -> {
+                    focusedEditText?.append(it)
+                }
+            }
         }
 
 
         btnLogin.setOnClickListener {
+            val factoryCode = etFactoryCode.text.toString()
             val username = etUsername.text.toString()
             val password = etPassword.text.toString()
             when {
+                factoryCode.isEmpty() -> {
+                    toast("لطفا شناسه شرکت خود را وارد کنید", false)
+                }
                 username.isEmpty() -> {
                     toast("لطفا نام کاربری خود را وارد کنید", false)
                 }
@@ -105,7 +168,7 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions,
                 }
                 else -> {
                     btnLogin.showProgressBar(true)
-                    viewModel.login(username, password)
+                    viewModel.login(username, password, factoryCode)
                 }
             }
             //TODO test purpose
@@ -129,17 +192,24 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions,
                 }).show() */
         }
 
+        ivClearFactory.setOnClickListener { etFactoryCode.text.clear() }
         ivClearPassword.setOnClickListener { etPassword.text.clear() }
         ivClearUsername.setOnClickListener { etUsername.text.clear() }
 
         //TODO TEST purpose
         //Pomp
-        etUsername.setText("1215")
-        etPassword.setText("1215")
+        // etUsername.setText("mahdi")
+        //  etPassword.setText("123456789")
 
         //Batch
         /*etUsername.setText("sara")
         etPassword.setText("1234")*/
+
+        if (etFactoryCode.visibility != View.GONE)
+            etFactoryCode.requestFocus()
+        else
+            etUsername.requestFocus()
+
     }
 
 
@@ -151,6 +221,13 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions,
                     btnLogin.showProgressBar(false)
                     if (it != null) {
                         if (it.isSucceed) {
+
+                            if (checkBoxRememberMe.isChecked) {
+                                shouldRememberCredential(true)
+                            } else {
+                                shouldRememberCredential(false)
+                            }
+
                             if (it.entity!!.equipmentId == null) {
                                 if (it.entity.userType == UserType.Mixer) {
                                     toast("کاربر میسکر در این نسخه از برنامه تعریف نشده است. لطفا برنامه را به روز رسانی کنید")
@@ -186,6 +263,36 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions,
                 }
             }
         })
+    }
+
+    private fun shouldRememberCredential(shouldRemember: Boolean) {
+        val prefs = getSharedPreferences(Constants.PREF_CREDENTIAL_NAME, Context.MODE_PRIVATE)
+        if (shouldRemember) {
+            prefs.edit().putBoolean(Constants.PREF_CREDENTIAL_REMEMBERED, true)
+                .putString(
+                    Constants.PREF_CREDENTIAL_FACTORY_ID,
+                    etFactoryCode.text.trim().toString()
+                )
+                .putString(Constants.PREF_CREDENTIAL_USER, etUsername.text.trim().toString())
+                .putString(Constants.PREF_CREDENTIAL_PASSWORD, etPassword.text.trim().toString())
+                .apply()
+        } else {
+            prefs.edit()
+                .clear()
+                .putBoolean(Constants.PREF_CREDENTIAL_REMEMBERED, false)
+                .apply()
+        }
+    }
+
+    private fun loadCredentialIfExists() {
+        val prefs = getSharedPreferences(Constants.PREF_CREDENTIAL_NAME, Context.MODE_PRIVATE)
+        val remembered = prefs.getBoolean(Constants.PREF_CREDENTIAL_REMEMBERED, false)
+        if (remembered) {
+            checkBoxRememberMe.isChecked = true
+            etFactoryCode.setText(prefs.getString(Constants.PREF_CREDENTIAL_FACTORY_ID, ""))
+            etUsername.setText(prefs.getString(Constants.PREF_CREDENTIAL_USER, ""))
+            etPassword.setText(prefs.getString(Constants.PREF_CREDENTIAL_PASSWORD, ""))
+        }
     }
 
 
@@ -250,5 +357,16 @@ class LoginActivity : AppCompatActivity(), PermissionHelper.Interactions,
     //todo test this
     override fun onInternetUnavailable() {
         NoNetworkDialog(this, R.style.my_alert_dialog).show()
+    }
+
+    override fun onFocusChange(view: View, hasFocus: Boolean) {
+        if (hasFocus) {
+            focusedEditText = view as EditText
+            when (view.id) {
+                etFactoryCode.id -> numericKeyboard?.setState(NumericKeyboard.State.FactoryCode)
+                etUsername.id -> numericKeyboard?.setState(NumericKeyboard.State.Username)
+                etPassword.id -> numericKeyboard?.setState(NumericKeyboard.State.Password)
+            }
+        }
     }
 }

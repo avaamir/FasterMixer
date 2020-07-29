@@ -1,6 +1,5 @@
 package com.behraz.fastermixer.batch.viewmodels
 
-import android.util.EventLog
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
@@ -19,8 +18,8 @@ class LoginActivityViewModel: ViewModel() {
     }
 
 
-    fun login(username: String, password: String) {
-        loginRequest.value = LoginRequest(username, password)
+    fun login(username: String, password: String, factoryCode: String) {
+        loginRequest.value = LoginRequest(username, password, factoryCode)
     }
 
     fun tryAgain() {

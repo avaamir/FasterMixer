@@ -76,6 +76,7 @@ class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Intera
             progressDialog.dismiss()
             if (it != null) {
                 if (it.isSucceed) {
+                    println("debugx: ViewLayer: BatchActivity Called..")
                     startActivity(Intent(this, BatchActivity::class.java))
                     finish()
                 } else {
