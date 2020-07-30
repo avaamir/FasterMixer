@@ -1,11 +1,9 @@
 package com.behraz.fastermixer.batch.utils.general
 
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.behraz.fastermixer.batch.app.receivers.NetworkStateReceiverLiveData
 import com.behraz.fastermixer.batch.app.receivers.GpsStateReceiverLiveData
+import com.behraz.fastermixer.batch.app.receivers.NetworkStateReceiverLiveData
 import com.behraz.fastermixer.batch.app.receivers.SignalStrengthReceiverLiveData
 
 fun FragmentActivity.subscribeNetworkStateChangeListener(onStateChanged: (Boolean) -> Unit) {

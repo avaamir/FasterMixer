@@ -17,6 +17,7 @@ import com.behraz.fastermixer.batch.models.enums.UserType
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.activities.admin.AdminActivity
 import com.behraz.fastermixer.batch.ui.activities.batch.BatchActivity
+import com.behraz.fastermixer.batch.ui.activities.mixer.MixerActivity
 import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.NumericKeyboard
 import com.behraz.fastermixer.batch.ui.dialogs.LocationPermissionDialog
@@ -61,8 +62,8 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         setContentView(R.layout.activity_login)
 
 
-        if (false) {
-            startActivity(Intent(this, TestActivity::class.java))
+        if (true) {
+            startActivity(Intent(this, MixerActivity::class.java))
             finish()
             return
         }

@@ -1,25 +1,18 @@
-package com.behraz.fastermixer.batch.ui.activities.pomp
+package com.behraz.fastermixer.batch.ui.activities.mixer
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
-import com.behraz.fastermixer.batch.databinding.ActivityPompBinding
-import com.behraz.fastermixer.batch.models.Customer
-import com.behraz.fastermixer.batch.models.Mixer
+import com.behraz.fastermixer.batch.databinding.ActivityMixerBinding
 import com.behraz.fastermixer.batch.models.Progress
 import com.behraz.fastermixer.batch.models.ProgressState
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
-import com.behraz.fastermixer.batch.ui.animations.closeReveal
-import com.behraz.fastermixer.batch.ui.animations.crossfade
 import com.behraz.fastermixer.batch.ui.animations.startReveal
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.progressview.FasterMixerProgressView
@@ -30,77 +23,43 @@ import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
 import com.behraz.fastermixer.batch.ui.fragments.MapFragment
-import com.behraz.fastermixer.batch.ui.fragments.pomp.CustomerListFragment
-import com.behraz.fastermixer.batch.ui.fragments.pomp.MixerListFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeProgresses
 import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
 import com.behraz.fastermixer.batch.utils.general.*
-import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
+import com.behraz.fastermixer.batch.viewmodels.MixerActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_batch.*
 
-
-class PompActivity : AppCompatActivity(),
-    FasterMixerProgressView.OnStateChangedListener, ApiService.InternetConnectionListener,
-    MessageDialog.Interactions, FasterMixerUserPanel.Interactions,
-    ApiService.OnUnauthorizedListener {
+class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
+    FasterMixerProgressView.OnStateChangedListener, ApiService.InternetConnectionListener, ApiService.OnUnauthorizedListener,
+    MessageDialog.Interactions {
 
     private companion object {
-        private const val FRAGMENT_MIXER_LIST_TAG = "mixer-list_frag"
-        private const val FRAGMENT_CUSTOMER_LIST_TAG = "customer-list_frag"
         private const val FRAGMENT_MESSAGE_LIST_TAG = "msg-list_frag"
         private const val FRAGMENT_MAP_TAG = "map_frag"
     }
-
-    private val blankMixer = Mixer(
-        id = "0",
-        carName = "نامشخص",
-        phone = null,
-        carId = "--,-,---,--",
-        state = "ندارد",
-        driverName = "نامشخص",
-        owner = "نامشخص",
-        lat = "0",
-        lng = "0",
-        amount = 0f,
-        capacity = 0f,
-        ended = false,
-        productTypeName = "-,-",
-        totalAmount = 0f
-    )
-
-    private val blankCustomer = Customer(
-        id = "0",
-        name = "نامشخص",
-        startTime = "نامشخص",
-        address = "نامشخص",
-        _slump = 0,
-        _amount = 0,
-        _density = 0,
-        _mixerCount = 0,
-        jobType = "نامشخص",
-        areaStr = "CIRCLE (0, 0)"
-    )
 
     private val progressDialog by lazy {
         MyProgressDialog(this, R.style.my_alert_dialog)
     }
 
-    private lateinit var viewModel: PompActivityViewModel
+    private lateinit var viewModel: MixerActivityViewModel
     private lateinit var bottomSheetBehavior: LockableBottomSheetBehavior<View>
     private lateinit var topSheetBehavior: TopSheetBehavior<View>
     private var isBottomExpanded = false
     private var isTopExpanded = false
-    private lateinit var mBinding: ActivityPompBinding
+    private lateinit var mBinding: ActivityMixerBinding
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pomp)
+        setContentView(R.layout.activity_mixer)
 
-        viewModel = ViewModelProvider(this).get(PompActivityViewModel::class.java)
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_pomp)
+        viewModel = ViewModelProvider(this).get(MixerActivityViewModel::class.java)
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_mixer)
         mBinding.lifecycleOwner = this
         mBinding.viewModel = viewModel
 
@@ -109,7 +68,9 @@ class PompActivity : AppCompatActivity(),
 
         subscribeNetworkStateChangeListener { mBinding.fasterMixerUserPanel.setInternetState(it) }
         subscribeGpsStateChangeListener { mBinding.fasterMixerUserPanel.setGPSState(it) }
+
     }
+
 
     private fun initViews() {
         tvMessageCount.text = "0"
@@ -137,60 +98,6 @@ class PompActivity : AppCompatActivity(),
                 rotationBy(if (isTopExpanded) -180f else 180f)
             }.start()
             isTopExpanded = !isTopExpanded
-        }
-
-        mBinding.layoutMixer.btnShowOnMap.setOnClickListener {
-            val mapFragment =
-                supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as MapFragment
-            viewModel.mixers.value?.entity?.let { mixers ->
-                if (mixers.isNotEmpty()) {
-                    mixers[0].latLng.let {
-                        mapFragment.moveCamera(it)
-                    }
-                }
-            }
-        }
-        mBinding.layoutMixer.btnMixerList.setOnClickListener {
-            if (isTopExpanded) {
-                mBinding.btnArrow.callOnClick()
-                mBinding.btnArrow.visibility = View.GONE
-            }
-            supportFragmentManager.beginTransaction().apply {
-                add(
-                    R.id.mapContainer,
-                    MixerListFragment(), FRAGMENT_MIXER_LIST_TAG
-                )
-                addToBackStack(null)
-                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                commit()
-            }
-            closeReveal(mBinding.btnMyLocation) { mBinding.btnMyLocation.visibility = View.GONE }
-        }
-
-        mBinding.layoutCustomer.btnCustomerList.setOnClickListener {
-            if (isTopExpanded) {
-                mBinding.btnArrow.callOnClick()
-                mBinding.btnArrow.visibility = View.GONE
-            }
-            supportFragmentManager.beginTransaction().apply {
-                add(
-                    R.id.mapContainer,
-                    CustomerListFragment(), FRAGMENT_CUSTOMER_LIST_TAG
-                )
-                addToBackStack(null)
-                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                commit()
-            }
-            closeReveal(mBinding.btnMyLocation) { mBinding.btnMyLocation.visibility = View.GONE }
-        }
-
-        mBinding.layoutMixer.btnCall.setOnClickListener {
-            startActivity(
-                Intent(
-                    Intent.ACTION_DIAL,
-                    Uri.parse("tel:" + viewModel.mixers.value!!.entity!![0].phone) //current mixer
-                )
-            )
         }
 
         mBinding.btnMessage.setOnClickListener {
@@ -234,13 +141,9 @@ class PompActivity : AppCompatActivity(),
         mBinding.jobProgressView.addOnStateChangedListener(this)
         mBinding.jobProgressView.setProgressItems(
             fakeProgresses(
-                false
+                true
             )
         ) //todo ui test purpose get it from viewModel
-
-        mBinding.layoutMixer.mixer = blankMixer
-        mBinding.layoutMixer.carId.setText(blankMixer.carId)
-        mBinding.layoutCustomer.customer = blankCustomer
     }
 
     private fun subscribeObservers() {
@@ -268,48 +171,6 @@ class PompActivity : AppCompatActivity(),
             }
         })
 
-
-        viewModel.mixers.observe(this, Observer {
-            if (it != null) {
-                if (it.isSucceed) {
-                    it.entity?.let { mixers ->
-                        if (mixers.isNotEmpty()) {
-                            mBinding.layoutMixer.mixer = mixers[0]
-                            if (mixers[0].carId.isNotBlank()) {
-                                mBinding.layoutMixer.carId.setText(mixers[0].carId)
-                            }
-                        }
-                    }
-                } else {
-                    //TODO is not succeed what should i do??
-                    println("debug: ${it.message}")
-                }
-            } else {
-                println("debug: getMessages() -> Server Error: returning `null`")
-                //todo Server Error chekar konam??
-            }
-        })
-
-
-        viewModel.customers.observe(this, Observer {
-            if (it != null) {
-                if (it.isSucceed) {
-                    it.entity?.let { customers ->
-                        //TODO customers[0] hamishegi nist va vaghti darkhast aval tamum shod bayad customers[1] ro neshun bede
-                        if (customers.isNotEmpty()) {
-                            mBinding.layoutCustomer.customer = customers[0]
-                        }
-                    }
-                } else {
-                    //TODO is not succeed what should i do??
-                    println("debug: ${it.message}")
-                }
-            } else {
-                println("debug: getMessages() -> Server Error: returning `null`")
-                //todo Server Error chekar konam??
-            }
-        })
-
         viewModel.messages.observe(this, Observer {
             if (it != null) {
                 if (it.isSucceed) {
@@ -329,7 +190,6 @@ class PompActivity : AppCompatActivity(),
         })
     }
 
-
     override fun onBackPressed() {
 
         if (supportFragmentManager.backStackEntryCount == 1) {
@@ -343,23 +203,25 @@ class PompActivity : AppCompatActivity(),
 
     }
 
+
     override fun onStateChanged(progress: Progress) {
         //TODO if topBar is not expanded expand it for some seconds then hide it
         toast(
             progress.name
         )
         if (progress.id == 1) { //get Customer Info
-            crossfade(mBinding.frameCustomer, mBinding.frameMixer)
+           // crossfade(mBinding.frameCustomer, mBinding.frameMixer)
         } else if (progress.id == 3) { //beginning of progress
-            crossfade(mBinding.frameMixer, mBinding.frameCustomer)
+           // crossfade(mBinding.frameMixer, mBinding.frameCustomer)
         } else if (progress.id == 4) { //finishing state
             if (progress.state == ProgressState.InProgress) {
                 //TODO
             } else if (progress.state == ProgressState.Done) {
-                mBinding.jobProgressView.resetProgress()
+             //   mBinding.jobProgressView.resetProgress()
             }
         }
     }
+
 
     override fun onMessageClicked() {
         toast("Not yet implemented")
@@ -394,11 +256,12 @@ class PompActivity : AppCompatActivity(),
 
     override fun onUnauthorizedAction(event: Event<Unit>) {
         toast("شما نیاز به ورود مجدد دارید")
-        finish()
+      //  finish()
     }
 
     override fun onInternetUnavailable() {
         NoNetworkDialog(this, R.style.my_alert_dialog).show()
     }
+
 
 }

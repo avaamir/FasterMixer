@@ -17,7 +17,7 @@ class PompActivityViewModel : ViewModel() {
     private var isGetMixerRequestActive = false
 
 
-    val pompArea = MutableLiveData<CircleFence?>(null) //TODO implement this // get from GPS
+    val pompArea = MutableLiveData<CircleFence?>(null) //TODO implement this // get from GPS // curently it will receive from server from car GPS, In new Version Maybe Needed
 
     private val getMixersEvent = MutableLiveData(Event(Unit))
     val mixers = Transformations.switchMap(getMixersEvent) {
