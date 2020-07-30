@@ -143,7 +143,7 @@ object RemoteRepo {
         }
     }
 
-    fun getPompLocation( //be khater in ke mikhastam callback dar bashe va niazi be liveData nabud az Reflection estefade nakardam va dasti code zadam
+    fun getEquipmentLocation( //be khater in ke mikhastam callback dar bashe va niazi be liveData nabud az Reflection estefade nakardam va dasti code zadam
         equipmentId: String,
         onResponse: (Entity<GetVehicleLocationResponse>?) -> Unit
     ) {

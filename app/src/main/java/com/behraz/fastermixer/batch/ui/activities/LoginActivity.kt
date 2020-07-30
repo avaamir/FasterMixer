@@ -62,7 +62,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         setContentView(R.layout.activity_login)
 
 
-        if (true) {
+        if (false) {
             startActivity(Intent(this, MixerActivity::class.java))
             finish()
             return
@@ -230,10 +230,6 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
                             }
 
                             if (it.entity!!.equipmentId == null) {
-                                if (it.entity.userType == UserType.Mixer) {
-                                    toast("کاربر میسکر در این نسخه از برنامه تعریف نشده است. لطفا برنامه را به روز رسانی کنید")
-                                    return@Observer
-                                }
                                 startActivity(Intent(this, ChooseEquipmentActivity::class.java))
                             } else {
                                 when (it.entity.userType) {
@@ -243,7 +239,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
                                             PompActivity::class.java
                                         )
                                     )
-                                    UserType.Mixer -> toast("کاربر میسکر در این نسخه از برنامه تعریف نشده است. لطفا برنامه را به روز رسانی کنید")
+                                    UserType.Mixer -> startActivity(Intent(this, MixerActivity::class.java))
                                     UserType.Batch -> startActivity(
                                         Intent(
                                             this,

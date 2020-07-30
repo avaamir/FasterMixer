@@ -49,7 +49,6 @@ interface BehrazClient {
     @POST("Customer/FindAllCustomerWithRequest")
     suspend fun getCustomers(): Response<Entity<List<Customer>>>
 
-
     @POST("InputLastData/FindLocationByVehicleId")
     suspend fun getVehicleLocation(@Body getEquipmentRequest: GetEquipmentRequest): Response<Entity<GetVehicleLocationResponse>>
 }

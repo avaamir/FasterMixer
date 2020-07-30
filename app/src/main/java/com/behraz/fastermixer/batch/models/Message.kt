@@ -10,7 +10,7 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "messages")
 data class Message(
     @PrimaryKey
-    @SerializedName("sendMessageID")
+    @SerializedName("messageID")
     val id: String,
     @SerializedName("senderName")
     val sender: String,
@@ -25,9 +25,10 @@ data class Message(
     val isDelivered: Boolean,
     @SerializedName("priority") //TODO not implemented server side
     val priority: Int,
-    @SerializedName("messageType") //TODO not implemented server side
-    val isSendMessage: Boolean
+    @SerializedName("messageType")
+    val _isEvent: Int //is Event Or Message?
 ) : Parcelable {
 
+    val shouldPopUp get() = _isEvent != 1
     val isEmergency: Boolean get() = priority == 1  //TODO not implemented server side
 }

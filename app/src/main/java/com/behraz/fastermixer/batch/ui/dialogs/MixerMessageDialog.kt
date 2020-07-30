@@ -4,23 +4,22 @@ import android.app.Activity
 import android.view.View
 import android.view.WindowManager
 import com.behraz.fastermixer.batch.R
-import kotlinx.android.synthetic.main.dialog_message.*
+import kotlinx.android.synthetic.main.mixer_dialog_message.*
 
-
-class MessageDialog(
+class MixerMessageDialog(
     activity: Activity,
     themeResId: Int,
     private val interactions: Interactions
 ) :
     MyBaseDialog(
         activity, themeResId,
-        R.layout.dialog_message
+        R.layout.mixer_dialog_message
     ) {
 
 
     override fun initViews() {
-        btnLab.setOnClickListener {
-            interactions.onLabClicked()
+        btnSOS.setOnClickListener {
+            interactions.onSOSClicked()
             dismiss()
         }
         btnMessage.setOnClickListener {
@@ -61,8 +60,7 @@ class MessageDialog(
     interface Interactions {
         fun onMessageClicked()
         fun onStopClicked()
-        fun onLabClicked()
+        fun onSOSClicked()
         fun onRepairClicked()
     }
 }
-

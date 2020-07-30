@@ -17,6 +17,7 @@ class PompActivityViewModel : ViewModel() {
     private var isGetMixerRequestActive = false
 
 
+    //we did not use Transformation because it is not always have a observer , But We Always have to update it's value for sorting mixers List, the only observer is in map fragment
     val pompArea = MutableLiveData<CircleFence?>(null) //TODO implement this // get from GPS // curently it will receive from server from car GPS, In new Version Maybe Needed
 
     private val getMixersEvent = MutableLiveData(Event(Unit))
@@ -82,7 +83,7 @@ class PompActivityViewModel : ViewModel() {
 
 
     private fun getPompLocation(equipmentId: String) {
-        RemoteRepo.getPompLocation(equipmentId) {
+        RemoteRepo.getEquipmentLocation(equipmentId) {
             if (it != null) {
                 if (it.isSucceed) {
                     pompArea.value =

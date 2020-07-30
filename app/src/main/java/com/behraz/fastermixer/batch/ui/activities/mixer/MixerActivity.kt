@@ -13,16 +13,16 @@ import com.behraz.fastermixer.batch.databinding.ActivityMixerBinding
 import com.behraz.fastermixer.batch.models.Progress
 import com.behraz.fastermixer.batch.models.ProgressState
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
+import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
 import com.behraz.fastermixer.batch.ui.animations.startReveal
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.progressview.FasterMixerProgressView
 import com.behraz.fastermixer.batch.ui.customs.general.LockableBottomSheetBehavior
 import com.behraz.fastermixer.batch.ui.customs.general.TopSheetBehavior
-import com.behraz.fastermixer.batch.ui.dialogs.MessageDialog
-import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
-import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
-import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
-import com.behraz.fastermixer.batch.ui.fragments.MapFragment
+import com.behraz.fastermixer.batch.ui.dialogs.*
+import com.behraz.fastermixer.batch.ui.fragments.mixer.MixerMapFragment
+import com.behraz.fastermixer.batch.ui.fragments.pomp.MessageListFragment
+import com.behraz.fastermixer.batch.ui.fragments.pomp.PompMapFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeProgresses
 import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
@@ -33,8 +33,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_batch.*
 
 class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
-    FasterMixerProgressView.OnStateChangedListener, ApiService.InternetConnectionListener, ApiService.OnUnauthorizedListener,
-    MessageDialog.Interactions {
+    FasterMixerProgressView.OnStateChangedListener, ApiService.InternetConnectionListener,
+    ApiService.OnUnauthorizedListener,
+    MixerMessageDialog.Interactions {
 
     private companion object {
         private const val FRAGMENT_MESSAGE_LIST_TAG = "msg-list_frag"
@@ -51,7 +52,6 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
     private var isBottomExpanded = false
     private var isTopExpanded = false
     private lateinit var mBinding: ActivityMixerBinding
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,7 +77,7 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
         supportFragmentManager.beginTransaction().apply {
             add(
                 R.id.mapContainer,
-                MapFragment.newInstance(mBinding.btnMyLocation.id),
+                MixerMapFragment.newInstance(mBinding.btnMyLocation.id),
                 FRAGMENT_MAP_TAG
             )
             commit()
@@ -101,7 +101,7 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
         }
 
         mBinding.btnMessage.setOnClickListener {
-            MessageDialog(
+            MixerMessageDialog(
                 this,
                 R.style.my_alert_dialog,
                 this
@@ -176,6 +176,7 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
                 if (it.isSucceed) {
                     it.entity?.let { messages ->
                         tvMessageCount.text = messages.size.toString()
+                        //TODO show like notification for some seconds then hidden it
                         //TODO check if a message is critical and new show in dialog to user
                     }
                 } else {
@@ -210,28 +211,35 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
             progress.name
         )
         if (progress.id == 1) { //get Customer Info
-           // crossfade(mBinding.frameCustomer, mBinding.frameMixer)
+            // crossfade(mBinding.frameCustomer, mBinding.frameMixer)
         } else if (progress.id == 3) { //beginning of progress
-           // crossfade(mBinding.frameMixer, mBinding.frameCustomer)
+            // crossfade(mBinding.frameMixer, mBinding.frameCustomer)
         } else if (progress.id == 4) { //finishing state
             if (progress.state == ProgressState.InProgress) {
                 //TODO
             } else if (progress.state == ProgressState.Done) {
-             //   mBinding.jobProgressView.resetProgress()
+                //   mBinding.jobProgressView.resetProgress()
             }
         }
     }
 
 
     override fun onMessageClicked() {
-        toast("Not yet implemented")
+        supportFragmentManager.beginTransaction().apply {
+            add(
+                R.id.mapContainer,
+                MessageListFragment(),
+                FRAGMENT_MESSAGE_LIST_TAG
+            )
+            commit()
+        }
     }
 
     override fun onStopClicked() {
         toast("Not yet implemented")
     }
 
-    override fun onLabClicked() {
+    override fun onSOSClicked() {
         toast("Not yet implemented")
     }
 
@@ -256,7 +264,7 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
 
     override fun onUnauthorizedAction(event: Event<Unit>) {
         toast("شما نیاز به ورود مجدد دارید")
-      //  finish()
+        //  finish()
     }
 
     override fun onInternetUnavailable() {

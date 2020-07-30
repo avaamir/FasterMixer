@@ -40,7 +40,7 @@ public final class MessageDao_Impl implements MessageDao {
     this.__insertionAdapterOfMessage = new EntityInsertionAdapter<Message>(__db) {
       @Override
       public String createQuery() {
-        return "INSERT OR REPLACE INTO `messages` (`id`,`sender`,`senderId`,`content`,`senderImage`,`viewed`,`isDelivered`,`priority`,`isSendMessage`) VALUES (?,?,?,?,?,?,?,?,?)";
+        return "INSERT OR REPLACE INTO `messages` (`id`,`sender`,`senderId`,`content`,`senderImage`,`viewed`,`isDelivered`,`priority`,`_isEvent`) VALUES (?,?,?,?,?,?,?,?,?)";
       }
 
       @Override
@@ -77,9 +77,7 @@ public final class MessageDao_Impl implements MessageDao {
         _tmp_1 = value.isDelivered() ? 1 : 0;
         stmt.bindLong(7, _tmp_1);
         stmt.bindLong(8, value.getPriority());
-        final int _tmp_2;
-        _tmp_2 = value.isSendMessage() ? 1 : 0;
-        stmt.bindLong(9, _tmp_2);
+        stmt.bindLong(9, value.get_isEvent());
       }
     };
     this.__deletionAdapterOfMessage = new EntityDeletionOrUpdateAdapter<Message>(__db) {
@@ -100,7 +98,7 @@ public final class MessageDao_Impl implements MessageDao {
     this.__updateAdapterOfMessage = new EntityDeletionOrUpdateAdapter<Message>(__db) {
       @Override
       public String createQuery() {
-        return "UPDATE OR ABORT `messages` SET `id` = ?,`sender` = ?,`senderId` = ?,`content` = ?,`senderImage` = ?,`viewed` = ?,`isDelivered` = ?,`priority` = ?,`isSendMessage` = ? WHERE `id` = ?";
+        return "UPDATE OR ABORT `messages` SET `id` = ?,`sender` = ?,`senderId` = ?,`content` = ?,`senderImage` = ?,`viewed` = ?,`isDelivered` = ?,`priority` = ?,`_isEvent` = ? WHERE `id` = ?";
       }
 
       @Override
@@ -137,9 +135,7 @@ public final class MessageDao_Impl implements MessageDao {
         _tmp_1 = value.isDelivered() ? 1 : 0;
         stmt.bindLong(7, _tmp_1);
         stmt.bindLong(8, value.getPriority());
-        final int _tmp_2;
-        _tmp_2 = value.isSendMessage() ? 1 : 0;
-        stmt.bindLong(9, _tmp_2);
+        stmt.bindLong(9, value.get_isEvent());
         if (value.getId() == null) {
           stmt.bindNull(10);
         } else {
@@ -260,7 +256,7 @@ public final class MessageDao_Impl implements MessageDao {
           final int _cursorIndexOfViewed = CursorUtil.getColumnIndexOrThrow(_cursor, "viewed");
           final int _cursorIndexOfIsDelivered = CursorUtil.getColumnIndexOrThrow(_cursor, "isDelivered");
           final int _cursorIndexOfPriority = CursorUtil.getColumnIndexOrThrow(_cursor, "priority");
-          final int _cursorIndexOfIsSendMessage = CursorUtil.getColumnIndexOrThrow(_cursor, "isSendMessage");
+          final int _cursorIndexOfIsEvent = CursorUtil.getColumnIndexOrThrow(_cursor, "_isEvent");
           final List<Message> _result = new ArrayList<Message>(_cursor.getCount());
           while(_cursor.moveToNext()) {
             final Message _item;
@@ -284,11 +280,9 @@ public final class MessageDao_Impl implements MessageDao {
             _tmpIsDelivered = _tmp_1 != 0;
             final int _tmpPriority;
             _tmpPriority = _cursor.getInt(_cursorIndexOfPriority);
-            final boolean _tmpIsSendMessage;
-            final int _tmp_2;
-            _tmp_2 = _cursor.getInt(_cursorIndexOfIsSendMessage);
-            _tmpIsSendMessage = _tmp_2 != 0;
-            _item = new Message(_tmpId,_tmpSender,_tmpSenderId,_tmpContent,_tmpSenderImage,_tmpViewed,_tmpIsDelivered,_tmpPriority,_tmpIsSendMessage);
+            final int _tmp_isEvent;
+            _tmp_isEvent = _cursor.getInt(_cursorIndexOfIsEvent);
+            _item = new Message(_tmpId,_tmpSender,_tmpSenderId,_tmpContent,_tmpSenderImage,_tmpViewed,_tmpIsDelivered,_tmpPriority,_tmp_isEvent);
             _result.add(_item);
           }
           return _result;
@@ -323,7 +317,7 @@ public final class MessageDao_Impl implements MessageDao {
           final int _cursorIndexOfViewed = CursorUtil.getColumnIndexOrThrow(_cursor, "viewed");
           final int _cursorIndexOfIsDelivered = CursorUtil.getColumnIndexOrThrow(_cursor, "isDelivered");
           final int _cursorIndexOfPriority = CursorUtil.getColumnIndexOrThrow(_cursor, "priority");
-          final int _cursorIndexOfIsSendMessage = CursorUtil.getColumnIndexOrThrow(_cursor, "isSendMessage");
+          final int _cursorIndexOfIsEvent = CursorUtil.getColumnIndexOrThrow(_cursor, "_isEvent");
           final Message _result;
           if(_cursor.moveToFirst()) {
             final String _tmpId;
@@ -346,11 +340,9 @@ public final class MessageDao_Impl implements MessageDao {
             _tmpIsDelivered = _tmp_1 != 0;
             final int _tmpPriority;
             _tmpPriority = _cursor.getInt(_cursorIndexOfPriority);
-            final boolean _tmpIsSendMessage;
-            final int _tmp_2;
-            _tmp_2 = _cursor.getInt(_cursorIndexOfIsSendMessage);
-            _tmpIsSendMessage = _tmp_2 != 0;
-            _result = new Message(_tmpId,_tmpSender,_tmpSenderId,_tmpContent,_tmpSenderImage,_tmpViewed,_tmpIsDelivered,_tmpPriority,_tmpIsSendMessage);
+            final int _tmp_isEvent;
+            _tmp_isEvent = _cursor.getInt(_cursorIndexOfIsEvent);
+            _result = new Message(_tmpId,_tmpSender,_tmpSenderId,_tmpContent,_tmpSenderImage,_tmpViewed,_tmpIsDelivered,_tmpPriority,_tmp_isEvent);
           } else {
             _result = null;
           }

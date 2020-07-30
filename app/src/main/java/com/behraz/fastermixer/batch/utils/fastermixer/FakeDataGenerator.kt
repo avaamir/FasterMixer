@@ -101,7 +101,7 @@ fun fakeMessages() = listOf(
         senderImage = null,
         viewed = false,
         isDelivered = false,
-        isSendMessage = false
+        _isEvent = 1
     ), Message(
         id = "2",
         sender = "باسکول",
@@ -111,7 +111,7 @@ fun fakeMessages() = listOf(
         senderImage = null,
         viewed = false,
         isDelivered = false,
-        isSendMessage = false
+        _isEvent = 1
     ), Message(
         id = "3",
         sender = "باسکول",
@@ -121,7 +121,7 @@ fun fakeMessages() = listOf(
         senderImage = null,
         viewed = false,
         isDelivered = false,
-        isSendMessage = false
+        _isEvent = 1
     ), Message(
         id = "4",
         sender = "باسکول",
@@ -131,7 +131,7 @@ fun fakeMessages() = listOf(
         senderImage = null,
         viewed = false,
         isDelivered = false,
-        isSendMessage = false
+        _isEvent = 1
     )
 )
 

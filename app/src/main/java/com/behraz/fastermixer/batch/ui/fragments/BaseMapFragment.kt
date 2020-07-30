@@ -15,19 +15,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.LayoutMapBinding
-import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.osm.MyOSMMapView
-import com.behraz.fastermixer.batch.ui.osm.MixerMarker
-import com.behraz.fastermixer.batch.ui.osm.WorkerMarker
-import com.behraz.fastermixer.batch.utils.fastermixer.Constants
-import com.behraz.fastermixer.batch.utils.general.toast
-import com.behraz.fastermixer.batch.viewmodels.MapViewModel
-import com.behraz.fastermixer.batch.viewmodels.MapViewModel.Companion.MIN_LOCATION_UPDATE_TIME
-import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
+import com.behraz.fastermixer.batch.utils.general.LocationHandler
+import com.behraz.fastermixer.batch.viewmodels.PompMapFragmentViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -35,34 +27,22 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 
-class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListener {
+abstract class BaseMapFragment : Fragment(), LocationListener,
+    MyOSMMapView.OnMapClickListener {
 
+    abstract val myLocation: GeoPoint
 
-    private var isFirstTime = true
     private var btnMyLocationId: Int =
         0 //btnMylocation Mitune tu activity bashe niaz hast refrencesh ro dashte bashim age tu activity hast
-    private lateinit var mapViewModel: MapViewModel
-    private lateinit var pompViewModel: PompActivityViewModel
 
-    private lateinit var mBinding: LayoutMapBinding
-    private lateinit var btnMyLocation: FloatingActionButton
+    private lateinit var _mBinding: LayoutMapBinding
+    protected val mBinding get() = _mBinding
+    protected lateinit var btnMyLocation: FloatingActionButton
 
-
-    private lateinit var userMarker: WorkerMarker
-
-    private var routePolyline: Polyline? = null
-
-    companion object {
-        private const val REQUEST_PERMISSIONS_REQUEST_CODE = 1
-        private const val BUNDLE_BTN_MY_LOC_ID = "btn-m-loc"
-        fun newInstance(btnMyLocationId: Int) = MapFragment()
-            .apply {
-                arguments = Bundle().apply {
-                    putInt(BUNDLE_BTN_MY_LOC_ID, btnMyLocationId)
-                }
-            }
+    protected companion object {
+        const val REQUEST_PERMISSIONS_REQUEST_CODE = 1
+        const val BUNDLE_BTN_MY_LOC_ID = "btn-m-loc"
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,9 +51,7 @@ class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListene
     ): View? {
 
 
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.layout_map, container, false)
-        mapViewModel = ViewModelProvider(this).get(MapViewModel::class.java)
-        pompViewModel = ViewModelProvider(activity!!).get(PompActivityViewModel::class.java)
+        _mBinding = DataBindingUtil.inflate(inflater, R.layout.layout_map, container, false)
 
 
         Configuration.getInstance()
@@ -84,82 +62,20 @@ class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListene
         initViews()
         initMapSettings()
         //setupLocationManager() //TODo felan data ra az gps ru machine migirim, yaani app android az server mikhune
-        subscribeObservers()
 
-        return mBinding.root
+        return _mBinding.root
     }
 
-    private fun subscribeObservers() {
-
-        pompViewModel.pompArea.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                mapViewModel.myLocation = it.center
-                userMarker.position = it.center
-                if (isFirstTime) {
-                    isFirstTime = false
-                    moveCamera(it.center)
-                }
-            }
-        })
-
-
-        pompViewModel.mixers.observe(viewLifecycleOwner, Observer {
-            if (it?.isSucceed == true) {
-                val excludeMarkerList =
-                    ArrayList(mapViewModel.markers.keys) // we need this for exclude mixers from original list if mixer not exists in new mixerList
-                it.entity?.forEach { mixer ->
-                    excludeMarkerList.remove(mixer.id) //do not need to exclude this mixer because it's exists in new List too
-                    val mixerMarker = mapViewModel.markers[mixer.id]
-                    if (mixerMarker == null) { //new mixer in pomp incoming list (taze az batch kharej shode va dare be pomp mire)
-                        //add to marker hash map and MapView
-                        mapViewModel.markers[mixer.id] =
-                            MixerMarker(mBinding.map).also { _marker ->
-                                _marker.position = mixer.latLng
-                                addMarkerToMap(_marker, mixer.latLng, "${mixer.carName} ${mixer.driverName}")
-                            }
-                    } else { //mixer already exists, update location
-                        mixerMarker.position = mixer.latLng
-                    }
-                }
-                excludeMarkerList.forEach { mixerId ->
-                    mBinding.map.overlayManager.remove(
-                        mapViewModel.markers.remove(mixerId)
-                    )
-                }
-            }
-        })
-
-
-
-        mapViewModel.getRouteResponse.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                if (it.isSuccessful) {
-                    routePolyline?.let { mBinding.map.overlayManager.remove(routePolyline) }
-                    routePolyline = drawPolyline(it.getRoutePoints())
-                } else {
-                    toast(Constants.SERVER_ERROR)
-                }
-            } else {
-                val networkConnected = ApiService.isNetworkAvailable()
-                if (networkConnected) {
-                    toast(Constants.SERVER_ERROR)
-                } else {
-                    toast("لطفا وضعیت اینترنت خود را بررسی کنید")
-                }
-            }
-        })
-    }
-
-    private fun initViews() {
+    protected open fun initViews() {
         if (btnMyLocationId != 0) {
-            mBinding.btnMyLocation.visibility = View.GONE
+            _mBinding.btnMyLocation.visibility = View.GONE
             btnMyLocation = activity!!.findViewById(btnMyLocationId)
         } else {
-            btnMyLocation = mBinding.btnMyLocation
+            btnMyLocation = _mBinding.btnMyLocation
         }
 
         btnMyLocation.setOnClickListener {
-            moveCamera(mapViewModel.myLocation)
+            moveCamera(myLocation)
             it.animate().apply {
                 interpolator = LinearInterpolator()
                 duration = 500
@@ -168,34 +84,28 @@ class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListene
         }
     }
 
-    private fun drawPolyline(points: List<GeoPoint>): Polyline {
+    protected fun drawPolyline(points: List<GeoPoint>): Polyline {
         val line = Polyline()
         line.setPoints(points)
         line.outlinePaint.color = Color.BLUE
-        mBinding.map.overlayManager.add(line)
+        _mBinding.map.overlayManager.add(line)
         //moveCamera(GeoPoint(line.bounds.centerLatitude, line.bounds.centerLongitude), 1.0) //todo how move camera to polygon area
         //line.outlinePaint.strokeWidth = 3f
         return line
     }
 
 
-    private fun initMapSettings() {
-        mBinding.map.setTileSource(TileSourceFactory.MAPNIK)
-        mBinding.map.setMultiTouchControls(true)
+    protected fun initMapSettings() {
+        _mBinding.map.setTileSource(TileSourceFactory.MAPNIK)
+        _mBinding.map.setMultiTouchControls(true)
 
 
         //set default location
         val startPoint = GeoPoint(31.89141833223403, 54.353561131283634)
-        mBinding.map.controller.run {
+        _mBinding.map.controller.run {
             setZoom(15.5)
             setCenter(startPoint)
         }
-
-        addMarkerToMap(
-            marker = WorkerMarker(mBinding.map).also { this.userMarker = it },
-            point = mapViewModel.myLocation
-        )
-
 
         //TODO my location on map
         /*val mLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(this), map)
@@ -208,29 +118,36 @@ class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListene
         //your items
 
 
-        mBinding.map.setOnMapClickListener(this)
+        _mBinding.map.setOnMapClickListener(this)
 
     }
 
-    private fun addMarkerToMap(
+    //TODO add this to sub classes NOT HEEREEEEEEEEEEEEEEEEEEEEEEEEE
+    protected fun addUserMarkerToMap(marker: Marker) {
+        addMarkerToMap(
+            marker = marker,
+            point = myLocation
+        )
+    }
+
+    protected fun addMarkerToMap(
         marker: Marker,
         point: GeoPoint,
         title: String = "مکان شما"
     ) {
         marker.position = point
         marker.title = title
-        mBinding.map.overlays.add(marker)
+        _mBinding.map.overlays.add(marker)
     }
 
 
     fun moveCamera(geoPoint: GeoPoint, zoom: Double = 15.0) {
-        mBinding.map.controller.run {
+        _mBinding.map.controller.run {
             setCenter(geoPoint)
             zoomTo(zoom)
             animateTo(geoPoint)
         }
     }
-
 
     @SuppressLint("MissingPermission")
     private fun setupLocationManager() {
@@ -263,7 +180,7 @@ class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListene
             println("debug: allProviders contains GPS_PROVIDER")
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
-                MIN_LOCATION_UPDATE_TIME,
+                LocationHandler.MIN_LOCATION_UPDATE_TIME,
                 0f,
                 this
             )
@@ -320,7 +237,7 @@ class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListene
         //if you make changes to the configuration, use
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
-        mBinding.map.onResume() //needed for compass, my location overlays, v6.0.0 and up
+        _mBinding.map.onResume() //needed for compass, my location overlays, v6.0.0 and up
     }
 
     override fun onPause() {
@@ -329,7 +246,7 @@ class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListene
         //if you make changes to the configuration, use
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().save(this, prefs);
-        mBinding.map.onPause() //needed for compass, my location overlays, v6.0.0 and up
+        _mBinding.map.onPause() //needed for compass, my location overlays, v6.0.0 and up
     }
 
     override fun onLocationChanged(location: Location) {
@@ -388,5 +305,6 @@ class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListene
             )
         )*/
     }
+
 
 }

@@ -30,9 +30,9 @@ public final class MessageDatabase_Impl extends MessageDatabase {
     final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(configuration, new RoomOpenHelper.Delegate(4) {
       @Override
       public void createAllTables(SupportSQLiteDatabase _db) {
-        _db.execSQL("CREATE TABLE IF NOT EXISTS `messages` (`id` TEXT NOT NULL, `sender` TEXT NOT NULL, `senderId` TEXT NOT NULL, `content` TEXT NOT NULL, `senderImage` TEXT, `viewed` INTEGER NOT NULL, `isDelivered` INTEGER NOT NULL, `priority` INTEGER NOT NULL, `isSendMessage` INTEGER NOT NULL, PRIMARY KEY(`id`))");
+        _db.execSQL("CREATE TABLE IF NOT EXISTS `messages` (`id` TEXT NOT NULL, `sender` TEXT NOT NULL, `senderId` TEXT NOT NULL, `content` TEXT NOT NULL, `senderImage` TEXT, `viewed` INTEGER NOT NULL, `isDelivered` INTEGER NOT NULL, `priority` INTEGER NOT NULL, `_isEvent` INTEGER NOT NULL, PRIMARY KEY(`id`))");
         _db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f0a0b28013eb84656b6f15c88c0f117e')");
+        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '225885490791a889ee80d6b8eedd00fd')");
       }
 
       @Override
@@ -85,7 +85,7 @@ public final class MessageDatabase_Impl extends MessageDatabase {
         _columnsMessages.put("viewed", new TableInfo.Column("viewed", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsMessages.put("isDelivered", new TableInfo.Column("isDelivered", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsMessages.put("priority", new TableInfo.Column("priority", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsMessages.put("isSendMessage", new TableInfo.Column("isSendMessage", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMessages.put("_isEvent", new TableInfo.Column("_isEvent", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysMessages = new HashSet<TableInfo.ForeignKey>(0);
         final HashSet<TableInfo.Index> _indicesMessages = new HashSet<TableInfo.Index>(0);
         final TableInfo _infoMessages = new TableInfo("messages", _columnsMessages, _foreignKeysMessages, _indicesMessages);
@@ -97,7 +97,7 @@ public final class MessageDatabase_Impl extends MessageDatabase {
         }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "f0a0b28013eb84656b6f15c88c0f117e", "fbbe64e91c75bab5977467c73bcd3afd");
+    }, "225885490791a889ee80d6b8eedd00fd", "d9782b1ac541fc22ca8bf7ceab1016cb");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(configuration.context)
         .name(configuration.name)
         .callback(_openCallback)

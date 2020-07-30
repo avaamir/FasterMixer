@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,21 +15,37 @@ import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentMessageListBinding
 import com.behraz.fastermixer.batch.models.Message
+import com.behraz.fastermixer.batch.models.requests.behraz.Entity
+import com.behraz.fastermixer.batch.ui.activities.mixer.MixerActivity
+import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
 import com.behraz.fastermixer.batch.ui.adapters.MessageAdapter
+import com.behraz.fastermixer.batch.utils.general.toast
+import com.behraz.fastermixer.batch.viewmodels.MixerActivityViewModel
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
+import java.lang.IllegalStateException
 
 class MessageListFragment : Fragment(), MessageAdapter.Interaction {
 
     private val mAdapter = MessageAdapter(true, this)
     private lateinit var mBinding: FragmentMessageListBinding
-    private lateinit var viewModel: PompActivityViewModel
+    private lateinit var viewModel: ViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(activity!!).get(PompActivityViewModel::class.java)
+        viewModel = when (activity) {
+            is MixerActivity -> {
+                ViewModelProvider(activity!!).get(MixerActivityViewModel::class.java)
+            }
+            is PompActivity -> {
+                ViewModelProvider(activity!!).get(PompActivityViewModel::class.java)
+            }
+            else -> {
+                throw IllegalStateException("PompActivity or MixerActivity is valid")
+            }
+        }
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_message_list, container, false)
         initViews()
         subscribeObservers()
@@ -36,7 +53,7 @@ class MessageListFragment : Fragment(), MessageAdapter.Interaction {
     }
 
     private fun subscribeObservers() {
-        viewModel.messages.observe(viewLifecycleOwner, Observer {
+        val observer = Observer<Entity<List<Message>>?> {
             if (it != null) {
                 if (it.isSucceed) {
                     mAdapter.submitList(it.entity)
@@ -46,10 +63,16 @@ class MessageListFragment : Fragment(), MessageAdapter.Interaction {
             } else {
                 //TODo
             }
-        })
+        }
+        if (this.viewModel is MixerActivityViewModel) {
+             (viewModel as MixerActivityViewModel).messages.observe(viewLifecycleOwner, observer)
+        } else {
+            (viewModel as PompActivityViewModel).messages.observe(viewLifecycleOwner, observer)
+        }
     }
 
     private fun initViews() {
+        mBinding.tvMessageCount.text = "0"
         mBinding.messageRecycler.adapter = mAdapter
         mBinding.messageRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         mBinding.messageRecycler.addItemDecoration(
@@ -66,6 +89,6 @@ class MessageListFragment : Fragment(), MessageAdapter.Interaction {
 
 
     override fun onItemClicked(message: Message) {
-        TODO("Not yet implemented")
+        toast("not yet implemented")
     }
 }

@@ -25,13 +25,14 @@ import com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.progressview.FasterMixerProgressView
 import com.behraz.fastermixer.batch.ui.customs.general.LockableBottomSheetBehavior
 import com.behraz.fastermixer.batch.ui.customs.general.TopSheetBehavior
-import com.behraz.fastermixer.batch.ui.dialogs.MessageDialog
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
+import com.behraz.fastermixer.batch.ui.dialogs.PompMessageDialog
 import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
-import com.behraz.fastermixer.batch.ui.fragments.MapFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.CustomerListFragment
+import com.behraz.fastermixer.batch.ui.fragments.pomp.MessageListFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.MixerListFragment
+import com.behraz.fastermixer.batch.ui.fragments.pomp.PompMapFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeProgresses
 import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
@@ -44,7 +45,7 @@ import kotlinx.android.synthetic.main.activity_batch.*
 
 class PompActivity : AppCompatActivity(),
     FasterMixerProgressView.OnStateChangedListener, ApiService.InternetConnectionListener,
-    MessageDialog.Interactions, FasterMixerUserPanel.Interactions,
+    PompMessageDialog.Interactions, FasterMixerUserPanel.Interactions,
     ApiService.OnUnauthorizedListener {
 
     private companion object {
@@ -116,7 +117,7 @@ class PompActivity : AppCompatActivity(),
         supportFragmentManager.beginTransaction().apply {
             add(
                 R.id.mapContainer,
-                MapFragment.newInstance(mBinding.btnMyLocation.id),
+                PompMapFragment.newInstance(mBinding.btnMyLocation.id),
                 FRAGMENT_MAP_TAG
             )
             commit()
@@ -141,7 +142,7 @@ class PompActivity : AppCompatActivity(),
 
         mBinding.layoutMixer.btnShowOnMap.setOnClickListener {
             val mapFragment =
-                supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as MapFragment
+                supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as PompMapFragment
             viewModel.mixers.value?.entity?.let { mixers ->
                 if (mixers.isNotEmpty()) {
                     mixers[0].latLng.let {
@@ -185,16 +186,22 @@ class PompActivity : AppCompatActivity(),
         }
 
         mBinding.layoutMixer.btnCall.setOnClickListener {
-            startActivity(
-                Intent(
-                    Intent.ACTION_DIAL,
-                    Uri.parse("tel:" + viewModel.mixers.value!!.entity!![0].phone) //current mixer
-                )
-            )
+            viewModel.mixers.value?.let {
+                if (it.entity.isNullOrEmpty()) {
+                    toast("شماره ای ثبت نشده است")
+                } else {
+                    startActivity(
+                        Intent(
+                            Intent.ACTION_DIAL,
+                            Uri.parse("tel:" + it.entity[0].phone) //current mixer
+                        )
+                    )
+                }
+            }
         }
 
         mBinding.btnMessage.setOnClickListener {
-            MessageDialog(
+            PompMessageDialog(
                 this,
                 R.style.my_alert_dialog,
                 this
@@ -315,6 +322,7 @@ class PompActivity : AppCompatActivity(),
                 if (it.isSucceed) {
                     it.entity?.let { messages ->
                         tvMessageCount.text = messages.size.toString()
+                        //TODO show like notification for some seconds then hidden it
                         //TODO check if a message is critical and new show in dialog to user
                     }
                 } else {
@@ -362,7 +370,14 @@ class PompActivity : AppCompatActivity(),
     }
 
     override fun onMessageClicked() {
-        toast("Not yet implemented")
+        supportFragmentManager.beginTransaction().apply {
+            add(
+                R.id.mapContainer,
+                MessageListFragment(),
+                FRAGMENT_MESSAGE_LIST_TAG
+            )
+            commit()
+        }
     }
 
     override fun onStopClicked() {
