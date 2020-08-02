@@ -13,16 +13,17 @@ import com.behraz.fastermixer.batch.databinding.ActivityMixerBinding
 import com.behraz.fastermixer.batch.models.Progress
 import com.behraz.fastermixer.batch.models.ProgressState
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
-import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
 import com.behraz.fastermixer.batch.ui.animations.startReveal
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.progressview.FasterMixerProgressView
 import com.behraz.fastermixer.batch.ui.customs.general.LockableBottomSheetBehavior
 import com.behraz.fastermixer.batch.ui.customs.general.TopSheetBehavior
-import com.behraz.fastermixer.batch.ui.dialogs.*
+import com.behraz.fastermixer.batch.ui.dialogs.MixerMessageDialog
+import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
+import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
+import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
 import com.behraz.fastermixer.batch.ui.fragments.mixer.MixerMapFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.MessageListFragment
-import com.behraz.fastermixer.batch.ui.fragments.pomp.PompMapFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeProgresses
 import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
@@ -231,6 +232,7 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
                 MessageListFragment(),
                 FRAGMENT_MESSAGE_LIST_TAG
             )
+            addToBackStack(FRAGMENT_MESSAGE_LIST_TAG)
             commit()
         }
     }
