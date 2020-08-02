@@ -143,7 +143,7 @@ object RemoteRepo {
         }
     }
 
-    fun getEquipmentLocation( //be khater in ke mikhastam callback dar bashe va niazi be liveData nabud az Reflection estefade nakardam va dasti code zadam
+    fun getEquipmentLocation( //be khater in ke m`ikhastam callback dar bashe va niazi be liveData nabud az Reflection estefade nakardam va dasti code zadam
         equipmentId: String,
         onResponse: (Entity<GetVehicleLocationResponse>?) -> Unit
     ) {
@@ -161,6 +161,14 @@ object RemoteRepo {
     }
 
 
+    fun seenMessage(messageId: String) {
+        if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
+        CoroutineScope(IO + serverJobs).launchApi({
+            ApiService.client.seenMessage(ChooseEquipmentRequest(messageId))
+        }) {}
+    }
+
+    fun getMixerMission() = apiReq(ApiService.client::getMixerMission)
 
     fun getCustomers() = apiReq(ApiService.client::getCustomers)
 

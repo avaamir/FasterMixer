@@ -22,12 +22,15 @@
             android:layout_height="match_parent" />
 
 
-        <androidx.cardview.widget.CardView
+        <FrameLayout
             android:id="@+id/frame_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:behavior_hideable="true"
-            app:layout_behavior=".ui.customs.general.TopSheetBehavior">
+            app:layout_behavior=".ui.customs.general.TopSheetBehavior"
+            android:background="#00000000"
+            android:paddingRight="32dp"
+            android:paddingLeft="32dp">
 
 
             <LinearLayout
@@ -40,12 +43,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
+                    android:visibility="gone"
                     app:layout_anchorGravity="top"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:background="@color/primary"
                     tools:layout_height="100dp" />
+
+                <include
+                    android:id="@+id/layout_new_message"
+                    layout="@layout/item_message_vertical"  />
 
 
                 <!--<FrameLayout
@@ -80,17 +88,17 @@
             </LinearLayout>
 
 
-        </androidx.cardview.widget.CardView>
+        </FrameLayout>
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnArrow"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/standard_margin"
             android:clickable="true"
             android:focusable="true"
+            android:visibility="gone"
             app:backgroundTint="@color/btn_yellow"
             app:fabSize="mini"
             app:layout_anchor="@id/frame_top"

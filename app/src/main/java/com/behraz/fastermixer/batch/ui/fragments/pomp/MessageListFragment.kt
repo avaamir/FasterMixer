@@ -22,6 +22,7 @@ import com.behraz.fastermixer.batch.ui.adapters.MessageAdapter
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.MixerActivityViewModel
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
+import kotlinx.android.synthetic.main.activity_pomp.*
 import java.lang.IllegalStateException
 
 class MessageListFragment : Fragment(), MessageAdapter.Interaction {
@@ -46,7 +47,8 @@ class MessageListFragment : Fragment(), MessageAdapter.Interaction {
                 throw IllegalStateException("PompActivity or MixerActivity is valid")
             }
         }
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_message_list, container, false)
+        mBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_message_list, container, false)
         initViews()
         subscribeObservers()
         return mBinding.root
@@ -56,6 +58,7 @@ class MessageListFragment : Fragment(), MessageAdapter.Interaction {
         val observer = Observer<Entity<List<Message>>?> {
             if (it != null) {
                 if (it.isSucceed) {
+                    mBinding.tvMessageCount.text = (it.entity?.size ?: 0).toString()
                     mAdapter.submitList(it.entity)
                 } else {
                     //TODo
@@ -65,7 +68,7 @@ class MessageListFragment : Fragment(), MessageAdapter.Interaction {
             }
         }
         if (this.viewModel is MixerActivityViewModel) {
-             (viewModel as MixerActivityViewModel).messages.observe(viewLifecycleOwner, observer)
+            (viewModel as MixerActivityViewModel).messages.observe(viewLifecycleOwner, observer)
         } else {
             (viewModel as PompActivityViewModel).messages.observe(viewLifecycleOwner, observer)
         }
@@ -74,7 +77,8 @@ class MessageListFragment : Fragment(), MessageAdapter.Interaction {
     private fun initViews() {
         mBinding.tvMessageCount.text = "0"
         mBinding.messageRecycler.adapter = mAdapter
-        mBinding.messageRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        mBinding.messageRecycler.layoutManager =
+            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         mBinding.messageRecycler.addItemDecoration(
             DividerItemDecoration(
                 context,

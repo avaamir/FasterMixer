@@ -38,10 +38,10 @@ interface BehrazClient {
     suspend fun getMessages(): Response<Entity<List<Message>>>
 
     @POST("Planning/FindAllPlanningForBatch")
-    suspend fun getBatchMixers() : Response<Entity<List<Mixer>>>
+    suspend fun getBatchMixers(): Response<Entity<List<Mixer>>>
 
     @POST("Planning/FindAllPlanningForPump")
-    suspend fun getPompMixers() : Response<Entity<List<Mixer>>>
+    suspend fun getPompMixers(): Response<Entity<List<Mixer>>>
 
     @POST("Equipment/FindLocationBatch")
     suspend fun getBatchLocation(@Body getEquipmentRequest: GetEquipmentRequest): Response<Entity<GetBatchLocationResponse>>
@@ -51,4 +51,12 @@ interface BehrazClient {
 
     @POST("InputLastData/FindLocationByVehicleId")
     suspend fun getVehicleLocation(@Body getEquipmentRequest: GetEquipmentRequest): Response<Entity<GetVehicleLocationResponse>>
+
+    @POST("SendMessage/UpdateViewedSendMessageById")
+    suspend fun seenMessage(@Body seenMessageId: ChooseEquipmentRequest): Response<Entity<Unit>>
+
+    @POST("Vehicle/GetMission")
+    suspend fun getMixerMission(): Response<Entity<MixerMission>>
+
+
 }

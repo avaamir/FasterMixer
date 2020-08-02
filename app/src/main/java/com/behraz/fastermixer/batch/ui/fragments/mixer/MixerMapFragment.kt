@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.fragments.BaseMapFragment
+import com.behraz.fastermixer.batch.ui.osm.DestMarker
 import com.behraz.fastermixer.batch.ui.osm.MixerMarker
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.toast
@@ -16,15 +17,14 @@ import com.behraz.fastermixer.batch.viewmodels.MixerMapFragmentViewModel
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polyline
 
-class MixerMapFragment: BaseMapFragment() {
+class MixerMapFragment : BaseMapFragment() {
 
     private var isFirstTime = true
     override val myLocation: GeoPoint
         get() = mapViewModel.myLocation
 
 
-    private var btnMyLocationId: Int =
-        0 //btnMylocation Mitune tu activity bashe niaz hast refrencesh ro dashte bashim age tu activity hast
+    private var destMarker: DestMarker? = null
     private lateinit var mapViewModel: MixerMapFragmentViewModel
     private lateinit var mixerActivityViewModel: MixerActivityViewModel
 
@@ -56,7 +56,8 @@ class MixerMapFragment: BaseMapFragment() {
         super.onCreateView(inflater, container, savedInstanceState)
 
         mapViewModel = ViewModelProvider(this).get(MixerMapFragmentViewModel::class.java)
-        mixerActivityViewModel = ViewModelProvider(activity!!).get(MixerActivityViewModel::class.java)
+        mixerActivityViewModel =
+            ViewModelProvider(activity!!).get(MixerActivityViewModel::class.java)
 
         initViews()
         subscribeObservers()
@@ -70,6 +71,35 @@ class MixerMapFragment: BaseMapFragment() {
 
 
     private fun subscribeObservers() {
+        mixerActivityViewModel.mixerMission.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                if (it.isSucceed) {
+                    it.entity?.destLocation?.let { _destCircleFence ->
+                        mapViewModel.getRoute(
+                            listOf(
+                                mapViewModel.myLocation,
+                                _destCircleFence.center
+                            )
+                        )
+                        if (destMarker == null) { //age avalin masir yabi bud
+                            addMarkerToMap(
+                                DestMarker(mBinding.map, 42, 42).also { _destMarker ->
+                                    destMarker = _destMarker
+                                }, _destCircleFence.center, "مقصد ${it.entity.conditionTitle}"
+                            )
+                        } else { //age ghablan track dar naghshe keshide shode bud
+                            destMarker!!.position = _destCircleFence.center
+                            routePolyline?.let { _routes ->
+                                mBinding.map.overlayManager.remove(_routes)
+                                routePolyline = null
+                            }
+                        }
+                    }
+                }
+            }
+        })
+
+
         mixerActivityViewModel.mixerLocation.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 mapViewModel.myLocation = it.center

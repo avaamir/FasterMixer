@@ -1,6 +1,7 @@
 package com.behraz.fastermixer.batch.ui.activities.mixer
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
@@ -69,11 +70,13 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
 
         subscribeNetworkStateChangeListener { mBinding.fasterMixerUserPanel.setInternetState(it) }
         subscribeGpsStateChangeListener { mBinding.fasterMixerUserPanel.setGPSState(it) }
-
     }
 
 
     private fun initViews() {
+        mBinding.layoutNewMessage.root.setOnClickListener { toast("not yet implemented") }
+
+
         tvMessageCount.text = "0"
         supportFragmentManager.beginTransaction().apply {
             add(
@@ -85,8 +88,8 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
         }
 
         topSheetBehavior = TopSheetBehavior.from(mBinding.frameTop)
+        topSheetBehavior.state = TopSheetBehavior.STATE_HIDDEN
         topSheetBehavior.setSwipedEnabled(false)
-
 
         mBinding.btnArrow.setOnClickListener {
             if (isTopExpanded) {
@@ -110,7 +113,7 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
         }
 
         bottomSheetBehavior = LockableBottomSheetBehavior.from(mBinding.bottomSheet)
-        bottomSheetBehavior.setSwipeEnabled(false)
+        bottomSheetBehavior.setSwipeEnabled(true)
 
         mBinding.btnHideUserPanel.setOnClickListener {
             if (isBottomExpanded) {
@@ -190,12 +193,20 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
                 //todo Server Error chekar konam??
             }
         })
+
+        viewModel.newMessage.observe(this, Observer {
+            mBinding.layoutNewMessage.message = it
+            topSheetBehavior.state = TopSheetBehavior.STATE_EXPANDED
+            Handler().postDelayed({
+                topSheetBehavior.state = TopSheetBehavior.STATE_HIDDEN
+            }, 3000)
+        })
     }
 
     override fun onBackPressed() {
 
         if (supportFragmentManager.backStackEntryCount == 1) {
-            mBinding.btnArrow.visibility = View.VISIBLE
+            //TODO mBinding.btnArrow.visibility = View.VISIBLE
             mBinding.btnMyLocation.visibility = View.VISIBLE
             startReveal(mBinding.btnArrow) {}
             startReveal(mBinding.btnMyLocation) {}
