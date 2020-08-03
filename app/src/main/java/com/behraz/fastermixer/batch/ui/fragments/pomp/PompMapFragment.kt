@@ -25,13 +25,12 @@ class PompMapFragment : BaseMapFragment() {
         get() = mapViewModel.myLocation
 
 
-    private var btnMyLocationId: Int =
-        0 //btnMylocation Mitune tu activity bashe niaz hast refrencesh ro dashte bashim age tu activity hast
     private lateinit var mapViewModel: PompMapFragmentViewModel
     private lateinit var pompViewModel: PompActivityViewModel
 
 
-    private var routePolyline: Polyline? = null
+    override fun onBtnMyLocationClicked() {}
+
 
     private val userMarker by lazy {
         PompMarker(mBinding.map).also {

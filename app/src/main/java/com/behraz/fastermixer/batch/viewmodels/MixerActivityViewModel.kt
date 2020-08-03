@@ -5,13 +5,13 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.Message
+import com.behraz.fastermixer.batch.models.MixerMission
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
-import com.behraz.fastermixer.batch.utils.fastermixer.fakeMessages
+import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.Event
-import com.behraz.fastermixer.batch.utils.general.launchApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
@@ -32,16 +32,37 @@ class MixerActivityViewModel : ViewModel() {
 
     val mixerLocation = MutableLiveData<CircleFence?>()
 
-
+    val newMissionEvent = MutableLiveData<Event<MixerMission>>()
+    val getMissionError = MutableLiveData<Event<String>>()
     private val getMixerMissionEvent = MutableLiveData(Event(Unit))
-    val mixerMission = Transformations.switchMap(getMixerMissionEvent) {
-        isGetMessageRequestActive = true
-        RemoteRepo.getMixerMission().map {
-            isGetMixerMissionsRequestActive = false
-            it
-        }
+    private val getMissionResponse = Transformations.switchMap(getMixerMissionEvent) {
+        RemoteRepo.getMixerMission()
     }
 
+    init {
+        getMissionResponse.observeForever {
+            println("debux: `newMission` Come")
+            if (it != null) {
+                if (it.isSucceed) {
+                    //Check if serverMission is a new Mission or Already submitted
+                    val serverMission = it.entity
+                    if (serverMission != null) { //NewMission
+                        val currentMission = newMissionEvent.value?.peekContent()
+                        if (serverMission.missionId != currentMission?.missionId) { //serverMission is a NewMission
+                            newMissionEvent.value = Event(serverMission)
+                        }
+                    } else { //NoMission
+                        if (newMissionEvent.value?.peekContent() !== MixerMission.NoMission)
+                            newMissionEvent.value = Event(MixerMission.NoMission)
+                    }
+                } else {
+                    getMissionError.value = Event(it.message)  //TODO?
+                }
+            } else {
+                getMissionError.value = Event(Constants.SERVER_ERROR) //TODO?
+            }
+        }
+    }
 
     private val getMessageEvent = MutableLiveData<Event<Unit>>()
     val messages = Transformations.switchMap(getMessageEvent) {

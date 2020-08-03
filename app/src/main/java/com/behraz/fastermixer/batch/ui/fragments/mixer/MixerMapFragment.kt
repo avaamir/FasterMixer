@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.behraz.fastermixer.batch.models.MixerMission
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.fragments.BaseMapFragment
 import com.behraz.fastermixer.batch.ui.osm.DestMarker
@@ -14,20 +15,35 @@ import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.MixerActivityViewModel
 import com.behraz.fastermixer.batch.viewmodels.MixerMapFragmentViewModel
+import org.osmdroid.events.MapListener
+import org.osmdroid.events.ScrollEvent
+import org.osmdroid.events.ZoomEvent
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polyline
 
 class MixerMapFragment : BaseMapFragment() {
 
-    private var isFirstTime = true
-    override val myLocation: GeoPoint
-        get() = mapViewModel.myLocation
-
-
-    private var destMarker: DestMarker? = null
+    private var shouldCameraTrackMixer =
+        true //age map ro scroll kard dg track nakone ama age dokme myLocation ro zad trackesh bokone
+    private val destMarker: DestMarker by lazy {
+        DestMarker(mBinding.map, 42, 42).also {
+            addMarkerToMap(
+                it,
+                it.position,
+                "مقصد"
+            )
+        }
+    }
     private lateinit var mapViewModel: MixerMapFragmentViewModel
     private lateinit var mixerActivityViewModel: MixerActivityViewModel
 
+
+    override val myLocation: GeoPoint
+        get() = mapViewModel.myLocation
+
+    override fun onBtnMyLocationClicked() {
+        shouldCameraTrackMixer = true
+    }
 
     private var routePolyline: Polyline? = null
 
@@ -67,45 +83,62 @@ class MixerMapFragment : BaseMapFragment() {
 
     override fun initViews() {
         super.initViews()
+        mBinding.map.addMapListener(object : MapListener {
+            override fun onScroll(event: ScrollEvent): Boolean {
+                event.run {
+                    if (x != 0 || y != 0)
+                        shouldCameraTrackMixer = false
+                }
+                return false
+            }
+
+            override fun onZoom(event: ZoomEvent): Boolean {
+                return false
+            }
+        })
+
     }
 
 
     private fun subscribeObservers() {
-        mixerActivityViewModel.mixerMission.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                if (it.isSucceed) {
-                    it.entity?.destLocation?.let { _destCircleFence ->
-                        mapViewModel.getRoute(
-                            listOf(
-                                mapViewModel.myLocation,
-                                _destCircleFence.center
-                            )
-                        )
-                        if (destMarker == null) { //age avalin masir yabi bud
-                            addMarkerToMap(
-                                DestMarker(mBinding.map, 42, 42).also { _destMarker ->
-                                    destMarker = _destMarker
-                                }, _destCircleFence.center, "مقصد ${it.entity.conditionTitle}"
-                            )
-                        } else { //age ghablan track dar naghshe keshide shode bud
-                            destMarker!!.position = _destCircleFence.center
-                            routePolyline?.let { _routes ->
-                                mBinding.map.overlayManager.remove(_routes)
-                                routePolyline = null
-                            }
-                        }
+        mixerActivityViewModel.newMissionEvent.observe(viewLifecycleOwner, Observer { event ->
+            event.getEventIfNotHandled()?.let { mission ->
+                println("debux: `newMissionEvent` Handled")
+                if (mission === MixerMission.NoMission) {
+                    println("debux: `newMissionEvent` NoMission")
+                    mBinding.map.overlayManager.remove(destMarker)
+                    toast("شما ماموریت دیگری ندارید")
+                } else {
+                    println("debux: `newMissionEvent` NewMission")
+                    //age ghablan track dar naghshe keshide shode bud
+                    destMarker.position = mission.destLocation.center
+                    destMarker.title = "مقصد ${mission.conditionTitle}"
+                    routePolyline?.let { _routes ->
+                        mBinding.map.overlayManager.remove(_routes)
+                        routePolyline = null
                     }
+                    println("debux: getRouteCalled")
+                    mapViewModel.getRoute(
+                        listOf(
+                            mapViewModel.myLocation,
+                            mission.destLocation.center
+                        )
+                    )
                 }
             }
         })
 
+        mixerActivityViewModel.getMissionError.observe(viewLifecycleOwner, Observer { event ->
+            event.getEventIfNotHandled()?.let {
+                toast(it)
+            }
+        })
 
         mixerActivityViewModel.mixerLocation.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 mapViewModel.myLocation = it.center
                 userMarker.position = it.center
-                if (isFirstTime) {
-                    isFirstTime = false
+                if (shouldCameraTrackMixer) {
                     moveCamera(it.center)
                 }
             }
@@ -113,7 +146,9 @@ class MixerMapFragment : BaseMapFragment() {
 
         mapViewModel.getRouteResponse.observe(viewLifecycleOwner, Observer {
             if (it != null) {
+                println("debux: getRouteResponse Came")
                 if (it.isSuccessful) {
+                    println("debux: getRouteResponse isSuccessful")
                     routePolyline?.let { mBinding.map.overlayManager.remove(routePolyline) }
                     routePolyline = drawPolyline(it.getRoutePoints())
                 } else {

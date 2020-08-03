@@ -31,6 +31,7 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
     MyOSMMapView.OnMapClickListener {
 
     abstract val myLocation: GeoPoint
+    abstract fun onBtnMyLocationClicked()
 
     private var btnMyLocationId: Int =
         0 //btnMylocation Mitune tu activity bashe niaz hast refrencesh ro dashte bashim age tu activity hast
@@ -80,6 +81,7 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
                 interpolator = LinearInterpolator()
                 duration = 500
                 rotationBy(360f)
+                onBtnMyLocationClicked()
             }.start()
         }
     }

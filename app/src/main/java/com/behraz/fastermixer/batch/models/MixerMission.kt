@@ -5,15 +5,20 @@ import com.google.gson.annotations.SerializedName
 
 data class MixerMission(
     @SerializedName("destLocation")
-    private val _destLocation: String?,
+    private val _destLocation: String,
     @SerializedName("conditionTitle")
-    val conditionTitle: String?,
+    val conditionTitle: String,
     @SerializedName("missionID")
-    val missionId: String?,
+    val missionId: String,
     @SerializedName("startMissionTime")
     val startMissionTime: String?,
     @SerializedName("endMissionTime")
     val endMissionTime: String?
 ) {
-    val destLocation: CircleFence? get() = if (_destLocation != null) CircleFence.circleFenceToCenterGeoPoint(_destLocation) else null
+
+    companion object {
+        val NoMission = MixerMission("In Ro Dorost KON", "", "0", null, null)
+    }
+
+    val destLocation: CircleFence get() = CircleFence.circleFenceToCenterGeoPoint(_destLocation)
 }
