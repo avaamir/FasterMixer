@@ -7,7 +7,6 @@ import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.MixerMission
 import com.behraz.fastermixer.batch.models.requests.CircleFence
-import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants

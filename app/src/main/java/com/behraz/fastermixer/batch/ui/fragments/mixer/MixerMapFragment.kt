@@ -23,8 +23,7 @@ import org.osmdroid.views.overlay.Polyline
 
 class MixerMapFragment : BaseMapFragment() {
 
-    private var shouldCameraTrackMixer =
-        true //age map ro scroll kard dg track nakone ama age dokme myLocation ro zad trackesh bokone
+    private var shouldCameraTrackMixer = true //age map ro scroll kard dg track nakone ama age dokme myLocation ro zad trackesh bokone
     private val destMarker: DestMarker by lazy {
         DestMarker(mBinding.map, 42, 42).also {
             addMarkerToMap(
@@ -32,6 +31,10 @@ class MixerMapFragment : BaseMapFragment() {
                 it.position,
                 "مقصد"
             )
+            it.setOnMarkerClickListener { marker, mapView ->
+                shouldCameraTrackMixer = true
+                false
+            }
         }
     }
     private lateinit var mapViewModel: MixerMapFragmentViewModel
