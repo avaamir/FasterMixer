@@ -21,7 +21,7 @@
                 android:thicknessRatio="64"
                 android:innerRadiusRatio="2.5"
                 android:useLevel="true">
-                <solid android:color="@color/primary_dark" />
+                <solid android:color="@color/btn_yellow" />
             </shape>
         </rotate>
     </item>

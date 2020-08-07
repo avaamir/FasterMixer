@@ -80,7 +80,7 @@ class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Intera
                     startActivity(Intent(this, BatchActivity::class.java))
                     finish()
                 } else {
-
+                    //TODO
                 }
             } else {
                 snack(Constants.SERVER_ERROR) {

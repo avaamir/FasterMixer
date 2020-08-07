@@ -62,10 +62,10 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         setContentView(R.layout.activity_login)
 
 
-        if (false) {
-            startActivity(Intent(this, MixerActivity::class.java))
-            finish()
-            return
+        if (true) {
+            startActivity(Intent(this, TestActivity::class.java))
+           // finish()
+            //return
         }
 
 
@@ -78,6 +78,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         }
         subscribeNetworkStateChangeListener {
             ivInternet.setImageResource(if (it) R.drawable.ic_check else R.drawable.ic_error)
+
         }
 
 
