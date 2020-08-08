@@ -35,6 +35,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
     PermissionHelper.Interactions,
     ApiService.InternetConnectionListener, AppUpdater.Interactions {
 
+    private var isDownloadUpdateFinished = false
     private lateinit var dialog: MyProgressDialog
 
     companion object {
@@ -93,6 +94,14 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
 
 
         permissionHelper.checkPermission()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isDownloadUpdateFinished) {
+            toast("باید بروزرسانی کنید")
+            finish()
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -427,6 +436,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
     override fun onProgressUpdate(progress: Int) {
         dialog.setProgress(progress)
         if (progress == 100) {
+            isDownloadUpdateFinished = true
             dialog.dismiss()
         }
     }
