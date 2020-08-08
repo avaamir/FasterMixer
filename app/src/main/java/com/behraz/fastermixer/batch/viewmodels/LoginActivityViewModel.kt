@@ -4,20 +4,35 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
+import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.models.requests.behraz.LoginRequest
+import com.behraz.fastermixer.batch.models.requests.behraz.UpdateResponse
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.utils.general.Event
 
 class LoginActivityViewModel : ViewModel() {
 
+    var isInDownloadProgress = false
+
     private var isCheckedForUpdatesRequestActive = false
+
+    private var updateEvent: Event<Entity<UpdateResponse>> =
+        Event(Entity(UpdateResponse.NoResponse, false, null))
 
     private val updateRequestEvent = MutableLiveData<Event<Unit>>()
     val checkUpdateResponse = Transformations.switchMap(updateRequestEvent) {
         isCheckedForUpdatesRequestActive = true
         RemoteRepo.checkUpdates().map {
-            isCheckedForUpdatesRequestActive = false
-            it
+            if (it?.isSucceed == false) {
+                isCheckedForUpdatesRequestActive = false
+            }
+
+            if (it != null) {
+                if (!updateEvent.peekContent().isSucceed) {
+                    updateEvent = Event(it)
+                }
+            }
+            updateEvent
         }
     }
 
@@ -40,5 +55,4 @@ class LoginActivityViewModel : ViewModel() {
     fun checkUpdates() {
         updateRequestEvent.value = Event(Unit)
     }
-
 }

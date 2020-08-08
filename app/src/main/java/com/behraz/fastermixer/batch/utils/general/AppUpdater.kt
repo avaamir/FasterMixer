@@ -1,4 +1,4 @@
-package com.behraz.fastermixer.batch
+package com.behraz.fastermixer.batch.utils.general
 
 import android.app.Activity
 import android.content.Context
@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import androidx.core.content.FileProvider
+import com.behraz.fastermixer.batch.BuildConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -20,37 +21,13 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-class AppUpdater private constructor(
-    private val context: Context,
+class AppUpdater(
+    private val activity: Activity,
     private val link: String,
     downloadLocation: String,
     private val newVersionCode: Long,
     private val interactions: Interactions
 ) {
-
-    companion object {
-        private lateinit var instance: AppUpdater
-        @Synchronized
-        fun getInstance(
-            context: Activity,
-            link: String,
-            downloadLocation: String,
-            newVersionCode: Long,
-            interactions: Interactions
-        ): AppUpdater {
-            if (!::instance.isInitialized) {
-                instance = AppUpdater(
-                    context.applicationContext,
-                    link,
-                    downloadLocation,
-                    newVersionCode,
-                    interactions
-                )
-            }
-            return instance
-        }
-    }
-
 
     private val downloadLocationFile = File(downloadLocation)
 
@@ -89,8 +66,8 @@ class AppUpdater private constructor(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 val downloadedApk =
                     FileProvider.getUriForFile(
-                        context,
-                        context.applicationContext.packageName + ".provider",
+                        activity,
+                        activity.applicationContext.packageName + ".provider",
                         downloadLocationFile
                     )
                 //intent.setData(downloadedApk)
@@ -100,7 +77,7 @@ class AppUpdater private constructor(
                 intent.setDataAndType(Uri.fromFile(downloadLocationFile), type)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             }
-            context.startActivity(intent)
+            activity.startActivity(intent)
         } else {
             interactions.onDownloadCancelled("فایل مورد نظر یافت نشد")
         }
@@ -108,8 +85,9 @@ class AppUpdater private constructor(
 
     private fun checkIsDownloadedAndVersionCode(): Long {
         if (downloadLocationFile.exists()) {
-            val pm: PackageManager = context.packageManager
-            pm.getPackageArchiveInfo(downloadLocationFile.absolutePath, 0)!!.let { info ->
+            val pm: PackageManager = activity.packageManager
+            val info = pm.getPackageArchiveInfo(downloadLocationFile.absolutePath, 0)
+            if (info != null) {
                 return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     println("debug:download:VersionCode : " + info.longVersionCode + ", VersionName : " + info.versionName)
                     info.longVersionCode
@@ -117,10 +95,12 @@ class AppUpdater private constructor(
                     println("debug:download:VersionCode : " + info.versionCode + ", VersionName : " + info.versionName)
                     info.versionCode.toLong()
                 }
+            } else {
+                downloadLocationFile.delete()
             }
-        } else {
-            return -1
         }
+        return -1
+
     }
 
     private suspend fun download() {
@@ -130,7 +110,7 @@ class AppUpdater private constructor(
 
             // take CPU lock to prevent CPU from going off if the user
             // presses the power button during download
-            val wl = (context.getSystemService(Context.POWER_SERVICE) as PowerManager).newWakeLock(
+            val wl = (activity.getSystemService(Context.POWER_SERVICE) as PowerManager).newWakeLock(
                 PowerManager.PARTIAL_WAKE_LOCK,
                 javaClass.name
             )

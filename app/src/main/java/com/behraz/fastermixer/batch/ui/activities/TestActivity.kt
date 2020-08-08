@@ -8,7 +8,7 @@ import android.os.BatteryManager
 import android.os.Bundle
 import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
-import com.behraz.fastermixer.batch.AppUpdater
+import com.behraz.fastermixer.batch.utils.general.AppUpdater
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.CircleFence
@@ -29,7 +29,11 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener, MixerAdapter.Interaction, AppUpdater.Interactions {
 
 
-    private lateinit var dialog: MyProgressDialog
+    private val dialog: MyProgressDialog by lazy {
+        MyProgressDialog(this, R.style.my_dialog_animation, true).also {
+            it.show()
+        }
+    }
 
     private var googleApiClient: GoogleApiClient? = null
 
@@ -159,14 +163,14 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
     private fun initViews() {
         btnLogin.setOnClickListener {
-            println("debug: $cacheDir")
+            println("debug: $cacheDir")/*
             AppUpdater.getInstance(
                 this,
                 "https://raw.githubusercontent.com/avaamir/FasterMixer/master/app/release/app-release.apk",
                 "$cacheDir/FasterMixer.apk",
                 1L,
                 this
-            ).startIfNeeded()
+            ).startIfNeeded()*/
         }
 
         btnInstall.setOnClickListener {
@@ -333,8 +337,6 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
     }
 
     override fun onDownloadStarted() {
-        dialog = MyProgressDialog(this, R.style.my_dialog_animation, true)
-        dialog.show()
     }
 
     override fun onProgressUpdate(progress: Int) {

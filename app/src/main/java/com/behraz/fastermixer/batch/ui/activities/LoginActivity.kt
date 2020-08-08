@@ -12,10 +12,10 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.behraz.fastermixer.batch.AppUpdater
 import com.behraz.fastermixer.batch.BuildConfig
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.models.enums.UserType
+import com.behraz.fastermixer.batch.models.requests.behraz.UpdateResponse
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.activities.admin.AdminActivity
 import com.behraz.fastermixer.batch.ui.activities.batch.BatchActivity
@@ -23,7 +23,6 @@ import com.behraz.fastermixer.batch.ui.activities.mixer.MixerActivity
 import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.NumericKeyboard
 import com.behraz.fastermixer.batch.ui.dialogs.LocationPermissionDialog
-import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.*
@@ -33,10 +32,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
     PermissionHelper.Interactions,
-    ApiService.InternetConnectionListener, AppUpdater.Interactions {
-
-    private var isDownloadUpdateFinished = false
-    private lateinit var dialog: MyProgressDialog
+    ApiService.InternetConnectionListener{
 
     companion object {
         private const val REQ_GO_TO_SETTINGS_PERMISSION = 12
@@ -96,13 +92,6 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         permissionHelper.checkPermission()
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (isDownloadUpdateFinished) {
-            toast("باید بروزرسانی کنید")
-            finish()
-        }
-    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -231,26 +220,24 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
 
 
     private fun subscribeObservers() {
-        viewModel.checkUpdateResponse.observe(this, Observer {
-            if (it != null) {
-                if (it.isSucceed) {
-                    if (it.entity!!.version > BuildConfig.VERSION_CODE) {
-                        alert(
-                            "بروزرسانی",
-                            "نسخه جدیدی از برنامه موجود میباشد. برای ادامه کار نیاز به بروزرسانی دارید. آیا ادامه میدهید؟",
-                            "ادامه",
-                            "خروج",
-                            false,
-                            { finish() }
-                        ) {
-                            AppUpdater.getInstance(
-                                this,
-                                it.entity.link,
-                                "$cacheDir/FasterMixer.apk",
-                                it.entity.version,
-                                this
-                            ).startIfNeeded()
+        viewModel.checkUpdateResponse.observe(this, Observer { event ->
+            event.getEventIfNotHandled()?.let {
+                if (it.entity !== UpdateResponse.NoResponse) {
+                    if (it.isSucceed) {
+                        if (it.entity!!.version > BuildConfig.VERSION_CODE) {
+                            startActivity(Intent(this, UpdateActivity::class.java).also { intent ->
+                                intent.putParcelableExtra(
+                                    Constants.INTENT_UPDATE_ACTIVITY_UPDATE_RESPONSE,
+                                    it.entity
+                                )
+                            })
+                            finish()
                         }
+                    } else {
+                        if (ApiService.isNetworkAvailable()) {
+                            viewModel.checkUpdates()
+                        }
+                        //TODO show proper message
                     }
                 } else {
                     if (ApiService.isNetworkAvailable()) {
@@ -258,11 +245,6 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
                     }
                     //TODO show proper message
                 }
-            } else {
-                if (ApiService.isNetworkAvailable()) {
-                    viewModel.checkUpdates()
-                }
-                //TODO show proper message
             }
         })
 
@@ -426,24 +408,6 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
                 etPassword.id -> numericKeyboard?.setState(NumericKeyboard.State.Password)
             }
         }
-    }
-
-    override fun onDownloadStarted() {
-        dialog = MyProgressDialog(this, R.style.my_dialog_animation, true)
-        dialog.show()
-    }
-
-    override fun onProgressUpdate(progress: Int) {
-        dialog.setProgress(progress)
-        if (progress == 100) {
-            isDownloadUpdateFinished = true
-            dialog.dismiss()
-        }
-    }
-
-    override fun onDownloadCancelled(message: String) {
-        dialog.dismiss()
-        toast(message, true)
     }
 
 

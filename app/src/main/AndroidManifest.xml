@@ -29,7 +29,8 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.activities.mixer.MixerActivity"></activity>
+        <activity android:name=".ui.activities.UpdateActivity"></activity>
+        <activity android:name=".ui.activities.mixer.MixerActivity" />
         <activity
             android:name=".ui.activities.admin.AdminActivity"
             android:screenOrientation="portrait" />
@@ -54,7 +55,6 @@
             </intent-filter>
         </activity>
 
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -62,9 +62,8 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
-
     </application>
 
 </manifest>
