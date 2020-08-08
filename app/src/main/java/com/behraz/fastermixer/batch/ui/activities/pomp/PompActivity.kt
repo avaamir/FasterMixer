@@ -40,7 +40,6 @@ import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.activity_batch.*
 import kotlinx.android.synthetic.main.activity_batch.tvMessageCount
 import kotlinx.android.synthetic.main.activity_pomp.*
 
