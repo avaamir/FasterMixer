@@ -12,6 +12,8 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.behraz.fastermixer.batch.AppUpdater
+import com.behraz.fastermixer.batch.BuildConfig
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.models.enums.UserType
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
@@ -21,6 +23,7 @@ import com.behraz.fastermixer.batch.ui.activities.mixer.MixerActivity
 import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.NumericKeyboard
 import com.behraz.fastermixer.batch.ui.dialogs.LocationPermissionDialog
+import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.*
@@ -30,8 +33,9 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
     PermissionHelper.Interactions,
-    ApiService.InternetConnectionListener {
+    ApiService.InternetConnectionListener, AppUpdater.Interactions {
 
+    private lateinit var dialog: MyProgressDialog
 
     companion object {
         private const val REQ_GO_TO_SETTINGS_PERMISSION = 12
@@ -62,23 +66,25 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         setContentView(R.layout.activity_login)
 
 
-        if (true) {
+        if (false) {
             startActivity(Intent(this, TestActivity::class.java))
-           // finish()
-            //return
+            finish()
+            return
         }
 
 
         viewModel = ViewModelProvider(this).get(LoginActivityViewModel::class.java)
         initViews()
-        observeViewModel()
+        subscribeObservers()
 
         subscribeGpsStateChangeListener {
             ivGPS.setImageResource(if (it) R.drawable.ic_check else R.drawable.ic_error)
         }
         subscribeNetworkStateChangeListener {
             ivInternet.setImageResource(if (it) R.drawable.ic_check else R.drawable.ic_error)
-
+            if (it && permissionHelper.arePermissionsGranted()) {
+                viewModel.checkUpdates()
+            }
         }
 
 
@@ -215,7 +221,42 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
     }
 
 
-    private fun observeViewModel() {
+    private fun subscribeObservers() {
+        viewModel.checkUpdateResponse.observe(this, Observer {
+            if (it != null) {
+                if (it.isSucceed) {
+                    if (it.entity!!.version > BuildConfig.VERSION_CODE) {
+                        alert(
+                            "بروزرسانی",
+                            "نسخه جدیدی از برنامه موجود میباشد. برای ادامه کار نیاز به بروزرسانی دارید. آیا ادامه میدهید؟",
+                            "ادامه",
+                            "خروج",
+                            false,
+                            { finish() }
+                        ) {
+                            AppUpdater.getInstance(
+                                this,
+                                it.entity.link,
+                                "$cacheDir/FasterMixer.apk",
+                                it.entity.version,
+                                this
+                            ).startIfNeeded()
+                        }
+                    }
+                } else {
+                    if (ApiService.isNetworkAvailable()) {
+                        viewModel.checkUpdates()
+                    }
+                    //TODO show proper message
+                }
+            } else {
+                if (ApiService.isNetworkAvailable()) {
+                    viewModel.checkUpdates()
+                }
+                //TODO show proper message
+            }
+        })
+
         viewModel.loginResponse.observe(this, Observer { event ->
             if (!event.hasBeenHandled) {
                 event.getEventIfNotHandled().let {
@@ -240,7 +281,12 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
                                             PompActivity::class.java
                                         )
                                     )
-                                    UserType.Mixer -> startActivity(Intent(this, MixerActivity::class.java))
+                                    UserType.Mixer -> startActivity(
+                                        Intent(
+                                            this,
+                                            MixerActivity::class.java
+                                        )
+                                    )
                                     UserType.Batch -> startActivity(
                                         Intent(
                                             this,
@@ -346,6 +392,11 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
 
     }
 
+    override fun onPermissionsGranted() {
+        if (ApiService.isNetworkAvailable())
+            viewModel.checkUpdates()
+    }
+
     override fun onPermissionDenied(deniedPermissions: ArrayList<String>) {
         deniedPermissions.forEach { println("debug: $it denied") }
         toast("اجازه دسترسی داده نشد")
@@ -367,4 +418,23 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
             }
         }
     }
+
+    override fun onDownloadStarted() {
+        dialog = MyProgressDialog(this, R.style.my_dialog_animation, true)
+        dialog.show()
+    }
+
+    override fun onProgressUpdate(progress: Int) {
+        dialog.setProgress(progress)
+        if (progress == 100) {
+            dialog.dismiss()
+        }
+    }
+
+    override fun onDownloadCancelled(message: String) {
+        dialog.dismiss()
+        toast(message, true)
+    }
+
+
 }

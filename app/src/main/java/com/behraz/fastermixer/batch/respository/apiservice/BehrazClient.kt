@@ -58,7 +58,7 @@ interface BehrazClient {
     @POST("Vehicle/GetMission")
     suspend fun getMixerMission(): Response<Entity<MixerMission>>
 
-   // @POST("")
-   // suspend fun hasUpdate(): Response<>
+    @POST("AppVersion/FindLastAppVersion")
+    suspend fun checkUpdates(): Response<Entity<UpdateResponse>>
 
 }

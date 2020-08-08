@@ -205,4 +205,6 @@ object RemoteRepo {
         }
     }
 
+    fun checkUpdates()= apiReq(ApiService.client::checkUpdates)
+
 }

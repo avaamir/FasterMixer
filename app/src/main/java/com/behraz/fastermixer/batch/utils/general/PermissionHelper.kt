@@ -30,6 +30,8 @@ class PermissionHelper(
 
         /**navigate user to settings**/
         fun onDeniedWithNeverAskAgain(permission: String)
+
+        fun onPermissionsGranted()
     }
 
 
@@ -85,9 +87,24 @@ class PermissionHelper(
             }
             if (deniedPermissions.isNotEmpty()) {
                 interactions.onPermissionDenied(deniedPermissions)
+            } else {
+                interactions.onPermissionsGranted()
             }
 
         }
+    }
+
+    fun arePermissionsGranted(): Boolean {
+        for (permission in permissions) {
+            if (ContextCompat.checkSelfPermission(
+                    activity,
+                    permission
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return false
+            }
+        }
+        return true
     }
 
 }

@@ -160,7 +160,7 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
     private fun initViews() {
         btnLogin.setOnClickListener {
             println("debug: $cacheDir")
-            AppUpdater(
+            AppUpdater.getInstance(
                 this,
                 "https://raw.githubusercontent.com/avaamir/FasterMixer/master/app/release/app-release.apk",
                 "$cacheDir/FasterMixer.apk",
@@ -339,7 +339,7 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
     override fun onProgressUpdate(progress: Int) {
         dialog.setProgress(progress)
-        if(progress == 100) {
+        if (progress == 100) {
             dialog.dismiss()
         }
     }
