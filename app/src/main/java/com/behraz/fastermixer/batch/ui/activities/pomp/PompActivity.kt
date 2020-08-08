@@ -41,6 +41,8 @@ import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_batch.*
+import kotlinx.android.synthetic.main.activity_batch.tvMessageCount
+import kotlinx.android.synthetic.main.activity_pomp.*
 
 
 class PompActivity : AppCompatActivity(),
@@ -370,12 +372,17 @@ class PompActivity : AppCompatActivity(),
     }
 
     override fun onMessageClicked() {
+        mBinding.btnArrow.visibility = View.INVISIBLE
+        if (topSheetBehavior.state == TopSheetBehavior.STATE_EXPANDED)
+            btnArrow.callOnClick()
+
         supportFragmentManager.beginTransaction().apply {
             add(
                 R.id.mapContainer,
                 MessageListFragment(),
                 FRAGMENT_MESSAGE_LIST_TAG
             )
+            addToBackStack(FRAGMENT_MESSAGE_LIST_TAG)
             commit()
         }
     }
