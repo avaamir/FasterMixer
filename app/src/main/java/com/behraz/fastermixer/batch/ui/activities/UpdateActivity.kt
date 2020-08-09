@@ -77,4 +77,11 @@ class UpdateActivity : AppCompatActivity(), AppUpdater.Interactions {
         dialog.dismiss()
         toast(message, true)
     }
+
+    override fun onServerError(serverCode: Int) {
+        println("debug: UI : Server error")
+        dialog.dismiss()
+        toast("متاسفانه خطایی در سرور پیش آمده است. لطفا دقایقی دیگر تلاش کنید")
+        finish()
+    }
 }

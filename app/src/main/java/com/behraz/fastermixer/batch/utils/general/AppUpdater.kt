@@ -33,26 +33,26 @@ class AppUpdater(
 
     fun startIfNeeded() {
         if (newVersionCode > BuildConfig.VERSION_CODE) {
-            CoroutineScope(IO).launch {
+            //    CoroutineScope(IO).launch {
+            Thread {
                 val apkFileVersionCode = checkIsDownloadedAndVersionCode()
                 if (apkFileVersionCode == -1L) { //not downloaded
                     CoroutineScope(Main).launch { interactions.onDownloadStarted() }
                     println("debug:download and install, No Download Available")
-                    download()
-                    install()
+                    downloadAndInstall()
                 } else {
                     if (newVersionCode > apkFileVersionCode) {
                         println("debug:delete download and install -> newVersionCode:$newVersionCode , lastDownloadVersionCode:$apkFileVersionCode")
                         CoroutineScope(Main).launch { interactions.onDownloadStarted() }
                         downloadLocationFile.delete()
-                        download()
-                        install()
+                        downloadAndInstall()
                     } else {
                         println("debug:just install  -> newVersionCode:$newVersionCode , lastDownloadVersionCode:$apkFileVersionCode")
                         install()
                     }
                 }
-            }
+            }.start()
+            //    }
         } else {
             println("debug: no install needed -> newVersionCode:$newVersionCode , currentVersionCode:${BuildConfig.VERSION_CODE}")
         }
@@ -79,7 +79,7 @@ class AppUpdater(
             }
             activity.startActivity(intent)
         } else {
-            interactions.onDownloadCancelled("فایل مورد نظر یافت نشد")
+            CoroutineScope(Main).launch { interactions.onDownloadCancelled("فایل مورد نظر یافت نشد") }
         }
     }
 
@@ -103,79 +103,80 @@ class AppUpdater(
 
     }
 
-    private suspend fun download() {
-        withContext(IO) {
-            // take CPU lock to prevent CPU from going off if the user
-            // presses the power button during download
+    private fun downloadAndInstall() {
+        //   withContext(IO) {
+        // take CPU lock to prevent CPU from going off if the user
+        // presses the power button during download
 
-            // take CPU lock to prevent CPU from going off if the user
-            // presses the power button during download
-            val wl = (activity.getSystemService(Context.POWER_SERVICE) as PowerManager).newWakeLock(
-                PowerManager.PARTIAL_WAKE_LOCK,
-                javaClass.name
-            )
-            wl.acquire(10 * 60 * 1000L /*10 minutes*/)
+        // take CPU lock to prevent CPU from going off if the user
+        // presses the power button during download
+        val wl = (activity.getSystemService(Context.POWER_SERVICE) as PowerManager).newWakeLock(
+            PowerManager.PARTIAL_WAKE_LOCK,
+            javaClass.name
+        )
+        wl.acquire(10 * 60 * 1000L /*10 minutes*/)
 
 
-            var input: InputStream? = null
-            var output: FileOutputStream? = null
-            var connection: HttpURLConnection? = null
-            try {
-                val url =
-                    URL(link)
-                connection = url.openConnection() as HttpURLConnection
-                connection.connect()
+        var input: InputStream? = null
+        var output: FileOutputStream? = null
+        var connection: HttpURLConnection? = null
+        try {
+            val url = URL(link)
+            connection = url.openConnection() as HttpURLConnection
+            connection.connect()
 
-                if (connection.responseCode != HttpURLConnection.HTTP_OK) {
-                    CoroutineScope(Main).launch {
-                        interactions.onDownloadCancelled(connection.responseMessage)
-                    }
-                    println("debug: Download: Server returns response code ${connection.responseCode} :${connection.responseMessage}")
-                } else {
-                    val fileLength =
-                        connection.contentLength //if server don't report the length it will return -1
-                    input = connection.inputStream
-                    output = FileOutputStream(downloadLocationFile)
-
-                    val data = ByteArray(4096)
-                    var total = 0L
-
-                    while (true) {
-                        val count = input.read(data)
-                        if (count == -1)
-                            break
-                        total += count
-                        if (fileLength > 0) {
-                            val percentage = (total * 100 / fileLength).toInt()
-                            println("debug: Download: $percentage")
-                            CoroutineScope(Main).launch {
-                                interactions.onProgressUpdate(percentage)
-                            }
-                        }
-                        output.write(data, 0, count)
-                    }
-                    CoroutineScope(Main).launch {
-                        interactions.onProgressUpdate(100)
-                    }
-                }
-            } catch (ex: IOException) {
-                println("debug: ${ex.message}")
+            if (connection.responseCode != HttpURLConnection.HTTP_OK) {
                 CoroutineScope(Main).launch {
-                    interactions.onDownloadCancelled(ex.message ?: "")
+                    interactions.onServerError(connection.responseCode)
                 }
-            } finally {
-                input?.close()
-                output?.close()
-                connection?.disconnect()
-                wl.release()
+                println("debug: Download: Server returns response code ${connection.responseCode} :${connection.responseMessage}")
+            } else {
+                val fileLength =
+                    connection.contentLength //if server don't report the length it will return -1
+                input = connection.inputStream
+                output = FileOutputStream(downloadLocationFile)
+
+                val data = ByteArray(4096)
+                var total = 0L
+
+                while (true) {
+                    val count = input.read(data)
+                    if (count == -1)
+                        break
+                    total += count
+                    if (fileLength > 0) {
+                        val percentage = (total * 100 / fileLength).toInt()
+                        println("debug: Download: $percentage")
+                        CoroutineScope(Main).launch {
+                            interactions.onProgressUpdate(percentage)
+                        }
+                    }
+                    output.write(data, 0, count)
+                }
+                CoroutineScope(Main).launch {
+                    interactions.onProgressUpdate(100)
+                    install()
+                }
             }
+        } catch (ex: IOException) {
+            println("debug: ${ex.message}")
+            CoroutineScope(Main).launch {
+                interactions.onDownloadCancelled(ex.message ?: "")
+            }
+        } finally {
+            input?.close()
+            output?.close()
+            connection?.disconnect()
+            wl.release()
         }
+        //}
     }
 
     interface Interactions {
         fun onDownloadStarted()
         fun onProgressUpdate(progress: Int)
         fun onDownloadCancelled(message: String)
+        fun onServerError(serverCode: Int)
     }
 
 }

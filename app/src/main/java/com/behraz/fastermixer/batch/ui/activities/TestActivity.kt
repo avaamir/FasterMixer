@@ -26,7 +26,7 @@ import java.io.File
 
 
 class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
-    GoogleApiClient.OnConnectionFailedListener, MixerAdapter.Interaction, AppUpdater.Interactions {
+    GoogleApiClient.OnConnectionFailedListener, MixerAdapter.Interaction {
 
 
     private val dialog: MyProgressDialog by lazy {
@@ -335,21 +335,5 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
     override fun onEndLoadingClicked(mixer: Mixer) {
         toast("Not yet implemented")
     }
-
-    override fun onDownloadStarted() {
-    }
-
-    override fun onProgressUpdate(progress: Int) {
-        dialog.setProgress(progress)
-        if (progress == 100) {
-            dialog.dismiss()
-        }
-    }
-
-    override fun onDownloadCancelled(message: String) {
-        dialog.dismiss()
-        toast(message, true)
-    }
-
 
 }
