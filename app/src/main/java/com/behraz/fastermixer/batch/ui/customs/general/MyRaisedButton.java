@@ -22,7 +22,6 @@ import com.behraz.fastermixer.batch.R;
 
 
 public class MyRaisedButton extends LinearLayout {
-
     private ConstraintLayout btnFrame;
     private ProgressBar progressBar;
     private TextView tvCaption;
@@ -54,6 +53,7 @@ public class MyRaisedButton extends LinearLayout {
         btnFrame = view.findViewById(R.id.btn_frame);
         progressBar = view.findViewById(R.id.progressbar_btn);
 
+        btnFrame.setOnClickListener(listener);
 
         TypedArray attributes = getContext().obtainStyledAttributes(attrs, R.styleable.MyRaisedButton);
 
@@ -140,6 +140,21 @@ public class MyRaisedButton extends LinearLayout {
             tvCaption.setVisibility(View.GONE);
     }
 
+    @Override
+    public void setBackgroundColor(int color) {
+        btnFrame.setBackgroundColor(color);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        btnFrame.setEnabled(enabled);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return btnFrame.isEnabled();
+    }
+
     public void setText(String text) {
         tvCaption.setText(text);
     }
@@ -147,7 +162,9 @@ public class MyRaisedButton extends LinearLayout {
     @Override
     public void setOnClickListener(@Nullable OnClickListener l) {
         this.listener = l;
-        btnFrame.setOnClickListener(l);
+        if (btnFrame != null)
+            btnFrame.setOnClickListener(l);
     }
+
 
 }

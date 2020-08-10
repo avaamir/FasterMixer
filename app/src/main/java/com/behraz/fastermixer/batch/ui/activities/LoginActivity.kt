@@ -86,7 +86,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
 
 
         //TODO UI Test Purpose
-        imageView5?.setOnClickListener { startActivity(Intent(this, AdminActivity::class.java)) }
+        //imageView5?.setOnClickListener { startActivity(Intent(this, AdminActivity::class.java)) }
 
 
         permissionHelper.checkPermission()
@@ -329,10 +329,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
             etPassword.setText(prefs.getString(Constants.PREF_CREDENTIAL_PASSWORD, ""))
         }
     }
-
-
-    //get permission
-
+    
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQ_GO_TO_SETTINGS_PERMISSION) {

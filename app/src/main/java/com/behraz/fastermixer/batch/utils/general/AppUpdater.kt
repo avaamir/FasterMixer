@@ -10,10 +10,8 @@ import android.os.PowerManager
 import androidx.core.content.FileProvider
 import com.behraz.fastermixer.batch.BuildConfig
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -8,94 +10,10 @@
             type="com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel" />
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.activities.pomp.PompActivity">
-
-
-        <FrameLayout
-            android:id="@+id/mapContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/frame_top"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:behavior_hideable="true"
-            app:layout_behavior=".ui.customs.general.TopSheetBehavior">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <com.behraz.fastermixer.batch.ui.customs.fastermixer.progressview.FasterMixerProgressView
-                    android:id="@+id/jobProgressView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    app:layout_anchorGravity="top"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:background="@color/primary"
-                    tools:layout_height="100dp" />
-
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <FrameLayout
-                        android:id="@+id/frame_customer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <include
-                            android:id="@+id/layout_customer"
-                            layout="@layout/item_customer" />
-
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:id="@+id/frameMixer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone">
-
-                        <include
-                            android:id="@+id/layout_mixer"
-                            layout="@layout/layout_mixer" />
-
-                    </FrameLayout>
-                </FrameLayout>
-
-
-            </LinearLayout>
-
-
-        </androidx.cardview.widget.CardView>
-
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnArrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/standard_margin"
-            android:clickable="true"
-            android:focusable="true"
-            app:backgroundTint="@color/btn_yellow"
-            app:fabSize="mini"
-            app:layout_anchor="@id/frame_top"
-            app:layout_anchorGravity="right|bottom"
-            app:srcCompat="@drawable/ic_arrow_down"
-            app:tint="@color/white" />
 
 
         <androidx.cardview.widget.CardView
@@ -147,76 +65,249 @@
 
         </androidx.cardview.widget.CardView>
 
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/bottomSheet"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="28dp"
-            app:behavior_hideable="true"
-            app:behavior_peekHeight="0dp"
-            app:layout_behavior=".ui.customs.general.LockableBottomSheetBehavior">
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/mapContainer"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/frame_user_buttons"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
-            <com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
-                android:id="@+id/fasterMixerUserPanel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/frame_user_buttons"
+                android:layout_width="120dp"
+                android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:showTopHideBtn="true" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/primary_dark"
+                    android:orientation="vertical">
 
 
-        </androidx.core.widget.NestedScrollView>
+                    <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                        android:id="@+id/btn_map"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        app:backgroundColor="@color/gray500"
+                        app:isFlat="true"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:radius="0dp"
+                        app:text="نقشه"
+                        app:textSize="9sp" />
+
+                    <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                        android:id="@+id/btn_projects"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="2dp"
+                        app:backgroundColor="@color/btn_yellow"
+                        app:isFlat="true"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_map"
+                        app:radius="0dp"
+                        app:text="پروژه ها"
+                        app:textSize="9sp" />
+
+                    <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                        android:id="@+id/btn_mixers"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="2dp"
+                        app:backgroundColor="@color/btn_yellow"
+                        app:isFlat="true"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_projects"
+                        app:radius="0dp"
+                        app:text="میکسر ها"
+                        app:textSize="9sp"  />
+
+                    <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                        android:id="@+id/btn_messages"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="2dp"
+                        app:backgroundColor="@color/btn_yellow"
+                        app:isFlat="true"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_mixers"
+                        app:radius="0dp"
+                        app:text="پیام ها"
+                        app:textSize="9sp"  />
+
+                    <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                        android:id="@+id/btn_voice_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="2dp"
+                        app:backgroundColor="@color/btn_blue"
+                        app:isFlat="true"
+                        app:layout_constraintBottom_toTopOf="@+id/btnLogout"
+                        app:radius="0dp"
+                        app:text="پیام صوتی"
+                        app:textSize="9sp" />
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            app:layout_anchor="@id/bottomSheet"
-            app:layout_anchorGravity="top">
+                    <!--frame hardware state-->
+                    <LinearLayout
+                        android:id="@+id/linearLayout2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:gravity="right"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toTopOf="@+id/myRaisedButton3"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0" >
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnHideUserPanel"
+
+                        <LinearLayout
+                            android:id="@+id/frame_internet"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/standard_margin">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="8dp"
+                                android:fontFamily="@font/iransans"
+                                android:text="اینترنت"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:id="@+id/ivInternet"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/ic_error" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/frame_gps"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/standard_margin">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="8dp"
+                                android:fontFamily="@font/iransans"
+                                android:text="موقعیت مکانی"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:id="@+id/ivGPS"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/ic_error" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/frame_voip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/standard_margin"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="8dp"
+                                android:text="Voip"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:id="@+id/ivVoip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/ic_error" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                        android:id="@+id/btnLogout"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        app:backgroundColor="@color/logout_red"
+                        app:isFlat="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:radius="0dp"
+                        app:text="خروج"
+                        app:textSize="9sp" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:backgroundTint="@color/btn_blue"
-                app:fabSize="mini"
-                app:srcCompat="@drawable/ic_person"
-                app:tint="@color/white" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnWeather"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:backgroundTint="@color/btn_yellow"
-                app:fabSize="mini"
-                app:srcCompat="@drawable/ic_sun"
-                app:tint="@color/white" />
+                android:layout_gravity="bottom"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnMyLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:backgroundTint="@color/btn_blue"
-                app:fabSize="mini"
-                app:srcCompat="@drawable/ic_gps"
-                app:tint="@color/white" />
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnWeather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:backgroundTint="@color/btn_yellow"
+                    app:fabSize="mini"
+                    app:srcCompat="@drawable/ic_sun"
+                    app:tint="@color/white" />
 
-        </LinearLayout>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnMyLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:backgroundTint="@color/btn_blue"
+                    app:fabSize="mini"
+                    app:srcCompat="@drawable/ic_gps"
+                    app:tint="@color/white" />
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
