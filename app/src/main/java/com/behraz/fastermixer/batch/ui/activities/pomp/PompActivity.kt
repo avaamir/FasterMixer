@@ -6,13 +6,11 @@ import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ActivityPompBinding
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
-import com.behraz.fastermixer.batch.ui.animations.startReveal
 import com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog

@@ -3,10 +3,12 @@ package com.behraz.fastermixer.batch.utils.general
 import android.app.Activity
 import android.graphics.Color
 import android.util.TypedValue
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
 
 
@@ -48,7 +50,13 @@ fun Activity.alert(
         }
         .setNegativeButton(negativeButtonText) { _, _ ->
             onNegativeClicked?.invoke()
-        }.show()
+        }.create()
+
+    dialog.window?.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+    dialog.show()
+    dialog.window?.decorView?.systemUiVisibility = window.decorView.systemUiVisibility
+    //Clear the not focusable flag from the window
+    dialog.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
 
 
     val tvMessage = dialog.findViewById<TextView>(android.R.id.message)
