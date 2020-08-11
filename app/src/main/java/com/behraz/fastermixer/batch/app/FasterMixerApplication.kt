@@ -13,6 +13,7 @@ import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
 import com.behraz.fastermixer.batch.respository.sharedprefrence.PrefsRepo
+import com.behraz.fastermixer.batch.ui.activities.ContactActivity
 import com.behraz.fastermixer.batch.ui.activities.LoginActivity
 import com.behraz.fastermixer.batch.ui.activities.TestActivity
 import com.behraz.fastermixer.batch.ui.activities.admin.AdminActivity
@@ -60,7 +61,7 @@ class FasterMixerApplication : Application() {
     private fun registerApiInterceptorsCallbacks() {
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityResumed(activity: Activity) {
-                if (activity !is LoginActivity && activity !is AdminActivity) {
+                if (activity !is LoginActivity && activity !is AdminActivity && activity !is ContactActivity) {
                     activity.fullScreen()
                 }
 
@@ -88,7 +89,7 @@ class FasterMixerApplication : Application() {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
 
 
-                if (activity !is LoginActivity && activity !is TestActivity) {
+                if (activity !is LoginActivity && activity !is TestActivity && activity !is ContactActivity) {
                     if (resources.getBoolean(R.bool.landscape_only)) {
                         activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                     } else {
@@ -101,7 +102,7 @@ class FasterMixerApplication : Application() {
                 }
 
                 activity.hideStatusBar()
-                if (activity !is LoginActivity && activity !is AdminActivity) {
+                if (activity !is LoginActivity && activity !is AdminActivity && activity !is ContactActivity) {
                     activity.fullScreen()
                 }
 

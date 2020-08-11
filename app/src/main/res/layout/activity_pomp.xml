@@ -97,66 +97,71 @@
                     <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
                         android:id="@+id/btn_map"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="0dp"
                         android:layout_gravity="center"
                         app:backgroundColor="@color/gray500"
                         app:isFlat="true"
+                        app:layout_constraintBottom_toTopOf="@+id/btn_projects"
                         app:layout_constraintTop_toTopOf="parent"
                         app:radius="0dp"
                         app:text="نقشه"
-                        app:textSize="9sp" />
+                        app:textSize="@dimen/pomp_menu_btns_font_size" />
 
                     <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
                         android:id="@+id/btn_projects"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="0dp"
                         android:layout_gravity="center"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="@dimen/pomp_menu_btns_top_margin"
                         app:backgroundColor="@color/btn_yellow"
                         app:isFlat="true"
+                        app:layout_constraintBottom_toTopOf="@+id/btn_mixers"
                         app:layout_constraintTop_toBottomOf="@+id/btn_map"
                         app:radius="0dp"
                         app:text="پروژه ها"
-                        app:textSize="9sp" />
+                        app:textSize="@dimen/pomp_menu_btns_font_size" />
 
                     <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
                         android:id="@+id/btn_mixers"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="0dp"
                         android:layout_gravity="center"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="@dimen/pomp_menu_btns_top_margin"
                         app:backgroundColor="@color/btn_yellow"
                         app:isFlat="true"
+                        app:layout_constraintBottom_toTopOf="@+id/btn_messages"
                         app:layout_constraintTop_toBottomOf="@+id/btn_projects"
                         app:radius="0dp"
                         app:text="میکسر ها"
-                        app:textSize="9sp"  />
+                        app:textSize="@dimen/pomp_menu_btns_font_size"/>
 
                     <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
                         android:id="@+id/btn_messages"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="0dp"
                         android:layout_gravity="center"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="@dimen/pomp_menu_btns_top_margin"
                         app:backgroundColor="@color/btn_yellow"
                         app:isFlat="true"
+                        app:layout_constraintBottom_toTopOf="@+id/btn_voice_message"
                         app:layout_constraintTop_toBottomOf="@+id/btn_mixers"
                         app:radius="0dp"
                         app:text="پیام ها"
-                        app:textSize="9sp"  />
+                        app:textSize="@dimen/pomp_menu_btns_font_size" />
 
                     <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
                         android:id="@+id/btn_voice_message"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="0dp"
                         android:layout_gravity="center"
-                        android:layout_marginBottom="2dp"
                         app:backgroundColor="@color/btn_blue"
                         app:isFlat="true"
+                        android:layout_marginTop="@dimen/pomp_menu_btns_top_margin"
                         app:layout_constraintBottom_toTopOf="@+id/btnLogout"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_messages"
                         app:radius="0dp"
                         app:text="پیام صوتی"
-                        app:textSize="9sp" />
+                        app:textSize="@dimen/pomp_menu_btns_font_size" />
 
 
                     <!--frame hardware state-->
@@ -168,9 +173,8 @@
                         android:gravity="right"
                         android:orientation="vertical"
                         android:visibility="gone"
-                        app:layout_constraintBottom_toTopOf="@+id/myRaisedButton3"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="1.0" >
+                        app:layout_constraintHorizontal_bias="1.0">
 
 
                         <LinearLayout
@@ -251,14 +255,16 @@
                     <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
                         android:id="@+id/btnLogout"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="0dp"
                         android:layout_gravity="center"
                         app:backgroundColor="@color/logout_red"
                         app:isFlat="true"
+                        android:layout_marginTop="@dimen/pomp_menu_btns_top_margin"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_voice_message"
                         app:radius="0dp"
                         app:text="خروج"
-                        app:textSize="9sp" />
+                        app:textSize="@dimen/pomp_menu_btns_font_size" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

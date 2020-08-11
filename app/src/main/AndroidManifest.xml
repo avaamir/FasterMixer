@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.behraz.fastermixer.batch">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,6 +12,13 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.WRITE_SMS" />
 
     <permission
         android:name="android.permission.ACCESS_FINE_LOCATION"
@@ -29,7 +35,8 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.activities.UpdateActivity"></activity>
+        <activity android:name=".ui.activities.ContactActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activities.UpdateActivity" />
         <activity android:name=".ui.activities.mixer.MixerActivity" />
         <activity
             android:name=".ui.activities.admin.AdminActivity"

@@ -12,4 +12,6 @@
     <dimen name="dialer_nums">44sp</dimen>
     <dimen name="dialer_num_width">100dp</dimen>
     <dimen name="dialer_num_height">100dp</dimen>
+    <dimen name="pomp_menu_btns_font_size">8sp</dimen>
+    <dimen name="pomp_menu_btns_top_margin">1dp</dimen>
 </resources>

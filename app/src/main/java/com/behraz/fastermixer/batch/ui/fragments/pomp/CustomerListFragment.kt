@@ -16,10 +16,10 @@ import com.behraz.fastermixer.batch.databinding.FragmentCustomerListBinding
 import com.behraz.fastermixer.batch.ui.adapters.CustomerAdapter
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 
-class CustomerListFragment: Fragment() {
+class CustomerListFragment : Fragment() {
     private lateinit var viewModel: PompActivityViewModel
     private lateinit var mBinding: FragmentCustomerListBinding
-    private val mAdapter = CustomerAdapter( )
+    private val mAdapter = CustomerAdapter()
 
 
     override fun onCreateView(
@@ -28,7 +28,8 @@ class CustomerListFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProvider(activity!!).get(PompActivityViewModel::class.java)
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_customer_list, container, false)
+        mBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_customer_list, container, false)
         initViews()
         subscribeObservers()
         return mBinding.root
@@ -53,8 +54,14 @@ class CustomerListFragment: Fragment() {
         mBinding.btnMap.setOnClickListener { activity!!.onBackPressed() }
 
         mBinding.mixerRecycler.adapter = mAdapter
-        mBinding.mixerRecycler.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
-        mBinding.mixerRecycler.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
+        mBinding.mixerRecycler.layoutManager =
+            LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
+        mBinding.mixerRecycler.addItemDecoration(
+            DividerItemDecoration(
+                context,
+                RecyclerView.VERTICAL
+            )
+        )
     }
 
 

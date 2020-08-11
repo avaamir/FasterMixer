@@ -12,28 +12,29 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
     @Nullable
     private static final android.util.SparseIntArray sViewsWithIds;
     static {
-        sIncludes = new androidx.databinding.ViewDataBinding.IncludedLayouts(17);
-        sIncludes.setIncludes(1, 
-            new String[] {"item_customer"},
-            new int[] {3},
-            new int[] {com.behraz.fastermixer.batch.R.layout.item_customer});
-        sIncludes.setIncludes(2, 
-            new String[] {"layout_mixer"},
-            new int[] {4},
-            new int[] {com.behraz.fastermixer.batch.R.layout.layout_mixer});
+        sIncludes = null;
         sViewsWithIds = new android.util.SparseIntArray();
-        sViewsWithIds.put(R.id.mapContainer, 5);
-        sViewsWithIds.put(R.id.frame_top, 6);
-        sViewsWithIds.put(R.id.jobProgressView, 7);
-        sViewsWithIds.put(R.id.btnArrow, 8);
-        sViewsWithIds.put(R.id.btnMessage, 9);
-        sViewsWithIds.put(R.id.imageView2, 10);
-        sViewsWithIds.put(R.id.tvMessageCount, 11);
-        sViewsWithIds.put(R.id.bottomSheet, 12);
-        sViewsWithIds.put(R.id.fasterMixerUserPanel, 13);
-        sViewsWithIds.put(R.id.btnHideUserPanel, 14);
-        sViewsWithIds.put(R.id.btnWeather, 15);
-        sViewsWithIds.put(R.id.btnMyLocation, 16);
+        sViewsWithIds.put(R.id.btnMessage, 1);
+        sViewsWithIds.put(R.id.imageView2, 2);
+        sViewsWithIds.put(R.id.tvMessageCount, 3);
+        sViewsWithIds.put(R.id.mapContainer, 4);
+        sViewsWithIds.put(R.id.frame_user_buttons, 5);
+        sViewsWithIds.put(R.id.btn_map, 6);
+        sViewsWithIds.put(R.id.btn_projects, 7);
+        sViewsWithIds.put(R.id.btn_mixers, 8);
+        sViewsWithIds.put(R.id.btn_messages, 9);
+        sViewsWithIds.put(R.id.btn_voice_message, 10);
+        sViewsWithIds.put(R.id.linearLayout2, 11);
+        sViewsWithIds.put(R.id.frame_internet, 12);
+        sViewsWithIds.put(R.id.ivInternet, 13);
+        sViewsWithIds.put(R.id.frame_gps, 14);
+        sViewsWithIds.put(R.id.ivGPS, 15);
+        sViewsWithIds.put(R.id.frame_voip, 16);
+        sViewsWithIds.put(R.id.ivVoip, 17);
+        sViewsWithIds.put(R.id.btnLogout, 18);
+        sViewsWithIds.put(R.id.linearLayout4, 19);
+        sViewsWithIds.put(R.id.btnWeather, 20);
+        sViewsWithIds.put(R.id.btnMyLocation, 21);
     }
     // views
     @NonNull
@@ -44,29 +45,32 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
     // Inverse Binding Event Handlers
 
     public ActivityPompBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 17, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 22, sIncludes, sViewsWithIds));
     }
     private ActivityPompBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
-        super(bindingComponent, root, 2
-            , (androidx.core.widget.NestedScrollView) bindings[12]
-            , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[8]
-            , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[14]
-            , (androidx.cardview.widget.CardView) bindings[9]
-            , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[16]
-            , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[15]
-            , (com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel) bindings[13]
-            , (android.widget.FrameLayout) bindings[1]
-            , (android.widget.FrameLayout) bindings[2]
-            , (androidx.cardview.widget.CardView) bindings[6]
-            , (android.widget.ImageView) bindings[10]
-            , (com.behraz.fastermixer.batch.ui.customs.fastermixer.progressview.FasterMixerProgressView) bindings[7]
-            , (com.behraz.fastermixer.batch.databinding.ItemCustomerBinding) bindings[3]
-            , (com.behraz.fastermixer.batch.databinding.LayoutMixerBinding) bindings[4]
-            , (android.widget.FrameLayout) bindings[5]
-            , (android.widget.TextView) bindings[11]
+        super(bindingComponent, root, 0
+            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[18]
+            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[6]
+            , (androidx.cardview.widget.CardView) bindings[1]
+            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[9]
+            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[8]
+            , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[21]
+            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[7]
+            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[10]
+            , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[20]
+            , (android.widget.LinearLayout) bindings[14]
+            , (android.widget.LinearLayout) bindings[12]
+            , (androidx.cardview.widget.CardView) bindings[5]
+            , (android.widget.LinearLayout) bindings[16]
+            , (android.widget.ImageView) bindings[2]
+            , (android.widget.ImageView) bindings[15]
+            , (android.widget.ImageView) bindings[13]
+            , (android.widget.ImageView) bindings[17]
+            , (android.widget.LinearLayout) bindings[11]
+            , (android.widget.LinearLayout) bindings[19]
+            , (android.widget.FrameLayout) bindings[4]
+            , (android.widget.TextView) bindings[3]
             );
-        this.frameCustomer.setTag(null);
-        this.frameMixer.setTag(null);
         this.mboundView0 = (androidx.coordinatorlayout.widget.CoordinatorLayout) bindings[0];
         this.mboundView0.setTag(null);
         setRootTag(root);
@@ -77,10 +81,8 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
     @Override
     public void invalidateAll() {
         synchronized(this) {
-                mDirtyFlags = 0x8L;
+                mDirtyFlags = 0x2L;
         }
-        layoutCustomer.invalidateAll();
-        layoutMixer.invalidateAll();
         requestRebind();
     }
 
@@ -90,12 +92,6 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
             if (mDirtyFlags != 0) {
                 return true;
             }
-        }
-        if (layoutCustomer.hasPendingBindings()) {
-            return true;
-        }
-        if (layoutMixer.hasPendingBindings()) {
-            return true;
         }
         return false;
     }
@@ -117,37 +113,8 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
     }
 
     @Override
-    public void setLifecycleOwner(@Nullable androidx.lifecycle.LifecycleOwner lifecycleOwner) {
-        super.setLifecycleOwner(lifecycleOwner);
-        layoutCustomer.setLifecycleOwner(lifecycleOwner);
-        layoutMixer.setLifecycleOwner(lifecycleOwner);
-    }
-
-    @Override
     protected boolean onFieldChange(int localFieldId, Object object, int fieldId) {
         switch (localFieldId) {
-            case 0 :
-                return onChangeLayoutCustomer((com.behraz.fastermixer.batch.databinding.ItemCustomerBinding) object, fieldId);
-            case 1 :
-                return onChangeLayoutMixer((com.behraz.fastermixer.batch.databinding.LayoutMixerBinding) object, fieldId);
-        }
-        return false;
-    }
-    private boolean onChangeLayoutCustomer(com.behraz.fastermixer.batch.databinding.ItemCustomerBinding LayoutCustomer, int fieldId) {
-        if (fieldId == BR._all) {
-            synchronized(this) {
-                    mDirtyFlags |= 0x1L;
-            }
-            return true;
-        }
-        return false;
-    }
-    private boolean onChangeLayoutMixer(com.behraz.fastermixer.batch.databinding.LayoutMixerBinding LayoutMixer, int fieldId) {
-        if (fieldId == BR._all) {
-            synchronized(this) {
-                    mDirtyFlags |= 0x2L;
-            }
-            return true;
         }
         return false;
     }
@@ -160,18 +127,14 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
             mDirtyFlags = 0;
         }
         // batch finished
-        executeBindingsOn(layoutCustomer);
-        executeBindingsOn(layoutMixer);
     }
     // Listener Stub Implementations
     // callback impls
     // dirty flag
     private  long mDirtyFlags = 0xffffffffffffffffL;
     /* flag mapping
-        flag 0 (0x1L): layoutCustomer
-        flag 1 (0x2L): layoutMixer
-        flag 2 (0x3L): viewModel
-        flag 3 (0x4L): null
+        flag 0 (0x1L): viewModel
+        flag 1 (0x2L): null
     flag mapping end*/
     //end
 }
