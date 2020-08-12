@@ -57,10 +57,18 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
         subscribeObservers()
 
         subscribeNetworkStateChangeListener {
-            //TODO add to ui
+            if (it) {
+                mBinding.ivInternet.setImageResource(R.drawable.ic_check);
+            } else {
+                mBinding.ivInternet.setImageResource(R.drawable.ic_error);
+            }
         }
         subscribeGpsStateChangeListener {
-            //TODO add to ui
+            if (it) {
+                mBinding.ivGPS.setImageResource(R.drawable.ic_check);
+            } else {
+                mBinding.ivGPS.setImageResource(R.drawable.ic_error);
+            }
         }
     }
 

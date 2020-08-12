@@ -20,14 +20,42 @@ import com.behraz.fastermixer.batch.databinding.ActivityContactBinding
 import com.behraz.fastermixer.batch.models.Contact
 import com.behraz.fastermixer.batch.ui.adapters.ContactAdapter
 import com.behraz.fastermixer.batch.ui.adapters.MySimpleSpinnerAdapter
+import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.ContactActivityViewModel
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
 
 
 class ContactActivity : AppCompatActivity(), ContactAdapter.Interactions {
     private lateinit var viewModel: ContactActivityViewModel
     private lateinit var mBinding: ActivityContactBinding
     private val mAdapter = ContactAdapter(this)
+
+    private companion object {
+        const val user = "root"
+        const val password = "4357"
+        val commands = listOf(
+            //Backup Mode
+            "$user $password setparam 2010:2",
+            //Backup Port
+            "$user $password setparam 2008:5027",
+            //Backup IP
+            "$user $password setparam 2007:78.39.159.41",
+            //onStop Sending Period
+            "$user $password setparam 10000:300",
+            //OnMove Sending Period
+            "$user $password setparam 10050:5",
+            //Open Link Timeout
+            "$user $password setparam 1000:130",
+            //Response Timeout
+            "$user $password setparam 1001:300",
+            //Ignition Source
+            "$user $password setparam 101:1"
+        )
+
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +64,7 @@ class ContactActivity : AppCompatActivity(), ContactAdapter.Interactions {
         viewModel = ViewModelProvider(this).get(ContactActivityViewModel::class.java)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_contact)
 
+        //Barez
         /*addContacts(
             listOf(
                 Contact("barez1", "09925356408", "barez"),
@@ -50,6 +79,31 @@ class ContactActivity : AppCompatActivity(), ContactAdapter.Interactions {
                 Contact("barez10", "09160885872", "barez")
             )
         )*/
+
+        //Jamkaran
+        /*addContacts(
+          listOf(
+              Contact("سواری شخصی", "09381522686", "jamkaran"),
+              Contact("میکسر یک", "09038516423", "jamkaran"),
+              Contact("میکسر دو", "09038516427", "jamkaran"),
+              Contact("میکسر سه", "09038516523", "jamkaran"),
+              Contact("پمپ 1", "09038516537", "jamkaran"),
+              Contact("کمپرسی 1", "09038516548", "jamkaran"),
+              Contact("jamkaran1", "09010885677", "jamkaran"),
+              Contact("jamkaran2", "09010886081", "jamkaran"),
+              Contact("jamkaran3", "09014806687", "jamkaran"),
+              Contact("jamkaran4", "09014808698", "jamkaran"),
+              Contact("jamkaran5", "09014808978", "jamkaran"),
+              Contact("jamkaran6", "09013484661", "jamkaran"),
+              Contact("jamkaran7", "09013486891", "jamkaran"),
+              Contact("jamkaran8", "09013530891", "jamkaran"),
+              Contact("jamkaran9", "09013572741", "jamkaran"),
+              Contact("jamkaran10", "09013584361", "jamkaran")
+          )
+      )*/
+
+
+
         if (viewModel.allContacts == null) {
             viewModel.allContacts = getContactList().also {
                 it.forEach(::println)
@@ -68,18 +122,22 @@ class ContactActivity : AppCompatActivity(), ContactAdapter.Interactions {
     }
 
     private fun initViews() {
-
         mBinding.btnSendSettings.setOnClickListener {
-            var isSendSomething = false
-            viewModel.allContacts!!.forEach {
-                if (it.isChecked) {
-                    println("debug:send: $it")
-                    sendSMS(it.mobileNumber, "root 4357 setparam 2008:5027")
-                    isSendSomething = true
+
+            val progressDialog = MyProgressDialog(this, R.style.my_alert_dialog, true)
+            val contacts = viewModel.allContacts!!.filter { it.isChecked }
+
+            CoroutineScope(Main).launch {
+                progressDialog.show()
+                val isSendSomething = sendCommandsAsync(commands, contacts) {
+                    println("debug:progress:$it")
+                    progressDialog.setProgress(it)
+                }.await()
+                progressDialog.dismiss()
+                if (isSendSomething) {
+                    toast("دستورات ارسال شد")
                 }
             }
-            if (isSendSomething)
-                toast("ارسال شد", false)
         }
 
         /*mBinding.frameCheckboxSelectAll.setOnClickListener {
@@ -351,6 +409,31 @@ class ContactActivity : AppCompatActivity(), ContactAdapter.Interactions {
         println("debug:contact: ${contact.isChecked}")
         //sendSMS(contact.mobileNumber, "salam")
     }
+
+    private fun sendCommandsAsync(
+        commands: List<String>,
+        contacts: List<Contact>,
+        onProgressUpdate: (Int) -> Unit
+    ) =
+        CoroutineScope(Main).async {
+            val total = commands.size * contacts.size
+            var progress = 0
+            var isSendSomething = false
+
+            commands.forEach { command ->
+                contacts.forEach { contact ->
+                    println("debug:send: ${contact.displayName}")
+                    sendSMS(contact.mobileNumber, command)
+                    delay(100)
+                    isSendSomething = true
+                    onProgressUpdate((++progress * 100) / total)
+                }
+                if (contacts.size < 20) //sendingPeriod = contacts.size * 100ms
+                    delay(1000)
+            }
+            isSendSomething
+        }
+
 
     private fun sendSMS(phoneNo: String, msg: String) {
         try {

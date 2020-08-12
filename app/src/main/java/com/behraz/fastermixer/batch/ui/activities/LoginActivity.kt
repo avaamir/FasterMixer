@@ -390,7 +390,6 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         finish()
     }
 
-    //todo test this
     override fun onInternetUnavailable() {
         NoNetworkDialog(this, R.style.my_alert_dialog).show()
     }

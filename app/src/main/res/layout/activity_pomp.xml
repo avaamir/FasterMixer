@@ -16,6 +16,7 @@
         tools:context=".ui.activities.pomp.PompActivity">
 
 
+
         <androidx.cardview.widget.CardView
             android:id="@+id/btnMessage"
             android:layout_width="wrap_content"
@@ -163,95 +164,6 @@
                         app:text="پیام صوتی"
                         app:textSize="@dimen/pomp_menu_btns_font_size" />
 
-
-                    <!--frame hardware state-->
-                    <LinearLayout
-                        android:id="@+id/linearLayout2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:gravity="right"
-                        android:orientation="vertical"
-                        android:visibility="gone"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="1.0">
-
-
-                        <LinearLayout
-                            android:id="@+id/frame_internet"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="@dimen/standard_margin">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="8dp"
-                                android:fontFamily="@font/iransans"
-                                android:text="اینترنت"
-                                android:textColor="@color/white"
-                                android:textSize="16sp" />
-
-                            <ImageView
-                                android:id="@+id/ivInternet"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:srcCompat="@drawable/ic_error" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/frame_gps"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="@dimen/standard_margin">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="8dp"
-                                android:fontFamily="@font/iransans"
-                                android:text="موقعیت مکانی"
-                                android:textColor="@color/white"
-                                android:textSize="16sp" />
-
-                            <ImageView
-                                android:id="@+id/ivGPS"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:srcCompat="@drawable/ic_error" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/frame_voip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="@dimen/standard_margin"
-                            android:visibility="gone">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="8dp"
-                                android:text="Voip"
-                                android:textColor="@color/white"
-                                android:textSize="16sp" />
-
-                            <ImageView
-                                android:id="@+id/ivVoip"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:srcCompat="@drawable/ic_error" />
-
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-
                     <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
                         android:id="@+id/btnLogout"
                         android:layout_width="match_parent"
@@ -308,6 +220,93 @@
                     app:fabSize="mini"
                     app:srcCompat="@drawable/ic_gps"
                     app:tint="@color/white" />
+
+            </LinearLayout>
+
+
+            <!--frame hardware state-->
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/mapContainer"
+                app:layout_constraintEnd_toEndOf="@+id/mapContainer">
+
+
+                <LinearLayout
+                    android:id="@+id/frame_internet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/standard_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:fontFamily="@font/iransans"
+                        android:text="اینترنت"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/ivInternet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_error" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/frame_gps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/standard_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:fontFamily="@font/iransans"
+                        android:text="موقعیت مکانی"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/ivGPS"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_error" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/frame_voip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/standard_margin"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:text="Voip"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/ivVoip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_error" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 

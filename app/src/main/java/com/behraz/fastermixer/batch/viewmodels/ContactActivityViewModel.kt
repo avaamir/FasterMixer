@@ -21,10 +21,11 @@ class ContactActivityViewModel : ViewModel() {
     }
 
     fun selectAll(shouldSelect: Boolean) {
-        contacts.value?.forEach {
+        _contacts.value?.forEach {
             it.isChecked = shouldSelect
+            println("debug: ${it.displayName}")
         }
-        _contacts.value = contacts.value
+        _contacts.value = _contacts.value
     }
 
 }
