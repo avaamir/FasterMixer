@@ -1,9 +1,13 @@
 package com.behraz.fastermixer.batch.ui.activities
 
+import android.Manifest
 import android.content.ContentProviderOperation
+import android.content.Intent
 import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.provider.Settings
 import android.telephony.SmsManager
 import android.view.View
 import android.widget.AdapterView
@@ -18,21 +22,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ActivityContactBinding
 import com.behraz.fastermixer.batch.models.Contact
+import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.adapters.ContactAdapter
 import com.behraz.fastermixer.batch.ui.adapters.MySimpleSpinnerAdapter
+import com.behraz.fastermixer.batch.ui.dialogs.LocationPermissionDialog
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
+import com.behraz.fastermixer.batch.utils.general.PermissionHelper
+import com.behraz.fastermixer.batch.utils.general.alert
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.ContactActivityViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
 
 
-class ContactActivity : AppCompatActivity(), ContactAdapter.Interactions {
+class ContactActivity : AppCompatActivity(), ContactAdapter.Interactions,
+    PermissionHelper.Interactions {
     private lateinit var viewModel: ContactActivityViewModel
     private lateinit var mBinding: ActivityContactBinding
     private val mAdapter = ContactAdapter(this)
 
     private companion object {
+        const val REQ_GO_TO_SETTINGS_PERMISSION = 123
+
         const val user = "root"
         const val password = "4357"
         val commands = listOf(
@@ -44,8 +55,10 @@ class ContactActivity : AppCompatActivity(), ContactAdapter.Interactions {
             "$user $password setparam 2007:78.39.159.41",
             //onStop Sending Period
             "$user $password setparam 10000:300",
+            "$user $password setparam 10005:300",
             //OnMove Sending Period
             "$user $password setparam 10050:5",
+            "$user $password setparam 10055:5",
             //Open Link Timeout
             "$user $password setparam 1000:130",
             //Response Timeout
@@ -56,6 +69,16 @@ class ContactActivity : AppCompatActivity(), ContactAdapter.Interactions {
 
     }
 
+    private val permissionHelper =
+        PermissionHelper(
+            arrayListOf(
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.WRITE_CONTACTS,
+                Manifest.permission.SEND_SMS,
+                Manifest.permission.READ_SMS,
+                Manifest.permission.RECEIVE_SMS
+            ), this, this
+        )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,7 +138,6 @@ class ContactActivity : AppCompatActivity(), ContactAdapter.Interactions {
     }
 
     private fun subscribeObservers() {
-
         viewModel.contacts.observe(this, Observer {
             mAdapter.submitList(it)
         })
@@ -123,7 +145,6 @@ class ContactActivity : AppCompatActivity(), ContactAdapter.Interactions {
 
     private fun initViews() {
         mBinding.btnSendSettings.setOnClickListener {
-
             val progressDialog = MyProgressDialog(this, R.style.my_alert_dialog, true)
             val contacts = viewModel.allContacts!!.filter { it.isChecked }
 
@@ -248,7 +269,6 @@ class ContactActivity : AppCompatActivity(), ContactAdapter.Interactions {
                             .build()
                     )
                 }
-
 
                 //------------------------------------------------------ Work Numbers
                 if (workNumber != null) {
@@ -447,6 +467,79 @@ class ContactActivity : AppCompatActivity(), ContactAdapter.Interactions {
             ).show()
             ex.printStackTrace()
         }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQ_GO_TO_SETTINGS_PERMISSION) {
+            permissionHelper.checkPermission()
+        }
+    }
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        permissionHelper.onRequestPermissionsResult(
+            requestCode,
+            permissions,
+            grantResults
+        )
+    }
+
+
+    override fun beforeRequestPermissionsDialogMessage(
+        notGrantedPermissions: ArrayList<String>,
+        permissionRequesterFunction: () -> Unit
+    ) {
+        notGrantedPermissions.forEach {
+            println("debug: $it not granted, request permissions now") //can show a dialog then request
+        }
+        LocationPermissionDialog(this, R.style.my_alert_dialog) { isGranted, dialog ->
+            if (isGranted) {
+                permissionRequesterFunction.invoke()
+                dialog.dismiss()
+            } else {
+                toast("اجازه دسترسی داده نشد")
+                finish()
+            }
+        }.show()
+    }
+
+    override fun onDeniedWithNeverAskAgain(permission: String) {
+        println("debug:show dialog:$permission -> Go to Settings")
+
+        alert(
+            title = "دسترسی",
+            message = "برنامه برای ادامه فعالیت خود به اجازه شما نیاز دارد. لطفا در تنظیمات برنامه دسترسی ها را درست کنید",
+            positiveButtonText = "رفتن به تنظیمات",
+            negativeButtonText = "بستن برنامه",
+            isCancelable = false,
+            onNegativeClicked = { finish() }
+        ) {
+            val intent = Intent().apply {
+                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                addCategory(Intent.CATEGORY_DEFAULT)
+                data = Uri.parse("package:$packageName")
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+            }
+            startActivityForResult(intent, ContactActivity.REQ_GO_TO_SETTINGS_PERMISSION)
+        }
+
+
+    }
+
+    override fun onPermissionsGranted() {}
+
+    override fun onPermissionDenied(deniedPermissions: ArrayList<String>) {
+        deniedPermissions.forEach { println("debug: $it denied") }
+        toast("اجازه دسترسی داده نشد")
+        finish()
     }
 }
 

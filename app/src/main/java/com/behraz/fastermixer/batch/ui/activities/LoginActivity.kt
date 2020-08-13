@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
     PermissionHelper.Interactions,
-    ApiService.InternetConnectionListener{
+    ApiService.InternetConnectionListener {
 
     companion object {
         private const val REQ_GO_TO_SETTINGS_PERMISSION = 12
@@ -328,7 +328,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
             etPassword.setText(prefs.getString(Constants.PREF_CREDENTIAL_PASSWORD, ""))
         }
     }
-    
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQ_GO_TO_SETTINGS_PERMISSION) {
