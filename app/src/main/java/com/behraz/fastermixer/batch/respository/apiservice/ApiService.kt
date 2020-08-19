@@ -22,8 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object ApiService {
-    const val Domain = "http://2.184.49.133:13013"
-    //const val Domain = "http://192.168.1.4:10101"
+    const val Domain = "http://78.39.159.41:8000"
     private const val BASE_API_URL = "$Domain/api/"
 
 
