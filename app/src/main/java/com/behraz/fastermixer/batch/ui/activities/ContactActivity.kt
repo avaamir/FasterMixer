@@ -27,6 +27,7 @@ import com.behraz.fastermixer.batch.ui.adapters.ContactAdapter
 import com.behraz.fastermixer.batch.ui.adapters.MySimpleSpinnerAdapter
 import com.behraz.fastermixer.batch.ui.dialogs.LocationPermissionDialog
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
+import com.behraz.fastermixer.batch.ui.fragments.contacts.ContactsFragment
 import com.behraz.fastermixer.batch.utils.general.PermissionHelper
 import com.behraz.fastermixer.batch.utils.general.alert
 import com.behraz.fastermixer.batch.utils.general.toast
@@ -35,38 +36,14 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
 
 
-class ContactActivity : AppCompatActivity(), ContactAdapter.Interactions,
+class ContactActivity : AppCompatActivity(),
     PermissionHelper.Interactions {
     private lateinit var viewModel: ContactActivityViewModel
     private lateinit var mBinding: ActivityContactBinding
-    private val mAdapter = ContactAdapter(this)
 
     private companion object {
         const val REQ_GO_TO_SETTINGS_PERMISSION = 123
-
-        const val user = "root"
-        const val password = "4357"
-        val commands = listOf(
-            //Backup Mode
-            "$user $password setparam 2010:2",
-            //Backup Port
-            "$user $password setparam 2008:5027",
-            //Backup IP
-            "$user $password setparam 2007:78.39.159.41",
-            //onStop Sending Period
-            "$user $password setparam 10000:300",
-            "$user $password setparam 10005:300",
-            //OnMove Sending Period
-            "$user $password setparam 10050:5",
-            "$user $password setparam 10055:5",
-            //Open Link Timeout
-            "$user $password setparam 1000:130",
-            //Response Timeout
-            "$user $password setparam 1001:300",
-            //Ignition Source
-            "$user $password setparam 101:1"
-        )
-
+        const val CONTACTS_LIST_TAG = "contact-list-frag"
     }
 
     private val permissionHelper =
@@ -83,9 +60,6 @@ class ContactActivity : AppCompatActivity(), ContactAdapter.Interactions,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contact)
-
-        viewModel = ViewModelProvider(this).get(ContactActivityViewModel::class.java)
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_contact)
 
         //Barez
         /*addContacts(
@@ -126,6 +100,8 @@ class ContactActivity : AppCompatActivity(), ContactAdapter.Interactions,
       )*/
 
 
+        viewModel = ViewModelProvider(this).get(ContactActivityViewModel::class.java)
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_contact)
 
         if (viewModel.allContacts == null) {
             viewModel.allContacts = getContactList().also {
@@ -133,75 +109,18 @@ class ContactActivity : AppCompatActivity(), ContactAdapter.Interactions,
             }
         }
 
-        initViews()
-        subscribeObservers()
+        initFragments()
+
     }
 
-    private fun subscribeObservers() {
-        viewModel.contacts.observe(this, Observer {
-            mAdapter.submitList(it)
-        })
-    }
-
-    private fun initViews() {
-        mBinding.btnSendSettings.setOnClickListener {
-            val progressDialog = MyProgressDialog(this, R.style.my_alert_dialog, true)
-            val contacts = viewModel.allContacts!!.filter { it.isChecked }
-
-            CoroutineScope(Main).launch {
-                progressDialog.show()
-                val isSendSomething = sendCommandsAsync(commands, contacts) {
-                    println("debug:progress:$it")
-                    progressDialog.setProgress(it)
-                }.await()
-                progressDialog.dismiss()
-                if (isSendSomething) {
-                    toast("دستورات ارسال شد")
-                }
-            }
+    private fun initFragments() {
+        supportFragmentManager.beginTransaction().apply {
+            add(mBinding.container.id, ContactsFragment(), CONTACTS_LIST_TAG)
+            commit()
         }
 
-        /*mBinding.frameCheckboxSelectAll.setOnClickListener {
-             mBinding.checkBoxSelectAll.isChecked = !mBinding.checkBoxSelectAll.isChecked
-         }*/
-
-        mBinding.checkBoxSelectAll.setOnCheckedChangeListener { _, b ->
-            viewModel.selectAll(b)
-        }
-
-        mBinding.recyclerContacts.addItemDecoration(
-            DividerItemDecoration(
-                this,
-                RecyclerView.VERTICAL
-            )
-        )
-        mBinding.recyclerContacts.layoutManager =
-            LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        mBinding.recyclerContacts.adapter = mAdapter
-
-        mBinding.spinnerOrganization.adapter = MySimpleSpinnerAdapter(
-            this,
-            android.R.layout.simple_spinner_dropdown_item,
-            listOf("همه") + (viewModel.allContacts!!.map { it.company }.distinct())
-        )
-
-        mBinding.spinnerOrganization.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parentView: AdapterView<*>?) {
-
-                }
-
-                override fun onItemSelected(
-                    parentView: AdapterView<*>?,
-                    selectedItemView: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    viewModel.filterContactsByOrganization(mBinding.spinnerOrganization.selectedItem.toString())
-                }
-
-            }
     }
+
 
     // Creates a contact entry from the current UI values, using the currently-selected account.
     private fun addContacts(contacts: List<Contact>) {
@@ -423,50 +342,6 @@ class ContactActivity : AppCompatActivity(), ContactAdapter.Interactions,
         }
         cur?.close()
         return ArrayList(contacts.values)
-    }
-
-    override fun onItemSelected(contact: Contact) {
-        println("debug:contact: ${contact.isChecked}")
-        //sendSMS(contact.mobileNumber, "salam")
-    }
-
-    private fun sendCommandsAsync(
-        commands: List<String>,
-        contacts: List<Contact>,
-        onProgressUpdate: (Int) -> Unit
-    ) =
-        CoroutineScope(Main).async {
-            val total = commands.size * contacts.size
-            var progress = 0
-            var isSendSomething = false
-
-            commands.forEach { command ->
-                contacts.forEach { contact ->
-                    println("debug:send: ${contact.displayName}")
-                    sendSMS(contact.mobileNumber, command)
-                    delay(100)
-                    isSendSomething = true
-                    onProgressUpdate((++progress * 100) / total)
-                }
-                if (contacts.size < 20) //sendingPeriod = contacts.size * 100ms
-                    delay(1000)
-            }
-            isSendSomething
-        }
-
-
-    private fun sendSMS(phoneNo: String, msg: String) {
-        try {
-            val smsManager: SmsManager = SmsManager.getDefault()
-            smsManager.sendTextMessage(phoneNo, null, msg, null, null)
-            toast("Message Sent $phoneNo")
-        } catch (ex: java.lang.Exception) {
-            Toast.makeText(
-                applicationContext, ex.message.toString(),
-                Toast.LENGTH_LONG
-            ).show()
-            ex.printStackTrace()
-        }
     }
 
 

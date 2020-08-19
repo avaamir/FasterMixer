@@ -17,15 +17,21 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.LayoutMapBinding
+import com.behraz.fastermixer.batch.ui.osm.ImageMarker
+import com.behraz.fastermixer.batch.ui.osm.MixerMarker
 import com.behraz.fastermixer.batch.ui.osm.MyOSMMapView
 import com.behraz.fastermixer.batch.utils.general.LocationHandler
-import com.behraz.fastermixer.batch.viewmodels.PompMapFragmentViewModel
+import com.behraz.fastermixer.batch.utils.general.getBitmapFromVectorDrawable
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
+import org.osmdroid.views.overlay.compass.CompassOverlay
+import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 abstract class BaseMapFragment : Fragment(), LocationListener,
     MyOSMMapView.OnMapClickListener {
@@ -110,15 +116,19 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         }
 
         //TODO my location on map
-        /*val mLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(this), map)
-        mLocationOverlay.setPersonIcon(markerBitmap)
+        val mLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(context), _mBinding.map)
+        mLocationOverlay.setPersonIcon(getBitmapFromVectorDrawable(context!!, R.drawable.ic_mixer))
         mLocationOverlay.enableMyLocation()
-        map.overlays.add(mLocationOverlay)*/
+        _mBinding.map.overlays.add(mLocationOverlay)
 
 
         //add icon on map with click
         //your items
 
+
+        val mCompassOverlay = CompassOverlay(context, InternalCompassOrientationProvider(context), _mBinding.map)
+        mCompassOverlay.enableCompass()
+        _mBinding.map.overlays.add(mCompassOverlay)
 
         _mBinding.map.setOnMapClickListener(this)
 

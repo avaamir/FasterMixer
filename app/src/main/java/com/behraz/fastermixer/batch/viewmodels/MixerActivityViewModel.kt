@@ -70,7 +70,7 @@ class MixerActivityViewModel : ViewModel() {
             it?.entity?.let { _messages ->
                 if (_messages.isNotEmpty()) {
                     newMessage.value = _messages[0]
-                    //TODO  RemoteRepo.seenMessage(_messages[0].id)
+                   RemoteRepo.seenMessage(_messages[0].id)
                 }
             }
             it

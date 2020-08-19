@@ -100,7 +100,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_gravity="center"
-                        app:backgroundColor="@color/gray500"
+                        app:backgroundColor="@color/primary_dark"
                         app:isFlat="true"
                         app:layout_constraintBottom_toTopOf="@+id/btn_projects"
                         app:layout_constraintTop_toTopOf="parent"
@@ -226,7 +226,7 @@
 
             <!--frame hardware state-->
             <LinearLayout
-                android:id="@+id/linearLayout2"
+                android:id="@+id/frameGPSState"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"

@@ -73,6 +73,10 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
     }
 
     private fun initViews() {
+
+        /*TODO:: make this visible after feature added to server*/
+        mBinding.btnVoiceMessage.visibility = View.GONE
+
         tvMessageCount.text = "0"
         initFragments()
 
@@ -223,17 +227,17 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
         supportFragmentManager.fragments.forEach {
             transaction.hide(it)
         }
-
-
+        mBinding.frameGPSState.visibility = View.INVISIBLE
+        
         when (myRaisedButton.id) {
             mBinding.btnMap.id -> {
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG)!!)
+                mBinding.frameGPSState.visibility = View.VISIBLE
             }
             mBinding.btnProjects.id -> {
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_CUSTOMER_LIST_TAG)!!)
             }
             mBinding.btnMixers.id -> {
-                supportFragmentManager.beginTransaction()
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_MIXER_LIST_TAG)!!)
             }
             mBinding.btnMessages.id -> {
@@ -246,7 +250,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
     }
 
     private fun refreshUserPanelButtonsOnClick(view: View) {
-        val gray = ContextCompat.getColor(this, R.color.gray500)
+        val gray = ContextCompat.getColor(this, R.color.primary_dark)
         val yellow = ContextCompat.getColor(this, R.color.btn_yellow)
 
         mBinding.btnMap.setBackgroundColor(yellow)

@@ -105,4 +105,5 @@
     <string name="bike_method_desc">توضیحات مربوط به ارسال با پیک</string>
     <string name="btn_backspace">پاک
         کردن</string>
+    <string name="driver_equipment_not_found">برای این نام کاربری تجهیزی تعریف نشده است. لطفا با هماهنگ کننده تماس بگیرید</string>
 </resources>

@@ -28,7 +28,7 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
         sViewsWithIds.put(R.id.linearLayout4, 12);
         sViewsWithIds.put(R.id.btnWeather, 13);
         sViewsWithIds.put(R.id.btnMyLocation, 14);
-        sViewsWithIds.put(R.id.linearLayout2, 15);
+        sViewsWithIds.put(R.id.frameGPSState, 15);
         sViewsWithIds.put(R.id.frame_internet, 16);
         sViewsWithIds.put(R.id.ivInternet, 17);
         sViewsWithIds.put(R.id.frame_gps, 18);
@@ -58,6 +58,7 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
             , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[7]
             , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[10]
             , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[13]
+            , (android.widget.LinearLayout) bindings[15]
             , (android.widget.LinearLayout) bindings[18]
             , (android.widget.LinearLayout) bindings[16]
             , (androidx.cardview.widget.CardView) bindings[5]
@@ -66,7 +67,6 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
             , (android.widget.ImageView) bindings[19]
             , (android.widget.ImageView) bindings[17]
             , (android.widget.ImageView) bindings[21]
-            , (android.widget.LinearLayout) bindings[15]
             , (android.widget.LinearLayout) bindings[12]
             , (android.widget.FrameLayout) bindings[4]
             , (android.widget.TextView) bindings[3]

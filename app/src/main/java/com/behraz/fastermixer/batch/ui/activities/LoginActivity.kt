@@ -62,7 +62,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         setContentView(R.layout.activity_login)
 
 
-        if (true) {
+        if (false) {
             startActivity(Intent(this, ContactActivity::class.java))
             finish()
             return
@@ -262,7 +262,17 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
                             }
 
                             if (it.entity!!.equipmentId == null) {
-                                startActivity(Intent(this, ChooseEquipmentActivity::class.java))
+                                when (it.entity.userType) {
+                                    UserType.Pomp -> toast(getString(R.string.driver_equipment_not_found))
+                                    UserType.Mixer -> toast(getString(R.string.driver_equipment_not_found))
+                                    UserType.Batch -> startActivity(
+                                        Intent(
+                                            this,
+                                            ChooseEquipmentActivity::class.java
+                                        )
+                                    )
+                                }.exhaustive()
+
                             } else {
                                 when (it.entity.userType) {
                                     UserType.Pomp -> startActivity(

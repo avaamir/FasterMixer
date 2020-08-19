@@ -26,6 +26,7 @@ import com.behraz.fastermixer.batch.databinding.ItemMessageVerticalBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ItemMixerBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ItemPlanBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ItemPompMixerBindingImpl;
+import com.behraz.fastermixer.batch.databinding.LayoutContactsFragmentBindingImpl;
 import com.behraz.fastermixer.batch.databinding.LayoutMapBindingImpl;
 import com.behraz.fastermixer.batch.databinding.LayoutMixerBindingImpl;
 import com.behraz.fastermixer.batch.databinding.LayoutRecordDialogBindingImpl;
@@ -82,17 +83,19 @@ public class DataBinderMapperImpl extends DataBinderMapper {
 
   private static final int LAYOUT_ITEMPOMPMIXER = 20;
 
-  private static final int LAYOUT_LAYOUTMAP = 21;
+  private static final int LAYOUT_LAYOUTCONTACTSFRAGMENT = 21;
 
-  private static final int LAYOUT_LAYOUTMIXER = 22;
+  private static final int LAYOUT_LAYOUTMAP = 22;
 
-  private static final int LAYOUT_LAYOUTRECORDDIALOG = 23;
+  private static final int LAYOUT_LAYOUTMIXER = 23;
 
-  private static final int LAYOUT_VIEWFASTERMIXERUSERPANEL = 24;
+  private static final int LAYOUT_LAYOUTRECORDDIALOG = 24;
 
-  private static final int LAYOUT_VIEWITEMPROGRESS = 25;
+  private static final int LAYOUT_VIEWFASTERMIXERUSERPANEL = 25;
 
-  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(25);
+  private static final int LAYOUT_VIEWITEMPROGRESS = 26;
+
+  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(26);
 
   static {
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.activity_admin, LAYOUT_ACTIVITYADMIN);
@@ -115,6 +118,7 @@ public class DataBinderMapperImpl extends DataBinderMapper {
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_mixer, LAYOUT_ITEMMIXER);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_plan, LAYOUT_ITEMPLAN);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_pomp_mixer, LAYOUT_ITEMPOMPMIXER);
+    INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.layout_contacts_fragment, LAYOUT_LAYOUTCONTACTSFRAGMENT);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.layout_map, LAYOUT_LAYOUTMAP);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.layout_mixer, LAYOUT_LAYOUTMIXER);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.layout_record_dialog, LAYOUT_LAYOUTRECORDDIALOG);
@@ -251,6 +255,12 @@ public class DataBinderMapperImpl extends DataBinderMapper {
           }
           throw new IllegalArgumentException("The tag for item_pomp_mixer is invalid. Received: " + tag);
         }
+        case  LAYOUT_LAYOUTCONTACTSFRAGMENT: {
+          if ("layout/layout_contacts_fragment_0".equals(tag)) {
+            return new LayoutContactsFragmentBindingImpl(component, view);
+          }
+          throw new IllegalArgumentException("The tag for layout_contacts_fragment is invalid. Received: " + tag);
+        }
         case  LAYOUT_LAYOUTMAP: {
           if ("layout/layout_map_0".equals(tag)) {
             return new LayoutMapBindingImpl(component, view);
@@ -344,7 +354,7 @@ public class DataBinderMapperImpl extends DataBinderMapper {
   }
 
   private static class InnerLayoutIdLookup {
-    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(25);
+    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(26);
 
     static {
       sKeys.put("layout/activity_admin_0", com.behraz.fastermixer.batch.R.layout.activity_admin);
@@ -367,6 +377,7 @@ public class DataBinderMapperImpl extends DataBinderMapper {
       sKeys.put("layout/item_mixer_0", com.behraz.fastermixer.batch.R.layout.item_mixer);
       sKeys.put("layout/item_plan_0", com.behraz.fastermixer.batch.R.layout.item_plan);
       sKeys.put("layout/item_pomp_mixer_0", com.behraz.fastermixer.batch.R.layout.item_pomp_mixer);
+      sKeys.put("layout/layout_contacts_fragment_0", com.behraz.fastermixer.batch.R.layout.layout_contacts_fragment);
       sKeys.put("layout/layout_map_0", com.behraz.fastermixer.batch.R.layout.layout_map);
       sKeys.put("layout/layout_mixer_0", com.behraz.fastermixer.batch.R.layout.layout_mixer);
       sKeys.put("layout/layout_record_dialog_0", com.behraz.fastermixer.batch.R.layout.layout_record_dialog);
