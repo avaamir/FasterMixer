@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
+import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.models.requests.behraz.LoginRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.UpdateResponse
@@ -37,8 +38,13 @@ class LoginActivityViewModel : ViewModel() {
     }
 
     private val loginRequest = MutableLiveData<LoginRequest>()
-    val loginResponse = Transformations.switchMap(loginRequest) {
-        RemoteRepo.login(it).map { entity ->
+    val loginResponse = Transformations.switchMap(loginRequest) { request ->
+        RemoteRepo.login(request).map { entity ->
+            //TODO if account isDemo (felan static code zade shode badan bayad az samte server dorost beshe) ->
+            if (entity?.isSucceed == true) {
+                if (request.factoryCode == "100100")
+                    FasterMixerApplication.isDemo = true
+            }
             Event(entity)
         }
     }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tvDemo"
+    style="@style/my_gray_medium_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="left|bottom"
+    android:layout_margin="@dimen/standard_margin"
+    android:background="@drawable/bg_rect_rounded"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:text="آزمایشی"
+    android:textColor="@color/btn_yellow"
+    android:visibility="gone"
+    android:textSize="18sp" />

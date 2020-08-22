@@ -122,12 +122,12 @@
                         android:layout_height="28dp"
                         android:background="@drawable/shape_drawer_badge"
                         android:gravity="center"
+                        android:text="0"
                         app:layout_constraintBottom_toBottomOf="@+id/imageView2"
                         app:layout_constraintEnd_toStartOf="@+id/imageView2"
                         app:layout_constraintStart_toStartOf="@+id/imageView2"
                         app:layout_constraintTop_toBottomOf="@+id/imageView2"
-                        tools:text="22"
-                        android:text="0"/>
+                        tools:text="22" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -145,6 +145,14 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         tools:itemCount="2"
         tools:listitem="@layout/item_mixer" />
+
+    <include
+        android:id="@+id/layoutDemo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/layout_demo"
+        android:layout_margin="@dimen/standard_margin"
+        android:layout_gravity="bottom|left" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

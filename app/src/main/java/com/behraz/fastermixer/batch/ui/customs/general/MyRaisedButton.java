@@ -112,7 +112,7 @@ public class MyRaisedButton extends LinearLayout {
             if (hasPic) {
                 ivPic.setVisibility(VISIBLE);
             } else {
-                ivPic.setVisibility(INVISIBLE);
+                ivPic.setVisibility(GONE);
             }
             tvCaption.setVisibility(VISIBLE);
             btnFrame.setOnClickListener(listener);

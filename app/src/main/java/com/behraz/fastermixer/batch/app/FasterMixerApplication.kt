@@ -21,6 +21,11 @@ import com.behraz.fastermixer.batch.utils.general.fullScreen
 import com.behraz.fastermixer.batch.utils.general.hideStatusBar
 
 class FasterMixerApplication : Application() {
+    companion object {
+        var isDemo: Boolean = false
+    }
+
+
     //Typefaces
     val iransans: Typeface by lazy {
         ResourcesCompat.getFont(this,

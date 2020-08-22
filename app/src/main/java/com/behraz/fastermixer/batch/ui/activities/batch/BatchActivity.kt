@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
+import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
@@ -51,6 +52,10 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdap
 
         subscribeNetworkStateChangeListener { fasterMixerUserPanel.setInternetState(it) }
         subscribeGpsStateChangeListener { fasterMixerUserPanel.setGPSState(it) }
+        if (FasterMixerApplication.isDemo) {
+            layoutDemo.visibility = View.VISIBLE
+        }
+
     }
 
     private fun subscribeObservers() {

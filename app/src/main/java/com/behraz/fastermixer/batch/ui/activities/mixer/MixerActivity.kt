@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
+import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.databinding.ActivityMixerBinding
 import com.behraz.fastermixer.batch.models.Progress
 import com.behraz.fastermixer.batch.models.ProgressState
@@ -32,7 +33,6 @@ import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.MixerActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.activity_batch.*
 
 class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
     FasterMixerProgressView.OnStateChangedListener, ApiService.InternetConnectionListener,
@@ -70,6 +70,9 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
 
         subscribeNetworkStateChangeListener { mBinding.fasterMixerUserPanel.setInternetState(it) }
         subscribeGpsStateChangeListener { mBinding.fasterMixerUserPanel.setGPSState(it) }
+        if (FasterMixerApplication.isDemo) {
+            mBinding.layoutDemo.visibility = View.VISIBLE
+        }
     }
 
 
@@ -77,7 +80,7 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
         mBinding.layoutNewMessage.root.setOnClickListener { toast("not yet implemented") }
 
 
-        tvMessageCount.text = "0"
+        mBinding.tvMessageCount.text = "0"
         supportFragmentManager.beginTransaction().apply {
             add(
                 R.id.mapContainer,
@@ -179,7 +182,7 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
             if (it != null) {
                 if (it.isSucceed) {
                     it.entity?.let { messages ->
-                        tvMessageCount.text = messages.size.toString()
+                        mBinding.tvMessageCount.text = messages.size.toString()
                         //TODO show like notification for some seconds then hidden it
                         //TODO check if a message is critical and new show in dialog to user
                     }

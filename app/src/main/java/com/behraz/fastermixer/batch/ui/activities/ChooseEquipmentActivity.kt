@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
+import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.models.Equipment
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.activities.batch.BatchActivity
@@ -49,6 +50,9 @@ class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Intera
 
         subscribeNetworkStateChangeListener { userPanel.setInternetState(it) }
         subscribeGpsStateChangeListener { userPanel.setGPSState(it) }
+        if (FasterMixerApplication.isDemo) {
+            layoutDemo.visibility = View.VISIBLE
+        }
     }
 
     private fun subscribeObservers() {

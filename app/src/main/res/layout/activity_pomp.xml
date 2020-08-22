@@ -16,6 +16,15 @@
         tools:context=".ui.activities.pomp.PompActivity">
 
 
+        <include
+            android:id="@+id/layoutDemo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/layout_demo"
+            android:layout_margin="@dimen/standard_margin"
+            android:layout_gravity="top|left" />
+
+
 
         <androidx.cardview.widget.CardView
             android:id="@+id/btnMessage"

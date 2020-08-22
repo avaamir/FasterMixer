@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
+import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.databinding.ActivityPompBinding
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
@@ -69,6 +70,9 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             } else {
                 mBinding.ivGPS.setImageResource(R.drawable.ic_error);
             }
+        }
+        if (FasterMixerApplication.isDemo) {
+            mBinding.layoutDemo.visibility = View.VISIBLE
         }
     }
 
@@ -228,7 +232,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             transaction.hide(it)
         }
         mBinding.frameGPSState.visibility = View.INVISIBLE
-        
+
         when (myRaisedButton.id) {
             mBinding.btnMap.id -> {
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG)!!)
