@@ -1,6 +1,7 @@
 package com.behraz.fastermixer.batch.ui.activities
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -104,7 +105,10 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         )
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initViews() {
+        tvVersion.text = "v${BuildConfig.VERSION_NAME}"
+
         loadCredentialIfExists()
 
         val orientation = resources.configuration.orientation

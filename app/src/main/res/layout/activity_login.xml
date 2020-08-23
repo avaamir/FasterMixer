@@ -24,6 +24,17 @@
             android:layout_height="wrap_content"
             tools:context=".ui.activities.LoginActivity">
 
+            <TextView
+                android:id="@+id/tvVersion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:fontFamily="@font/consolas"
+                android:textColor="@color/btn_yellow"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="v1.2" />
 
             <androidx.cardview.widget.CardView
                 android:visibility="visible"
