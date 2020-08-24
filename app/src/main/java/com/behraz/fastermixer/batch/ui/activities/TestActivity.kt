@@ -7,6 +7,8 @@ import android.net.Uri
 import android.os.BatteryManager
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.behraz.fastermixer.batch.utils.general.AppUpdater
 import com.behraz.fastermixer.batch.R
@@ -63,6 +65,12 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
         val x = subscribeSignalStrengthChangeListener(true) {
             println("debug:signal: $it")
         }
+
+
+        Handler().postDelayed({
+            l_demo.visibility = View.VISIBLE
+        } , 3000)
+
 /*
         btnLogin.setOnClickListener {
             *//*  val currentTime: Date = Calendar.getInstance().time
