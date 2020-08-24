@@ -6,7 +6,7 @@
     android:id="@+id/tvDemo"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:visibility="visible"
+    android:visibility="gone"
     app:cardCornerRadius="10dp"
     app:cardBackgroundColor="@color/bg_black_transparent_for_text"
     style="@style/my_card_style">

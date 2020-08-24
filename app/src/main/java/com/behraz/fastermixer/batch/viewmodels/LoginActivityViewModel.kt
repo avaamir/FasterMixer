@@ -13,8 +13,6 @@ import com.behraz.fastermixer.batch.utils.general.Event
 
 class LoginActivityViewModel : ViewModel() {
 
-    var isInDownloadProgress = false
-
     private var isCheckedForUpdatesRequestActive = false
 
     private var updateEvent: Event<Entity<UpdateResponse>> =
@@ -42,8 +40,7 @@ class LoginActivityViewModel : ViewModel() {
         RemoteRepo.login(request).map { entity ->
             //TODO if account isDemo (felan static code zade shode badan bayad az samte server dorost beshe) ->
             if (entity?.isSucceed == true) {
-                if (request.factoryCode == "100100")
-                    FasterMixerApplication.isDemo = true
+                FasterMixerApplication.isDemo = request.factoryCode == "100100"
             }
             Event(entity)
         }

@@ -5,19 +5,21 @@ public class BR {
 
   public static final int batch = 1;
 
-  public static final int customer = 2;
+  public static final int contact = 2;
 
-  public static final int equipment = 3;
+  public static final int customer = 3;
 
-  public static final int message = 4;
+  public static final int equipment = 4;
 
-  public static final int mixer = 5;
+  public static final int message = 5;
 
-  public static final int plan = 6;
+  public static final int mixer = 6;
 
-  public static final int progress = 7;
+  public static final int plan = 7;
 
-  public static final int user = 8;
+  public static final int progress = 8;
 
-  public static final int viewModel = 9;
+  public static final int user = 9;
+
+  public static final int viewModel = 10;
 }
