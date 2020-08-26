@@ -26,6 +26,74 @@
 
 
 
+        <FrameLayout
+            android:id="@+id/frame_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:behavior_hideable="true"
+            app:layout_behavior=".ui.customs.general.TopSheetBehavior"
+            android:background="#00000000"
+            android:paddingRight="32dp"
+            android:paddingLeft="32dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.behraz.fastermixer.batch.ui.customs.fastermixer.progressview.FasterMixerProgressView
+                    android:id="@+id/jobProgressView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:visibility="gone"
+                    app:layout_anchorGravity="top"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:background="@color/primary"
+                    tools:layout_height="100dp" />
+
+                <include
+                    android:id="@+id/layout_new_message"
+                    layout="@layout/item_message_vertical"  />
+
+
+                <!--<FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <FrameLayout
+                        android:id="@+id/frame_customer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <include
+                            android:id="@+id/layout_customer"
+                            layout="@layout/item_customer" />
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/frameMixer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
+
+                        <include
+                            android:id="@+id/layout_mixer"
+                            layout="@layout/layout_mixer" />
+
+                    </FrameLayout>
+                </FrameLayout>-->
+
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/btnMessage"
             android:layout_width="wrap_content"
@@ -195,7 +263,7 @@
 
 
             <LinearLayout
-                android:id="@+id/linearLayout4"
+                android:id="@+id/frameBottomButtons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"

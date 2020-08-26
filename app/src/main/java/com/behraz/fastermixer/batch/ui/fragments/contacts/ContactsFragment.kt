@@ -68,7 +68,7 @@ class ContactsFragment: Fragment(), ContactAdapter.Interactions {
         initViews()
         subscribeObservers()
 
-        //TODO initContacts()
+        //initContacts()
 
         return mBinding.root
     }
@@ -217,7 +217,7 @@ class ContactsFragment: Fragment(), ContactAdapter.Interactions {
 
     private fun initContacts() {
         //Barez
-        addContacts(
+/*        addContacts(
             listOf(
                 Contact("barez1", "09925356408", "barez"),
                 Contact("barez2", "09925356405", "barez"),
@@ -230,12 +230,12 @@ class ContactsFragment: Fragment(), ContactAdapter.Interactions {
                 Contact("barez9", "09921603894", "barez"),
                 Contact("barez10", "09160885872", "barez")
             )
-        )
+        )*/
 
         //Jamkaran
         addContacts(
           listOf(
-              Contact("سواری شخصی", "09381522686", "jamkaran"),
+/*              Contact("سواری شخصی", "09381522686", "jamkaran"),
               Contact("میکسر یک", "09038516423", "jamkaran"),
               Contact("میکسر دو", "09038516427", "jamkaran"),
               Contact("میکسر سه", "09038516523", "jamkaran"),
@@ -247,10 +247,10 @@ class ContactsFragment: Fragment(), ContactAdapter.Interactions {
               Contact("jamkaran4", "09014808698", "jamkaran"),
               Contact("jamkaran5", "09014808978", "jamkaran"),
               Contact("jamkaran6", "09013484661", "jamkaran"),
-              Contact("jamkaran7", "09013486891", "jamkaran"),
-              Contact("jamkaran8", "09013530891", "jamkaran"),
-              Contact("jamkaran9", "09013572741", "jamkaran"),
-              Contact("jamkaran10", "09013584361", "jamkaran")
+              Contact("jamkaran7", "09013486891", "jamkaran"),*/
+              Contact("jamkaran8", "09013530891", "jamkaran")
+           //   Contact("jamkaran9", "09013572741", "jamkaran"),
+          //    Contact("jamkaran10", "09013584361", "jamkaran")
           )
       )
     }

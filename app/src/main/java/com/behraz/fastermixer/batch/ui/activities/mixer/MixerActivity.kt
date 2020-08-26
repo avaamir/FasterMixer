@@ -4,21 +4,16 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.view.animation.LinearInterpolator
-import android.view.animation.OvershootInterpolator
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
-import com.behraz.fastermixer.batch.databinding.ActivityMixerBinding
-import com.behraz.fastermixer.batch.models.Progress
-import com.behraz.fastermixer.batch.models.ProgressState
+import com.behraz.fastermixer.batch.databinding.ActivityPompBinding
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
-import com.behraz.fastermixer.batch.ui.animations.startReveal
-import com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
-import com.behraz.fastermixer.batch.ui.customs.fastermixer.progressview.FasterMixerProgressView
-import com.behraz.fastermixer.batch.ui.customs.general.LockableBottomSheetBehavior
+import com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
 import com.behraz.fastermixer.batch.ui.customs.general.TopSheetBehavior
 import com.behraz.fastermixer.batch.ui.dialogs.MixerMessageDialog
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
@@ -27,15 +22,13 @@ import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
 import com.behraz.fastermixer.batch.ui.fragments.mixer.MixerMapFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.MessageListFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
-import com.behraz.fastermixer.batch.utils.fastermixer.fakeProgresses
 import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
 import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.MixerActivityViewModel
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.activity_batch.*
 
-class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
-    FasterMixerProgressView.OnStateChangedListener, ApiService.InternetConnectionListener,
+class MixerActivity : AppCompatActivity(),
+    ApiService.InternetConnectionListener,
     ApiService.OnUnauthorizedListener,
     MixerMessageDialog.Interactions {
 
@@ -49,11 +42,9 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
     }
 
     private lateinit var viewModel: MixerActivityViewModel
-    private lateinit var bottomSheetBehavior: LockableBottomSheetBehavior<View>
+    private lateinit var mBinding: ActivityPompBinding
+
     private lateinit var topSheetBehavior: TopSheetBehavior<View>
-    private var isBottomExpanded = false
-    private var isTopExpanded = false
-    private lateinit var mBinding: ActivityMixerBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,15 +52,25 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
         setContentView(R.layout.activity_mixer)
 
         viewModel = ViewModelProvider(this).get(MixerActivityViewModel::class.java)
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_mixer)
-        mBinding.lifecycleOwner = this
-        mBinding.viewModel = viewModel
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_pomp)
 
         initViews()
         subscribeObservers()
 
-        subscribeNetworkStateChangeListener { mBinding.fasterMixerUserPanel.setInternetState(it) }
-        subscribeGpsStateChangeListener { mBinding.fasterMixerUserPanel.setGPSState(it) }
+        subscribeNetworkStateChangeListener {
+            if (it) {
+                mBinding.ivInternet.setImageResource(R.drawable.ic_check)
+            } else {
+                mBinding.ivInternet.setImageResource(R.drawable.ic_error)
+            }
+        }
+        subscribeGpsStateChangeListener {
+            if (it) {
+                mBinding.ivGPS.setImageResource(R.drawable.ic_check)
+            } else {
+                mBinding.ivGPS.setImageResource(R.drawable.ic_error)
+            }
+        }
         if (FasterMixerApplication.isDemo) {
             mBinding.layoutDemo.visibility = View.VISIBLE
         }
@@ -94,18 +95,7 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
         topSheetBehavior.state = TopSheetBehavior.STATE_HIDDEN
         topSheetBehavior.setSwipedEnabled(false)
 
-        mBinding.btnArrow.setOnClickListener {
-            if (isTopExpanded) {
-                topSheetBehavior.state = TopSheetBehavior.STATE_HIDDEN
-            } else {
-                topSheetBehavior.state = TopSheetBehavior.STATE_EXPANDED
-            }
-            it.animate().apply {
-                duration = 500
-                rotationBy(if (isTopExpanded) -180f else 180f)
-            }.start()
-            isTopExpanded = !isTopExpanded
-        }
+
 
         mBinding.btnMessage.setOnClickListener {
             MixerMessageDialog(
@@ -115,21 +105,46 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
             ).show()
         }
 
-        bottomSheetBehavior = LockableBottomSheetBehavior.from(mBinding.bottomSheet)
-        bottomSheetBehavior.setSwipeEnabled(true)
 
-        mBinding.btnHideUserPanel.setOnClickListener {
-            if (isBottomExpanded) {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            } else {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        /*TODO:: make this visible after feature added to server*/
+        mBinding.btnVoiceMessage.visibility = View.GONE
+
+        mBinding.btnMixers.visibility = View.GONE //mixer in ra nadarad
+        mBinding.btnProjects.visibility = View.GONE //mixer in ra nadarad
+
+        tvMessageCount.text = "0"
+        initFragments()
+
+        mBinding.btnMap.isEnabled = false
+
+        //TODO too much dependencies, make MyRasiedButton OnClick Listener Ok And remove below lines, and add onClick in XML
+        mBinding.btnMap.setOnClickListener {
+            onFasterMixerMenuButtonsClicked(mBinding.btnMap)
+        }
+        mBinding.btnMixers.setOnClickListener {
+            onFasterMixerMenuButtonsClicked(mBinding.btnMixers)
+        }
+        mBinding.btnProjects.setOnClickListener {
+            onFasterMixerMenuButtonsClicked(mBinding.btnProjects)
+        }
+        mBinding.btnMessages.setOnClickListener {
+            onFasterMixerMenuButtonsClicked(mBinding.btnMessages)
+        }
+
+
+
+        mBinding.btnLogout.setOnClickListener {
+            logoutAlertMessage {
+                viewModel.logout()
+                progressDialog.show()
             }
-            it.animate().apply {
-                interpolator = OvershootInterpolator()
-                duration = 500
-                rotationBy(if (isBottomExpanded) -180f else 180f)
-            }.start()
-            isBottomExpanded = !isBottomExpanded
+        }
+
+        mBinding.btnVoiceMessage.setOnClickListener {
+            RecordingDialogFragment().show(
+                supportFragmentManager,
+                null
+            )
         }
 
 
@@ -141,23 +156,14 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
             }.start()
         }
 
-
-        mBinding.fasterMixerUserPanel.setInteractions(this)
-
-
-        mBinding.jobProgressView.addOnStateChangedListener(this)
-        mBinding.jobProgressView.setProgressItems(
-            fakeProgresses(
-                true
-            )
-        ) //todo ui test purpose get it from viewModel
     }
 
     private fun subscribeObservers() {
         viewModel.user.observe(this, Observer {
             it?.let {
-                mBinding.fasterMixerUserPanel.setUsername(it.name)
-                mBinding.fasterMixerUserPanel.setPersonalCode(it.personalCode)
+                //TODO add user personal info to ui
+                /*mBinding.fasterMixerUserPanel.setUsername(it.name)
+                mBinding.fasterMixerUserPanel.setPersonalCode(it.personalCode)*/
             }
         })
 
@@ -206,49 +212,87 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
         })
     }
 
+    private fun initFragments() {
+        supportFragmentManager.beginTransaction().apply {
+            add(
+                R.id.mapContainer,
+                MessageListFragment(), FRAGMENT_MESSAGE_LIST_TAG
+            )
+            add(
+                R.id.mapContainer,
+                MixerMapFragment.newInstance(mBinding.btnMyLocation.id),
+                FRAGMENT_MAP_TAG
+            )
+            commit()
+        }
+    }
+
+    private fun onFasterMixerMenuButtonsClicked(myRaisedButton: MyRaisedButton) {
+
+        val transaction = supportFragmentManager.beginTransaction()
+        supportFragmentManager.fragments.forEach {
+            transaction.hide(it)
+        }
+        mBinding.frameGPSState.visibility = View.INVISIBLE
+        mBinding.frameBottomButtons.visibility = View.INVISIBLE
+
+        when (myRaisedButton.id) {
+            mBinding.btnMap.id -> {
+                transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG)!!)
+                mBinding.frameGPSState.visibility = View.VISIBLE
+                mBinding.frameBottomButtons.visibility = View.VISIBLE
+            }
+            mBinding.btnMessages.id -> {
+                transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_MESSAGE_LIST_TAG)!!)
+            }
+            //TODO
+            mBinding.btnProjects.id -> {
+                throw  IllegalStateException("this menu is only available in PompActivity")
+                //transaction.show(supportFragmentManager.findFragmentByTag( FRAGMENT_CUSTOMER_LIST_TAG)!!)
+            }
+            mBinding.btnMixers.id -> {
+                throw  IllegalStateException("this menu is only available in PompActivity")
+                //transaction.show(supportFragmentManager.findFragmentByTag( FRAGMENT_MIXER_LIST_TAG)!!)
+            }
+        }
+        transaction.commit()
+
+        refreshUserPanelButtonsOnClick(myRaisedButton)
+    }
+
+    private fun refreshUserPanelButtonsOnClick(view: View) {
+        val gray = ContextCompat.getColor(this, R.color.primary_dark)
+        val yellow = ContextCompat.getColor(this, R.color.btn_yellow)
+
+        mBinding.btnMap.setBackgroundColor(yellow)
+        mBinding.btnProjects.setBackgroundColor(yellow)
+        mBinding.btnMixers.setBackgroundColor(yellow)
+        mBinding.btnMessages.setBackgroundColor(yellow)
+
+        mBinding.btnMap.isEnabled = true
+        mBinding.btnProjects.isEnabled = true
+        mBinding.btnMixers.isEnabled = true
+        mBinding.btnMessages.isEnabled = true
+
+        view.isEnabled = false
+        view.setBackgroundColor(gray)
+    }
+
     override fun onBackPressed() {
 
-        if (supportFragmentManager.backStackEntryCount == 1) {
-            //TODO mBinding.btnArrow.visibility = View.VISIBLE
-            mBinding.btnMyLocation.visibility = View.VISIBLE
-            startReveal(mBinding.btnArrow) {}
-            startReveal(mBinding.btnMyLocation) {}
+        val mapFragment = supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG)!!
+        if (mapFragment.isHidden) {
+            onFasterMixerMenuButtonsClicked(mBinding.btnMap)
+        } else {
+            super.onBackPressed()
         }
-
         super.onBackPressed()
 
     }
 
 
-    override fun onStateChanged(progress: Progress) {
-        //TODO if topBar is not expanded expand it for some seconds then hide it
-        toast(
-            progress.name
-        )
-        if (progress.id == 1) { //get Customer Info
-            // crossfade(mBinding.frameCustomer, mBinding.frameMixer)
-        } else if (progress.id == 3) { //beginning of progress
-            // crossfade(mBinding.frameMixer, mBinding.frameCustomer)
-        } else if (progress.id == 4) { //finishing state
-            if (progress.state == ProgressState.InProgress) {
-                //TODO
-            } else if (progress.state == ProgressState.Done) {
-                //   mBinding.jobProgressView.resetProgress()
-            }
-        }
-    }
-
-
     override fun onMessageClicked() {
-        supportFragmentManager.beginTransaction().apply {
-            add(
-                R.id.mapContainer,
-                MessageListFragment(),
-                FRAGMENT_MESSAGE_LIST_TAG
-            )
-            addToBackStack(FRAGMENT_MESSAGE_LIST_TAG)
-            commit()
-        }
+        onFasterMixerMenuButtonsClicked(mBinding.btnMessages)
     }
 
     override fun onStopClicked() {
@@ -260,21 +304,6 @@ class MixerActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
     }
 
     override fun onRepairClicked() {
-        toast("Not yet implemented")
-    }
-
-    override fun onLogoutClicked(view: View) {
-        logoutAlertMessage {
-            viewModel.logout()
-            progressDialog.show()
-        }
-    }
-
-    override fun onRecordClicked(btnRecord: FloatingActionButton?) {
-        RecordingDialogFragment().show(supportFragmentManager, null)
-    }
-
-    override fun onCallClicked(view: View) {
         toast("Not yet implemented")
     }
 

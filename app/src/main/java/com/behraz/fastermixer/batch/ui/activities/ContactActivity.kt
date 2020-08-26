@@ -49,14 +49,17 @@ class ContactActivity : AppCompatActivity(),
         viewModel = ViewModelProvider(this).get(ContactActivityViewModel::class.java)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_contact)
 
-        if (viewModel.allContacts == null) {
-            viewModel.allContacts = getContactList().also {
-                it.forEach(::println)
+
+        if (permissionHelper.arePermissionsGranted()) {
+            if (viewModel.allContacts == null) {
+                viewModel.allContacts = getContactList().also {
+                    it.forEach(::println)
+                }
             }
+            initFragments()
         }
 
-        initFragments()
-
+        permissionHelper.checkPermission()
     }
 
     private fun initFragments() {
@@ -134,7 +137,7 @@ class ContactActivity : AppCompatActivity(),
                         if (moveToFirst()) {
                             val organization =
                                 getString(getColumnIndex(ContactsContract.CommonDataKinds.Organization.COMPANY))
-                            contacts[name]?.company = organization
+                            contacts[name]?.company = organization ?: ""
                         }
                         close()
                     }
@@ -211,7 +214,9 @@ class ContactActivity : AppCompatActivity(),
 
     }
 
-    override fun onPermissionsGranted() {}
+    override fun onPermissionsGranted() {
+        initFragments()
+    }
 
     override fun onPermissionDenied(deniedPermissions: ArrayList<String>) {
         deniedPermissions.forEach { println("debug: $it denied") }
