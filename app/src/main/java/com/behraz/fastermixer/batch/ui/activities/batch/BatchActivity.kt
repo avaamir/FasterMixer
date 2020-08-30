@@ -28,7 +28,7 @@ import com.behraz.fastermixer.batch.viewmodels.BatchActivityViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_batch.*
 
-class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdapter.Interaction,
+class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdapter.BatchAdapterInteraction,
     FasterMixerUserPanel.Interactions, ApiService.InternetConnectionListener,
     ApiService.OnUnauthorizedListener {
 

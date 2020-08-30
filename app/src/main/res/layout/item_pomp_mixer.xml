@@ -135,7 +135,20 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed"
                 app:radius="10dp"
+                android:visibility="gone"
                 app:text="تماس با راننده" />
+
+            <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                android:id="@+id/btn_show_mixer_on_map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:backgroundColor="@color/white"
+                app:image="@drawable/ic_map"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:radius="10dp" />
 
             <com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView
                 android:id="@+id/carId"

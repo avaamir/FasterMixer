@@ -1,13 +1,19 @@
 package com.behraz.fastermixer.batch.ui.activities.pomp
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.View
 import android.view.animation.LinearInterpolator
+import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.databinding.ActivityPompBinding
@@ -30,6 +36,25 @@ import kotlinx.android.synthetic.main.activity_batch.*
 
 class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
     PompMessageDialog.Interactions, ApiService.OnUnauthorizedListener {
+
+    private val locateMixerReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (intent.action == Constants.ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP) {
+                //TODO put mixer or mixerId in intent from MixerListFragment
+                val mixerId =
+                    intent.getStringExtra(Constants.ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP_MIXER_ID)
+                val mixer = viewModel.requestMixers.value?.entity?.find { it.id == mixerId }
+                if (mixer != null) {
+                    onFasterMixerMenuButtonsClicked(mBinding.btnMessages)
+                    (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as? PompMapFragment)
+                        ?.moveCamera(mixer.latLng)
+
+                } else {
+                    toast("خطایی به وجود آمده است")
+                }
+            }
+        }
+    }
 
     private companion object {
         private const val FRAGMENT_MIXER_LIST_TAG = "mixer-list_frag"
@@ -59,21 +84,31 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
 
         subscribeNetworkStateChangeListener {
             if (it) {
-                mBinding.ivInternet.setImageResource(R.drawable.ic_check);
+                mBinding.ivInternet.setImageResource(R.drawable.ic_check)
             } else {
-                mBinding.ivInternet.setImageResource(R.drawable.ic_error);
+                mBinding.ivInternet.setImageResource(R.drawable.ic_error)
             }
         }
         subscribeGpsStateChangeListener {
             if (it) {
-                mBinding.ivGPS.setImageResource(R.drawable.ic_check);
+                mBinding.ivGPS.setImageResource(R.drawable.ic_check)
             } else {
-                mBinding.ivGPS.setImageResource(R.drawable.ic_error);
+                mBinding.ivGPS.setImageResource(R.drawable.ic_error)
             }
         }
         if (FasterMixerApplication.isDemo) {
             mBinding.layoutDemo.visibility = View.VISIBLE
         }
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+            locateMixerReceiver,
+            IntentFilter(Constants.ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP)
+        )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(locateMixerReceiver)
     }
 
     private fun initViews() {
@@ -132,6 +167,15 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             }.start()
         }
 
+        mBinding.checkBoxShowAllMixers.isChecked = viewModel.shouldShowAllMixers.value!!
+
+        /*TODO bad az in ke api dorost shod in 2 khat ro pak kon*/
+        mBinding.checkBoxShowAllMixers.visibility = View.INVISIBLE
+        mBinding.textView55.visibility = View.INVISIBLE
+
+        mBinding.checkBoxShowAllMixers.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.shouldShowAllMixers.value = isChecked
+        }
 
     }
 

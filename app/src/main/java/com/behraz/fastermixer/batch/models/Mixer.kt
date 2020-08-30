@@ -18,9 +18,9 @@ data class Mixer(
     @SerializedName("owner")
     val owner: String,
     @SerializedName("latPoint")
-      var lat: String,
+    var lat: String,
     @SerializedName("lngPoint")
-      var lng: String,
+    var lng: String,
 
     val totalAmount: Float?, //TODO not implemented server side
     val phone: String?, //TODO it is telephone list, not yet implemented server side

@@ -28,7 +28,7 @@ import java.io.File
 
 
 class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
-    GoogleApiClient.OnConnectionFailedListener, MixerAdapter.Interaction {
+    GoogleApiClient.OnConnectionFailedListener, MixerAdapter.BatchAdapterInteraction {
 
 
     private val dialog: MyProgressDialog by lazy {

@@ -20,9 +20,10 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
         sViewsWithIds.put(R.id.textView15, 12);
         sViewsWithIds.put(R.id.textView17, 13);
         sViewsWithIds.put(R.id.btnCall, 14);
-        sViewsWithIds.put(R.id.carId, 15);
-        sViewsWithIds.put(R.id.textView10, 16);
-        sViewsWithIds.put(R.id.textView19, 17);
+        sViewsWithIds.put(R.id.btn_show_mixer_on_map, 15);
+        sViewsWithIds.put(R.id.carId, 16);
+        sViewsWithIds.put(R.id.textView10, 17);
+        sViewsWithIds.put(R.id.textView19, 18);
     }
     // views
     @NonNull
@@ -33,13 +34,14 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
     // Inverse Binding Event Handlers
 
     public ItemPompMixerBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 18, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 19, sIncludes, sViewsWithIds));
     }
     private ItemPompMixerBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
             , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[14]
-            , (com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView) bindings[15]
-            , (android.widget.TextView) bindings[16]
+            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[15]
+            , (com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView) bindings[16]
+            , (android.widget.TextView) bindings[17]
             , (android.widget.TextView) bindings[9]
             , (android.widget.TextView) bindings[10]
             , (android.widget.TextView) bindings[11]
@@ -48,7 +50,7 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
             , (android.widget.TextView) bindings[3]
             , (android.widget.TextView) bindings[13]
             , (android.widget.TextView) bindings[4]
-            , (android.widget.TextView) bindings[17]
+            , (android.widget.TextView) bindings[18]
             , (android.widget.TextView) bindings[7]
             , (android.widget.TextView) bindings[5]
             , (android.widget.TextView) bindings[8]

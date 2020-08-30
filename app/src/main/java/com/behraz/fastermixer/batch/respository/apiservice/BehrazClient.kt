@@ -43,6 +43,9 @@ interface BehrazClient {
     @POST("Planning/FindAllPlanningForPump")
     suspend fun getPompMixers(): Response<Entity<List<Mixer>>>
 
+    @POST("Vehicle/FindAllMixerForPump")
+    suspend fun getAllMixers(): Response<Entity<List<Mixer>>>
+
     @POST("Equipment/FindLocationBatch")
     suspend fun getBatchLocation(@Body getEquipmentRequest: GetEquipmentRequest): Response<Entity<GetBatchLocationResponse>>
 

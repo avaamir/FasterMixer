@@ -1,7 +1,9 @@
 package com.behraz.fastermixer.batch.viewmodels
 
 import androidx.lifecycle.*
+import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.CircleFence
+import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.utils.general.Event
@@ -9,6 +11,8 @@ import kotlin.concurrent.fixedRateTimer
 
 class PompActivityViewModel : ViewModel() {
 
+
+    var shouldShowAllMixers = MutableLiveData<Boolean>(false)
 
     val user get() = UserConfigs.user
 
@@ -18,37 +22,49 @@ class PompActivityViewModel : ViewModel() {
 
 
     //we did not use Transformation because it is not always have a observer , But We Always have to update it's value for sorting mixers List, the only observer is in map fragment
-    val pompArea = MutableLiveData<CircleFence?>(null) //TODO implement this // get from GPS // curently it will receive from server from car GPS, In new Version Maybe Needed
+    val pompArea =
+        MutableLiveData<CircleFence?>(null) //TODO implement this // get from GPS // curently it will receive from server from car GPS, In new Version Maybe Needed
 
     private val getMixersEvent = MutableLiveData(Event(Unit))
-    val mixers = Transformations.switchMap(getMixersEvent) {
-        RemoteRepo.getRequestMixers(batchNotPomp = false).map { response ->
-            isGetMixerRequestActive = false
-            val sortedMixers = pompArea.value?.let { pompLocation ->
-                response?.entity?.let {
-                    if (it.size == 1) {
-                        if (it[0].state != "تخلیه") it[0].normalizeStateByDistance(pompLocation)
-                        it
-                    } else
-                        it.sortedWith(
-                            compareBy { mixer ->
-                                mixer.latLng.distanceToAsDouble(pompLocation.center)
-                                    .also { distance ->
-                                        mixer.normalizeStateByDistance(
-                                            distance,
-                                            pompLocation.radius
-                                        )
-                                    }
-                            }
-                        )
-                }
-            }
-            if (sortedMixers != null)
-                response?.copy(entity = sortedMixers)
-            else
-                response
+
+    val allMixers = Transformations.switchMap(getMixersEvent) {
+        RemoteRepo.getAllMixers().map { response ->
+            sortMixerResponse(response)
         }
     }
+    val requestMixers = Transformations.switchMap(getMixersEvent) {
+        RemoteRepo.getRequestMixers(batchNotPomp = false).map { response ->
+            isGetMixerRequestActive = false
+            sortMixerResponse(response)
+        }
+    }
+
+    private fun sortMixerResponse(response: Entity<List<Mixer>>?): Entity<List<Mixer>>? {
+        val sortedMixers = pompArea.value?.let { pompLocation ->
+            response?.entity?.let {
+                if (it.size == 1) {
+                    if (it[0].state != "تخلیه") it[0].normalizeStateByDistance(pompLocation)
+                    it
+                } else
+                    it.sortedWith(
+                        compareBy { mixer ->
+                            mixer.latLng.distanceToAsDouble(pompLocation.center)
+                                .also { distance ->
+                                    mixer.normalizeStateByDistance(
+                                        distance,
+                                        pompLocation.radius
+                                    )
+                                }
+                        }
+                    )
+            }
+        }
+        return if (sortedMixers != null)
+            response?.copy(entity = sortedMixers)
+        else
+            response
+    }
+
 
     private val getCustomerEvent = MutableLiveData(Event(Unit))
     val customers = Transformations.switchMap(getCustomerEvent) {

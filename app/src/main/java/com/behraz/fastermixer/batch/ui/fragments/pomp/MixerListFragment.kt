@@ -10,16 +10,19 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentMixerListBinding
 import com.behraz.fastermixer.batch.models.Mixer
+import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.ui.adapters.MixerAdapter
+import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 
-class MixerListFragment : Fragment(), MixerAdapter.Interaction {
+class MixerListFragment : Fragment(), MixerAdapter.PompAdapterInteraction {
     private val mixerAdapter = MixerAdapter(true, this)
     private lateinit var mBinding: FragmentMixerListBinding
     private lateinit var viewModel: PompActivityViewModel
@@ -37,17 +40,38 @@ class MixerListFragment : Fragment(), MixerAdapter.Interaction {
     }
 
     private fun observeViewModel() {
-      viewModel.mixers.observe(viewLifecycleOwner, Observer {
-          if (it != null) {
-              if (it.isSucceed) {
-                  mixerAdapter.submitList(it.entity)
-              } else {
-                  //TODo
-              }
-          } else {
-              //TODo
-          }
-      })
+        viewModel.shouldShowAllMixers.observe(viewLifecycleOwner, Observer { shouldShowAll ->
+            if (shouldShowAll)
+                handleServerResponse(viewModel.allMixers.value)
+            else
+                handleServerResponse(viewModel.requestMixers.value)
+        })
+
+        viewModel.allMixers.observe(viewLifecycleOwner, Observer {
+            if (viewModel.shouldShowAllMixers.value!!) {
+                handleServerResponse(it)
+            }
+        })
+
+        viewModel.requestMixers.observe(viewLifecycleOwner, Observer {
+            if (!viewModel.shouldShowAllMixers.value!!) {
+                handleServerResponse(it)
+            }
+        })
+
+
+    }
+
+    private fun handleServerResponse(response: Entity<List<Mixer>>?) {
+        if (response != null) {
+            if (response.isSucceed) {
+                mixerAdapter.submitList(response.entity)
+            } else {
+                //TODo
+            }
+        } else {
+            //TODo
+        }
     }
 
     private fun initViews() {
@@ -64,11 +88,14 @@ class MixerListFragment : Fragment(), MixerAdapter.Interaction {
             LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
     }
 
+    override fun onShowOnMapClicked(mixer: Mixer) {
+        LocalBroadcastManager.getInstance(context!!)
+            .sendBroadcast(Intent(Constants.ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP).apply {
+                putExtra(Constants.ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP_MIXER_ID, mixer.id)
+            })
+    }
+
     override fun onCallClicked(mixer: Mixer) {
         startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + mixer.phone)))
     }
-
-    override fun onEndLoadingClicked(mixer: Mixer) { /*just for batch*/
-    }
-
 }

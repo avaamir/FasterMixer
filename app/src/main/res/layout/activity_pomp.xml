@@ -147,6 +147,29 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <TextView
+                android:id="@+id/textView55"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/iransans"
+                android:text="نمایش همه"
+                android:elevation="5dp"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/checkBoxShowAllMixers"
+                app:layout_constraintEnd_toStartOf="@+id/checkBoxShowAllMixers"
+                app:layout_constraintTop_toTopOf="@+id/checkBoxShowAllMixers" />
+
+            <CheckBox
+                android:id="@+id/checkBoxShowAllMixers"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:elevation="5dp"
+                app:layout_constraintEnd_toEndOf="@+id/mapContainer"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <FrameLayout
                 android:id="@+id/mapContainer"
                 android:layout_width="0dp"
@@ -154,7 +177,9 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/frame_user_buttons"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" >
+
+            </FrameLayout>
 
 
             <androidx.cardview.widget.CardView

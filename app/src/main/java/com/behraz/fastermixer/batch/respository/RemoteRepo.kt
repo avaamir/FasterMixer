@@ -111,6 +111,7 @@ object RemoteRepo {
     fun getRequestMixers(batchNotPomp: Boolean) =
         if (batchNotPomp) apiReq(ApiService.client::getBatchMixers) else apiReq(ApiService.client::getPompMixers)
 
+    fun getAllMixers() = apiReq(ApiService.client::getAllMixers)
 
     fun getMessages() = apiReq(ApiService.client::getMessages)
 

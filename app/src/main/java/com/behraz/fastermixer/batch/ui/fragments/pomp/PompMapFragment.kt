@@ -6,18 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.behraz.fastermixer.batch.respository.apiservice.ApiService
+import com.behraz.fastermixer.batch.models.Mixer
+import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.ui.fragments.BaseMapFragment
 import com.behraz.fastermixer.batch.ui.osm.MixerMarker
 import com.behraz.fastermixer.batch.ui.osm.PompMarker
-import com.behraz.fastermixer.batch.utils.fastermixer.Constants
-import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 import com.behraz.fastermixer.batch.viewmodels.PompMapFragmentViewModel
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.overlay.Polyline
 
 class PompMapFragment : BaseMapFragment() {
+
 
 
     private var isFirstTime = true
@@ -69,7 +68,6 @@ class PompMapFragment : BaseMapFragment() {
         super.initViews()
     }
 
-
     private fun subscribeObservers() {
 
         pompViewModel.pompArea.observe(viewLifecycleOwner, Observer {
@@ -84,35 +82,55 @@ class PompMapFragment : BaseMapFragment() {
         })
 
 
-        pompViewModel.mixers.observe(viewLifecycleOwner, Observer {
-            if (it?.isSucceed == true) {
-                val excludeMarkerList =
-                    ArrayList(mapViewModel.markers.keys) // we need this for exclude mixers from original list if mixer not exists in new mixerList
-                it.entity?.forEach { mixer ->
-                    excludeMarkerList.remove(mixer.id) //do not need to exclude this mixer because it's exists in new List too
-                    val mixerMarker = mapViewModel.markers[mixer.id]
-                    if (mixerMarker == null) { //new mixer in pomp incoming list (taze az batch kharej shode va dare be pomp mire)
-                        //add to marker hash map and MapView
-                        mapViewModel.markers[mixer.id] =
-                            MixerMarker(mBinding.map).also { _marker ->
-                                _marker.position = mixer.latLng
-                                addMarkerToMap(
-                                    _marker,
-                                    mixer.latLng,
-                                    "${mixer.carName} ${mixer.driverName}"
-                                )
-                            }
-                    } else { //mixer already exists, update location
-                        mixerMarker.position = mixer.latLng
-                    }
-                }
-                excludeMarkerList.forEach { mixerId ->
-                    mBinding.map.overlayManager.remove(
-                        mapViewModel.markers.remove(mixerId)
-                    )
-                }
+        pompViewModel.shouldShowAllMixers.observe(viewLifecycleOwner, Observer {shouldShowAll->
+            if (shouldShowAll) {
+                sortAndShowMixers(pompViewModel.allMixers.value)
+            } else {
+                sortAndShowMixers(pompViewModel.requestMixers.value)
             }
         })
+
+        pompViewModel.allMixers.observe(viewLifecycleOwner, Observer {
+            if (pompViewModel.shouldShowAllMixers.value!!) {
+                sortAndShowMixers(it)
+            }
+        })
+
+        pompViewModel.requestMixers.observe(viewLifecycleOwner, Observer {
+            if (!pompViewModel.shouldShowAllMixers.value!!) {
+                sortAndShowMixers(it)
+            }
+        })
+    }
+
+    private fun sortAndShowMixers(serverResponse: Entity<List<Mixer>>?) {
+        if (serverResponse?.isSucceed == true) {
+            val excludeMarkerList =
+                ArrayList(mapViewModel.markers.keys) // we need this for exclude mixers from original list if mixer not exists in new mixerList
+            serverResponse.entity?.forEach { mixer ->
+                excludeMarkerList.remove(mixer.id) //do not need to exclude this mixer because it's exists in new List too
+                val mixerMarker = mapViewModel.markers[mixer.id]
+                if (mixerMarker == null) { //new mixer in pomp incoming list (taze az batch kharej shode va dare be pomp mire)
+                    //add to marker hash map and MapView
+                    mapViewModel.markers[mixer.id] =
+                        MixerMarker(mBinding.map).also { _marker ->
+                            _marker.position = mixer.latLng
+                            addMarkerToMap(
+                                _marker,
+                                mixer.latLng,
+                                "${mixer.carName} ${mixer.driverName}"
+                            )
+                        }
+                } else { //mixer already exists, update location
+                    mixerMarker.position = mixer.latLng
+                }
+            }
+            excludeMarkerList.forEach { mixerId ->
+                mBinding.map.overlayManager.remove(
+                    mapViewModel.markers.remove(mixerId)
+                )
+            }
+        }
     }
 
     override fun onMapTapped(geoPoint: GeoPoint) {
