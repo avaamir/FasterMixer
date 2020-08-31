@@ -118,7 +118,7 @@ class PompMapFragment : BaseMapFragment() {
                             addMarkerToMap(
                                 _marker,
                                 mixer.latLng,
-                                "${mixer.carName} ${mixer.driverName}"
+                                if (mixer.driverName.isNullOrBlank()) mixer.carName else "${mixer.carName} ${mixer.driverName}"
                             )
                         }
                 } else { //mixer already exists, update location

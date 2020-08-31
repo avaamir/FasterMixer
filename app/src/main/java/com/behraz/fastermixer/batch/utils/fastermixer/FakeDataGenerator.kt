@@ -142,13 +142,14 @@ fun fakeMixers(): List<Mixer> {
         mixers.add(
             Mixer(
                 id = "$i",
+                serviceId = "$i",
                 carName = "امیرحسین مهدی پور$i",
                 phone = "0936216381$i",
                 carId = "12,ب,234,63",
                 state = "ده دقیقه تا پمپ",
                 driverName = "حسن جعفری",
                 owner = "بهراز$i",
-                lat = "${i}",
+                lat = "$i",
                 lng =  "42.2${7-i}",
                 amount = 4f,
                 capacity = 6f,

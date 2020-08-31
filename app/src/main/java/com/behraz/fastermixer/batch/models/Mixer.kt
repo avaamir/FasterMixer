@@ -5,12 +5,14 @@ import com.google.gson.annotations.SerializedName
 import org.osmdroid.util.GeoPoint
 
 data class Mixer(
-    @SerializedName("planningServiceItemID")
+    @SerializedName("vehicleID")
     val id: String,
+    @SerializedName("planningServiceItemID")
+    val serviceId: String, //id service ke dare bar ro mibare
     @SerializedName("vehicleName")
     val carName: String,
     @SerializedName("driverName")
-    var driverName: String,
+    var driverName: String?,
     @SerializedName("plaque")
     val carId: String,
     @SerializedName("conditionName")
@@ -83,8 +85,8 @@ data class LoadInfo(
     private val productTypeName: String? //density,slump
 ) {
     val amount get() = "$_amount متر مکعب"
-    val slump get() = productTypeName?.split(",")?.get(1)
-    val density get() = productTypeName?.split(",")?.get(0)
+    val slump get() = if (productTypeName.isNullOrBlank()) "نامشخص" else productTypeName.split(",")[1]
+    val density get() = if (productTypeName.isNullOrBlank()) "نامشخص" else productTypeName.split(",")[0]
     val amountFromTotal get() = "$_totalAmount/$_amount"
 
 }

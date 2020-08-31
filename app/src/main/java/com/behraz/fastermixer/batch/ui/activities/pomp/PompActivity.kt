@@ -7,7 +7,6 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.view.View
 import android.view.animation.LinearInterpolator
-import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -45,7 +44,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
                     intent.getStringExtra(Constants.ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP_MIXER_ID)
                 val mixer = viewModel.requestMixers.value?.entity?.find { it.id == mixerId }
                 if (mixer != null) {
-                    onFasterMixerMenuButtonsClicked(mBinding.btnMessages)
+                    onFasterMixerMenuButtonsClicked(mBinding.btnMap)
                     (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as? PompMapFragment)
                         ?.moveCamera(mixer.latLng)
 
@@ -80,6 +79,9 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
         mBinding.viewModel = viewModel
 
         initViews()
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(locateMixerReceiver, IntentFilter(Constants.ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP))
+
         subscribeObservers()
 
         subscribeNetworkStateChangeListener {
@@ -99,16 +101,11 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
         if (FasterMixerApplication.isDemo) {
             mBinding.layoutDemo.visibility = View.VISIBLE
         }
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-            locateMixerReceiver,
-            IntentFilter(Constants.ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP)
-        )
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(locateMixerReceiver)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(locateMixerReceiver)
     }
 
     private fun initViews() {
@@ -169,9 +166,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
 
         mBinding.checkBoxShowAllMixers.isChecked = viewModel.shouldShowAllMixers.value!!
 
-        /*TODO bad az in ke api dorost shod in 2 khat ro pak kon*/
-        mBinding.checkBoxShowAllMixers.visibility = View.INVISIBLE
-        mBinding.textView55.visibility = View.INVISIBLE
+
 
         mBinding.checkBoxShowAllMixers.setOnCheckedChangeListener { _, isChecked ->
             viewModel.shouldShowAllMixers.value = isChecked
@@ -275,12 +270,12 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
         supportFragmentManager.fragments.forEach {
             transaction.hide(it)
         }
-        mBinding.frameGPSState.visibility = View.INVISIBLE
+        mBinding.gpBtns.visibility = View.GONE
 
         when (myRaisedButton.id) {
             mBinding.btnMap.id -> {
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG)!!)
-                mBinding.frameGPSState.visibility = View.VISIBLE
+                mBinding.gpBtns.visibility = View.VISIBLE
             }
             mBinding.btnProjects.id -> {
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_CUSTOMER_LIST_TAG)!!)

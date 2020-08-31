@@ -152,9 +152,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:elevation="5dp"
                 android:fontFamily="@font/iransans"
                 android:text="نمایش همه"
-                android:elevation="5dp"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/checkBoxShowAllMixers"
                 app:layout_constraintEnd_toStartOf="@+id/checkBoxShowAllMixers"
@@ -177,7 +177,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/frame_user_buttons"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" >
+                app:layout_constraintTop_toTopOf="parent">
 
             </FrameLayout>
 
@@ -236,7 +236,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/btn_projects"
                         app:radius="0dp"
                         app:text="میکسر ها"
-                        app:textSize="@dimen/pomp_menu_btns_font_size"/>
+                        app:textSize="@dimen/pomp_menu_btns_font_size" />
 
                     <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
                         android:id="@+id/btn_messages"
@@ -257,9 +257,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/pomp_menu_btns_top_margin"
                         app:backgroundColor="@color/btn_blue"
                         app:isFlat="true"
-                        android:layout_marginTop="@dimen/pomp_menu_btns_top_margin"
                         app:layout_constraintBottom_toTopOf="@+id/btnLogout"
                         app:layout_constraintTop_toBottomOf="@+id/btn_messages"
                         app:radius="0dp"
@@ -271,9 +271,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/pomp_menu_btns_top_margin"
                         app:backgroundColor="@color/logout_red"
                         app:isFlat="true"
-                        android:layout_marginTop="@dimen/pomp_menu_btns_top_margin"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/btn_voice_message"
                         app:radius="0dp"
@@ -411,6 +411,12 @@
 
 
             </LinearLayout>
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/gpBtns"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="textView55,checkBoxShowAllMixers,frameGPSState,frameBottomButtons" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
