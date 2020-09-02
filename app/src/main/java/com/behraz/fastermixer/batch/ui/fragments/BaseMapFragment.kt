@@ -116,19 +116,19 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         }
 
         //TODO my location on map
-        val mLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(context), _mBinding.map)
+        /*val mLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(context), _mBinding.map)
         mLocationOverlay.setPersonIcon(getBitmapFromVectorDrawable(context!!, R.drawable.ic_mixer))
         mLocationOverlay.enableMyLocation()
-        _mBinding.map.overlays.add(mLocationOverlay)
+        _mBinding.map.overlays.add(mLocationOverlay)*/
 
 
         //add icon on map with click
         //your items
 
 
-        val mCompassOverlay = CompassOverlay(context, InternalCompassOrientationProvider(context), _mBinding.map)
+        /*val mCompassOverlay = CompassOverlay(context, InternalCompassOrientationProvider(context), _mBinding.map)
         mCompassOverlay.enableCompass()
-        _mBinding.map.overlays.add(mCompassOverlay)
+        _mBinding.map.overlays.add(mCompassOverlay)*/
 
         _mBinding.map.setOnMapClickListener(this)
 

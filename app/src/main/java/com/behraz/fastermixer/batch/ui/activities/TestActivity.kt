@@ -67,6 +67,18 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
         }
 
 
+
+        btnShowAllMixersToggle.setOnClickListener {
+            if (btnShowAllMixersToggle.text == "همه میکسرها") {
+                btnShowAllMixersToggle.text = "میکسرهای پروژه"
+                //TODO show all mixers
+            } else {
+                btnShowAllMixersToggle.text = "همه میکسرها"
+                //TODO show request mixers
+            }
+        }
+
+
         Handler().postDelayed({
             l_demo.visibility = View.VISIBLE
         } , 3000)

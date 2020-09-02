@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.animation.LinearInterpolator
@@ -31,6 +32,7 @@ import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
 import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 import kotlinx.android.synthetic.main.activity_batch.*
+import kotlinx.android.synthetic.main.activity_test.*
 
 
 class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
@@ -42,11 +44,14 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
                 //TODO put mixer or mixerId in intent from MixerListFragment
                 val mixerId =
                     intent.getStringExtra(Constants.ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP_MIXER_ID)
-                val mixer = viewModel.requestMixers.value?.entity?.find { it.id == mixerId }
+                val mixer = viewModel.allMixers.value?.entity?.find { it.id == mixerId }
+                    ?: viewModel.requestMixers.value?.entity?.find { it.id == mixerId }
                 if (mixer != null) {
                     onFasterMixerMenuButtonsClicked(mBinding.btnMap)
-                    (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as? PompMapFragment)
-                        ?.moveCamera(mixer.latLng)
+                    (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as? PompMapFragment)?.focusOnMixer(
+                        mixer
+                    )
+
 
                 } else {
                     toast("خطایی به وجود آمده است")
@@ -80,7 +85,10 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
 
         initViews()
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(locateMixerReceiver, IntentFilter(Constants.ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP))
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+            locateMixerReceiver,
+            IntentFilter(Constants.ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP)
+        )
 
         subscribeObservers()
 
@@ -164,14 +172,23 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             }.start()
         }
 
-        mBinding.checkBoxShowAllMixers.isChecked = viewModel.shouldShowAllMixers.value!!
+        mBinding.btnShowAllMixersToggle.text =
+            if (viewModel.shouldShowAllMixers.value!!) getString(R.string.pomp_mixers_on_map_toggle_request) else getString(
+                R.string.pomp_mixers_on_map_toggle_all
+            )
 
 
+    }
 
-        mBinding.checkBoxShowAllMixers.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.shouldShowAllMixers.value = isChecked
+
+    fun toggleBtnShowAllMixers(v: View) {
+        if (btnShowAllMixersToggle.text == getString(R.string.pomp_mixers_on_map_toggle_all)) {
+            btnShowAllMixersToggle.text = getString(R.string.pomp_mixers_on_map_toggle_request)
+            viewModel.shouldShowAllMixers.value = true
+        } else {
+            btnShowAllMixersToggle.text = getString(R.string.pomp_mixers_on_map_toggle_all)
+            viewModel.shouldShowAllMixers.value = false
         }
-
     }
 
     private fun subscribeObservers() {
@@ -271,16 +288,22 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             transaction.hide(it)
         }
         mBinding.gpBtns.visibility = View.GONE
+        mBinding.btnMessage.visibility = View.GONE
+
 
         when (myRaisedButton.id) {
             mBinding.btnMap.id -> {
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG)!!)
+                mBinding.btnMessage.visibility = View.VISIBLE
                 mBinding.gpBtns.visibility = View.VISIBLE
+                mBinding.btnShowAllMixersToggle.setTextColor(Color.BLACK)
             }
             mBinding.btnProjects.id -> {
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_CUSTOMER_LIST_TAG)!!)
             }
             mBinding.btnMixers.id -> {
+                mBinding.btnShowAllMixersToggle.setTextColor(Color.WHITE)
+                mBinding.btnShowAllMixersToggle.visibility = View.VISIBLE
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_MIXER_LIST_TAG)!!)
             }
             mBinding.btnMessages.id -> {

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.behraz.fastermixer.batch.viewmodels.MixerActivityViewModel" />
+            type="com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -25,10 +25,6 @@
             android:layout_gravity="top|left" />
 
 
-        <FrameLayout
-            android:id="@+id/mapContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
         <FrameLayout
             android:id="@+id/frame_top"
@@ -98,23 +94,6 @@
 
         </FrameLayout>
 
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnArrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/standard_margin"
-            android:clickable="true"
-            android:focusable="true"
-            android:visibility="gone"
-            app:backgroundTint="@color/btn_yellow"
-            app:fabSize="mini"
-            app:layout_anchor="@id/frame_top"
-            app:layout_anchorGravity="right|bottom"
-            app:srcCompat="@drawable/ic_arrow_down"
-            app:tint="@color/white" />
-
-
         <androidx.cardview.widget.CardView
             android:id="@+id/btnMessage"
             android:layout_width="wrap_content"
@@ -164,76 +143,230 @@
 
         </androidx.cardview.widget.CardView>
 
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/bottomSheet"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="28dp"
-            app:behavior_hideable="true"
-            app:behavior_peekHeight="0dp"
-            app:layout_behavior=".ui.customs.general.LockableBottomSheetBehavior">
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/mapContainer"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/frame_user_buttons"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </FrameLayout>
 
 
-            <com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
-                android:id="@+id/fasterMixerUserPanel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/frame_user_buttons"
+                android:layout_width="120dp"
+                android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:showTopHideBtn="true" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/primary_dark"
+                    android:orientation="vertical">
 
 
-        </androidx.core.widget.NestedScrollView>
+                    <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                        android:id="@+id/btn_map"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center"
+                        app:backgroundColor="@color/primary_dark"
+                        app:isFlat="true"
+                        app:layout_constraintBottom_toTopOf="@+id/btn_messages"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:radius="0dp"
+                        app:text="نقشه"
+                        app:textSize="@dimen/pomp_menu_btns_font_size" />
+
+                    <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                        android:id="@+id/btn_messages"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center"
+                        app:backgroundColor="@color/btn_yellow"
+                        app:isFlat="true"
+                        app:layout_constraintBottom_toTopOf="@+id/btn_voice_message"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_map"
+                        app:radius="0dp"
+                        app:text="پیام ها"
+                        app:textSize="@dimen/pomp_menu_btns_font_size" />
+
+                    <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                        android:id="@+id/btn_voice_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center"
+                        app:backgroundColor="@color/btn_blue"
+                        app:isFlat="true"
+                        app:layout_constraintBottom_toTopOf="@+id/btnLogout"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_messages"
+                        app:radius="0dp"
+                        app:text="پیام صوتی"
+                        app:textSize="@dimen/pomp_menu_btns_font_size" />
+
+                    <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                        android:id="@+id/btnLogout"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center"
+                        app:backgroundColor="@color/logout_red"
+                        app:isFlat="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_voice_message"
+                        app:radius="0dp"
+                        app:text="خروج"
+                        app:textSize="@dimen/pomp_menu_btns_font_size" />
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            app:layout_anchor="@id/bottomSheet"
-            app:layout_anchorGravity="top">
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnHideUserPanel"
+
+            </androidx.cardview.widget.CardView>
+
+
+            <LinearLayout
+                android:id="@+id/frameBottomButtons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:backgroundTint="@color/btn_blue"
-                app:fabSize="mini"
-                app:srcCompat="@drawable/ic_person"
-                app:tint="@color/white" />
+                android:layout_gravity="bottom"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnWeather"
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnWeather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:backgroundTint="@color/btn_yellow"
+                    app:fabSize="mini"
+                    app:srcCompat="@drawable/ic_sun"
+                    app:tint="@color/white" />
+
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnMyLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:backgroundTint="@color/btn_blue"
+                    app:fabSize="mini"
+                    app:srcCompat="@drawable/ic_gps"
+                    app:tint="@color/white" />
+
+            </LinearLayout>
+
+
+            <!--frame hardware state-->
+            <LinearLayout
+                android:id="@+id/frameGPSState"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:backgroundTint="@color/btn_yellow"
-                app:fabSize="mini"
-                app:srcCompat="@drawable/ic_sun"
-                app:tint="@color/white" />
+                android:orientation="horizontal"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/mapContainer"
+                app:layout_constraintEnd_toEndOf="@+id/mapContainer">
 
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnMyLocation"
+                <LinearLayout
+                    android:id="@+id/frame_internet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/standard_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:fontFamily="@font/iransans"
+                        android:text="اینترنت"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/ivInternet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_error" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/frame_gps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/standard_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:fontFamily="@font/iransans"
+                        android:text="موقعیت مکانی"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/ivGPS"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_error" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/frame_voip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/standard_margin"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:text="Voip"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/ivVoip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_error" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/gpBtns"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:backgroundTint="@color/btn_blue"
-                app:fabSize="mini"
-                app:srcCompat="@drawable/ic_gps"
-                app:tint="@color/white" />
+                app:constraint_referenced_ids="frameGPSState,frameBottomButtons" />
 
-        </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

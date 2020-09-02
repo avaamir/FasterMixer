@@ -106,4 +106,6 @@
     <string name="btn_backspace">پاک
         کردن</string>
     <string name="driver_equipment_not_found">برای این نام کاربری تجهیزی تعریف نشده است. لطفا با هماهنگ کننده تماس بگیرید</string>
+    <string name="pomp_mixers_on_map_toggle_all">همه میکسرها</string>
+    <string name="pomp_mixers_on_map_toggle_request">میکسرهای پروژه</string>
 </resources>

@@ -64,7 +64,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
 
 
         if (false) {
-            startActivity(Intent(this, ContactActivity::class.java))
+            startActivity(Intent(this, TestActivity::class.java))
             finish()
             return
         }

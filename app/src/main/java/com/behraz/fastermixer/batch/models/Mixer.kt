@@ -14,7 +14,7 @@ data class Mixer(
     @SerializedName("driverName")
     var driverName: String?,
     @SerializedName("plaque")
-    val carId: String,
+    val pelak: String,
     @SerializedName("conditionName")
     var state: String,
     @SerializedName("owner")

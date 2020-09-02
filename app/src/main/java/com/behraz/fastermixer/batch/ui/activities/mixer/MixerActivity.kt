@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
-import com.behraz.fastermixer.batch.databinding.ActivityPompBinding
+import com.behraz.fastermixer.batch.databinding.ActivityMixerBinding
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
 import com.behraz.fastermixer.batch.ui.customs.general.TopSheetBehavior
@@ -42,7 +42,7 @@ class MixerActivity : AppCompatActivity(),
     }
 
     private lateinit var viewModel: MixerActivityViewModel
-    private lateinit var mBinding: ActivityPompBinding
+    private lateinit var mBinding: ActivityMixerBinding
 
     private lateinit var topSheetBehavior: TopSheetBehavior<View>
 
@@ -52,7 +52,7 @@ class MixerActivity : AppCompatActivity(),
         setContentView(R.layout.activity_mixer)
 
         viewModel = ViewModelProvider(this).get(MixerActivityViewModel::class.java)
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_pomp)
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_mixer)
 
         initViews()
         subscribeObservers()
@@ -82,14 +82,6 @@ class MixerActivity : AppCompatActivity(),
 
 
         mBinding.tvMessageCount.text = "0"
-        supportFragmentManager.beginTransaction().apply {
-            add(
-                R.id.mapContainer,
-                MixerMapFragment.newInstance(mBinding.btnMyLocation.id),
-                FRAGMENT_MAP_TAG
-            )
-            commit()
-        }
 
         topSheetBehavior = TopSheetBehavior.from(mBinding.frameTop)
         topSheetBehavior.state = TopSheetBehavior.STATE_HIDDEN
@@ -109,9 +101,6 @@ class MixerActivity : AppCompatActivity(),
         /*TODO:: make this visible after feature added to server*/
         mBinding.btnVoiceMessage.visibility = View.GONE
 
-        mBinding.btnMixers.visibility = View.GONE //mixer in ra nadarad
-        mBinding.btnProjects.visibility = View.GONE //mixer in ra nadarad
-
         tvMessageCount.text = "0"
         initFragments()
 
@@ -121,12 +110,7 @@ class MixerActivity : AppCompatActivity(),
         mBinding.btnMap.setOnClickListener {
             onFasterMixerMenuButtonsClicked(mBinding.btnMap)
         }
-        mBinding.btnMixers.setOnClickListener {
-            onFasterMixerMenuButtonsClicked(mBinding.btnMixers)
-        }
-        mBinding.btnProjects.setOnClickListener {
-            onFasterMixerMenuButtonsClicked(mBinding.btnProjects)
-        }
+
         mBinding.btnMessages.setOnClickListener {
             onFasterMixerMenuButtonsClicked(mBinding.btnMessages)
         }
@@ -245,15 +229,6 @@ class MixerActivity : AppCompatActivity(),
             mBinding.btnMessages.id -> {
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_MESSAGE_LIST_TAG)!!)
             }
-            //TODO
-            mBinding.btnProjects.id -> {
-                throw  IllegalStateException("this menu is only available in PompActivity")
-                //transaction.show(supportFragmentManager.findFragmentByTag( FRAGMENT_CUSTOMER_LIST_TAG)!!)
-            }
-            mBinding.btnMixers.id -> {
-                throw  IllegalStateException("this menu is only available in PompActivity")
-                //transaction.show(supportFragmentManager.findFragmentByTag( FRAGMENT_MIXER_LIST_TAG)!!)
-            }
         }
         transaction.commit()
 
@@ -265,13 +240,9 @@ class MixerActivity : AppCompatActivity(),
         val yellow = ContextCompat.getColor(this, R.color.btn_yellow)
 
         mBinding.btnMap.setBackgroundColor(yellow)
-        mBinding.btnProjects.setBackgroundColor(yellow)
-        mBinding.btnMixers.setBackgroundColor(yellow)
         mBinding.btnMessages.setBackgroundColor(yellow)
 
         mBinding.btnMap.isEnabled = true
-        mBinding.btnProjects.isEnabled = true
-        mBinding.btnMixers.isEnabled = true
         mBinding.btnMessages.isEnabled = true
 
         view.isEnabled = false

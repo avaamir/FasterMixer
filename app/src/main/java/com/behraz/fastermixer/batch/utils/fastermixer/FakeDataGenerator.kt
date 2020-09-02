@@ -145,7 +145,7 @@ fun fakeMixers(): List<Mixer> {
                 serviceId = "$i",
                 carName = "امیرحسین مهدی پور$i",
                 phone = "0936216381$i",
-                carId = "12,ب,234,63",
+                pelak = "12,ب,234,63",
                 state = "ده دقیقه تا پمپ",
                 driverName = "حسن جعفری",
                 owner = "بهراز$i",

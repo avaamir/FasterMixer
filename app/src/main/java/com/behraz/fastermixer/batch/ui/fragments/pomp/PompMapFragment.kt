@@ -135,4 +135,9 @@ class PompMapFragment : BaseMapFragment() {
 
     override fun onMapTapped(geoPoint: GeoPoint) {
     }
+
+    fun focusOnMixer(mixer: Mixer) {
+        moveCamera(mixer.latLng)
+        mapViewModel.markers[mixer.id]?.showInfoWindow()
+    }
 }

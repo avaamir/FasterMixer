@@ -11,7 +11,6 @@ import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ItemMixerBinding
 import com.behraz.fastermixer.batch.databinding.ItemPompMixerBinding
 import com.behraz.fastermixer.batch.models.Mixer
-import java.lang.IllegalStateException
 
 class MixerAdapter(private val isForPomp: Boolean, interaction: Interaction) :
     ListAdapter<Mixer, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
@@ -75,8 +74,8 @@ class MixerAdapter(private val isForPomp: Boolean, interaction: Interaction) :
                     (interaction as PompAdapterInteraction).onShowOnMapClicked(mixer)
                 }
                 mBinding.btnCall.setOnClickListener { interaction.onCallClicked(mixer) }
-                if (mixer.carId.isNotBlank()) {
-                    mixer.carId.split(",")
+                if (mixer.pelak.isNotBlank()) {
+                    mixer.pelak.split(",")
                         .run { mBinding.carId.setText(get(0), get(1), get(2), get(3)) }
                 }
 
@@ -84,8 +83,8 @@ class MixerAdapter(private val isForPomp: Boolean, interaction: Interaction) :
                 (mBinding as ItemMixerBinding).mixer = mixer
                 //todo addThis When btnOnLoacEnding added:: btnOnLoacEnding added:: mBinding.btnEndLoading.setOnClickListener { (interaction as BatchAdapterInteraction).onEndLoadingClicked(mixer) }
                 mBinding.btnCall.setOnClickListener { interaction.onCallClicked(mixer) }
-                if (mixer.carId.isNotBlank()) {
-                    mixer.carId.split(",")
+                if (mixer.pelak.isNotBlank()) {
+                    mixer.pelak.split(",")
                         .run { mBinding.carId.setText(get(0), get(1), get(2), get(3)) }
                 }
             }
