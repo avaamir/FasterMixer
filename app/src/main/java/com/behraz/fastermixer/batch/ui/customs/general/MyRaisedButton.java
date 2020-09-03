@@ -95,7 +95,7 @@ public class MyRaisedButton extends LinearLayout {
             tvCaption.setVisibility(GONE);
         }
         tvCaption.setTextColor(attributes.getColor(R.styleable.MyRaisedButton_textColor, Color.WHITE));
-        tvCaption.setTextSize(TypedValue.COMPLEX_UNIT_SP, attributes.getDimension(R.styleable.MyRaisedButton_textSize, 16));
+       // tvCaption.setTextSize(TypedValue.COMPLEX_UNIT_SP, attributes.getDimension(R.styleable.MyRaisedButton_textSize, 16));
 
         attributes.recycle();
 

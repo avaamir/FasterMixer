@@ -3,16 +3,29 @@ package com.behraz.fastermixer.batch.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ItemContactBinding
 import com.behraz.fastermixer.batch.models.Contact
 
 class ContactAdapter(private val interactions: Interactions) :
-    RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() {
+    ListAdapter<Contact, ContactAdapter.ContactViewHolder>(DIFF_CALLBACK) {
 
-    private var currentList: List<Contact> = ArrayList()
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Contact>() {
 
+            override fun areItemsTheSame(oldItem: Contact, newItem: Contact): Boolean {
+                return oldItem.mobileNumber == newItem.mobileNumber
+            }
+
+            override fun areContentsTheSame(oldItem: Contact, newItem: Contact): Boolean {
+                return oldItem == newItem
+            }
+
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
         return ContactViewHolder(
@@ -29,36 +42,32 @@ class ContactAdapter(private val interactions: Interactions) :
         holder.bind(currentList[position])
     }
 
-
     inner class ContactViewHolder(private val mBinding: ItemContactBinding) :
         RecyclerView.ViewHolder(mBinding.root) {
         fun bind(item: Contact) {
             mBinding.contact = item
-            mBinding.executePendingBindings()
 
             mBinding.checkBox.isChecked = item.isChecked
             mBinding.root.setOnClickListener {
                 item.isChecked = !item.isChecked
                 mBinding.checkBox.isChecked = item.isChecked
-            }
-            mBinding.checkBox.setOnCheckedChangeListener { _, isChecked ->
-                item.isChecked = isChecked
                 interactions.onItemSelected(item)
+                println("debug:OnClick:${item.displayName}, ${System.identityHashCode(item)}, ${item.isChecked}")
             }
+
+            mBinding.checkBox.setOnClickListener {
+                mBinding.root.callOnClick()
+            }
+
+
+            println("debug:onBind:${item.displayName}, ${System.identityHashCode(item)}, ${item.isChecked}")
+
+            mBinding.executePendingBindings()
         }
     }
-
-    fun submitList(contacts: List<Contact>) {
-        this.currentList = contacts
-        notifyDataSetChanged()
-    }
-
 
     interface Interactions {
         fun onItemSelected(contact: Contact)
     }
-
-    override fun getItemCount() = currentList.size
-
 
 }

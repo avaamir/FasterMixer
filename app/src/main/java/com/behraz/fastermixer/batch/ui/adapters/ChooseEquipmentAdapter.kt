@@ -13,7 +13,7 @@ import com.behraz.fastermixer.batch.models.Equipment
 class ChooseEquipmentAdapter(private val interaction: Interaction? = null) :
     ListAdapter<Equipment, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
-    companion object {
+    private companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Equipment>() {
 
             override fun areItemsTheSame(oldItem: Equipment, newItem: Equipment): Boolean {

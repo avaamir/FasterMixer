@@ -14,57 +14,49 @@ public class ViewFasterMixerUserPanelBindingImpl extends ViewFasterMixerUserPane
     static {
         sIncludes = null;
         sViewsWithIds = new android.util.SparseIntArray();
-        sViewsWithIds.put(R.id.scrollUserPanel, 1);
-        sViewsWithIds.put(R.id.iv_profile, 2);
-        sViewsWithIds.put(R.id.linearLayout, 3);
-        sViewsWithIds.put(R.id.tv_username, 4);
-        sViewsWithIds.put(R.id.textView, 5);
-        sViewsWithIds.put(R.id.tv_personal_code, 6);
-        sViewsWithIds.put(R.id.textView3, 7);
-        sViewsWithIds.put(R.id.btnCall, 8);
-        sViewsWithIds.put(R.id.linearLayout2, 9);
-        sViewsWithIds.put(R.id.frame_voip, 10);
-        sViewsWithIds.put(R.id.ivVoip, 11);
-        sViewsWithIds.put(R.id.frame_gps, 12);
-        sViewsWithIds.put(R.id.ivGPS, 13);
-        sViewsWithIds.put(R.id.frame_internet, 14);
-        sViewsWithIds.put(R.id.ivInternet, 15);
-        sViewsWithIds.put(R.id.btnLogout, 16);
-        sViewsWithIds.put(R.id.btnRecord, 17);
+        sViewsWithIds.put(R.id.linearLayout2, 2);
+        sViewsWithIds.put(R.id.scrollUserPanel, 3);
+        sViewsWithIds.put(R.id.iv_profile, 4);
+        sViewsWithIds.put(R.id.linearLayout, 5);
+        sViewsWithIds.put(R.id.tv_username, 6);
+        sViewsWithIds.put(R.id.textView, 7);
+        sViewsWithIds.put(R.id.tv_personal_code, 8);
+        sViewsWithIds.put(R.id.textView3, 9);
+        sViewsWithIds.put(R.id.btnCall, 10);
+        sViewsWithIds.put(R.id.btnLogout, 11);
+        sViewsWithIds.put(R.id.btnRecord, 12);
     }
     // views
     @NonNull
     private final androidx.constraintlayout.widget.ConstraintLayout mboundView0;
+    @NonNull
+    private final androidx.constraintlayout.widget.ConstraintLayout mboundView1;
     // variables
     // values
     // listeners
     // Inverse Binding Event Handlers
 
     public ViewFasterMixerUserPanelBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 18, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 13, sIncludes, sViewsWithIds));
     }
     private ViewFasterMixerUserPanelBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
-            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[8]
-            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[16]
-            , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[17]
-            , (android.widget.LinearLayout) bindings[12]
-            , (android.widget.LinearLayout) bindings[14]
-            , (android.widget.LinearLayout) bindings[10]
-            , (android.widget.ImageView) bindings[13]
-            , (android.widget.ImageView) bindings[15]
-            , (de.hdodenhof.circleimageview.CircleImageView) bindings[2]
-            , (android.widget.ImageView) bindings[11]
-            , (android.widget.LinearLayout) bindings[3]
-            , (android.widget.LinearLayout) bindings[9]
-            , (android.widget.HorizontalScrollView) bindings[1]
-            , (android.widget.TextView) bindings[5]
+            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[10]
+            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[11]
+            , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[12]
+            , (de.hdodenhof.circleimageview.CircleImageView) bindings[4]
+            , (android.widget.LinearLayout) bindings[5]
+            , (android.view.View) bindings[2]
+            , (android.widget.HorizontalScrollView) bindings[3]
             , (android.widget.TextView) bindings[7]
+            , (android.widget.TextView) bindings[9]
+            , (android.widget.TextView) bindings[8]
             , (android.widget.TextView) bindings[6]
-            , (android.widget.TextView) bindings[4]
             );
         this.mboundView0 = (androidx.constraintlayout.widget.ConstraintLayout) bindings[0];
         this.mboundView0.setTag(null);
+        this.mboundView1 = (androidx.constraintlayout.widget.ConstraintLayout) bindings[1];
+        this.mboundView1.setTag(null);
         setRootTag(root);
         // listeners
         invalidateAll();

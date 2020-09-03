@@ -55,7 +55,7 @@ data class Mixer(
             temp % 10 == 0 -> "${temp / 10} کیلومتر" //km
             else -> "${temp / 10}.${temp % 10} کیلومتر" //km
         }.let {
-            state = if (it.contains("رسید"))
+            state = if (it.contains("رسید") || it.contains("محدوده"))
                 it
             else
                 "$it مانده"

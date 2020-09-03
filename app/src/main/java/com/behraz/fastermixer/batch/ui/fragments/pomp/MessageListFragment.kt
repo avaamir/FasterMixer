@@ -22,8 +22,6 @@ import com.behraz.fastermixer.batch.ui.adapters.MessageAdapter
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.MixerActivityViewModel
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
-import kotlinx.android.synthetic.main.activity_pomp.*
-import java.lang.IllegalStateException
 
 class MessageListFragment : Fragment(), MessageAdapter.Interaction {
 
@@ -60,6 +58,9 @@ class MessageListFragment : Fragment(), MessageAdapter.Interaction {
                 if (it.isSucceed) {
                     mBinding.tvMessageCount.text = (it.entity?.size ?: 0).toString()
                     mAdapter.submitList(it.entity)
+                    if (mAdapter.currentList.isNotEmpty()) {
+                        mBinding.gpAnimationView.visibility = View.GONE
+                    }
                 } else {
                     //TODo
                 }

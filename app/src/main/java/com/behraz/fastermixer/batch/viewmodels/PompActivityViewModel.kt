@@ -102,8 +102,9 @@ class PompActivityViewModel : ViewModel() {
         RemoteRepo.getEquipmentLocation(equipmentId) {
             if (it != null) {
                 if (it.isSucceed) {
+                    //TODO az server vase pomp circle nemiyad khater hamin man mahduda ro ruye 100 gozashtam
                     pompArea.value =
-                        it.entity!!.location //age observer nadashte bashe set nemishe, age scenario avaz shod deghat kon, alan mapFragment Observersh hast
+                        it.entity!!.location.copy(radius = 100.0) //age observer nadashte bashe set nemishe, age scenario avaz shod deghat kon, alan mapFragment Observersh hast
                 } else {
                     //TODO what should i do?
                 }

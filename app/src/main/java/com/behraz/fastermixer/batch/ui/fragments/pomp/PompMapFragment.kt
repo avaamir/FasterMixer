@@ -18,7 +18,6 @@ import org.osmdroid.util.GeoPoint
 class PompMapFragment : BaseMapFragment() {
 
 
-
     private var isFirstTime = true
     override val myLocation: GeoPoint
         get() = mapViewModel.myLocation
@@ -82,12 +81,13 @@ class PompMapFragment : BaseMapFragment() {
         })
 
 
-        pompViewModel.shouldShowAllMixers.observe(viewLifecycleOwner, Observer {shouldShowAll->
+        pompViewModel.shouldShowAllMixers.observe(viewLifecycleOwner, Observer { shouldShowAll ->
             if (shouldShowAll) {
                 sortAndShowMixers(pompViewModel.allMixers.value)
             } else {
                 sortAndShowMixers(pompViewModel.requestMixers.value)
             }
+
         })
 
         pompViewModel.allMixers.observe(viewLifecycleOwner, Observer {
@@ -127,9 +127,13 @@ class PompMapFragment : BaseMapFragment() {
             }
             excludeMarkerList.forEach { mixerId ->
                 mBinding.map.overlayManager.remove(
-                    mapViewModel.markers.remove(mixerId)
+                    mapViewModel.markers.remove(mixerId).also {
+                        if (it?.isInfoWindowShown == true)
+                            it.closeInfoWindow()
+                    }
                 )
             }
+            mBinding.map.invalidate()
         }
     }
 

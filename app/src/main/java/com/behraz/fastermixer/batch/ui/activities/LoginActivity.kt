@@ -28,6 +28,7 @@ import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.LoginActivityViewModel
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.gps_internet_status_icons.*
 
 
 class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
@@ -63,8 +64,8 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         setContentView(R.layout.activity_login)
 
 
-        if (false) {
-            startActivity(Intent(this, TestActivity::class.java))
+        if (true) {
+            startActivity(Intent(this, ContactActivity::class.java))
             finish()
             return
         }

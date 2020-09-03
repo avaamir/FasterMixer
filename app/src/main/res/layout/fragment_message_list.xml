@@ -10,13 +10,13 @@
 
 
         <ImageView
-            android:visibility="gone"
             android:id="@+id/imageView2"
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:src="@drawable/ic_message"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/btnMessage"
             app:layout_constraintVertical_chainStyle="packed" />
@@ -25,25 +25,25 @@
         <TextView
             android:id="@+id/textView6"
             style="@style/my_gray_normal_text"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:text="پیامها"
             android:textColor="@color/white"
             android:textSize="22sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/imageView2"
             app:layout_constraintEnd_toStartOf="@+id/imageView2"
             app:layout_constraintTop_toTopOf="@+id/imageView2" />
 
         <TextView
-            android:visibility="gone"
             android:id="@+id/tvMessageCount"
             style="@style/my_white_normal_text"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:background="@drawable/shape_drawer_badge"
             android:gravity="center"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/imageView2"
             app:layout_constraintEnd_toStartOf="@+id/imageView2"
             app:layout_constraintStart_toStartOf="@+id/imageView2"
@@ -57,8 +57,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            app:btn_image="@drawable/ic_map"
             android:visibility="gone"
+            app:btn_image="@drawable/ic_map"
             app:caption="بازگشت به نقشه"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -69,9 +69,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:visibility="gone"
             app:btn_image="@drawable/ic_add_message"
             app:caption="ارسال پیام"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/btnMap"
             app:layout_constraintStart_toEndOf="@+id/btnMap"
             app:layout_constraintTop_toTopOf="@id/btnMap" />
@@ -86,5 +86,40 @@
             app:layout_constraintTop_toBottomOf="@+id/tvMessageCount"
             tools:itemCount="7"
             tools:listitem="@layout/item_message_vertical" />
+
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/messageRecycler"
+            app:layout_constraintEnd_toEndOf="@+id/messageRecycler"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/messageRecycler"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/message" />
+
+        <TextView
+            android:id="@+id/tv_no_message"
+            style="@style/my_gray_medium_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="پیامی وجود ندارد"
+            android:textColor="@color/white"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/animationView" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/gpAnimationView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="animationView,tv_no_message" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -51,8 +52,6 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
                     (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as? PompMapFragment)?.focusOnMixer(
                         mixer
                     )
-
-
                 } else {
                     toast("خطایی به وجود آمده است")
                 }
@@ -173,21 +172,21 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
         }
 
         mBinding.btnShowAllMixersToggle.text =
-            if (viewModel.shouldShowAllMixers.value!!) getString(R.string.pomp_mixers_on_map_toggle_request) else getString(
-                R.string.pomp_mixers_on_map_toggle_all
-            )
+            if (viewModel.shouldShowAllMixers.value!!)
+                getString(R.string.pomp_mixers_on_map_toggle_all)
+            else
+                getString(R.string.pomp_mixers_on_map_toggle_request)
 
 
     }
 
 
     fun toggleBtnShowAllMixers(v: View) {
-        if (btnShowAllMixersToggle.text == getString(R.string.pomp_mixers_on_map_toggle_all)) {
-            btnShowAllMixersToggle.text = getString(R.string.pomp_mixers_on_map_toggle_request)
-            viewModel.shouldShowAllMixers.value = true
-        } else {
+        viewModel.shouldShowAllMixers.value = !viewModel.shouldShowAllMixers.value!!
+        if (viewModel.shouldShowAllMixers.value!!) {
             btnShowAllMixersToggle.text = getString(R.string.pomp_mixers_on_map_toggle_all)
-            viewModel.shouldShowAllMixers.value = false
+        } else {
+            btnShowAllMixersToggle.text = getString(R.string.pomp_mixers_on_map_toggle_request)
         }
     }
 
@@ -297,6 +296,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
                 mBinding.btnMessage.visibility = View.VISIBLE
                 mBinding.gpBtns.visibility = View.VISIBLE
                 mBinding.btnShowAllMixersToggle.setTextColor(Color.BLACK)
+                mBinding.btnShowAllMixersToggle.backgroundTintList = ColorStateList.valueOf(0x190090ff)
             }
             mBinding.btnProjects.id -> {
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_CUSTOMER_LIST_TAG)!!)
@@ -304,6 +304,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             mBinding.btnMixers.id -> {
                 mBinding.btnShowAllMixersToggle.setTextColor(Color.WHITE)
                 mBinding.btnShowAllMixersToggle.visibility = View.VISIBLE
+                mBinding.btnShowAllMixersToggle.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.btn_blue))
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_MIXER_LIST_TAG)!!)
             }
             mBinding.btnMessages.id -> {

@@ -1,7 +1,14 @@
 package com.behraz.fastermixer.batch.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
+
+
+@Entity(tableName = "contacts")
 data class Contact(
     val displayName: String,
+    @PrimaryKey
     val mobileNumber: String,
     var company: String,
     val homeNumber: String? = null,
@@ -10,5 +17,5 @@ data class Contact(
     val jobTitle: String? = null
 ) {
     @Transient
-    var isChecked = false
+    var isChecked: Boolean = false
 }

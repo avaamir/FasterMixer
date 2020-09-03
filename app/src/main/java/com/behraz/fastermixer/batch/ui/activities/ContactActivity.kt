@@ -51,15 +51,14 @@ class ContactActivity : AppCompatActivity(),
 
 
         if (permissionHelper.arePermissionsGranted()) {
-            if (viewModel.allContacts == null) {
-                viewModel.allContacts = getContactList().also {
-                    it.forEach(::println)
-                }
-            }
+            /*if (viewModel.allContacts == null) {
+                viewModel.allContacts = readContactList()
+            }*/
             initFragments()
+        } else {
+            permissionHelper.checkPermission()
         }
 
-        permissionHelper.checkPermission()
     }
 
     private fun initFragments() {
@@ -69,86 +68,6 @@ class ContactActivity : AppCompatActivity(),
         }
 
     }
-
-    private fun getContactList(): ArrayList<Contact> {
-        val contacts = HashMap<String, Contact>()
-
-        val cur: Cursor? = contentResolver.query(
-            ContactsContract.Contacts.CONTENT_URI,
-            null, null, null, null
-        )
-        if ((cur?.count ?: 0) > 0) {
-            while (cur != null && cur.moveToNext()) {
-                val id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID))
-                val name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-
-                //Getting contact Phone
-                if (cur.getInt(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
-                    val pCur: Cursor? = contentResolver.query(
-                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                        null,
-                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                        arrayOf(id),
-                        null
-                    )
-                    while (pCur != null && pCur.moveToNext()) {
-                        val phoneNo: String =
-                            pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                        if (contacts[name] == null) {
-                            contacts[name] =
-                                Contact(
-                                    name,
-                                    phoneNo,
-                                    ""
-                                )
-                            //println("debug:notNull $name, $phoneNo")
-                        }
-                    }
-                    pCur?.close()
-                }
-                //Getting Contact Organization
-                //1- Getting ContactRawID
-                var rawContactId = "-1"
-                contentResolver.query(
-                    ContactsContract.RawContacts.CONTENT_URI,
-                    arrayOf(ContactsContract.RawContacts._ID),
-                    ContactsContract.RawContacts.CONTACT_ID + "= ?",
-                    arrayOf(id),
-                    null
-                )?.apply {
-                    if (moveToFirst()) {
-                        rawContactId =
-                            getInt(getColumnIndex(ContactsContract.RawContacts._ID)).toString()
-                    }
-                    close()
-                }
-                //2- Getting contact organization using rawContactId
-                if (rawContactId != "-1") {
-                    contentResolver.query(
-                        ContactsContract.Data.CONTENT_URI,
-                        null,
-                        ContactsContract.Data.RAW_CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?",
-                        arrayOf(
-                            rawContactId,
-                            ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE
-                        ),
-                        null
-                    )?.apply {
-                        if (moveToFirst()) {
-                            val organization =
-                                getString(getColumnIndex(ContactsContract.CommonDataKinds.Organization.COMPANY))
-                            contacts[name]?.company = organization ?: ""
-                        }
-                        close()
-                    }
-
-                }
-            }
-        }
-        cur?.close()
-        return ArrayList(contacts.values)
-    }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
