@@ -74,7 +74,7 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
         initViews()
         subscribeObservers()
 
-        initContacts()
+        //initContacts()
 
         return mBinding.root
     }
@@ -153,6 +153,7 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
 
         mBinding.checkBoxSelectAll.setOnCheckedChangeListener { _, b ->
             viewModel.selectAll(b)
+            mAdapter.notifyDataSetChanged()
         }
 
         mBinding.recyclerContacts.addItemDecoration(
@@ -186,7 +187,6 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
     private fun subscribeObservers() {
         viewModel.contacts.observe(viewLifecycleOwner, Observer {
             mAdapter.submitList(it)
-            println("debug:SubmitList")
         })
 
         viewModel.organizations.observe(viewLifecycleOwner, Observer {
@@ -217,7 +217,6 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
 
             commands.forEach { command ->
                 contacts.forEach { contact ->
-                    println("debug:send: ${contact.displayName}")
                     sendSMS(contact.mobileNumber, command)
                     delay(100)
                     isSendSomething = true

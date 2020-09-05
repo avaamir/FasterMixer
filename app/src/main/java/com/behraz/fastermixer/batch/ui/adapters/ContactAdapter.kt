@@ -21,7 +21,7 @@ class ContactAdapter(private val interactions: Interactions) :
             }
 
             override fun areContentsTheSame(oldItem: Contact, newItem: Contact): Boolean {
-                return oldItem == newItem
+                return oldItem == newItem && oldItem.isChecked == newItem.isChecked
             }
 
         }
@@ -52,16 +52,11 @@ class ContactAdapter(private val interactions: Interactions) :
                 item.isChecked = !item.isChecked
                 mBinding.checkBox.isChecked = item.isChecked
                 interactions.onItemSelected(item)
-                println("debug:OnClick:${item.displayName}, ${System.identityHashCode(item)}, ${item.isChecked}")
             }
 
             mBinding.checkBox.setOnClickListener {
                 mBinding.root.callOnClick()
             }
-
-
-            println("debug:onBind:${item.displayName}, ${System.identityHashCode(item)}, ${item.isChecked}")
-
             mBinding.executePendingBindings()
         }
     }

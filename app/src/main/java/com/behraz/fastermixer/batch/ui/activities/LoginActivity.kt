@@ -64,7 +64,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         setContentView(R.layout.activity_login)
 
 
-        if (true) {
+        if (false) {
             startActivity(Intent(this, ContactActivity::class.java))
             finish()
             return

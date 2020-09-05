@@ -1,13 +1,14 @@
 package com.behraz.fastermixer.batch.viewmodels
 
 import android.app.Application
-import android.provider.ContactsContract
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.Contact
 import com.behraz.fastermixer.batch.respository.persistance.contactdb.ContactRepo
 import com.behraz.fastermixer.batch.utils.general.DoubleTrigger
 import com.behraz.fastermixer.batch.utils.general.Event
-import kotlinx.coroutines.selects.select
 
 class ContactActivityViewModel(application: Application) : AndroidViewModel(application) {
     //var allContacts: ArrayList<Contact>? = null
@@ -17,7 +18,6 @@ class ContactActivityViewModel(application: Application) : AndroidViewModel(appl
 
 
     private val companyFilter = MutableLiveData("همه")
-    private val selectAll = MutableLiveData<Event<Unit>>()
 
     private var keyword: String? = null
         set(value) {
@@ -91,12 +91,15 @@ class ContactActivityViewModel(application: Application) : AndroidViewModel(appl
     }
 
     fun selectAll(shouldSelect: Boolean) {
-        //TODO implement this
         contacts.value?.forEach {
-            it.isChecked = shouldSelect
-            println("debug: ${it.displayName}")
+            if (shouldSelect) {
+                isCheckedMap[it.mobileNumber] = true
+                it.isChecked = true
+            } else {
+                it.isChecked = false
+                isCheckedMap.remove(it.mobileNumber)
+            }
         }
-        selectAll.value = Event(Unit)
     }
 
     fun selectContact(contact: Contact) {
