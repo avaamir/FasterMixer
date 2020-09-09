@@ -20,8 +20,10 @@ import com.behraz.fastermixer.batch.databinding.LayoutMapBinding
 import com.behraz.fastermixer.batch.ui.osm.ImageMarker
 import com.behraz.fastermixer.batch.ui.osm.MixerMarker
 import com.behraz.fastermixer.batch.ui.osm.MyOSMMapView
+import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.LocationHandler
 import com.behraz.fastermixer.batch.utils.general.getBitmapFromVectorDrawable
+import com.behraz.fastermixer.batch.utils.general.toast
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -36,7 +38,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 abstract class BaseMapFragment : Fragment(), LocationListener,
     MyOSMMapView.OnMapClickListener {
 
-    abstract val myLocation: GeoPoint
+    abstract val myLocation: GeoPoint?
     abstract fun onBtnMyLocationClicked()
 
     private var btnMyLocationId: Int =
@@ -82,13 +84,17 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         }
 
         btnMyLocation.setOnClickListener {
-            moveCamera(myLocation)
-            it.animate().apply {
-                interpolator = LinearInterpolator()
-                duration = 500
-                rotationBy(360f)
-                onBtnMyLocationClicked()
-            }.start()
+            if (myLocation != null) {
+                moveCamera(myLocation!!)
+                it.animate().apply {
+                    interpolator = LinearInterpolator()
+                    duration = 500
+                    rotationBy(360f)
+                    onBtnMyLocationClicked()
+                }.start()
+            } else {
+                toast("درحال دریافت موقعیت شما..")
+            }
         }
     }
 
@@ -109,10 +115,9 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
 
 
         //set default location
-        val startPoint = GeoPoint(31.89141833223403, 54.353561131283634)
         _mBinding.map.controller.run {
             setZoom(15.5)
-            setCenter(startPoint)
+            setCenter(Constants.mapStartPoint)
         }
 
         //TODO my location on map
@@ -131,14 +136,13 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         _mBinding.map.overlays.add(mCompassOverlay)*/
 
         _mBinding.map.setOnMapClickListener(this)
-
     }
 
     //TODO add this to sub classes NOT HEEREEEEEEEEEEEEEEEEEEEEEEEEE
     protected fun addUserMarkerToMap(marker: Marker) {
         addMarkerToMap(
             marker = marker,
-            point = myLocation
+            point = myLocation!!
         )
     }
 

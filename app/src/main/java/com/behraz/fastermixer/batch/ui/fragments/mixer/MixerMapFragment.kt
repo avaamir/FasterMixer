@@ -23,7 +23,8 @@ import org.osmdroid.views.overlay.Polyline
 
 class MixerMapFragment : BaseMapFragment() {
 
-    private var shouldCameraTrackMixer = true //age map ro scroll kard dg track nakone ama age dokme myLocation ro zad trackesh bokone
+    private var shouldCameraTrackMixer =
+        true //age map ro scroll kard dg track nakone ama age dokme myLocation ro zad trackesh bokone
     private val destMarker: DestMarker by lazy {
         DestMarker(mBinding.map, 42, 42).also {
             addMarkerToMap(
@@ -41,8 +42,7 @@ class MixerMapFragment : BaseMapFragment() {
     private lateinit var mixerActivityViewModel: MixerActivityViewModel
 
 
-    override val myLocation: GeoPoint
-        get() = mapViewModel.myLocation
+    override val myLocation: GeoPoint? get() = mapViewModel.myLocation
 
     override fun onBtnMyLocationClicked() {
         shouldCameraTrackMixer = true
@@ -121,12 +121,22 @@ class MixerMapFragment : BaseMapFragment() {
                         routePolyline = null
                     }
                     println("debux: getRouteCalled")
-                    mapViewModel.getRoute(
-                        listOf(
-                            mapViewModel.myLocation,
-                            mission.destLocation.center
-                        )
-                    )
+                    if (mapViewModel.myLocation != null) {
+                        val remainingDistance = mapViewModel.myLocation!!.distanceToAsDouble(mission.destLocation.center)
+                        if (remainingDistance > mission.destLocation.radius) {
+                            mapViewModel.getRoute(
+                                listOf(
+                                    mapViewModel.myLocation!!,
+                                    mission.destLocation.center
+                                )
+                            )
+                        } else {
+                            toast("به مقصد رسیدید")
+                        }
+                    } else {
+                        mapViewModel.shouldFindRoutesAfterUserLocationFound = true
+                    }
+
                 }
             }
         })
@@ -143,6 +153,24 @@ class MixerMapFragment : BaseMapFragment() {
                 userMarker.position = it.center
                 if (shouldCameraTrackMixer) {
                     moveCamera(it.center)
+                }
+                if (mapViewModel.shouldFindRoutesAfterUserLocationFound) {
+                    mapViewModel.shouldFindRoutesAfterUserLocationFound = false
+                    val destLocationArea =
+                        mixerActivityViewModel.newMissionEvent.value!!.peekContent().destLocation
+                    val remainingDistance =
+                        mapViewModel.myLocation!!.distanceToAsDouble(destLocationArea.center)
+                    println("debux: distance: $remainingDistance")
+                    if (remainingDistance > destLocationArea.radius) {
+                        mapViewModel.getRoute(
+                            listOf(
+                                mapViewModel.myLocation!!,
+                                destLocationArea.center
+                            )
+                        )
+                    } else {
+                        toast("به مقصد رسیدید")
+                    }
                 }
             }
         })

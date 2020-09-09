@@ -9,8 +9,10 @@ import com.behraz.fastermixer.batch.respository.RemoteRepo
 import org.osmdroid.util.GeoPoint
 
 class MixerMapFragmentViewModel: ViewModel() {
-    var myLocation =
-        GeoPoint(31.891413345001638, 54.35357135720551)
+
+    var shouldFindRoutesAfterUserLocationFound: Boolean = false
+
+    var myLocation: GeoPoint? = null
 
 
     private var coordinates: MutableLiveData<List<GeoPoint>> = MutableLiveData()

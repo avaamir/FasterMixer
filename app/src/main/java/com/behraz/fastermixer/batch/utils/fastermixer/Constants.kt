@@ -1,6 +1,10 @@
 package com.behraz.fastermixer.batch.utils.fastermixer
 
+import org.osmdroid.util.GeoPoint
+
 object Constants {
+      val mapStartPoint by lazy {   GeoPoint(31.891413345001638, 54.35357135720551) }
+
     const val VALID_DURATION_TIME_FOR_LAST_DATA_WHEN_VEHICLE_MOVING: Byte = 5
     const val VALID_DURATION_TIME_FOR_LAST_DATA_WHEN_VEHICLE_STOP: Byte = 12
 
