@@ -7,6 +7,8 @@ import android.content.IntentFilter
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.transition.AutoTransition
+import android.transition.TransitionManager
 import android.view.View
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AppCompatActivity
@@ -38,6 +40,8 @@ import kotlinx.android.synthetic.main.activity_test.*
 
 class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
     PompMessageDialog.Interactions, ApiService.OnUnauthorizedListener {
+
+    private var projectCount = -1 // this variable work like a flag for `onNewProjectIncome`
 
     private val locateMixerReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -217,18 +221,22 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
         viewModel.customers.observe(this, Observer {
             if (it != null) {
                 if (it.isSucceed) {
-                    it.entity?.let { customers ->
-                        //TODO customers[0] hamishegi nist va vaghti darkhast aval tamum shod bayad customers[1] ro neshun bede
-                        if (customers.isNotEmpty()) {
-                            ////TODO add to ui:: customers[0] Info
+                    val customers = it.entity
+                    if (projectCount != (customers?.size ?: 0)) {
+                        projectCount = customers?.size ?: 0
+                        if (customers.isNullOrEmpty()) {
+                            if (viewModel.shouldShowAllMixers.value == false) {//age proje tarif nashode bud mixer haye koli ro neshun bede
+                                mBinding.btnShowAllMixersToggle.callOnClick()
+                            }
+                        } else {
+                            if (viewModel.shouldShowAllMixers.value == true) {//age prje tarif shode bud mixer proje ro neshun bede
+                                mBinding.btnShowAllMixersToggle.callOnClick()
+                                toast("پروژه جدید تعریف شده است")
+                            }
                         }
                     }
-                } else {
-                    //TODO is not succeed what should i do??
-                    println("debug: ${it.message}")
                 }
             } else {
-                println("debug: getMessages() -> Server Error: returning `null`")
                 //todo Server Error chekar konam??
             }
         })
@@ -296,7 +304,8 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
                 mBinding.btnMessage.visibility = View.VISIBLE
                 mBinding.gpBtns.visibility = View.VISIBLE
                 mBinding.btnShowAllMixersToggle.setTextColor(Color.BLACK)
-                mBinding.btnShowAllMixersToggle.backgroundTintList = ColorStateList.valueOf(0x190090ff)
+                mBinding.btnShowAllMixersToggle.backgroundTintList =
+                    ColorStateList.valueOf(0x190090ff)
             }
             mBinding.btnProjects.id -> {
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_CUSTOMER_LIST_TAG)!!)
@@ -304,7 +313,8 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             mBinding.btnMixers.id -> {
                 mBinding.btnShowAllMixersToggle.setTextColor(Color.WHITE)
                 mBinding.btnShowAllMixersToggle.visibility = View.VISIBLE
-                mBinding.btnShowAllMixersToggle.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.btn_blue))
+                mBinding.btnShowAllMixersToggle.backgroundTintList =
+                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.btn_blue))
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_MIXER_LIST_TAG)!!)
             }
             mBinding.btnMessages.id -> {

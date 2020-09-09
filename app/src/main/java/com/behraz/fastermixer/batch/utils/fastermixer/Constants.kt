@@ -1,7 +1,8 @@
 package com.behraz.fastermixer.batch.utils.fastermixer
 
 object Constants {
-    const val VALID_DURATION_TIME_FOR_LAST_DATA: Byte = 12
+    const val VALID_DURATION_TIME_FOR_LAST_DATA_WHEN_VEHICLE_MOVING: Byte = 5
+    const val VALID_DURATION_TIME_FOR_LAST_DATA_WHEN_VEHICLE_STOP: Byte = 12
 
     const val ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP_MIXER_ID = "miasdf"
     const val ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP = "pomp-map-locate-mixer"

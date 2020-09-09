@@ -25,6 +25,8 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
         sViewsWithIds.put(R.id.textView19, 17);
         sViewsWithIds.put(R.id.gpNotNeeded, 18);
         sViewsWithIds.put(R.id.tvSpeedState, 19);
+        sViewsWithIds.put(R.id.tvLastDataTime, 20);
+        sViewsWithIds.put(R.id.imageView8, 21);
     }
     // views
     // variables
@@ -33,7 +35,7 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
     // Inverse Binding Event Handlers
 
     public ItemPompMixerBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 20, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 22, sIncludes, sViewsWithIds));
     }
     private ItemPompMixerBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
@@ -42,6 +44,7 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
             , (com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView) bindings[16]
             , (androidx.cardview.widget.CardView) bindings[0]
             , (androidx.constraintlayout.widget.Group) bindings[18]
+            , (android.widget.ImageView) bindings[21]
             , (android.widget.TextView) bindings[9]
             , (android.widget.TextView) bindings[10]
             , (android.widget.TextView) bindings[11]
@@ -55,6 +58,7 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
             , (android.widget.TextView) bindings[5]
             , (android.widget.TextView) bindings[8]
             , (android.widget.TextView) bindings[6]
+            , (android.widget.TextView) bindings[20]
             , (android.widget.TextView) bindings[1]
             , (android.widget.TextView) bindings[19]
             );

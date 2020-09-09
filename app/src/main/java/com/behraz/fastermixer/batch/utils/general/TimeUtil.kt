@@ -25,5 +25,33 @@ fun millisToTimeString(millis: Long): String {
     uptime -= TimeUnit.MINUTES.toMillis(minutes)
     val seconds: Long = TimeUnit.MILLISECONDS.toSeconds(uptime)
 
-    return "${if (days < 10) "0$days" else days} : ${if (hours < 10) "0$hours" else hours} : ${if (minutes < 10) "0$minutes" else minutes} : ${if (seconds < 10) "0$seconds" else seconds}"
+    return "${if (days < 10) "0$days" else days.toString()} : ${if (hours < 10) "0$hours" else hours.toString()} : ${if (minutes < 10) "0$minutes" else minutes.toString()} : ${if (seconds < 10) "0$seconds" else seconds.toString()}"
 }
+
+fun estimateTime(duration: Long, sourceUnit: TimeUnit = TimeUnit.MINUTES): String {
+    if (sourceUnit == TimeUnit.MILLISECONDS || sourceUnit == TimeUnit.NANOSECONDS || sourceUnit == TimeUnit.MICROSECONDS) {
+        throw IllegalArgumentException("millis nanos and micros are not valid for TimeUnit")
+    }
+    TimeUnit.values().reversedArray().forEach { destTimeUnit ->
+        println(destTimeUnit)
+        val amount = destTimeUnit.convert(duration, sourceUnit)
+        if (amount > 0) {
+            return "$amount " + when (destTimeUnit) {
+                TimeUnit.SECONDS -> "ثانیه"
+                TimeUnit.MINUTES -> "دقیقه"
+                TimeUnit.HOURS -> "ساعت"
+                TimeUnit.DAYS -> "روز"
+                else -> throw IllegalArgumentException("millis nanos and micros are not valid for TimeUnit")
+            }.exhaustiveAsExpression() + " پیش"
+        }
+    }
+    return "همین الان"
+}
+
+
+
+
+
+
+
+

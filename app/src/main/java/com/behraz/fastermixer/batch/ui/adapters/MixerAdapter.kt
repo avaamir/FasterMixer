@@ -13,8 +13,7 @@ import com.behraz.fastermixer.batch.databinding.ItemMixerBinding
 import com.behraz.fastermixer.batch.databinding.ItemPompMixerBinding
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
-import com.behraz.fastermixer.batch.utils.general.minus
-import com.behraz.fastermixer.batch.utils.general.now
+import com.behraz.fastermixer.batch.utils.general.estimateTime
 
 class MixerAdapter(private val isForPomp: Boolean, interaction: Interaction) :
     ListAdapter<Mixer, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
@@ -91,14 +90,20 @@ class MixerAdapter(private val isForPomp: Boolean, interaction: Interaction) :
                 }
 
                 if (mixer.lastDataTimeDiff != null) {
-                    if (mixer.lastDataTimeDiff > Constants.VALID_DURATION_TIME_FOR_LAST_DATA) {
+                    if (
+                        (mixer.lastDataTimeDiff > Constants.VALID_DURATION_TIME_FOR_LAST_DATA_WHEN_VEHICLE_STOP && mixer.speed == 0f) ||
+                        (mixer.lastDataTimeDiff > Constants.VALID_DURATION_TIME_FOR_LAST_DATA_WHEN_VEHICLE_MOVING && mixer.speed != 0f)
+                    ) {
                         mBinding.frame.setCardBackgroundColor(
                             ContextCompat.getColor(
                                 itemView.context,
                                 R.color.btn_yellow
                             )
                         )
-                    } else {
+                    } else if (
+                        (mixer.lastDataTimeDiff < Constants.VALID_DURATION_TIME_FOR_LAST_DATA_WHEN_VEHICLE_STOP && mixer.speed == 0f) ||
+                        (mixer.lastDataTimeDiff < Constants.VALID_DURATION_TIME_FOR_LAST_DATA_WHEN_VEHICLE_MOVING && mixer.speed != 0f)
+                    ) {
                         mBinding.frame.setCardBackgroundColor(
                             ContextCompat.getColor(
                                 itemView.context,
@@ -106,7 +111,13 @@ class MixerAdapter(private val isForPomp: Boolean, interaction: Interaction) :
                             )
                         )
                     }
+
+                    mBinding.tvLastDataTime.text = estimateTime(mixer.lastDataTimeDiff)
                 }
+
+
+
+
             } else {
                 (mBinding as ItemMixerBinding).mixer = mixer
                 //todo addThis When btnOnLoacEnding added:: btnOnLoacEnding added:: mBinding.btnEndLoading.setOnClickListener { (interaction as BatchAdapterInteraction).onEndLoadingClicked(mixer) }
