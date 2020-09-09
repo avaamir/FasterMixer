@@ -153,7 +153,7 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
     }
 
 
-    fun moveCamera(geoPoint: GeoPoint, zoom: Double = 15.0) {
+    fun moveCamera(geoPoint: GeoPoint, zoom: Double = 18.0) {
         _mBinding.map.controller.run {
             setCenter(geoPoint)
             zoomTo(zoom)

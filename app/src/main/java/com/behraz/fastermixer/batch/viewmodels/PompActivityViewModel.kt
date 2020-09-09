@@ -22,7 +22,7 @@ class PompActivityViewModel : ViewModel() {
 
 
     //we did not use Transformation because it is not always have a observer , But We Always have to update it's value for sorting mixers List, the only observer is in map fragment
-    val pompArea =
+    val pompAreaInfo =
         MutableLiveData<CircleFence?>(null) //TODO implement this // get from GPS // curently it will receive from server from car GPS, In new Version Maybe Needed
 
     private val getMixersEvent = MutableLiveData(Event(Unit))
@@ -40,7 +40,7 @@ class PompActivityViewModel : ViewModel() {
     }
 
     private fun sortMixerResponse(response: Entity<List<Mixer>>?): Entity<List<Mixer>>? {
-        val sortedMixers = pompArea.value?.let { pompLocation ->
+        val sortedMixers = pompAreaInfo.value?.let { pompLocation ->
             response?.entity?.let {
                 if (it.size == 1) {
                     if (it[0].state != "تخلیه") it[0].normalizeStateByDistance(pompLocation)
@@ -103,7 +103,7 @@ class PompActivityViewModel : ViewModel() {
             if (it != null) {
                 if (it.isSucceed) {
                     //TODO az server vase pomp circle nemiyad khater hamin man mahduda ro ruye 100 gozashtam
-                    pompArea.value =
+                    pompAreaInfo.value =
                         it.entity!!.location.copy(radius = 100.0) //age observer nadashte bashe set nemishe, age scenario avaz shod deghat kon, alan mapFragment Observersh hast
                 } else {
                     //TODO what should i do?

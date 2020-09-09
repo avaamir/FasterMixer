@@ -28,12 +28,14 @@ class ContactActivityViewModel(application: Application) : AndroidViewModel(appl
         }
 
 
+    val allContacts get() = ContactRepo.allContacts
+
     val organizations = Transformations.map(ContactRepo.allContacts) { contacts ->
         contacts.map { it.company }.distinct()
     }
 
 
-    private val isCheckedMap = HashMap<String, Boolean>()
+    val isCheckedMap = HashMap<String, Boolean>() //phone , isChecked
 
     val contacts =
         Transformations.switchMap(DoubleTrigger(companyFilter, ContactRepo.allContacts)) {

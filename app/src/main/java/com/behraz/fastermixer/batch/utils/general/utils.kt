@@ -14,19 +14,6 @@ import org.osmdroid.util.GeoPoint
 import java.util.concurrent.TimeUnit
 
 
-fun millisToTimeString(millis: Long): String {
-    var uptime = millis
-    val days: Long = TimeUnit.MILLISECONDS.toDays(uptime)
-    uptime -= TimeUnit.DAYS.toMillis(days)
-    val hours: Long = TimeUnit.MILLISECONDS.toHours(uptime)
-    uptime -= TimeUnit.HOURS.toMillis(hours)
-    val minutes: Long = TimeUnit.MILLISECONDS.toMinutes(uptime)
-    uptime -= TimeUnit.MINUTES.toMillis(minutes)
-    val seconds: Long = TimeUnit.MILLISECONDS.toSeconds(uptime)
-
-    return "${if (days < 10) "0$days" else days} : ${if (hours < 10) "0$hours" else hours} : ${if (minutes < 10) "0$minutes" else minutes} : ${if (seconds < 10) "0$seconds" else seconds}"
-}
-
 fun standardCartNumber(number: String): String {
     val sb = StringBuilder(number)
     for (i in 1..number.length) {

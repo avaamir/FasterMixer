@@ -3,6 +3,7 @@ package com.behraz.fastermixer.batch.models
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.google.gson.annotations.SerializedName
 import org.osmdroid.util.GeoPoint
+import java.util.*
 
 data class Mixer(
     @SerializedName("vehicleID")
@@ -12,7 +13,7 @@ data class Mixer(
     @SerializedName("vehicleName")
     val carName: String,
     @SerializedName("driverName")
-    var driverName: String?,
+    private var _driverName: String?,
     @SerializedName("plaque")
     val pelak: String,
     @SerializedName("conditionName")
@@ -27,6 +28,13 @@ data class Mixer(
     val totalAmount: Float?, //TODO not implemented server side
     val phone: String?, //TODO it is telephone list, not yet implemented server side
 
+    @SerializedName("lastDataTime")
+    val lastDataTime: Date?,
+    @SerializedName("durationTime")
+    val lastDataTimeDiff: Long?,
+    @SerializedName("speed") val speed: Float?,
+
+
     @SerializedName("ended")
     private val ended: Boolean?,
     @SerializedName("productTypeName")
@@ -36,6 +44,9 @@ data class Mixer(
     @SerializedName("capacity")
     val capacity: Float            // zarifyat machine
 ) {
+    val driverName get() = _driverName ?: ""
+    val pelakForMapLayer get() = pelak.split(",")
+        .run { "${get(3)} ${get(2)} ${get(1)} ${get(0)}" }
     val latLng: GeoPoint get() = GeoPoint(lat.toDouble(), lng.toDouble())
     val loadInfo: LoadInfo
         get() =

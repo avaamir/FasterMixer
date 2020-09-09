@@ -1,6 +1,7 @@
 package com.behraz.fastermixer.batch.utils.fastermixer
 
 import com.behraz.fastermixer.batch.models.*
+import java.util.*
 
 
 fun fakeAdminEquipments() = listOf(
@@ -147,7 +148,7 @@ fun fakeMixers(): List<Mixer> {
                 phone = "0936216381$i",
                 pelak = "12,ب,234,63",
                 state = "ده دقیقه تا پمپ",
-                driverName = "حسن جعفری",
+                _driverName = "حسن جعفری",
                 owner = "بهراز$i",
                 lat = "$i",
                 lng =  "42.2${7-i}",
@@ -155,7 +156,10 @@ fun fakeMixers(): List<Mixer> {
                 capacity = 6f,
                 ended = false,
                 productTypeName = "8,2",
-                totalAmount = 300f
+                totalAmount = 300f,
+                lastDataTime = Calendar.getInstance().time,
+                speed = 0.0f,
+                lastDataTimeDiff = 0L
             )
         )
     }

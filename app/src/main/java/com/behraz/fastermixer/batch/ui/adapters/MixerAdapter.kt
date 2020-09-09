@@ -2,6 +2,7 @@ package com.behraz.fastermixer.batch.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
@@ -11,6 +12,9 @@ import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ItemMixerBinding
 import com.behraz.fastermixer.batch.databinding.ItemPompMixerBinding
 import com.behraz.fastermixer.batch.models.Mixer
+import com.behraz.fastermixer.batch.utils.fastermixer.Constants
+import com.behraz.fastermixer.batch.utils.general.minus
+import com.behraz.fastermixer.batch.utils.general.now
 
 class MixerAdapter(private val isForPomp: Boolean, interaction: Interaction) :
     ListAdapter<Mixer, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
@@ -79,6 +83,30 @@ class MixerAdapter(private val isForPomp: Boolean, interaction: Interaction) :
                         .run { mBinding.carId.setText(get(0), get(1), get(2), get(3)) }
                 }
 
+
+                if (mixer.speed == null) {
+                    mBinding.tvSpeedState.text = ""
+                } else {
+                    mBinding.tvSpeedState.text = if (mixer.speed > 0) "(در حرکت)" else "(ایستاده)"
+                }
+
+                if (mixer.lastDataTimeDiff != null) {
+                    if (mixer.lastDataTimeDiff > Constants.VALID_DURATION_TIME_FOR_LAST_DATA) {
+                        mBinding.frame.setCardBackgroundColor(
+                            ContextCompat.getColor(
+                                itemView.context,
+                                R.color.btn_yellow
+                            )
+                        )
+                    } else {
+                        mBinding.frame.setCardBackgroundColor(
+                            ContextCompat.getColor(
+                                itemView.context,
+                                R.color.gray50
+                            )
+                        )
+                    }
+                }
             } else {
                 (mBinding as ItemMixerBinding).mixer = mixer
                 //todo addThis When btnOnLoacEnding added:: btnOnLoacEnding added:: mBinding.btnEndLoading.setOnClickListener { (interaction as BatchAdapterInteraction).onEndLoadingClicked(mixer) }

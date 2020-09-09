@@ -20,6 +20,9 @@ public class FragmentMessageListBindingImpl extends FragmentMessageListBinding  
         sViewsWithIds.put(R.id.btnMap, 4);
         sViewsWithIds.put(R.id.btnMessage, 5);
         sViewsWithIds.put(R.id.messageRecycler, 6);
+        sViewsWithIds.put(R.id.animationView, 7);
+        sViewsWithIds.put(R.id.tv_no_message, 8);
+        sViewsWithIds.put(R.id.gpAnimationView, 9);
     }
     // views
     @NonNull
@@ -30,16 +33,19 @@ public class FragmentMessageListBindingImpl extends FragmentMessageListBinding  
     // Inverse Binding Event Handlers
 
     public FragmentMessageListBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 7, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 10, sIncludes, sViewsWithIds));
     }
     private FragmentMessageListBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
+            , (com.airbnb.lottie.LottieAnimationView) bindings[7]
             , (com.behraz.fastermixer.batch.ui.customs.fastermixer.CardButton) bindings[4]
             , (com.behraz.fastermixer.batch.ui.customs.fastermixer.CardButton) bindings[5]
+            , (androidx.constraintlayout.widget.Group) bindings[9]
             , (android.widget.ImageView) bindings[1]
             , (androidx.recyclerview.widget.RecyclerView) bindings[6]
             , (android.widget.TextView) bindings[2]
             , (android.widget.TextView) bindings[3]
+            , (android.widget.TextView) bindings[8]
             );
         this.mboundView0 = (androidx.constraintlayout.widget.ConstraintLayout) bindings[0];
         this.mboundView0.setTag(null);

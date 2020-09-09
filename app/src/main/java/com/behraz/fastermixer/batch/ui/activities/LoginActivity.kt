@@ -29,6 +29,8 @@ import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.LoginActivityViewModel
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.gps_internet_status_icons.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
@@ -63,6 +65,8 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        var date =  now()
+        println("debux ")
 
         if (false) {
             startActivity(Intent(this, ContactActivity::class.java))

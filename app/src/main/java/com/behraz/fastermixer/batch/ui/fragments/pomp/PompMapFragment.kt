@@ -11,6 +11,8 @@ import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.ui.fragments.BaseMapFragment
 import com.behraz.fastermixer.batch.ui.osm.MixerMarker
 import com.behraz.fastermixer.batch.ui.osm.PompMarker
+import com.behraz.fastermixer.batch.utils.general.minus
+import com.behraz.fastermixer.batch.utils.general.now
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 import com.behraz.fastermixer.batch.viewmodels.PompMapFragmentViewModel
 import org.osmdroid.util.GeoPoint
@@ -69,7 +71,7 @@ class PompMapFragment : BaseMapFragment() {
 
     private fun subscribeObservers() {
 
-        pompViewModel.pompArea.observe(viewLifecycleOwner, Observer {
+        pompViewModel.pompAreaInfo.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 mapViewModel.myLocation = it.center
                 userMarker.position = it.center
@@ -77,6 +79,7 @@ class PompMapFragment : BaseMapFragment() {
                     isFirstTime = false
                     moveCamera(it.center)
                 }
+                userMarker.title = "مکان شما"
             }
         })
 
@@ -107,6 +110,7 @@ class PompMapFragment : BaseMapFragment() {
         if (serverResponse?.isSucceed == true) {
             val excludeMarkerList =
                 ArrayList(mapViewModel.markers.keys) // we need this for exclude mixers from original list if mixer not exists in new mixerList
+
             serverResponse.entity?.forEach { mixer ->
                 excludeMarkerList.remove(mixer.id) //do not need to exclude this mixer because it's exists in new List too
                 val mixerMarker = mapViewModel.markers[mixer.id]
@@ -118,7 +122,7 @@ class PompMapFragment : BaseMapFragment() {
                             addMarkerToMap(
                                 _marker,
                                 mixer.latLng,
-                                if (mixer.driverName.isNullOrBlank()) mixer.carName else "${mixer.carName} ${mixer.driverName}"
+                                if (mixer.driverName.isBlank()) mixer.pelakForMapLayer else "${mixer.pelakForMapLayer} ${mixer.driverName}"
                             )
                         }
                 } else { //mixer already exists, update location

@@ -11,6 +11,7 @@ import com.behraz.fastermixer.batch.respository.apiservice.interceptors.EmptyBod
 import com.behraz.fastermixer.batch.respository.apiservice.interceptors.NetworkConnectionInterceptor
 import com.behraz.fastermixer.batch.respository.apiservice.interceptors.UnauthorizedInterceptor
 import com.behraz.fastermixer.batch.utils.general.Event
+import com.google.gson.GsonBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
@@ -91,10 +92,10 @@ object ApiService {
                 }
             }.build()
 
-
+        val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()
         Retrofit.Builder()
             .baseUrl(BASE_API_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .client(client)
     }
 

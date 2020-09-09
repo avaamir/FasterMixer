@@ -2,6 +2,7 @@ package com.behraz.fastermixer.batch.models
 
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.google.gson.annotations.SerializedName
+import java.util.*
 
 data class MixerMission(
     @SerializedName("destLocation")
@@ -13,12 +14,14 @@ data class MixerMission(
     @SerializedName("startMissionTime")
     val startMissionTime: String?,
     @SerializedName("endMissionTime")
-    val endMissionTime: String?
+    val endMissionTime: String?,
+    @SerializedName("clientDatetime") //TODO not yet implemented server side
+    val dataDateTime: Date?
 ) {
 
     companion object {
-        val NoMission = MixerMission("In Ro Dorost KON", "", "0", null, null)
+        val NoMission = MixerMission("In Ro Dorost KON", "", "0", null, null, null)
     }
 
-    val destLocation: CircleFence get() = CircleFence.circleFenceToCenterGeoPoint(_destLocation)
+    val destLocation: CircleFence get() = CircleFence.circleFenceToCenterGeoPoint(_destLocation, dataDateTime)
 }

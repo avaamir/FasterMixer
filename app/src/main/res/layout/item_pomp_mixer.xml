@@ -3,16 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data >
+    <data>
+
         <variable
             name="mixer"
             type="com.behraz.fastermixer.batch.models.Mixer" />
     </data>
+
     <androidx.cardview.widget.CardView
+        android:id="@+id/frame"
+        style="@style/my_card_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/my_card_style"
         app:cardCornerRadius="0dp"
+        app:cardBackgroundColor="@color/gray50"
         app:cardUseCompatPadding="false">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,7 +39,6 @@
                 style="@style/my_gray_normal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:text="@{mixer.carName}"
                 android:textColor="@color/blue"
@@ -129,19 +132,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:visibility="gone"
                 app:backgroundColor="@color/btn_blue"
                 app:image="@drawable/ic_call"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed"
                 app:radius="10dp"
-                android:visibility="gone"
                 app:text="تماس با راننده" />
 
             <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
                 android:id="@+id/btn_show_mixer_on_map"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="80dp"
+                android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 app:backgroundColor="@color/white"
                 app:image="@drawable/ic_map"
@@ -155,27 +158,14 @@
                 android:id="@+id/carId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView14"
-                app:layout_constraintEnd_toStartOf="@+id/textView14"
-                app:layout_constraintHorizontal_bias="0.67"
-                app:layout_constraintStart_toEndOf="@+id/btnCall"
-                app:layout_constraintTop_toTopOf="@+id/textView14"
+                android:layout_marginStart="32dp"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_show_mixer_on_map"
+                app:layout_constraintStart_toEndOf="@+id/btn_show_mixer_on_map"
+                app:layout_constraintTop_toTopOf="@+id/btn_show_mixer_on_map"
                 tools:firstText="12"
-                tools:secondText="ب"
-                tools:thirdText="134"
                 tools:forthText="54"
-                />
-
-            <TextView
-                android:id="@+id/textView10"
-                style="@style/my_gray_normal_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="نام راننده:"
-                app:layout_constraintBottom_toBottomOf="@+id/textView16"
-                app:layout_constraintEnd_toEndOf="@+id/carId"
-                app:layout_constraintTop_toTopOf="@+id/textView16" />
+                tools:secondText="ب"
+                tools:thirdText="134" />
 
 
             <TextView
@@ -184,22 +174,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
-                tools:text="امیرحسین مهدی پور"
-                android:text="@{mixer.driverName}"
+                android:fontFamily="@font/iransans_light"
+                android:text="@{mixer.driverName.empty ? `` : `(`+ mixer.driverName +`)`}"
                 android:textColor="@color/mixer_red"
-                app:layout_constraintBottom_toBottomOf="@+id/textView10"
-                app:layout_constraintEnd_toStartOf="@+id/textView10"
-                app:layout_constraintTop_toTopOf="@+id/textView10" />
+                app:layout_constraintBottom_toBottomOf="@+id/tvMixerName"
+                app:layout_constraintEnd_toStartOf="@+id/tvMixerName"
+                app:layout_constraintTop_toTopOf="@+id/tvMixerName"
+                tools:text="(امیرحسین مهدی پور)" />
 
             <TextView
                 android:id="@+id/textView19"
                 style="@style/my_gray_normal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="وضعیت:"
-                app:layout_constraintBottom_toBottomOf="@+id/textView18"
-                app:layout_constraintEnd_toEndOf="@+id/textView10"
-                app:layout_constraintTop_toTopOf="@+id/textView18" />
+                android:text="فاصله:"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/tvMixerName"
+                app:layout_constraintTop_toBottomOf="@+id/tvMixerName" />
 
             <TextView
                 android:id="@+id/textView9"
@@ -241,6 +232,27 @@
                 app:layout_constraintEnd_toStartOf="@+id/textView19"
                 app:layout_constraintTop_toTopOf="@+id/textView19"
                 tools:text="10 دقیقه تا جایگاه بچینگ" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/gpNotNeeded"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="textView18,textView15,textView16,textView9,textView12,textView13,textView17,textView14,textView11,textView20"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="8dp" />
+
+            <TextView
+                android:id="@+id/tvSpeedState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:fontFamily="@font/iransans"
+                tools:text="(ایستاده)"
+                android:textColor="@color/mixer_red"
+                app:layout_constraintBottom_toBottomOf="@+id/textView22"
+                app:layout_constraintEnd_toStartOf="@+id/textView22"
+                app:layout_constraintTop_toTopOf="@+id/textView22" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

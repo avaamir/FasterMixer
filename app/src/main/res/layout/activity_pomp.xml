@@ -312,7 +312,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     app:backgroundTint="@color/btn_blue"
-                    app:fabSize="mini"
+                    app:fabSize="normal"
                     app:srcCompat="@drawable/ic_gps"
                     app:tint="@color/white" />
 

@@ -20,12 +20,11 @@ import com.behraz.fastermixer.batch.databinding.LayoutContactsFragmentBinding
 import com.behraz.fastermixer.batch.models.Contact
 import com.behraz.fastermixer.batch.ui.adapters.ContactAdapter
 import com.behraz.fastermixer.batch.ui.adapters.MySimpleSpinnerAdapter
+import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
+import com.behraz.fastermixer.batch.utils.general.createNewContact
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.ContactActivityViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 
 class ContactsFragment : Fragment(), ContactAdapter.Interactions {
     private lateinit var viewModel: ContactActivityViewModel
@@ -36,6 +35,10 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
         const val user = "root"
         const val password = "4357"
         val commands = listOf(
+            /*//Server IP
+            "$user $password setparam 2004:2.184.49.133",
+            //Server Port
+            "$user $password setparam 2005:5027",
             //Backup Mode
             "$user $password setparam 2010:2",
             //Backup Port
@@ -53,12 +56,55 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
             //Response Timeout
             "$user $password setparam 1001:300",
             //Ignition Source
-            "$user $password setparam 101:1"
-            //Server IP
-            //"$user $password setparam 2004:2.184.49.133",
-            //Server Port
-            //"$user $password setparam 2005:5027",
+            "$user $password setparam 101:1",*/
+            //Data Sending: Min Distance
+            "$user $password setparam 10051:0",
+            //Data Sending: Min Angle
+            "$user $password setparam 10052:0",
+            //Data Sending: Min Speed Delta
+            "$user $password setparam 10053:0",
+            //
+            //Recorded Data Sending Rate
+            "$user $password setparam 10054:100",
+            //Recorded Data Sending Order
+            "$user $password setparam 1002:0" //0:newest 1:oldest
+            //Reset CPU
+            //"$user $password cpureset"
         )
+
+
+        private val CONTACTS_JAMKARAN = listOf(
+            Contact("سواری شخصی", "09381522686", "jamkaran"),
+            Contact("میکسر یک", "09038516423", "jamkaran"),
+            Contact("میکسر دو", "09038516427", "jamkaran"),
+            Contact("میکسر سه", "09038516523", "jamkaran"),
+            Contact("پمپ 1", "09038516537", "jamkaran"),
+            Contact("کمپرسی 1", "09038516548", "jamkaran"),
+            Contact("jamkaran1", "09010885677", "jamkaran"),
+            Contact("jamkaran2", "09010886081", "jamkaran"),
+            Contact("jamkaran3", "09014806687", "jamkaran"),
+            Contact("jamkaran4", "09014808698", "jamkaran"),
+            Contact("jamkaran5", "09014808978", "jamkaran"),
+            Contact("jamkaran6", "09013484661", "jamkaran"),
+            Contact("jamkaran7", "09013486891", "jamkaran"),
+            Contact("jamkaran8", "09013530891", "jamkaran"),
+            Contact("jamkaran9", "09013572741", "jamkaran"),
+            Contact("jamkaran10", "09013584361", "jamkaran")
+        )
+
+        private val CONTACTS_BAREZ = listOf(
+            Contact("barez1", "09925356408", "barez"),
+            Contact("barez2", "09925356405", "barez"),
+            Contact("barez3", "09160887340", "barez"),
+            Contact("barez4", "09921603892", "barez"),
+            Contact("barez5", "09921603893", "barez"),
+            Contact("barez6", "09925356431", "barez"),
+            Contact("barez7", "09921603891", "barez"),
+            Contact("barez8", "09160885890", "barez"),
+            Contact("barez9", "09921603894", "barez"),
+            Contact("barez10", "09160885872", "barez")
+        )
+
     }
 
     override fun onCreateView(
@@ -82,41 +128,15 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
     private fun initContacts() {
         //Barez
         viewModel.insertContact(
-            listOf(
-                Contact("barez1", "09925356408", "barez"),
-                Contact("barez2", "09925356405", "barez"),
-                Contact("barez3", "09160887340", "barez"),
-                Contact("barez4", "09921603892", "barez"),
-                Contact("barez5", "09921603893", "barez"),
-                Contact("barez6", "09925356431", "barez"),
-                Contact("barez7", "09921603891", "barez"),
-                Contact("barez8", "09160885890", "barez"),
-                Contact("barez9", "09921603894", "barez"),
-                Contact("barez10", "09160885872", "barez")
-            )
+            CONTACTS_BAREZ
         )
 
         //Jamkaran
         viewModel.insertContact(
-            listOf(
-                Contact("سواری شخصی", "09381522686", "jamkaran"),
-                Contact("میکسر یک", "09038516423", "jamkaran"),
-                Contact("میکسر دو", "09038516427", "jamkaran"),
-                Contact("میکسر سه", "09038516523", "jamkaran"),
-                Contact("پمپ 1", "09038516537", "jamkaran"),
-                Contact("کمپرسی 1", "09038516548", "jamkaran"),
-                Contact("jamkaran1", "09010885677", "jamkaran"),
-                Contact("jamkaran2", "09010886081", "jamkaran"),
-                Contact("jamkaran3", "09014806687", "jamkaran"),
-                Contact("jamkaran4", "09014808698", "jamkaran"),
-                Contact("jamkaran5", "09014808978", "jamkaran"),
-                Contact("jamkaran6", "09013484661", "jamkaran"),
-                Contact("jamkaran7", "09013486891", "jamkaran"),
-                Contact("jamkaran8", "09013530891", "jamkaran"),
-                Contact("jamkaran9", "09013572741", "jamkaran"),
-                Contact("jamkaran10", "09013584361", "jamkaran")
-            )
+            CONTACTS_JAMKARAN
         )
+
+        context!!.createNewContact(CONTACTS_JAMKARAN)
     }
 
 
@@ -126,25 +146,32 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
         }
 
         mBinding.btnSendSettings.setOnClickListener {
-            toast("not yet implemented")
-            /*val progressDialog = MyProgressDialog(context!!, R.style.my_alert_dialog, true)
-            val contacts = viewModel.allContacts!!.filter { it.isChecked }
+            val progressDialog = MyProgressDialog(context!!, R.style.my_alert_dialog, true)
 
-            if (contacts.isNotEmpty()) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    progressDialog.show()
-                    val isSendSomething = sendCommandsAsync(commands, contacts) {
-                        println("debug:progress:$it")
-                        progressDialog.setProgress(it)
-                    }.await()
-                    progressDialog.dismiss()
-                    if (isSendSomething) {
-                        toast("دستورات ارسال شد")
+            val allContacts = viewModel.allContacts.value
+            if (allContacts != null) {
+                val contacts = allContacts.filter {
+                    viewModel.isCheckedMap[it.mobileNumber] == true
+                }
+
+                if (contacts.isNotEmpty()) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        progressDialog.show()
+                        val isSendSomething = sendCommandsAsync(commands, contacts) {
+                            println("debug:progress:$it")
+                            progressDialog.setProgress(it)
+                        }.await()
+                        progressDialog.dismiss()
+                        if (isSendSomething) {
+                            toast("دستورات ارسال شد")
+                        }
                     }
+                } else {
+                    toast("چیزی انتخاب نشده است")
                 }
             } else {
-                toast("چیزی انتخاب نشده است")
-            }*/
+                toast("List is NULL")
+            }
         }
 
         /*mBinding.frameCheckboxSelectAll.setOnClickListener {
