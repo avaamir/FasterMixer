@@ -280,7 +280,7 @@ class MixerActivity : AppCompatActivity(),
 
     override fun onUnauthorizedAction(event: Event<Unit>) {
         toast("شما نیاز به ورود مجدد دارید")
-        //  finish()
+        finish()
     }
 
     override fun onInternetUnavailable() {

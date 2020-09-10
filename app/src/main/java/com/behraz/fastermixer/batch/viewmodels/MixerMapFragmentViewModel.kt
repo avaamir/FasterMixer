@@ -22,6 +22,7 @@ class MixerMapFragmentViewModel: ViewModel() {
         }
 
     fun getRoute(coordinates: List<GeoPoint>) {
+        //return
         this.coordinates.value = coordinates
     }
 

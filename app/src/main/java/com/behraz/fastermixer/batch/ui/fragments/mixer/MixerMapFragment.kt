@@ -1,6 +1,7 @@
 package com.behraz.fastermixer.batch.ui.fragments.mixer
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,10 +22,10 @@ import org.osmdroid.events.ZoomEvent
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polyline
 
+
 class MixerMapFragment : BaseMapFragment() {
 
-    private var shouldCameraTrackMixer =
-        true //age map ro scroll kard dg track nakone ama age dokme myLocation ro zad trackesh bokone
+    private var shouldCameraTrackMixer = true //age map ro scroll kard dg track nakone ama age dokme myLocation ro zad trackesh bokone
     private val destMarker: DestMarker by lazy {
         DestMarker(mBinding.map, 42, 42).also {
             addMarkerToMap(
@@ -81,6 +82,12 @@ class MixerMapFragment : BaseMapFragment() {
         initViews()
         subscribeObservers()
 
+        Handler().postDelayed({
+            toast("Bang")
+             btnMyLocation.callOnClick()
+        }, 10000)
+
+
         return mBinding.root
     }
 
@@ -124,6 +131,7 @@ class MixerMapFragment : BaseMapFragment() {
                     if (mapViewModel.myLocation != null) {
                         val remainingDistance = mapViewModel.myLocation!!.distanceToAsDouble(mission.destLocation.center)
                         if (remainingDistance > mission.destLocation.radius) {
+                            toast("مسیر یابی صدا زد") //TODO remove this
                             mapViewModel.getRoute(
                                 listOf(
                                     mapViewModel.myLocation!!,
@@ -162,6 +170,7 @@ class MixerMapFragment : BaseMapFragment() {
                         mapViewModel.myLocation!!.distanceToAsDouble(destLocationArea.center)
                     println("debux: distance: $remainingDistance")
                     if (remainingDistance > destLocationArea.radius) {
+                        toast("مسیر یابی صدا زد") //TODO remove this
                         mapViewModel.getRoute(
                             listOf(
                                 mapViewModel.myLocation!!,

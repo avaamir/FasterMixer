@@ -16,7 +16,7 @@ public class LayoutMapBindingImpl extends LayoutMapBinding  {
         sViewsWithIds = new android.util.SparseIntArray();
         sViewsWithIds.put(R.id.map, 1);
         sViewsWithIds.put(R.id.btnMyLocation2, 2);
-        sViewsWithIds.put(R.id.btnMyLocation, 3);
+        sViewsWithIds.put(R.id.btnFragmentMyLocation, 3);
     }
     // views
     @NonNull

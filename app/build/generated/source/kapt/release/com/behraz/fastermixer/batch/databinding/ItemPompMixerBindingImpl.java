@@ -22,26 +22,29 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
         sViewsWithIds.put(R.id.btnCall, 14);
         sViewsWithIds.put(R.id.btn_show_mixer_on_map, 15);
         sViewsWithIds.put(R.id.carId, 16);
-        sViewsWithIds.put(R.id.textView10, 17);
-        sViewsWithIds.put(R.id.textView19, 18);
+        sViewsWithIds.put(R.id.textView19, 17);
+        sViewsWithIds.put(R.id.gpNotNeeded, 18);
+        sViewsWithIds.put(R.id.tvSpeedState, 19);
+        sViewsWithIds.put(R.id.tvLastDataTime, 20);
+        sViewsWithIds.put(R.id.imageView8, 21);
     }
     // views
-    @NonNull
-    private final androidx.cardview.widget.CardView mboundView0;
     // variables
     // values
     // listeners
     // Inverse Binding Event Handlers
 
     public ItemPompMixerBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 19, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 22, sIncludes, sViewsWithIds));
     }
     private ItemPompMixerBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
             , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[14]
             , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[15]
             , (com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView) bindings[16]
-            , (android.widget.TextView) bindings[17]
+            , (androidx.cardview.widget.CardView) bindings[0]
+            , (androidx.constraintlayout.widget.Group) bindings[18]
+            , (android.widget.ImageView) bindings[21]
             , (android.widget.TextView) bindings[9]
             , (android.widget.TextView) bindings[10]
             , (android.widget.TextView) bindings[11]
@@ -50,15 +53,16 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
             , (android.widget.TextView) bindings[3]
             , (android.widget.TextView) bindings[13]
             , (android.widget.TextView) bindings[4]
-            , (android.widget.TextView) bindings[18]
+            , (android.widget.TextView) bindings[17]
             , (android.widget.TextView) bindings[7]
             , (android.widget.TextView) bindings[5]
             , (android.widget.TextView) bindings[8]
             , (android.widget.TextView) bindings[6]
+            , (android.widget.TextView) bindings[20]
             , (android.widget.TextView) bindings[1]
+            , (android.widget.TextView) bindings[19]
             );
-        this.mboundView0 = (androidx.cardview.widget.CardView) bindings[0];
-        this.mboundView0.setTag(null);
+        this.frame.setTag(null);
         this.textView14.setTag(null);
         this.textView16.setTag(null);
         this.textView18.setTag(null);
@@ -126,11 +130,15 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
             mDirtyFlags = 0;
         }
         java.lang.String mixerState = null;
+        java.lang.String javaLangStringMixerDriverName = null;
+        java.lang.String javaLangStringMixerDriverNameJavaLangString = null;
         java.lang.String mixerLoadInfoAmountFromTotal = null;
         java.lang.String mixerLoadInfoAmount = null;
         float mixerCapacity = 0f;
+        boolean mixerDriverNameEmpty = false;
         com.behraz.fastermixer.batch.models.LoadInfo mixerLoadInfo = null;
         java.lang.String mixerCapacityJavaLangString = null;
+        java.lang.String mixerDriverNameEmptyJavaLangStringJavaLangStringMixerDriverNameJavaLangString = null;
         com.behraz.fastermixer.batch.models.Mixer mixer = mMixer;
         java.lang.String mixerLoadInfoDensity = null;
         java.lang.String mixerCarName = null;
@@ -167,6 +175,35 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
                     // read mixer.loadInfo.slump
                     mixerLoadInfoSlump = mixerLoadInfo.getSlump();
                 }
+                if (mixerDriverName != null) {
+                    // read mixer.driverName.empty
+                    mixerDriverNameEmpty = mixerDriverName.isEmpty();
+                }
+            if((dirtyFlags & 0x3L) != 0) {
+                if(mixerDriverNameEmpty) {
+                        dirtyFlags |= 0x8L;
+                }
+                else {
+                        dirtyFlags |= 0x4L;
+                }
+            }
+        }
+        // batch finished
+
+        if ((dirtyFlags & 0x4L) != 0) {
+
+                // read ("(") + (mixer.driverName)
+                javaLangStringMixerDriverName = ("(") + (mixerDriverName);
+
+
+                // read (("(") + (mixer.driverName)) + (")")
+                javaLangStringMixerDriverNameJavaLangString = (javaLangStringMixerDriverName) + (")");
+        }
+
+        if ((dirtyFlags & 0x3L) != 0) {
+
+                // read mixer.driverName.empty ? "" : (("(") + (mixer.driverName)) + (")")
+                mixerDriverNameEmptyJavaLangStringJavaLangStringMixerDriverNameJavaLangString = ((mixerDriverNameEmpty) ? ("") : (javaLangStringMixerDriverNameJavaLangString));
         }
         // batch finished
         if ((dirtyFlags & 0x3L) != 0) {
@@ -176,7 +213,7 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView16, mixerLoadInfoDensity);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView18, mixerLoadInfoAmountFromTotal);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView20, mixerCapacityJavaLangString);
-            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView21, mixerDriverName);
+            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView21, mixerDriverNameEmptyJavaLangStringJavaLangStringMixerDriverNameJavaLangString);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView22, mixerState);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView9, mixerLoadInfoAmount);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.tvMixerName, mixerCarName);
@@ -189,6 +226,8 @@ public class ItemPompMixerBindingImpl extends ItemPompMixerBinding  {
     /* flag mapping
         flag 0 (0x1L): mixer
         flag 1 (0x2L): null
+        flag 2 (0x3L): mixer.driverName.empty ? "" : (("(") + (mixer.driverName)) + (")")
+        flag 3 (0x4L): mixer.driverName.empty ? "" : (("(") + (mixer.driverName)) + (")")
     flag mapping end*/
     //end
 }

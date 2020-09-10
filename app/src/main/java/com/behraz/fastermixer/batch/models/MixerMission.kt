@@ -15,7 +15,7 @@ data class MixerMission(
     val startMissionTime: String?,
     @SerializedName("endMissionTime")
     val endMissionTime: String?,
-    @SerializedName("clientDatetime") //TODO not yet implemented server side
+    @SerializedName("clientDatetime")
     val dataDateTime: Date?
 ) {
 

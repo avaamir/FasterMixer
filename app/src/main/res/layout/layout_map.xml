@@ -30,7 +30,7 @@
 
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnMyLocation"
+                android:id="@+id/btnFragmentMyLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"

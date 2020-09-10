@@ -17,12 +17,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.LayoutMapBinding
-import com.behraz.fastermixer.batch.ui.osm.ImageMarker
-import com.behraz.fastermixer.batch.ui.osm.MixerMarker
 import com.behraz.fastermixer.batch.ui.osm.MyOSMMapView
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.LocationHandler
-import com.behraz.fastermixer.batch.utils.general.getBitmapFromVectorDrawable
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.osmdroid.config.Configuration
@@ -30,10 +27,6 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
-import org.osmdroid.views.overlay.compass.CompassOverlay
-import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 abstract class BaseMapFragment : Fragment(), LocationListener,
     MyOSMMapView.OnMapClickListener {
@@ -72,19 +65,22 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         initMapSettings()
         //setupLocationManager() //TODo felan data ra az gps ru machine migirim, yaani app android az server mikhune
 
+
         return _mBinding.root
     }
 
     protected open fun initViews() {
         if (btnMyLocationId != 0) {
-            _mBinding.btnMyLocation.visibility = View.GONE
+            _mBinding.btnFragmentMyLocation.visibility = View.GONE
             btnMyLocation = activity!!.findViewById(btnMyLocationId)
         } else {
-            btnMyLocation = _mBinding.btnMyLocation
+            btnMyLocation = _mBinding.btnFragmentMyLocation
         }
 
         btnMyLocation.setOnClickListener {
+            println("debux: btnMyLocation Called $myLocation")
             if (myLocation != null) {
+                println("debux: MyLocation is not null")
                 moveCamera(myLocation!!)
                 it.animate().apply {
                     interpolator = LinearInterpolator()

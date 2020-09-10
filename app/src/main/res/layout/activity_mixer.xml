@@ -18,23 +18,22 @@
 
         <include
             android:id="@+id/layoutDemo"
+            layout="@layout/layout_demo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            layout="@layout/layout_demo"
-            android:layout_margin="@dimen/standard_margin"
-            android:layout_gravity="top|left" />
-
+            android:layout_gravity="top|left"
+            android:layout_margin="@dimen/standard_margin" />
 
 
         <FrameLayout
             android:id="@+id/frame_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:behavior_hideable="true"
-            app:layout_behavior=".ui.customs.general.TopSheetBehavior"
             android:background="#00000000"
+            android:paddingLeft="32dp"
             android:paddingRight="32dp"
-            android:paddingLeft="32dp">
+            app:behavior_hideable="true"
+            app:layout_behavior=".ui.customs.general.TopSheetBehavior">
 
 
             <LinearLayout
@@ -57,7 +56,7 @@
 
                 <include
                     android:id="@+id/layout_new_message"
-                    layout="@layout/item_message_vertical"  />
+                    layout="@layout/item_message_vertical" />
 
 
                 <!--<FrameLayout
@@ -238,20 +237,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:layout_margin="8dp"
                 android:orientation="horizontal"
-                android:padding="8dp"
+                android:padding="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
 
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/btnWeather"
-                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="8dp"
                     android:clickable="true"
                     android:focusable="true"
+                    android:visibility="gone"
                     app:backgroundTint="@color/btn_yellow"
                     app:fabSize="mini"
                     app:srcCompat="@drawable/ic_sun"
@@ -266,10 +266,9 @@
                     android:clickable="true"
                     android:focusable="true"
                     app:backgroundTint="@color/btn_blue"
-                    app:fabSize="mini"
+                    app:fabSize="normal"
                     app:srcCompat="@drawable/ic_gps"
                     app:tint="@color/white" />
-
             </LinearLayout>
 
 
@@ -313,8 +312,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:visibility="gone"
-                    android:padding="@dimen/standard_margin">
+                    android:padding="@dimen/standard_margin"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
