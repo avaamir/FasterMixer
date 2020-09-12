@@ -58,8 +58,11 @@ interface BehrazClient {
     @POST("SendMessage/UpdateViewedSendMessageById")
     suspend fun seenMessage(@Body seenMessageId: ChooseEquipmentRequest): Response<Entity<Unit>>
 
-    @POST("Vehicle/GetMission")
-    suspend fun getMixerMission(): Response<Entity<MixerMission>>
+    @POST("Vehicle/GetMission") //mixer
+    suspend fun getMixerMission(): Response<Entity<Mission>>
+
+    @POST("Vehicle/GetMissionPump") //pomp
+    suspend fun getPompMission(): Response<Entity<Mission>>
 
     @POST("AppVersion/FindLastAppVersion")
     suspend fun checkUpdates(): Response<Entity<UpdateResponse>>

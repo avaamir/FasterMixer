@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.databinding.ActivityMixerBinding
+import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
 import com.behraz.fastermixer.batch.ui.customs.general.TopSheetBehavior
@@ -26,6 +27,8 @@ import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
 import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.MixerActivityViewModel
 import kotlinx.android.synthetic.main.activity_batch.*
+import kotlinx.android.synthetic.main.activity_batch.tvMessageCount
+import kotlinx.android.synthetic.main.activity_mixer.*
 
 class MixerActivity : AppCompatActivity(),
     ApiService.InternetConnectionListener,
@@ -140,6 +143,12 @@ class MixerActivity : AppCompatActivity(),
             }.start()
         }
 
+
+        mBinding.btnRoute.setOnClickListener {
+            (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as MixerMapFragment).routeAgain()
+        }
+
+
     }
 
     private fun subscribeObservers() {
@@ -194,6 +203,7 @@ class MixerActivity : AppCompatActivity(),
                 topSheetBehavior.state = TopSheetBehavior.STATE_HIDDEN
             }, 3000)
         })
+
     }
 
     private fun initFragments() {
@@ -204,7 +214,7 @@ class MixerActivity : AppCompatActivity(),
             )
             add(
                 R.id.mapContainer,
-                MixerMapFragment.newInstance(mBinding.btnMyLocation.id),
+                MixerMapFragment.newInstance(mBinding.btnMyLocation.id, mBinding.btnRoute.id),
                 FRAGMENT_MAP_TAG
             )
             commit()

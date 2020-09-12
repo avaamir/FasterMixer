@@ -78,9 +78,7 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         }
 
         btnMyLocation.setOnClickListener {
-            println("debux: btnMyLocation Called $myLocation")
             if (myLocation != null) {
-                println("debux: MyLocation is not null")
                 moveCamera(myLocation!!)
                 it.animate().apply {
                     interpolator = LinearInterpolator()
@@ -101,6 +99,7 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         _mBinding.map.overlayManager.add(line)
         //moveCamera(GeoPoint(line.bounds.centerLatitude, line.bounds.centerLongitude), 1.0) //todo how move camera to polygon area
         //line.outlinePaint.strokeWidth = 3f
+        _mBinding.map.invalidate()
         return line
     }
 
@@ -157,7 +156,7 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         _mBinding.map.controller.run {
             setCenter(geoPoint)
             zoomTo(zoom)
-            animateTo(geoPoint)
+           // animateTo(geoPoint)
         }
     }
 

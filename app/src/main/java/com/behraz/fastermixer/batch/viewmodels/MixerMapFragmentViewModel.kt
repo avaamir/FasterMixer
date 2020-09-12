@@ -22,8 +22,12 @@ class MixerMapFragmentViewModel: ViewModel() {
         }
 
     fun getRoute(coordinates: List<GeoPoint>) {
-        //return
         this.coordinates.value = coordinates
+    }
+
+    fun tryGetRouteAgain() {
+        println("debux:tryGetRouteAgain: ${coordinates.value}")
+        this.coordinates.value = this.coordinates.value
     }
 
 

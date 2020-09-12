@@ -170,6 +170,7 @@ object RemoteRepo {
     }
 
     fun getMixerMission() = apiReq(ApiService.client::getMixerMission)
+    fun getPompMission() = apiReq(ApiService.client::getPompMission)
 
     fun getCustomers() = apiReq(ApiService.client::getCustomers)
 

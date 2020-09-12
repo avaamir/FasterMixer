@@ -64,10 +64,6 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
-        var date =  now()
-        println("debux ")
-
         if (false) {
             startActivity(Intent(this, ContactActivity::class.java))
             finish()
