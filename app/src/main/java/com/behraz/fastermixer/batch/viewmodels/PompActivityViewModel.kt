@@ -1,11 +1,13 @@
 package com.behraz.fastermixer.batch.viewmodels
 
 import androidx.lifecycle.*
+import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
+import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.Event
 import kotlin.concurrent.fixedRateTimer
 
@@ -65,6 +67,40 @@ class PompActivityViewModel : ViewModel() {
             response
     }
 
+
+
+    val newMissionEvent = MutableLiveData<Event<Mission>>()
+    val getMissionError = MutableLiveData<Event<String>>()
+    private val getMixerMissionEvent = MutableLiveData(Event(Unit))
+    private val getMissionResponse = Transformations.switchMap(getMixerMissionEvent) {
+        RemoteRepo.getPompMission()
+    }
+
+    init {
+        getMissionResponse.observeForever {
+            println("debux: `newMission` Come")
+            if (it != null) {
+                if (it.isSucceed) {
+                    //Check if serverMission is a new Mission or Already submitted
+                    val serverMission = it.entity
+                    if (serverMission != null) { //NewMission
+                        val currentMission = newMissionEvent.value?.peekContent()
+                        if (serverMission.missionId != currentMission?.missionId) { //serverMission is a NewMission
+                            newMissionEvent.value = Event(serverMission)
+                        }
+                    } else { //NoMission
+                        if (newMissionEvent.value?.peekContent() !== Mission.NoMission)
+                            newMissionEvent.value = Event(Mission.NoMission)
+                    }
+                } else {
+                    getMissionError.value = Event(it.message)  //TODO?
+                }
+            } else {
+                //TODO check this code , request again to map.ir
+                getMissionError.value = Event(Constants.SERVER_ERROR) //TODO?
+            }
+        }
+    }
 
     private val getCustomerEvent = MutableLiveData(Event(Unit))
     val customers = Transformations.switchMap(getCustomerEvent) {

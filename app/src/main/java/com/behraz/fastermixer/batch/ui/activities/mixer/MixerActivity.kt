@@ -155,7 +155,6 @@ class MixerActivity : AppCompatActivity(),
             (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as MixerMapFragment).routeAgain()
         }
 
-
     }
 
     private fun subscribeObservers() {

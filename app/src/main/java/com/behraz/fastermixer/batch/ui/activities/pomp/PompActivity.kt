@@ -22,11 +22,13 @@ import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.databinding.ActivityPompBinding
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
+import com.behraz.fastermixer.batch.ui.activities.mixer.MixerActivity
 import com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.ui.dialogs.PompMessageDialog
 import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
+import com.behraz.fastermixer.batch.ui.fragments.mixer.MixerMapFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.CustomerListFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.MessageListFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.MixerListFragment
@@ -190,6 +192,10 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
                 getString(R.string.pomp_mixers_on_map_toggle_request)
 
 
+        mBinding.btnRoute.setOnClickListener {
+            (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as PompMapFragment).routeAgain()
+        }
+
     }
 
 
@@ -289,7 +295,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             //setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             add(
                 R.id.mapContainer,
-                PompMapFragment.newInstance(mBinding.btnMyLocation.id),
+                PompMapFragment.newInstance(mBinding.btnMyLocation.id, mBinding.btnRoute.id),
                 FRAGMENT_MAP_TAG
             )
             commit()

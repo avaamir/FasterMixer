@@ -316,6 +316,20 @@
                     app:srcCompat="@drawable/ic_gps"
                     app:tint="@color/white" />
 
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnRoute"
+                    android:visibility="invisible"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:backgroundTint="@color/btn_blue"
+                    app:fabSize="normal"
+                    app:srcCompat="@drawable/ic_marker"
+                    app:tint="@color/white" />
+
             </LinearLayout>
 
 
