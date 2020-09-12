@@ -13,6 +13,7 @@ import com.behraz.fastermixer.batch.ui.fragments.BaseMapFragment
 import com.behraz.fastermixer.batch.ui.osm.DestMarker
 import com.behraz.fastermixer.batch.ui.osm.MixerMarker
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
+import com.behraz.fastermixer.batch.utils.general.now
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.MixerActivityViewModel
 import com.behraz.fastermixer.batch.viewmodels.MixerMapFragmentViewModel
@@ -26,9 +27,15 @@ import org.osmdroid.views.overlay.Polyline
 class MixerMapFragment : BaseMapFragment() {
 
 
+    private var routePolyline: Polyline? = null
+        set(value) {
+            println("debux: Setter: before:$field new:$value, ${now()}")
+            field = value
+        }
+
     private var btnRoute: View? = null
 
-
+    private var isFirstCameraMove = true
     private var shouldCameraTrackMixer =
         true //age map ro scroll kard dg track nakone ama age dokme myLocation ro zad trackesh bokone
     private val destMarker: DestMarker by lazy {
@@ -55,7 +62,8 @@ class MixerMapFragment : BaseMapFragment() {
         shouldCameraTrackMixer = true
     }
 
-    private var routePolyline: Polyline? = null
+
+
 
     private val userMarker by lazy {
         MixerMarker(mBinding.map).also {
@@ -91,6 +99,9 @@ class MixerMapFragment : BaseMapFragment() {
         subscribeObservers()
 
         test() //TODO
+
+
+        println("debux: init: ${System.identityHashCode(this)} ${System.currentTimeMillis()}")
 
         return mBinding.root
     }
@@ -139,10 +150,6 @@ class MixerMapFragment : BaseMapFragment() {
                     //age ghablan track dar naghshe keshide shode bud
                     destMarker.position = mission.destLocation.center
                     destMarker.title = "مقصد ${mission.conditionTitle}"
-                    routePolyline?.let { _routes ->
-                        mBinding.map.overlayManager.remove(_routes)
-                        routePolyline = null
-                    }
                     if (mapViewModel.myLocation != null) {
                         val remainingDistance =
                             mapViewModel.myLocation!!.distanceToAsDouble(mission.destLocation.center)
@@ -184,7 +191,10 @@ class MixerMapFragment : BaseMapFragment() {
             if (it != null) {
                 mapViewModel.myLocation = it.center
                 userMarker.position = it.center
-                if (shouldCameraTrackMixer) {
+                println("debux: MixerLocation Came")
+                if (shouldCameraTrackMixer || isFirstCameraMove) {
+                    println("debux: moveCamera")
+                    isFirstCameraMove = false
                     moveCamera(it.center)
                 }
                 if (mapViewModel.shouldFindRoutesAfterUserLocationFound) {
@@ -217,10 +227,12 @@ class MixerMapFragment : BaseMapFragment() {
                 println("debux: getRouteResponse Came")
                 if (it.isSuccessful) {
                     println("debux: getRouteResponse isSuccessful")
-                    routePolyline?.let {
-                        mBinding.map.overlayManager.remove(routePolyline)
+                    routePolyline?.let { _routes ->
+                        mBinding.map.overlayManager.remove(_routes)
+                        routePolyline = null
                     }
                     routePolyline = drawPolyline(it.getRoutePoints())
+                    println("debux: points: ${routePolyline}, ${it} ${it.getRoutePoints()}")
                 } else {
                     println("debux: getRouteResponse unSuccessful")
                     toast(Constants.SERVER_ERROR)
@@ -244,6 +256,22 @@ class MixerMapFragment : BaseMapFragment() {
     fun routeAgain() {
         /*todo add check if out of road then request to map.ir*/
         /*todo age location ha avaz shode bud ya khat keshide nashode bud req bezan*/
+ /*       val mLoc = mapViewModel.myLocation
+        val destLoc =   mixerActivityViewModel.newMissionEvent.value?.peekContent()?.destLocation?.center
+        if (mLoc != null && destLoc != null) {
+            mapViewModel.getRoute(
+                listOf(
+                    mLoc,
+                    destLoc
+                )
+            )
+            destMarker.position = destLoc
+        } else {
+            toast("شما ماموریتی ندارید")
+        }*/
+
+        println("debux: $routePolyline , ${routePolyline?.distance}")
+        println("debux: routeAgain: ${mapViewModel.getRouteResponse.value?.getRoutePoints()}")
         mapViewModel.tryGetRouteAgain()
     }
 }

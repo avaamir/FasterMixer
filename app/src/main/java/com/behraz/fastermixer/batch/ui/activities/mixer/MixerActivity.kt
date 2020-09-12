@@ -1,5 +1,6 @@
 package com.behraz.fastermixer.batch.ui.activities.mixer
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -53,6 +54,12 @@ class MixerActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mixer)
+
+
+        val orientation = resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) { //age land bud bayad baghiye code ejra beshe ta 2ta fragment ijad nashe va code be moshkel nakhore
+            return
+        }
 
         viewModel = ViewModelProvider(this).get(MixerActivityViewModel::class.java)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_mixer)
@@ -207,6 +214,7 @@ class MixerActivity : AppCompatActivity(),
     }
 
     private fun initFragments() {
+        println("debux: initFragments ${System.currentTimeMillis()}")
         supportFragmentManager.beginTransaction().apply {
             add(
                 R.id.mapContainer,

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.transition.AutoTransition
@@ -80,6 +81,13 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pomp)
+
+
+        val orientation = resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) { //age land bud bayad baghiye code ejra beshe ta 2ta fragment ijad nashe va code be moshkel nakhore
+            return
+        }
+
 
         viewModel = ViewModelProvider(this).get(PompActivityViewModel::class.java)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_pomp)

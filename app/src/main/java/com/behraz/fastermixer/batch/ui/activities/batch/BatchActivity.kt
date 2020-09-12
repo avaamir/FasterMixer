@@ -1,6 +1,7 @@
 package com.behraz.fastermixer.batch.ui.activities.batch
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -44,6 +45,12 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdap
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_batch)
+
+        val orientation = resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) { //age land bud bayad baghiye code ejra beshe ta 2ta fragment ijad nashe va code be moshkel nakhore
+            return
+        }
+
 
         viewModel = ViewModelProvider(this).get(BatchActivityViewModel::class.java)
 

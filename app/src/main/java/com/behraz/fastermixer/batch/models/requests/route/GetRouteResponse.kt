@@ -28,8 +28,6 @@ data class GetRouteResponse(
 
             }
         }
-
-        println("debux: $points")
         return points
     }
 
