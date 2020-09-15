@@ -29,7 +29,8 @@ import com.behraz.fastermixer.batch.viewmodels.BatchActivityViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_batch.*
 
-class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdapter.BatchAdapterInteraction,
+class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction,
+    MixerAdapter.BatchAdapterInteraction,
     FasterMixerUserPanel.Interactions, ApiService.InternetConnectionListener,
     ApiService.OnUnauthorizedListener {
 
@@ -93,22 +94,9 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction, MixerAdap
         })
 
 
-        viewModel.messages.observe(this, Observer {
-            if (it != null) {
-                if (it.isSucceed) {
-                    it.entity?.let { messages ->
-                        messageAdapter.submitList(messages)
-                        tvMessageCount.text = messages.size.toString()
-                    }
-                } else {
-                    //TODO is not succeed what should i do??
-                    println("debug: ${it.message}")
-                }
-            } else {
-
-                println("debug: getMessages() -> Server Error: returning `null`")
-                //todo Server Error chekar konam??
-            }
+        viewModel.messages.observe(this, Observer { messages ->
+            messageAdapter.submitList(messages)
+            tvMessageCount.text = messages.size.toString()
         })
 
 

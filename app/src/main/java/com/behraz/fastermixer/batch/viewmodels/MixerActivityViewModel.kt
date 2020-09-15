@@ -3,12 +3,12 @@ package com.behraz.fastermixer.batch.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
+import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.Event
 import kotlinx.coroutines.CoroutineScope
@@ -64,21 +64,24 @@ class MixerActivityViewModel : ViewModel() {
         }
     }
 
-    private val getMessageEvent = MutableLiveData<Event<Unit>>()
-    val messages = Transformations.switchMap(getMessageEvent) {
+    //private val getMessageEvent = MutableLiveData<Event<Unit>>()
+    /*val messages = Transformations.switchMap(getMessageEvent) {
         RemoteRepo.getMessages().map {
             isGetMessageRequestActive = false
             it?.entity?.let { _messages ->
                 if (_messages.isNotEmpty()) {
                     newMessage.value = _messages[0]
-                   RemoteRepo.seenMessage(_messages[0].id)
+                    RemoteRepo.seenMessage(_messages[0].id)
                 }
             }
             it
         }
-    }
+    }*/
 
-    val newMessage = MutableLiveData<Message>()
+    val messages = MessageRepo.allMessage
+
+
+    val newMessage = MutableLiveData<Event<Message>>()
 
     private val logOutEvent = MutableLiveData<Event<Unit>>()
     val logoutResponse = Transformations.switchMap(logOutEvent) {
@@ -123,11 +126,28 @@ class MixerActivityViewModel : ViewModel() {
     }
 
 
-    fun getMessages() {
+    private fun getMessages() {
         if (!isGetMessageRequestActive) {
             isGetMessageRequestActive = true
-            getMessageEvent.postValue(Event(Unit))
+            RemoteRepo.getMessage {
+                isGetMessageRequestActive = false
+                if (it != null) { //halat hayee ke khata vojud darad mohem ast, data az MessageRepo khande mishavad
+                    if (!it.isSucceed) {
+                        //TODO ???
+                    } else {
+                        val lastMessage = it.entity?.get(0)
+                        if (lastMessage != null)
+                            newMessage.value = Event(lastMessage)
+                    }
+                } else {
+                    //TODO ???
+                }
+            }
         }
+        /*if (!isGetMessageRequestActive) {
+            isGetMessageRequestActive = true
+            getMessageEvent.postValue(Event(Unit))
+        }*/
     }
 
     override fun onCleared() {

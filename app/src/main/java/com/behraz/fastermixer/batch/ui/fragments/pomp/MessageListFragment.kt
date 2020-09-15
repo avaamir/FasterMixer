@@ -10,12 +10,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentMessageListBinding
 import com.behraz.fastermixer.batch.models.Message
-import com.behraz.fastermixer.batch.models.requests.behraz.Entity
+import com.behraz.fastermixer.batch.respository.RemoteRepo
+import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.ui.activities.mixer.MixerActivity
 import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
 import com.behraz.fastermixer.batch.ui.adapters.MessageAdapter
@@ -53,20 +55,11 @@ class MessageListFragment : Fragment(), MessageAdapter.Interaction {
     }
 
     private fun subscribeObservers() {
-        val observer = Observer<Entity<List<Message>>?> {
-            if (it != null) {
-                if (it.isSucceed) {
-                    mBinding.tvMessageCount.text = (it.entity?.size ?: 0).toString()
-                    mAdapter.submitList(it.entity)
-                    if (mAdapter.currentList.isNotEmpty()) {
-                        mBinding.gpAnimationView.visibility = View.GONE
-                    }
-                } else {
-                    //TODo
-                }
-            } else {
-                //TODo
-            }
+        val observer = Observer<List<Message>> {
+            mBinding.tvMessageCount.text = (it.size).toString()
+            mAdapter.submitList(it)
+            if (mAdapter.currentList.isNotEmpty())
+                mBinding.gpAnimationView.visibility = View.GONE
         }
         if (this.viewModel is MixerActivityViewModel) {
             (viewModel as MixerActivityViewModel).messages.observe(viewLifecycleOwner, observer)
@@ -76,6 +69,25 @@ class MessageListFragment : Fragment(), MessageAdapter.Interaction {
     }
 
     private fun initViews() {
+
+        ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val message = mAdapter.getMessageAt(viewHolder.absoluteAdapterPosition)
+                MessageRepo.delete(message)
+                toast("پیام حذف شد")
+            }
+
+        }).attachToRecyclerView(mBinding.messageRecycler)
+
+
         mBinding.tvMessageCount.text = "0"
         mBinding.messageRecycler.adapter = mAdapter
         mBinding.messageRecycler.layoutManager =
@@ -94,6 +106,6 @@ class MessageListFragment : Fragment(), MessageAdapter.Interaction {
 
 
     override fun onItemClicked(message: Message) {
-        toast("not yet implemented")
+        //toast("not yet implemented")
     }
 }

@@ -255,23 +255,10 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             }
         })
 
-        viewModel.messages.observe(this, Observer {
-            if (it != null) {
-                if (it.isSucceed) {
-                    it.entity?.let { messages ->
-                        tvMessageCount.text = messages.size.toString()
-                        //TODO show like notification for some seconds then hidden it
-                        //TODO check if a message is critical and new show in dialog to user
-                    }
-                } else {
-                    //TODO is not succeed what should i do??
-                    println("debug: ${it.message}")
-                }
-            } else {
-
-                println("debug: getMessages() -> Server Error: returning `null`")
-                //todo Server Error chekar konam??
-            }
+        viewModel.messages.observe(this, Observer { messages ->
+            tvMessageCount.text = messages.size.toString()
+            //TODO show like notification for some seconds then hidden it
+            //TODO check if a message is critical and new show in dialog to user
         })
     }
 

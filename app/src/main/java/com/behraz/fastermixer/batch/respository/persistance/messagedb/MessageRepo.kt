@@ -2,7 +2,9 @@ package com.behraz.fastermixer.batch.respository.persistance.messagedb
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.Message
+import com.behraz.fastermixer.batch.respository.UserConfigs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Job
@@ -23,13 +25,22 @@ object MessageRepo {
     }
 
     val allMessage: LiveData<List<Message>> by lazy {
-        MessageDao.allMessage
+        MessageDao.allMessage.map {
+            it.filter {
+                it.userId == UserConfigs.user.value!!.personId
+            }
+            it
+        }
     }
 
     fun insert(items: List<Message>) {
         if (!MessageRepo::job.isInitialized || !job.isActive)
             job = Job()
         CoroutineScope(IO + job).launch {
+            items.forEach { item ->
+                if (item.userId == null)
+                    item.userId = UserConfigs.user.value!!.personId
+            }
             MessageDao.insertAll(items)
         }
     }
@@ -38,6 +49,8 @@ object MessageRepo {
         if (!MessageRepo::job.isInitialized || !job.isActive)
             job = Job()
         CoroutineScope(IO + job).launch {
+            if (item.userId == null)
+                item.userId = UserConfigs.user.value!!.personId
             MessageDao.insert(item)
         }
     }
@@ -46,6 +59,8 @@ object MessageRepo {
         if (!MessageRepo::job.isInitialized || !job.isActive)
             job = Job()
         CoroutineScope(IO + job).launch {
+            if (item.userId == null)
+                item.userId = UserConfigs.user.value!!.personId
             MessageDao.update(item)
         }
     }

@@ -3,8 +3,10 @@ package com.behraz.fastermixer.batch.models
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
+import java.util.*
 
 @Parcelize
 @Entity(tableName = "messages")
@@ -16,9 +18,10 @@ data class Message(
     val sender: String,
     @SerializedName("senderID")
     val senderId: String,
+    @SerializedName("dateTime")
+    val dateTime: String,
     @SerializedName("text")
     val content: String,
-    val senderImage: String?, //TODO not implemented server side
     @SerializedName("viewed") //TODO not implemented server side
     val viewed: Boolean,
     @SerializedName("state") //TODO not implemented server side
@@ -26,7 +29,9 @@ data class Message(
     @SerializedName("priority") //TODO not implemented server side
     val priority: Int,
     @SerializedName("messageType")
-    val _isEvent: Int //is Event Or Message?
+    val _isEvent: Int, //is Event Or Message?
+    val senderImage: String?, //TODO not implemented server side
+    var userId: String?
 ) : Parcelable {
 
     val shouldPopUp get() = _isEvent != 1

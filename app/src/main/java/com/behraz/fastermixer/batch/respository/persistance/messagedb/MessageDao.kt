@@ -7,7 +7,7 @@ import com.behraz.fastermixer.batch.models.Message
 @Dao
 interface MessageDao {
 
-    @get:Query("SELECT * FROM messages")
+    @get:Query("SELECT * FROM messages ORDER BY dateTime DESC")
     val allMessage: LiveData<List<Message>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

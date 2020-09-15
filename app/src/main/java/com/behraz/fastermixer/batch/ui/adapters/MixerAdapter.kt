@@ -21,12 +21,11 @@ class MixerAdapter(private val isForPomp: Boolean, interaction: Interaction) :
     private var interaction: Interaction
 
     init {
-        if (interaction is PompAdapterInteraction)
-            this.interaction = interaction
-        else if (interaction is BatchAdapterInteraction)
-            this.interaction = interaction
-        else
-            throw IllegalArgumentException("can not use Interaction, use PompAdapterInteraction or BatchAdapterInteraction")
+        when (interaction) {
+            is PompAdapterInteraction -> this.interaction = interaction
+            is BatchAdapterInteraction -> this.interaction = interaction
+            else -> throw IllegalArgumentException("can not use Interaction, use PompAdapterInteraction or BatchAdapterInteraction")
+        }
 
     }
 
@@ -112,7 +111,7 @@ class MixerAdapter(private val isForPomp: Boolean, interaction: Interaction) :
                         )
                     }
 
-                    mBinding.tvLastDataTime.text = estimateTime(mixer.lastDataTimeDiff)
+                    mBinding.tvLastDataTime.text = estimateTime(mixer.lastDataTimeDiff.toLong())
                 }
 
 

@@ -1,6 +1,7 @@
 package com.behraz.fastermixer.batch.utils.fastermixer
 
 import com.behraz.fastermixer.batch.models.*
+import com.behraz.fastermixer.batch.utils.general.now
 import java.util.*
 
 
@@ -102,7 +103,9 @@ fun fakeMessages() = listOf(
         senderImage = null,
         viewed = false,
         isDelivered = false,
-        _isEvent = 1
+        _isEvent = 1,
+        userId = null,
+        dateTime = now().toString()
     ), Message(
         id = "2",
         sender = "باسکول",
@@ -112,7 +115,9 @@ fun fakeMessages() = listOf(
         senderImage = null,
         viewed = false,
         isDelivered = false,
-        _isEvent = 1
+        dateTime = now().toString(),
+        _isEvent = 1,
+        userId = null
     ), Message(
         id = "3",
         sender = "باسکول",
@@ -122,7 +127,9 @@ fun fakeMessages() = listOf(
         senderImage = null,
         viewed = false,
         isDelivered = false,
-        _isEvent = 1
+        dateTime = now().toString(),
+        _isEvent = 1,
+        userId = null
     ), Message(
         id = "4",
         sender = "باسکول",
@@ -131,8 +138,10 @@ fun fakeMessages() = listOf(
         senderId = "1",
         senderImage = null,
         viewed = false,
+        dateTime = now().toString(),
         isDelivered = false,
-        _isEvent = 1
+        _isEvent = 1,
+        userId = null
     )
 )
 
@@ -151,7 +160,7 @@ fun fakeMixers(): List<Mixer> {
                 _driverName = "حسن جعفری",
                 owner = "بهراز$i",
                 lat = "$i",
-                lng =  "42.2${7-i}",
+                lng = "42.2${7 - i}",
                 amount = 4f,
                 capacity = 6f,
                 ended = false,
@@ -159,7 +168,7 @@ fun fakeMixers(): List<Mixer> {
                 totalAmount = 300f,
                 lastDataTime = Calendar.getInstance().time,
                 speed = 0.0f,
-                lastDataTimeDiff = 0L
+                lastDataTimeDiff = 0.0
             )
         )
     }

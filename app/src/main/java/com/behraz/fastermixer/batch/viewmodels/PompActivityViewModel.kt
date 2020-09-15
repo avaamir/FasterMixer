@@ -1,18 +1,27 @@
 package com.behraz.fastermixer.batch.viewmodels
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
+import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.Event
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.concurrent.fixedRateTimer
 
 class PompActivityViewModel : ViewModel() {
 
+    @Volatile
+    private var isGetPompMissionsRequestActive = false
 
     var shouldShowAllMixers = MutableLiveData<Boolean>(false)
 
@@ -27,14 +36,15 @@ class PompActivityViewModel : ViewModel() {
     val pompAreaInfo =
         MutableLiveData<CircleFence?>(null) //TODO implement this // get from GPS // curently it will receive from server from car GPS, In new Version Maybe Needed
 
-    private val getMixersEvent = MutableLiveData(Event(Unit))
+    private val getPompEvent = MutableLiveData(Event(Unit))
 
-    val allMixers = Transformations.switchMap(getMixersEvent) {
+    val allMixers = Transformations.switchMap(getPompEvent) {
         RemoteRepo.getAllMixers().map { response ->
             sortMixerResponse(response)
         }
     }
-    val requestMixers = Transformations.switchMap(getMixersEvent) {
+
+    val requestMixers = Transformations.switchMap(getPompEvent) {
         RemoteRepo.getRequestMixers(batchNotPomp = false).map { response ->
             isGetMixerRequestActive = false
             sortMixerResponse(response)
@@ -111,14 +121,7 @@ class PompActivityViewModel : ViewModel() {
     }
 
 
-    private val getMessageEvent = MutableLiveData<Event<Unit>>()
-    val messages = Transformations.switchMap(getMessageEvent) {
-        RemoteRepo.getMessages().map {
-            isGetMessageRequestActive = false
-            it
-        }
-    }
-
+    val messages = MessageRepo.allMessage
     private val logOutEvent = MutableLiveData<Event<Unit>>()
     val logoutResponse = Transformations.switchMap(logOutEvent) {
         RemoteRepo.logout()
@@ -130,9 +133,19 @@ class PompActivityViewModel : ViewModel() {
             refreshMixers()
             getMessages()
             getPompLocation(user.equipmentId!!)
+            getPompMission()
         }
     }
 
+
+
+    private fun getPompMission() {
+        if (!isGetPompMissionsRequestActive) {
+            CoroutineScope(Dispatchers.Main).launch {
+                getMixerMissionEvent.value = Event(Unit)
+            }
+        }
+    }
 
     private fun getPompLocation(equipmentId: String) {
         RemoteRepo.getEquipmentLocation(equipmentId) {
@@ -156,7 +169,7 @@ class PompActivityViewModel : ViewModel() {
     fun refreshMixers() {
         if (!isGetMixerRequestActive) {
             isGetCustomerRequestActive = true
-            getMixersEvent.postValue(Event(Unit))
+            getPompEvent.postValue(Event(Unit))
         }
     }
 
@@ -167,10 +180,19 @@ class PompActivityViewModel : ViewModel() {
         }
     }
 
-    fun getMessages() {
+    private fun getMessages() {
         if (!isGetMessageRequestActive) {
             isGetMessageRequestActive = true
-            getMessageEvent.postValue(Event(Unit))
+            RemoteRepo.getMessage {
+                isGetMessageRequestActive = false
+                if (it != null) { //halat hayee ke khata vojud darad mohem ast, data az MessageRepo khande mishavad
+                    if (!it.isSucceed) {
+                        //TODO ???
+                    }
+                } else {
+                    //TODO ???
+                }
+            }
         }
     }
 

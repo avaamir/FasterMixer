@@ -55,6 +55,9 @@ class MessageAdapter(
         return currentList.size
     }
 
+    fun getMessageAt(position: Int): Message = currentList[position]
+
+
     inner class MessageViewHolder(
         private val mBinding: ViewDataBinding
     ) : RecyclerView.ViewHolder(mBinding.root) {

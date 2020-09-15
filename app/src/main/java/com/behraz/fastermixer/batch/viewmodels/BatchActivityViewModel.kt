@@ -7,6 +7,7 @@ import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
+import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.utils.general.Event
 import org.osmdroid.util.GeoPoint
 import kotlin.concurrent.fixedRateTimer
@@ -47,13 +48,7 @@ class BatchActivityViewModel : ViewModel() {
 
 
     private var isGetMessageRequestActive = false
-    private val getMessageEvent = MutableLiveData<Event<Unit>>()
-    val messages = Transformations.switchMap(getMessageEvent) {
-        RemoteRepo.getMessages().map {
-            isGetMessageRequestActive = false
-            it
-        }
-    }
+    val messages = MessageRepo.allMessage
     val user get() = UserConfigs.user
 
     private val logOutEvent = MutableLiveData<Event<Unit>>()
@@ -78,10 +73,19 @@ class BatchActivityViewModel : ViewModel() {
     }
 
 
-    fun getMessages() {
+    private fun getMessages() {
         if (!isGetMessageRequestActive) {
             isGetMessageRequestActive = true
-            getMessageEvent.postValue(Event(Unit))
+            RemoteRepo.getMessage {
+                isGetMessageRequestActive = false
+                if (it != null) { //halat hayee ke khata vojud darad mohem ast, data az MessageRepo khande mishavad
+                    if (!it.isSucceed) {
+                        //TODO ???
+                    }
+                } else {
+                    //TODO ???
+                }
+            }
         }
     }
 

@@ -31,7 +31,7 @@ data class Mixer(
     @SerializedName("lastDataTime")
     val lastDataTime: Date?,
     @SerializedName("durationTime")
-    val lastDataTimeDiff: Long?,
+    val lastDataTimeDiff: Double?,
     @SerializedName("speed") val speed: Float?,
 
 

@@ -1,20 +1,20 @@
 package com.behraz.fastermixer.batch.respository
 
+import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Plan
 import com.behraz.fastermixer.batch.models.requests.CircleFence
+import com.behraz.fastermixer.batch.models.requests.behraz.SeenMessageRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.*
 import com.behraz.fastermixer.batch.models.requests.route.GetRouteResponse
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.respository.apiservice.MapService
+import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.utils.fastermixer.fakePlans
 import com.behraz.fastermixer.batch.utils.general.RunOnceLiveData
 import com.behraz.fastermixer.batch.utils.general.launchApi
-import kotlinx.coroutines.CompletableJob
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import org.osmdroid.util.GeoPoint
 import retrofit2.Response
@@ -113,7 +113,35 @@ object RemoteRepo {
 
     fun getAllMixers() = apiReq(ApiService.client::getAllMixers)
 
-    fun getMessages() = apiReq(ApiService.client::getMessages)
+    fun getMessage(onResponse: (Entity<List<Message>>?) -> Unit) { //Resonse ro mikhad
+        if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
+        CoroutineScope(IO + serverJobs).launchApi({
+            val response = ApiService.client.getMessages()
+            if (response.isSuccessful) {
+                val messages = response.body()?.entity
+                if (response.body()?.isSucceed == true) {
+                    if (messages != null) {
+                        MessageRepo.insert(messages)
+                        val seenMessagesIdList = messages.map { it.id }
+                        seenMessage(seenMessagesIdList)
+                    }
+                    withContext(Main) {
+                        onResponse(response.body())
+                    }
+                } else {
+                    withContext(Main) {
+                        onResponse(response.body())
+                    }
+                }
+            } else {
+                withContext(Main) {
+                    onResponse(response.body())
+                }
+            }
+        }) {
+            onResponse(null)
+        }
+    }
 
 
     fun sendVoice(imageRequest: MultipartBody.Part) =
@@ -162,10 +190,10 @@ object RemoteRepo {
     }
 
 
-    fun seenMessage(messageId: String) {
+    private fun seenMessage(messageIds: List<String>) {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         CoroutineScope(IO + serverJobs).launchApi({
-            ApiService.client.seenMessage(ChooseEquipmentRequest(messageId))
+            ApiService.client.seenMessage(SeenMessageRequest(messageIds))
         }) {}
     }
 
@@ -207,6 +235,7 @@ object RemoteRepo {
         }
     }
 
-    fun checkUpdates()= apiReq(ApiService.client::checkUpdates)
+    fun checkUpdates() = apiReq(ApiService.client::checkUpdates)
+
 
 }

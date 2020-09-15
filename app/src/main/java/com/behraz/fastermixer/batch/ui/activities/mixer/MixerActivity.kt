@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.databinding.ActivityMixerBinding
-import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
 import com.behraz.fastermixer.batch.ui.customs.general.TopSheetBehavior
@@ -24,12 +23,11 @@ import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
 import com.behraz.fastermixer.batch.ui.fragments.mixer.MixerMapFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.MessageListFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
+import com.behraz.fastermixer.batch.utils.fastermixer.fakeMessages
 import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
 import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.MixerActivityViewModel
 import kotlinx.android.synthetic.main.activity_batch.*
-import kotlinx.android.synthetic.main.activity_batch.tvMessageCount
-import kotlinx.android.synthetic.main.activity_mixer.*
 
 class MixerActivity : AppCompatActivity(),
     ApiService.InternetConnectionListener,
@@ -67,6 +65,7 @@ class MixerActivity : AppCompatActivity(),
         initViews()
         subscribeObservers()
 
+
         subscribeNetworkStateChangeListener {
             if (it) {
                 mBinding.ivInternet.setImageResource(R.drawable.ic_check)
@@ -88,7 +87,9 @@ class MixerActivity : AppCompatActivity(),
 
 
     private fun initViews() {
-        mBinding.layoutNewMessage.root.setOnClickListener { toast("not yet implemented") }
+        mBinding.layoutNewMessage.root.setOnClickListener {
+            onFasterMixerMenuButtonsClicked(mBinding.btnMessages)
+        }
 
 
         mBinding.tvMessageCount.text = "0"
@@ -183,31 +184,20 @@ class MixerActivity : AppCompatActivity(),
             }
         })
 
-        viewModel.messages.observe(this, Observer {
-            if (it != null) {
-                if (it.isSucceed) {
-                    it.entity?.let { messages ->
-                        mBinding.tvMessageCount.text = messages.size.toString()
-                        //TODO show like notification for some seconds then hidden it
-                        //TODO check if a message is critical and new show in dialog to user
-                    }
-                } else {
-                    //TODO is not succeed what should i do??
-                    println("debug: ${it.message}")
-                }
-            } else {
-
-                println("debug: getMessages() -> Server Error: returning `null`")
-                //todo Server Error chekar konam??
-            }
+        viewModel.messages.observe(this, Observer { _messages ->
+            mBinding.tvMessageCount.text = _messages.size.toString()
+            //TODO show like notification for some seconds then hidden it
+            //TODO check if a message is critical and new show in dialog to user
         })
 
         viewModel.newMessage.observe(this, Observer {
-            mBinding.layoutNewMessage.message = it
-            topSheetBehavior.state = TopSheetBehavior.STATE_EXPANDED
-            Handler().postDelayed({
-                topSheetBehavior.state = TopSheetBehavior.STATE_HIDDEN
-            }, 3000)
+            it.getEventIfNotHandled()?.let {
+                mBinding.layoutNewMessage.message = it
+                topSheetBehavior.state = TopSheetBehavior.STATE_EXPANDED
+                Handler().postDelayed({
+                    topSheetBehavior.state = TopSheetBehavior.STATE_HIDDEN
+                }, 3000)
+            }
         })
 
     }

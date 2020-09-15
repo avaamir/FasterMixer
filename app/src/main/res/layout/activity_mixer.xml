@@ -33,6 +33,7 @@
             android:paddingLeft="32dp"
             android:paddingRight="32dp"
             app:behavior_hideable="true"
+            android:elevation="10dp"
             app:layout_behavior=".ui.customs.general.TopSheetBehavior">
 
 
@@ -41,23 +42,9 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.behraz.fastermixer.batch.ui.customs.fastermixer.progressview.FasterMixerProgressView
-                    android:id="@+id/jobProgressView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:visibility="gone"
-                    app:layout_anchorGravity="top"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:background="@color/primary"
-                    tools:layout_height="100dp" />
-
                 <include
                     android:id="@+id/layout_new_message"
                     layout="@layout/item_message_vertical" />
-
 
                 <!--<FrameLayout
                     android:layout_width="match_parent"
@@ -86,7 +73,6 @@
 
                     </FrameLayout>
                 </FrameLayout>-->
-
 
             </LinearLayout>
 

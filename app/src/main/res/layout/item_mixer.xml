@@ -97,6 +97,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:radius="10dp"
+                android:visibility="gone"
                 app:text="تماس با راننده" />
 
             <com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView

@@ -1,6 +1,7 @@
 package com.behraz.fastermixer.batch.respository.apiservice
 
 import com.behraz.fastermixer.batch.models.*
+import com.behraz.fastermixer.batch.models.requests.behraz.SeenMessageRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.*
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -56,7 +57,7 @@ interface BehrazClient {
     suspend fun getVehicleLocation(@Body getEquipmentRequest: GetEquipmentRequest): Response<Entity<GetVehicleLocationResponse>>
 
     @POST("SendMessage/UpdateViewedSendMessageById")
-    suspend fun seenMessage(@Body seenMessageId: ChooseEquipmentRequest): Response<Entity<Unit>>
+    suspend fun seenMessage(@Body seenMessageRequest: SeenMessageRequest): Response<Entity<Unit>>
 
     @POST("Vehicle/GetMission") //mixer
     suspend fun getMixerMission(): Response<Entity<Mission>>
