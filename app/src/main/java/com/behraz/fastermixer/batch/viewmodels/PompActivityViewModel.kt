@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
+import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.CircleFence
@@ -78,7 +79,6 @@ class PompActivityViewModel : ViewModel() {
     }
 
 
-
     val newMissionEvent = MutableLiveData<Event<Mission>>()
     val getMissionError = MutableLiveData<Event<String>>()
     private val getMixerMissionEvent = MutableLiveData(Event(Unit))
@@ -138,7 +138,6 @@ class PompActivityViewModel : ViewModel() {
     }
 
 
-
     private fun getPompMission() {
         if (!isGetPompMissionsRequestActive) {
             CoroutineScope(Dispatchers.Main).launch {
@@ -180,6 +179,7 @@ class PompActivityViewModel : ViewModel() {
         }
     }
 
+    val newMessage = MutableLiveData<Event<Message>>()
     private fun getMessages() {
         if (!isGetMessageRequestActive) {
             isGetMessageRequestActive = true
@@ -188,9 +188,13 @@ class PompActivityViewModel : ViewModel() {
                 if (it != null) { //halat hayee ke khata vojud darad mohem ast, data az MessageRepo khande mishavad
                     if (!it.isSucceed) {
                         //TODO ???
+                    } else {
+                        val lastMessage = it.entity?.get(0)
+                        if (lastMessage != null)
+                            newMessage.value = Event(lastMessage)
                     }
                 } else {
-                    //TODO ???
+                    //TODO
                 }
             }
         }

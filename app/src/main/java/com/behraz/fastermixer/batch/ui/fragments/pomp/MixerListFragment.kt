@@ -3,6 +3,7 @@ package com.behraz.fastermixer.batch.ui.fragments.pomp
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -86,6 +87,13 @@ class MixerListFragment : Fragment(), MixerAdapter.PompAdapterInteraction {
         )
         mBinding.mixerRecycler.layoutManager =
             LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
+    }
+
+
+    fun scrollToTop() {
+        Handler().postDelayed({
+            mBinding.mixerRecycler.smoothScrollToPosition(0)
+        }, 1000)
     }
 
     override fun onShowOnMapClicked(mixer: Mixer) {

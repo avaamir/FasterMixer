@@ -26,12 +26,11 @@
 
             <TextView
                 android:id="@+id/textView23"
+                style="@style/my_gray_normal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="نام مشتری:"
-                style="@style/my_gray_normal_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,35 +48,34 @@
 
             <TextView
                 android:id="@+id/textView25"
+                style="@style/my_gray_normal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginEnd="64dp"
                 android:text="ساعت شروع:"
-                style="@style/my_gray_normal_text"
-                app:layout_constraintEnd_toEndOf="@+id/textView23"
-                app:layout_constraintTop_toBottomOf="@+id/textView23" />
+                app:layout_constraintEnd_toStartOf="@+id/textView24"
+                app:layout_constraintTop_toTopOf="@+id/textView24" />
 
             <TextView
                 android:id="@+id/textView26"
+                style="@style/faster_mixer_item_data_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                tools:text="14:32"
+                android:layout_marginEnd="8dp"
                 android:text="@{customer.startTime}"
-                style="@style/faster_mixer_item_data_text"
                 app:layout_constraintBottom_toBottomOf="@+id/textView25"
                 app:layout_constraintEnd_toStartOf="@+id/textView25"
-                app:layout_constraintTop_toTopOf="@+id/textView25" />
+                app:layout_constraintTop_toTopOf="@+id/textView25"
+                tools:text="14:32" />
 
             <TextView
                 android:id="@+id/textView28"
+                style="@style/my_gray_normal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:text="آدرس:"
-                style="@style/my_gray_normal_text"
-                app:layout_constraintEnd_toEndOf="@+id/textView25"
-                app:layout_constraintTop_toBottomOf="@+id/textView25" />
+                app:layout_constraintEnd_toEndOf="@+id/textView36"
+                app:layout_constraintTop_toBottomOf="@+id/textView36" />
 
             <TextView
                 android:id="@+id/textView29"
@@ -93,26 +91,26 @@
 
             <TextView
                 android:id="@+id/textView30"
+                style="@style/my_gray_normal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
+                android:layout_marginEnd="64dp"
                 android:text="اسلامپ:"
-                style="@style/my_gray_normal_text"
-                app:layout_constraintBottom_toBottomOf="@+id/textView24"
-                app:layout_constraintEnd_toStartOf="@+id/textView24"
-                app:layout_constraintTop_toTopOf="@+id/textView24" />
+                app:layout_constraintBottom_toBottomOf="@+id/textView25"
+                app:layout_constraintEnd_toEndOf="@+id/textView34"
+                app:layout_constraintTop_toTopOf="@+id/textView25" />
 
             <TextView
                 android:id="@+id/textView31"
+                style="@style/faster_mixer_item_data_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
-                tools:text="8"
                 android:text="@{customer.slump}"
-                style="@style/faster_mixer_item_data_text"
                 app:layout_constraintBottom_toBottomOf="@+id/textView30"
                 app:layout_constraintEnd_toStartOf="@+id/textView30"
-                app:layout_constraintTop_toTopOf="@+id/textView30" />
+                app:layout_constraintTop_toTopOf="@+id/textView30"
+                tools:text="8" />
 
             <TextView
                 android:id="@+id/textView32"
@@ -139,74 +137,75 @@
 
             <TextView
                 android:id="@+id/textView34"
+                style="@style/my_gray_normal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
+                android:layout_marginEnd="64dp"
                 android:text="نوع کار:"
-                style="@style/my_gray_normal_text"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/textView33"
-                app:layout_constraintEnd_toStartOf="@+id/textView33"
-                app:layout_constraintTop_toTopOf="@+id/textView33" />
+                app:layout_constraintEnd_toStartOf="@+id/textView26"
+                app:layout_constraintTop_toTopOf="@+id/textView26"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/textView35"
+                style="@style/faster_mixer_item_data_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                tools:text="مسکونی"
                 android:text="@{customer.jobType}"
-                style="@style/faster_mixer_item_data_text"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/textView34"
-                app:layout_constraintEnd_toStartOf="@+id/textView34"
-                app:layout_constraintTop_toTopOf="@+id/textView34" />
+                app:layout_constraintEnd_toEndOf="@+id/textView31"
+                app:layout_constraintTop_toTopOf="@+id/textView34"
+                app:layout_constraintVertical_bias="1.0"
+                tools:text="مسکونی" />
 
             <TextView
                 android:id="@+id/textView36"
+                style="@style/my_gray_normal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="حجم بتن:"
-                style="@style/my_gray_normal_text"
-                app:layout_constraintBottom_toBottomOf="@+id/textView26"
-                app:layout_constraintEnd_toEndOf="@+id/textView34"
-                app:layout_constraintTop_toTopOf="@+id/textView26" />
+                app:layout_constraintBottom_toBottomOf="@+id/textView38"
+                app:layout_constraintEnd_toEndOf="@+id/textView23"
+                app:layout_constraintTop_toTopOf="@+id/textView38" />
 
             <TextView
                 android:id="@+id/textView37"
+                style="@style/faster_mixer_item_data_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                style="@style/faster_mixer_item_data_text"
-                tools:text="6 متر مکعب"
                 android:text="@{customer.amount}"
                 app:layout_constraintBottom_toBottomOf="@+id/textView36"
-                app:layout_constraintEnd_toStartOf="@+id/textView36"
-                app:layout_constraintTop_toTopOf="@+id/textView36" />
+                app:layout_constraintEnd_toEndOf="@+id/textView24"
+                app:layout_constraintTop_toTopOf="@+id/textView36"
+                tools:text="6 متر مکعب" />
 
             <TextView
                 android:id="@+id/textView38"
+                style="@style/my_gray_normal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="تعداد میکسر:"
-                style="@style/my_gray_normal_text"
-                app:layout_constraintBottom_toBottomOf="@+id/textView26"
-                app:layout_constraintEnd_toEndOf="@+id/textView30"
-                app:layout_constraintTop_toTopOf="@+id/textView26" />
+                app:layout_constraintEnd_toEndOf="@+id/textView25"
+                app:layout_constraintTop_toBottomOf="@+id/textView23" />
 
             <TextView
                 android:id="@+id/textView39"
+                style="@style/faster_mixer_item_data_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                tools:text="6"
                 android:text="@{customer.mixerCount}"
-                style="@style/faster_mixer_item_data_text"
                 app:layout_constraintBottom_toBottomOf="@+id/textView38"
-                app:layout_constraintEnd_toStartOf="@+id/textView38"
-                app:layout_constraintTop_toTopOf="@+id/textView38" />
+                app:layout_constraintEnd_toEndOf="@+id/textView26"
+                app:layout_constraintTop_toTopOf="@+id/textView38"
+                tools:text="6" />
 
             <com.behraz.fastermixer.batch.ui.customs.fastermixer.CardButton
                 android:id="@+id/btnCustomerList"
                 android:layout_width="wrap_content"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 app:btn_image="@drawable/ic_factory"

@@ -3,6 +3,7 @@ package com.behraz.fastermixer.batch.models
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.google.gson.annotations.SerializedName
 import org.osmdroid.util.GeoPoint
+import java.text.SimpleDateFormat
 import java.util.*
 
 data class Customer(
@@ -11,7 +12,7 @@ data class Customer(
     @SerializedName("customerName")
     val name: String,
     @SerializedName("deliveryTime")
-    val startTime: String,
+    private val _startTime: Date,
     @SerializedName("requestAddress")
     val address: String,
 
@@ -25,9 +26,11 @@ data class Customer(
     private val _mixerCount: Int, //test
     @SerializedName("geoPoint")
     private val areaStr: String,
-    //TODO not yet implemented server side
-    val jobType: String
+    @SerializedName("requestType")
+    private val _jobType: String?
 ) {
+    val jobType get() = if (_jobType.isNullOrBlank()) "نامشخص" else _jobType
+    val startTime: String get() = SimpleDateFormat.getTimeInstance().format(_startTime)
     val location: CircleFence get() = CircleFence.circleFenceToCenterGeoPoint(areaStr, null)
     val amount get() = "$_amount متر مکعب"
     val slump get() = "$_slump"

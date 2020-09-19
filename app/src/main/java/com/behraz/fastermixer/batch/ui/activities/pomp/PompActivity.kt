@@ -8,8 +8,7 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
-import android.transition.AutoTransition
-import android.transition.TransitionManager
+import android.os.Handler
 import android.view.View
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AppCompatActivity
@@ -22,13 +21,12 @@ import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.databinding.ActivityPompBinding
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
-import com.behraz.fastermixer.batch.ui.activities.mixer.MixerActivity
 import com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+import com.behraz.fastermixer.batch.ui.customs.general.TopSheetBehavior
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.ui.dialogs.PompMessageDialog
 import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
-import com.behraz.fastermixer.batch.ui.fragments.mixer.MixerMapFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.CustomerListFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.MessageListFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.MixerListFragment
@@ -39,11 +37,15 @@ import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 import kotlinx.android.synthetic.main.activity_batch.*
 import kotlinx.android.synthetic.main.activity_test.*
+import kotlinx.android.synthetic.main.view_faster_mixer_user_panel.*
 
 
 class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
     PompMessageDialog.Interactions, ApiService.OnUnauthorizedListener {
 
+
+
+    private lateinit var topSheetBehavior: TopSheetBehavior<View>
     private var projectCount = -1 // this variable work like a flag for `onNewProjectIncome`
 
     private val locateMixerReceiver = object : BroadcastReceiver() {
@@ -131,6 +133,14 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
 
     private fun initViews() {
 
+        topSheetBehavior = TopSheetBehavior.from(mBinding.frameTop)
+        topSheetBehavior.state = TopSheetBehavior.STATE_HIDDEN
+        topSheetBehavior.setSwipedEnabled(false)
+
+        mBinding.layoutNewMessage.root.setOnClickListener {
+            onFasterMixerMenuButtonsClicked(mBinding.btnMessages)
+        }
+
         /*TODO:: make this visible after feature added to server*/
         mBinding.btnVoiceMessage.visibility = View.GONE
 
@@ -209,6 +219,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
     }
 
     private fun subscribeObservers() {
+
         viewModel.user.observe(this, Observer {
             it?.let {
                 //TODO add to ui
@@ -236,14 +247,14 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             if (it != null) {
                 if (it.isSucceed) {
                     val customers = it.entity
-                    if (projectCount != (customers?.size ?: 0)) {
+                    if (projectCount != (customers?.size ?: 0)) { //age pishfarz projectCount, -1 nabashe age tedad proje haye tarif shode 0 bashe aslan vared in if nemishe
                         projectCount = customers?.size ?: 0
                         if (customers.isNullOrEmpty()) {
-                            if (viewModel.shouldShowAllMixers.value == false) {//age proje tarif nashode bud mixer haye koli ro neshun bede
+                            if (viewModel.shouldShowAllMixers.value == false) { //age proje tarif nashode bud mixer haye koli ro neshun bede
                                 mBinding.btnShowAllMixersToggle.callOnClick()
                             }
                         } else {
-                            if (viewModel.shouldShowAllMixers.value == true) {//age prje tarif shode bud mixer proje ro neshun bede
+                            if (viewModel.shouldShowAllMixers.value == true) { //age prje tarif shode bud mixer proje ro neshun bede
                                 mBinding.btnShowAllMixersToggle.callOnClick()
                                 toast("پروژه جدید تعریف شده است")
                             }
@@ -259,6 +270,16 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             tvMessageCount.text = messages.size.toString()
             //TODO show like notification for some seconds then hidden it
             //TODO check if a message is critical and new show in dialog to user
+        })
+
+        viewModel.newMessage.observe(this, Observer {
+            it.getEventIfNotHandled()?.let {
+                mBinding.layoutNewMessage.message = it
+                topSheetBehavior.state = TopSheetBehavior.STATE_EXPANDED
+                Handler().postDelayed({
+                    topSheetBehavior.state = TopSheetBehavior.STATE_HIDDEN
+                }, 3000)
+            }
         })
     }
 
@@ -316,7 +337,9 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
                 mBinding.btnShowAllMixersToggle.visibility = View.VISIBLE
                 mBinding.btnShowAllMixersToggle.backgroundTintList =
                     ColorStateList.valueOf(ContextCompat.getColor(this, R.color.btn_blue))
-                transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_MIXER_LIST_TAG)!!)
+                val mixerListFragment = supportFragmentManager.findFragmentByTag(FRAGMENT_MIXER_LIST_TAG) as MixerListFragment
+                transaction.show(mixerListFragment)
+                mixerListFragment.scrollToTop()
             }
             mBinding.btnMessages.id -> {
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_MESSAGE_LIST_TAG)!!)
