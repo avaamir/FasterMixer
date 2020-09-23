@@ -5,6 +5,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Mission
+import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
@@ -16,12 +17,7 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlin.concurrent.fixedRateTimer
 
-class MixerActivityViewModel : ViewModel() {
-
-    val user get() = UserConfigs.user
-
-    @Volatile
-    private var isGetMessageRequestActive = false
+class MixerActivityViewModel : ParentViewModel() {
 
     @Volatile
     private var isGetMixerLocationRequestActive = false
@@ -64,43 +60,20 @@ class MixerActivityViewModel : ViewModel() {
         }
     }
 
-    //private val getMessageEvent = MutableLiveData<Event<Unit>>()
-    /*val messages = Transformations.switchMap(getMessageEvent) {
-        RemoteRepo.getMessages().map {
-            isGetMessageRequestActive = false
-            it?.entity?.let { _messages ->
-                if (_messages.isNotEmpty()) {
-                    newMessage.value = _messages[0]
-                    RemoteRepo.seenMessage(_messages[0].id)
-                }
-            }
-            it
-        }
-    }*/
 
-    val messages = MessageRepo.allMessage
-
-
-    val newMessage = MutableLiveData<Event<Message>>()
-
-    private val logOutEvent = MutableLiveData<Event<Unit>>()
-    val logoutResponse = Transformations.switchMap(logOutEvent) {
-        RemoteRepo.logout()
-    }
-
-    private val timer = fixedRateTimer(period = 10000L) {
+    override fun onTimerTick() {
         user.value?.let { user ->  //TODO albate bazam momkene unauthorized bede chun shyad moghe check kardan login bashe ama bad if logout etefagh biofte, AMA jelo exception ro migire
-            getMessages()
             getMixerLocation(user.equipmentId!!) //get location from Car GPS
             getMixerMission()
         }
     }
 
+
     private fun getMixerLocation(equipmentId: String) {
         if (!isGetMixerLocationRequestActive) {
-            isGetMessageRequestActive = true
+            isGetMixerLocationRequestActive = true
             RemoteRepo.getEquipmentLocation(equipmentId) {
-                isGetMessageRequestActive = false
+                isGetMixerLocationRequestActive = false
                 if (it != null) {
                     if (it.isSucceed) {
                         mixerLocation.value =
@@ -120,41 +93,5 @@ class MixerActivityViewModel : ViewModel() {
             }
         }
     }
-
-    fun logout() {
-        logOutEvent.value = Event(Unit)
-    }
-
-
-    private fun getMessages() {
-        if (!isGetMessageRequestActive) {
-            isGetMessageRequestActive = true
-            RemoteRepo.getMessage {
-                isGetMessageRequestActive = false
-                if (it != null) { //halat hayee ke khata vojud darad mohem ast, data az MessageRepo khande mishavad
-                    if (!it.isSucceed) {
-                        //TODO ???
-                    } else {
-                        val lastMessage = it.entity?.get(0)
-                        if (lastMessage != null)
-                            newMessage.value = Event(lastMessage)
-                    }
-                } else {
-                    //TODO ???
-                }
-            }
-        }
-        /*if (!isGetMessageRequestActive) {
-            isGetMessageRequestActive = true
-            getMessageEvent.postValue(Event(Unit))
-        }*/
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        timer.cancel()
-        timer.purge()
-    }
-
 
 }

@@ -2,33 +2,25 @@ package com.behraz.fastermixer.batch.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
-import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.respository.RemoteRepo
-import com.behraz.fastermixer.batch.respository.UserConfigs
-import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.Event
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.concurrent.fixedRateTimer
 
-class PompActivityViewModel : ViewModel() {
+class PompActivityViewModel : ParentViewModel() {
 
     @Volatile
     private var isGetPompMissionsRequestActive = false
 
     var shouldShowAllMixers = MutableLiveData<Boolean>(false)
 
-    val user get() = UserConfigs.user
-
-    private var isGetMessageRequestActive = false
     private var isGetCustomerRequestActive = false
     private var isGetMixerRequestActive = false
 
@@ -121,22 +113,14 @@ class PompActivityViewModel : ViewModel() {
     }
 
 
-    val messages = MessageRepo.allMessage
-    private val logOutEvent = MutableLiveData<Event<Unit>>()
-    val logoutResponse = Transformations.switchMap(logOutEvent) {
-        RemoteRepo.logout()
-    }
-
-    private val timer = fixedRateTimer(period = 10000L) {
+    override fun onTimerTick() {
         user.value?.let { user ->  //TODO albate bazam momkene unauthorized bede chun shyad moghe check kardan login bashe ama bad if logout etefagh biofte, AMA jelo exception ro migire
             refreshCustomers()
             refreshMixers()
-            getMessages()
             getPompLocation(user.equipmentId!!)
             getPompMission()
         }
     }
-
 
     private fun getPompMission() {
         if (!isGetPompMissionsRequestActive) {
@@ -160,11 +144,6 @@ class PompActivityViewModel : ViewModel() {
         }
     }
 
-
-    fun logout() {
-        logOutEvent.value = Event(Unit)
-    }
-
     fun refreshMixers() {
         if (!isGetMixerRequestActive) {
             isGetCustomerRequestActive = true
@@ -178,32 +157,4 @@ class PompActivityViewModel : ViewModel() {
             getCustomerEvent.postValue(Event(Unit))
         }
     }
-
-    val newMessage = MutableLiveData<Event<Message>>()
-    private fun getMessages() {
-        if (!isGetMessageRequestActive) {
-            isGetMessageRequestActive = true
-            RemoteRepo.getMessage {
-                isGetMessageRequestActive = false
-                if (it != null) { //halat hayee ke khata vojud darad mohem ast, data az MessageRepo khande mishavad
-                    if (!it.isSucceed) {
-                        //TODO ???
-                    } else {
-                        val lastMessage = it.entity?.get(0)
-                        if (lastMessage != null)
-                            newMessage.value = Event(lastMessage)
-                    }
-                } else {
-                    //TODO
-                }
-            }
-        }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        timer.cancel()
-        timer.purge()
-    }
-
 }

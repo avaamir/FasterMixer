@@ -42,7 +42,8 @@ data class User(
             1 -> UserType.Pomp
             2 -> UserType.Mixer
             3 -> UserType.Batch
-            else -> UserType.Batch//throw IllegalAccessError("userType can be 1..3")
+            4-> UserType.Admin
+            else -> throw IllegalAccessError("userType can be 1..3")
         }
 
 

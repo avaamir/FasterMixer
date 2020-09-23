@@ -1,7 +1,7 @@
 package com.behraz.fastermixer.batch.respository.apiservice
 
 import com.behraz.fastermixer.batch.models.*
-import com.behraz.fastermixer.batch.models.requests.behraz.SeenMessageRequest
+import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.*
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -68,4 +68,8 @@ interface BehrazClient {
     @POST("AppVersion/FindLastAppVersion")
     suspend fun checkUpdates(): Response<Entity<UpdateResponse>>
 
+    @POST("Breakdown/InsertBreakdown")
+    suspend fun insertBreakdown(@Body request: EntityRequest<BreakdownRequest>) : Response<Entity<Any>>
+
 }
+

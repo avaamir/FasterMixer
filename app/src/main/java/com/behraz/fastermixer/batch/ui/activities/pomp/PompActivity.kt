@@ -20,6 +20,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.databinding.ActivityPompBinding
+import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
 import com.behraz.fastermixer.batch.ui.customs.general.TopSheetBehavior
@@ -226,6 +227,14 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             }
         })
 
+        viewModel.breakdownResponse.observe(this, Observer {
+            if (it?.isSucceed == true) {
+                toast("پیام ارسال شد")
+            } else {
+                toast("خطایی به وجود آمد لطفا دوباره تلاش کنید")
+            }
+        })
+
         viewModel.logoutResponse.observe(this, Observer {
             progressDialog.dismiss()
             if (it != null) {
@@ -389,7 +398,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
     }
 
     override fun onStopClicked() {
-        toast("Not yet implemented")
+        viewModel.insertBreakdown(BreakdownRequest.STOP)
     }
 
     override fun onLabClicked() {
@@ -397,7 +406,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
     }
 
     override fun onRepairClicked() {
-        toast("Not yet implemented")
+        viewModel.insertBreakdown(BreakdownRequest.BREAKDOWN)
     }
 
     override fun onUnauthorizedAction(event: Event<Unit>) {

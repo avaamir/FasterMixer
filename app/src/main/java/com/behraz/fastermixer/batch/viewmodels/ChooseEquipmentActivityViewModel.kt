@@ -6,6 +6,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.behraz.fastermixer.batch.models.Equipment
 import com.behraz.fastermixer.batch.models.enums.UserType
+import com.behraz.fastermixer.batch.models.enums.UserType.*
 import com.behraz.fastermixer.batch.models.requests.behraz.ChooseEquipmentRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.respository.RemoteRepo
@@ -27,9 +28,10 @@ class ChooseEquipmentActivityViewModel : ViewModel() {
     private val chooseEquipmentRequest = MutableLiveData<ChooseEquipmentRequest>()
     val chooseEquipmentResponse = Transformations.switchMap(chooseEquipmentRequest) { request ->
         when (UserConfigs.user.value!!.userType) {
-            UserType.Pomp -> RemoteRepo.choosePomp(request)
-            UserType.Mixer -> TODO()
-            UserType.Batch -> RemoteRepo.chooseBatch(request)
+            Pomp -> RemoteRepo.choosePomp(request)
+            Mixer -> TODO()
+            Batch -> RemoteRepo.chooseBatch(request)
+            Admin -> throw IllegalStateException()
         }.exhaustiveAsExpression()
     }
 
@@ -37,9 +39,10 @@ class ChooseEquipmentActivityViewModel : ViewModel() {
     val equipments: LiveData<Entity<List<Equipment>>?> =
         Transformations.switchMap(getEquipmentEvent) {
             when (it.peekContent()) {
-                UserType.Batch -> RemoteRepo.getBatches()
-                UserType.Pomp -> RemoteRepo.getPomps()
-                UserType.Mixer -> TODO("getMixers")
+                Batch -> RemoteRepo.getBatches()
+                Pomp -> RemoteRepo.getPomps()
+                Mixer -> TODO("getMixers")
+                Admin -> throw IllegalStateException()
             }.exhaustiveAsExpression() as LiveData<Entity<List<Equipment>>?>
         }
 

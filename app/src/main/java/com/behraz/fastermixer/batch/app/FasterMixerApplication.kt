@@ -66,7 +66,7 @@ class FasterMixerApplication : Application() {
     private fun registerApiInterceptorsCallbacks() {
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityResumed(activity: Activity) {
-                if (activity !is LoginActivity && activity !is AdminActivity && activity !is ContactActivity) {
+                if (activity !is LoginActivity && activity !is AdminActivity && activity !is ContactActivity && activity !is AdminActivity ) {
                     activity.fullScreen()
                 }
 
@@ -94,7 +94,7 @@ class FasterMixerApplication : Application() {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
 
 
-                if (activity !is LoginActivity && activity !is TestActivity && activity !is ContactActivity) {
+                if (activity !is LoginActivity && activity !is TestActivity && activity !is ContactActivity && activity !is AdminActivity ) {
                     if (resources.getBoolean(R.bool.landscape_only)) {
                         activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                     } else {
@@ -107,7 +107,7 @@ class FasterMixerApplication : Application() {
                 }
 
                 activity.hideStatusBar()
-                if (activity !is LoginActivity && activity !is AdminActivity && activity !is ContactActivity) {
+                if (activity !is LoginActivity && activity !is AdminActivity && activity !is ContactActivity && activity !is AdminActivity ) {
                     activity.fullScreen()
                 }
 

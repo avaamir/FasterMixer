@@ -18,6 +18,7 @@ import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.models.enums.UserType
 import com.behraz.fastermixer.batch.models.requests.behraz.UpdateResponse
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
+import com.behraz.fastermixer.batch.ui.activities.admin.AdminActivity
 import com.behraz.fastermixer.batch.ui.activities.batch.BatchActivity
 import com.behraz.fastermixer.batch.ui.activities.mixer.MixerActivity
 import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
@@ -65,7 +66,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         if (false) {
-            startActivity(Intent(this, ContactActivity::class.java))
+            startActivity(Intent(this, TestActivity::class.java))
             finish()
             return
         }
@@ -276,6 +277,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
                                             ChooseEquipmentActivity::class.java
                                         )
                                     )
+                                    UserType.Admin -> startActivity(Intent(this, AdminActivity::class.java))
                                 }.exhaustive()
 
                             } else {
@@ -298,6 +300,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
                                             BatchActivity::class.java
                                         )
                                     )
+                                    UserType.Admin -> startActivity(Intent(this, AdminActivity::class.java))
                                 }.exhaustive()
                             }
                         } else {

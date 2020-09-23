@@ -2,6 +2,7 @@ package com.behraz.fastermixer.batch.respository
 
 import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Plan
+import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.models.requests.behraz.SeenMessageRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.*
@@ -90,6 +91,9 @@ object RemoteRepo {
     fun logout() = apiReq(ApiService.client::logout) {
         UserConfigs.logout()
     }
+
+    fun insertBreakdownRequest(description: BreakdownRequest) = apiReq(EntityRequest(description), ApiService.client::insertBreakdown)
+
 
     fun getBatches() = apiReq(ApiService.client::getBatches)
     fun getPomps() = apiReq(ApiService.client::getPomps)

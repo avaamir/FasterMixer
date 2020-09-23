@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.databinding.ActivityMixerBinding
+import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
 import com.behraz.fastermixer.batch.ui.customs.general.TopSheetBehavior
@@ -167,6 +168,15 @@ class MixerActivity : AppCompatActivity(),
             }
         })
 
+        viewModel.breakdownResponse.observe(this, Observer {
+            if (it?.isSucceed == true) {
+                toast("پیام ارسال شد")
+            } else {
+                toast("خطایی به وجود آمد لطفا دوباره تلاش کنید")
+            }
+        })
+
+
         viewModel.logoutResponse.observe(this, Observer {
             progressDialog.dismiss()
             if (it != null) {
@@ -274,15 +284,15 @@ class MixerActivity : AppCompatActivity(),
     }
 
     override fun onStopClicked() {
-        toast("Not yet implemented")
+        viewModel.insertBreakdown(BreakdownRequest.STOP)
     }
 
     override fun onSOSClicked() {
-        toast("Not yet implemented")
+        viewModel.insertBreakdown(BreakdownRequest.SOS)
     }
 
     override fun onRepairClicked() {
-        toast("Not yet implemented")
+        viewModel.insertBreakdown(BreakdownRequest.BREAKDOWN)
     }
 
     override fun onUnauthorizedAction(event: Event<Unit>) {
