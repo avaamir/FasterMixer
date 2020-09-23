@@ -12,7 +12,7 @@ import com.behraz.fastermixer.batch.utils.general.Event
 import org.osmdroid.util.GeoPoint
 import kotlin.concurrent.fixedRateTimer
 
-class BatchActivityViewModel : ViewModel() {
+class BatchActivityViewModel : ParentViewModel() {
 
     private var batchLocation: CircleFence? = null
 
@@ -46,22 +46,8 @@ class BatchActivityViewModel : ViewModel() {
         }
     }
 
-
-    private var isGetMessageRequestActive = false
-    val messages = MessageRepo.allMessage
-    val user get() = UserConfigs.user
-
-    private val logOutEvent = MutableLiveData<Event<Unit>>()
-    val logoutResponse = Transformations.switchMap(logOutEvent) {
-        RemoteRepo.logout()
-    }
-
-
-    private val timer = fixedRateTimer(period = 10000L) {
-        if (UserConfigs.isLoggedIn) { //TODO albate bazam momkene unauthorized bede chun shyad moghe check kardan login bashe ama bad if logout etefagh biofte
-            refreshMixers()
-            getMessages()
-        }
+    override fun onTimerTick() {
+        refreshMixers()
     }
 
     init {
@@ -72,36 +58,8 @@ class BatchActivityViewModel : ViewModel() {
         }
     }
 
-
-    private fun getMessages() {
-        if (!isGetMessageRequestActive) {
-            isGetMessageRequestActive = true
-            RemoteRepo.getMessage {
-                isGetMessageRequestActive = false
-                if (it != null) { //halat hayee ke khata vojud darad mohem ast, data az MessageRepo khande mishavad
-                    if (!it.isSucceed) {
-                        //TODO ???
-                    }
-                } else {
-                    //TODO ???
-                }
-            }
-        }
-    }
-
     fun refreshMixers() {
         getMixersEvent.postValue(Event(Unit))
-    }
-
-
-    fun logout() {
-        logOutEvent.value = Event(Unit)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        timer.cancel()
-        timer.purge()
     }
 
 }
