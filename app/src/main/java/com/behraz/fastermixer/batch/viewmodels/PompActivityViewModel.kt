@@ -78,6 +78,16 @@ class PompActivityViewModel : ParentViewModel() {
         RemoteRepo.getPompMission()
     }
 
+    private val getCustomerEvent = MutableLiveData(Event(Unit))
+    val customers = Transformations.switchMap(getCustomerEvent) {
+        println("debugx: getCustomerEvent called")
+        RemoteRepo.getCustomers().map { response ->
+            println("debugx: getCustomerResponse came")
+            isGetCustomerRequestActive = false
+            response
+        }
+    }
+
     init {
         getMissionResponse.observeForever {
             println("debux: `newMission` Come")
@@ -104,13 +114,7 @@ class PompActivityViewModel : ParentViewModel() {
         }
     }
 
-    private val getCustomerEvent = MutableLiveData(Event(Unit))
-    val customers = Transformations.switchMap(getCustomerEvent) {
-        RemoteRepo.getCustomers().map { response ->
-            isGetCustomerRequestActive = false
-            response
-        }
-    }
+
 
 
     override fun onTimerTick() {

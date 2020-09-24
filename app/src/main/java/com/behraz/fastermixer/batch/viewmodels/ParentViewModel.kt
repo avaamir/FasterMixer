@@ -9,6 +9,7 @@ import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.utils.general.Event
+import java.util.*
 import kotlin.concurrent.fixedRateTimer
 
 abstract class ParentViewModel : ViewModel() {
@@ -34,16 +35,19 @@ abstract class ParentViewModel : ViewModel() {
         RemoteRepo.insertBreakdownRequest(it)
     }
 
-    private val timer = fixedRateTimer(period = 10000L) {
-        user.value?.let { user ->  //TODO albate bazam momkene unauthorized bede chun shyad moghe check kardan login bashe ama bad if logout etefagh biofte, AMA jelo exception ro migire
-            getMessages()
-            onTimerTick()
-        }
-    }
-
-
     val newMessage = MutableLiveData<Event<Message>>()
 
+    private val timer: Timer
+
+
+    init {
+        timer = fixedRateTimer(period = 10000L) {
+            user.value?.let { user ->  //TODO albate bazam momkene unauthorized bede chun shyad moghe check kardan login bashe ama bad if logout etefagh biofte, AMA jelo exception ro migire
+                getMessages()
+                onTimerTick()
+            }
+        }
+    }
 
     private fun getMessages() {
         if (!isGetMessageRequestActive) {
@@ -66,7 +70,7 @@ abstract class ParentViewModel : ViewModel() {
     }
 
     fun insertBreakdown(breakdownRequest: BreakdownRequest) {
-       breakdownEvent.value = breakdownRequest
+        breakdownEvent.value = breakdownRequest
     }
 
     fun logout() {
