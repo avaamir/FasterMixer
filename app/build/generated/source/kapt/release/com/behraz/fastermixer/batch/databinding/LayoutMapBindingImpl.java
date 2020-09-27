@@ -15,8 +15,8 @@ public class LayoutMapBindingImpl extends LayoutMapBinding  {
         sIncludes = null;
         sViewsWithIds = new android.util.SparseIntArray();
         sViewsWithIds.put(R.id.map, 1);
-        sViewsWithIds.put(R.id.btnMyLocation2, 2);
-        sViewsWithIds.put(R.id.btnFragmentMyLocation, 3);
+        sViewsWithIds.put(R.id.btnFragmentMyLocation, 2);
+        sViewsWithIds.put(R.id.btnLayers, 3);
     }
     // views
     @NonNull
@@ -31,8 +31,8 @@ public class LayoutMapBindingImpl extends LayoutMapBinding  {
     }
     private LayoutMapBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
+            , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[2]
             , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[3]
-            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[2]
             , (com.behraz.fastermixer.batch.ui.osm.MyOSMMapView) bindings[1]
             );
         this.mboundView0 = (android.widget.RelativeLayout) bindings[0];

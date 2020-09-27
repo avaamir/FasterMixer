@@ -37,8 +37,6 @@ import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
 import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 import kotlinx.android.synthetic.main.activity_batch.*
-import kotlinx.android.synthetic.main.activity_test.*
-import kotlinx.android.synthetic.main.view_faster_mixer_user_panel.*
 
 
 class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
@@ -213,9 +211,9 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
     fun toggleBtnShowAllMixers(v: View) {
         viewModel.shouldShowAllMixers.value = !viewModel.shouldShowAllMixers.value!!
         if (viewModel.shouldShowAllMixers.value!!) {
-            btnShowAllMixersToggle.text = getString(R.string.pomp_mixers_on_map_toggle_all)
+            mBinding.btnShowAllMixersToggle.text = getString(R.string.pomp_mixers_on_map_toggle_all)
         } else {
-            btnShowAllMixersToggle.text = getString(R.string.pomp_mixers_on_map_toggle_request)
+            mBinding.btnShowAllMixersToggle.text = getString(R.string.pomp_mixers_on_map_toggle_request)
         }
     }
 

@@ -16,18 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
-                android:id="@+id/btnMyLocation2"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                app:image="@drawable/ic_gps"
-                app:backgroundColor="@color/white"
-                app:radius="10dp"
-                android:visibility="gone"
-                android:layout_margin="@dimen/standard_margin"/>
-
+            android:orientation="vertical">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btnFragmentMyLocation"
@@ -38,7 +27,20 @@
                 app:backgroundTint="@color/primary_dark"
                 app:srcCompat="@drawable/ic_gps"
                 app:tint="@color/white"
-                app:fabSize="mini"
+                app:fabSize="normal"
+                android:layout_margin="8dp"   />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnLayers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                app:backgroundTint="@color/btn_blue"
+                app:srcCompat="@drawable/ic_layers"
+                app:tint="@color/white"
+                app:fabSize="normal"
+                android:layout_alignParentRight="true"
                 android:layout_margin="8dp"   />
 
 

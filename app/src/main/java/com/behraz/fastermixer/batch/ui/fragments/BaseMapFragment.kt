@@ -21,9 +21,10 @@ import com.behraz.fastermixer.batch.ui.osm.MyOSMMapView
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.LocationHandler
 import com.behraz.fastermixer.batch.utils.general.toast
+import com.behraz.fastermixer.batch.utils.map.MyMapTileSource
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.osmdroid.config.Configuration
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.tileprovider.tilesource.*
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
@@ -31,19 +32,23 @@ import org.osmdroid.views.overlay.Polyline
 abstract class BaseMapFragment : Fragment(), LocationListener,
     MyOSMMapView.OnMapClickListener {
 
+    private var currentTileSourceIndex = 0
+
     abstract val myLocation: GeoPoint?
     abstract fun onBtnMyLocationClicked()
 
-    private var btnMyLocationId: Int =
-        0 //btnMylocation Mitune tu activity bashe niaz hast refrencesh ro dashte bashim age tu activity hast
+    private var btnMyLocationId: Int = 0 //btnMylocation Mitune tu activity bashe niaz hast refrencesh ro dashte bashim age tu activity hast
+    private var btnLayersId: Int = 0
 
     private lateinit var _mBinding: LayoutMapBinding
     protected val mBinding get() = _mBinding
     protected lateinit var btnMyLocation: FloatingActionButton
+    protected lateinit var btnLayers: FloatingActionButton
 
     protected companion object {
         const val REQUEST_PERMISSIONS_REQUEST_CODE = 1
         const val BUNDLE_BTN_MY_LOC_ID = "btn-m-loc"
+        const val BUNDLE_BTN_LAYERS_ID = "btn-layers"
     }
 
     override fun onCreateView(
@@ -61,6 +66,8 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
 
 
         btnMyLocationId = arguments?.getInt(BUNDLE_BTN_MY_LOC_ID) ?: 0
+        btnLayersId = arguments?.getInt(BUNDLE_BTN_LAYERS_ID) ?: 0
+
         initViews()
         initMapSettings()
         //setupLocationManager() //TODo felan data ra az gps ru machine migirim, yaani app android az server mikhune
@@ -75,6 +82,26 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
             btnMyLocation = activity!!.findViewById(btnMyLocationId)
         } else {
             btnMyLocation = _mBinding.btnFragmentMyLocation
+        }
+
+        if (btnLayersId != 0) {
+            _mBinding.btnLayers.visibility = View.GONE
+            btnLayers = activity!!.findViewById(btnLayersId)
+        } else {
+            btnLayers = _mBinding.btnLayers
+        }
+
+        btnLayers.setOnClickListener {
+            currentTileSourceIndex++
+            when (currentTileSourceIndex) {
+                //1 -> setTileMapSource(MyMapTileSource.HOT)
+                1 -> setTileMapSource(MyMapTileSource.GoogleHybrid)
+                2 -> setTileMapSource(MyMapTileSource.GoogleStandardRoadMap)
+                else -> {
+                    setTileMapSource(TileSourceFactory.MAPNIK)
+                    currentTileSourceIndex = 0
+                }
+            }
         }
 
         btnMyLocation.setOnClickListener {
@@ -104,8 +131,15 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
     }
 
 
+    fun setTileMapSource(tileSource: ITileSource) {
+        _mBinding.map.setTileSource(tileSource)
+    }
+
     protected fun initMapSettings() {
+        //default value
         _mBinding.map.setTileSource(TileSourceFactory.MAPNIK)
+        //
+
         _mBinding.map.setMultiTouchControls(true)
 
 
@@ -124,7 +158,6 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
 
         //add icon on map with click
         //your items
-
 
         /*val mCompassOverlay = CompassOverlay(context, InternalCompassOrientationProvider(context), _mBinding.map)
         mCompassOverlay.enableCompass()
@@ -156,7 +189,7 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         _mBinding.map.controller.run {
             setCenter(geoPoint)
             zoomTo(zoom)
-           // animateTo(geoPoint)
+            // animateTo(geoPoint)
         }
     }
 
@@ -317,5 +350,25 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         )*/
     }
 
+    fun showLayersButton(shouldShow: Boolean) {
+        if (shouldShow)
+            _mBinding.btnLayers.visibility = View.VISIBLE
+        else
+            _mBinding.btnLayers.visibility = View.GONE
+    }
+
 
 }
+
+
+class BaseMapFragmentImpl : BaseMapFragment() {
+    override val myLocation: GeoPoint?
+        get() = Constants.mapStartPoint
+
+    override fun onBtnMyLocationClicked() {
+    }
+
+}
+
+
+

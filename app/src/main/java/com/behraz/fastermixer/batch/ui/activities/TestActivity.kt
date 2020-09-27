@@ -3,33 +3,45 @@ package com.behraz.fastermixer.batch.ui.activities
 
 import android.app.DownloadManager
 import android.content.*
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.BatteryManager
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
+import android.provider.SyncStateContract
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.behraz.fastermixer.batch.utils.general.AppUpdater
 import com.behraz.fastermixer.batch.R
+import com.behraz.fastermixer.batch.models.LatLng
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.ui.adapters.MixerAdapter
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
+import com.behraz.fastermixer.batch.ui.fragments.BaseMapFragment
+import com.behraz.fastermixer.batch.ui.fragments.BaseMapFragmentImpl
+import com.behraz.fastermixer.batch.ui.fragments.mixer.MixerMapFragment
+import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.subscribeSignalStrengthChangeListener
 import com.behraz.fastermixer.batch.utils.general.toast
+import com.behraz.fastermixer.batch.utils.map.MyMapTileSource
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.PendingResult
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_test.*
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
 import java.io.File
 
 
 class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener, MixerAdapter.BatchAdapterInteraction {
 
+
+    private var counter = 0
 
     private val dialog: MyProgressDialog by lazy {
         MyProgressDialog(this, R.style.my_dialog_animation, true).also {
@@ -62,26 +74,40 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test)
 
+
+        if (true) {
+            val orientation = resources.configuration.orientation
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) { //age land bud bayad baghiye code ejra beshe ta 2ta fragment ijad nashe va code be moshkel nakhore
+
+
+                val mapFragment = BaseMapFragmentImpl()
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.mapContainer, mapFragment, "base-map")
+                    .commit()
+
+                fab.setOnClickListener {
+                    counter++
+                    when(counter) {
+                        1 -> mapFragment.setTileMapSource(MyMapTileSource.GoogleStandardRoadMap)
+                        2 -> mapFragment.setTileMapSource(MyMapTileSource.GoogleTerrain)
+                        3 -> mapFragment.setTileMapSource(MyMapTileSource.GoogleSat)
+                        4 -> mapFragment.setTileMapSource(TileSourceFactory.MAPNIK)
+                        5 -> mapFragment.setTileMapSource(MyMapTileSource.HOT)
+                        else -> counter = 0
+                    }
+                }
+
+
+
+            }
+            return
+        }
+
+
         val x = subscribeSignalStrengthChangeListener(true) {
             println("debug:signal: $it")
         }
 
-
-
-        btnShowAllMixersToggle.setOnClickListener {
-            if (btnShowAllMixersToggle.text == "همه میکسرها") {
-                btnShowAllMixersToggle.text = "میکسرهای پروژه"
-                //TODO show all mixers
-            } else {
-                btnShowAllMixersToggle.text = "همه میکسرها"
-                //TODO show request mixers
-            }
-        }
-
-
-        Handler().postDelayed({
-            l_demo.visibility = View.VISIBLE
-        } , 3000)
 
 /*
         btnLogin.setOnClickListener {
@@ -182,21 +208,7 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
     }
 
     private fun initViews() {
-        btnLogin.setOnClickListener {
-            println("debug: $cacheDir")/*
-            AppUpdater.getInstance(
-                this,
-                "https://raw.githubusercontent.com/avaamir/FasterMixer/master/app/release/app-release.apk",
-                "$cacheDir/FasterMixer.apk",
-                1L,
-                this
-            ).startIfNeeded()*/
-        }
 
-        btnInstall.setOnClickListener {
-            //val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/FasterMixer.apk"
-            val path = "$cacheDir/FasterMixer.apk"
-        }
     }
 
 

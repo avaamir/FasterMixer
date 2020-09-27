@@ -34,7 +34,7 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
     private companion object {
         const val user = "root"
         const val password = "4357"
-        val commands = listOf(
+        val teltonikaCommands = listOf(
             /*//Server IP
             "$user $password setparam 2004:2.184.49.133",
             //Server Port
@@ -157,7 +157,7 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
                 if (contacts.isNotEmpty()) {
                     CoroutineScope(Dispatchers.Main).launch {
                         progressDialog.show()
-                        val isSendSomething = sendCommandsAsync(commands, contacts) {
+                        val isSendSomething = sendCommandsAsync(teltonikaCommands, contacts) {
                             println("debug:progress:$it")
                             progressDialog.setProgress(it)
                         }.await()
