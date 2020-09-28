@@ -58,7 +58,9 @@ class MessageListFragment : Fragment(), MessageAdapter.Interaction {
         val observer = Observer<List<Message>> {
             mBinding.tvMessageCount.text = (it.size).toString()
             mAdapter.submitList(it)
-            if (mAdapter.currentList.isNotEmpty())
+            if (it.isEmpty())
+                mBinding.gpAnimationView.visibility = View.VISIBLE
+            else
                 mBinding.gpAnimationView.visibility = View.GONE
         }
         if (this.viewModel is MixerActivityViewModel) {

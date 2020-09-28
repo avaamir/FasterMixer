@@ -400,7 +400,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
     }
 
     override fun onLabClicked() {
-        toast("Not yet implemented")
+        viewModel.insertBreakdown(BreakdownRequest.LAB)
     }
 
     override fun onRepairClicked() {
