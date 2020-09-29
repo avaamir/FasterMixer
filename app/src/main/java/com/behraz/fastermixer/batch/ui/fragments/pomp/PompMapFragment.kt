@@ -13,6 +13,7 @@ import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.fragments.BaseMapFragment
 import com.behraz.fastermixer.batch.ui.fragments.mixer.MixerMapFragment
 import com.behraz.fastermixer.batch.ui.osm.DestMarker
+import com.behraz.fastermixer.batch.ui.osm.DriverInfoWindow
 import com.behraz.fastermixer.batch.ui.osm.MixerMarker
 import com.behraz.fastermixer.batch.ui.osm.PompMarker
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
@@ -269,10 +270,12 @@ class PompMapFragment : BaseMapFragment() {
                     mapViewModel.markers[mixer.id] =
                         MixerMarker(mBinding.map).also { _marker ->
                             _marker.position = mixer.latLng
+                            mixer.pelak.split(",")
+                                .run { _marker.setPelakText(get(0), get(1), get(2), get(3)) }
                             addMarkerToMap(
                                 _marker,
                                 mixer.latLng,
-                                if (mixer.driverName.isBlank()) mixer.pelakForMapLayer else "${mixer.pelakForMapLayer} ${mixer.driverName}"
+                                mixer.driverName
                             )
                         }
                 } else { //mixer already exists, update location
@@ -288,6 +291,8 @@ class PompMapFragment : BaseMapFragment() {
                 )
             }
             mBinding.map.invalidate()
+            val x = mBinding.map.overlays
+            println()
         }
     }
 

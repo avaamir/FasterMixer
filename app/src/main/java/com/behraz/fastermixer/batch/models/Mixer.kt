@@ -45,8 +45,6 @@ data class Mixer(
     val capacity: Float            // zarifyat machine
 ) {
     val driverName get() = _driverName ?: ""
-    val pelakForMapLayer get() = pelak.split(",")
-        .run { "${get(3)} ${get(2)} ${get(1)} ${get(0)}" }
     val latLng: GeoPoint get() = GeoPoint(lat.toDouble(), lng.toDouble())
     val loadInfo: LoadInfo
         get() =

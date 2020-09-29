@@ -24,7 +24,6 @@ import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
 import com.behraz.fastermixer.batch.ui.fragments.mixer.MixerMapFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.MessageListFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
-import com.behraz.fastermixer.batch.utils.fastermixer.fakeMessages
 import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
 import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.MixerActivityViewModel

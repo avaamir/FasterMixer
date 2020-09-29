@@ -86,15 +86,7 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
                     .commit()
 
                 fab.setOnClickListener {
-                    counter++
-                    when(counter) {
-                        1 -> mapFragment.setTileMapSource(MyMapTileSource.GoogleStandardRoadMap)
-                        2 -> mapFragment.setTileMapSource(MyMapTileSource.GoogleTerrain)
-                        3 -> mapFragment.setTileMapSource(MyMapTileSource.GoogleSat)
-                        4 -> mapFragment.setTileMapSource(TileSourceFactory.MAPNIK)
-                        5 -> mapFragment.setTileMapSource(MyMapTileSource.HOT)
-                        else -> counter = 0
-                    }
+                   mapFragment.setTileMapSource(MyMapTileSource.GoogleStandardRoadMap)
                 }
 
 

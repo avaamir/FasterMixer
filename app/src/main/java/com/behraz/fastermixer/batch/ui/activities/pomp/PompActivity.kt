@@ -201,7 +201,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
                 getString(R.string.pomp_mixers_on_map_toggle_request)
 
 
-        mBinding.btnRoute.setOnClickListener {
+        mBinding.btnRouteProject.setOnClickListener {
             (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as PompMapFragment).routeAgain()
         }
 
@@ -310,7 +310,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             //setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             add(
                 R.id.mapContainer,
-                PompMapFragment.newInstance(mBinding.btnMyLocation.id, mBinding.btnRoute.id),
+                PompMapFragment.newInstance(mBinding.btnMyLocation.id, mBinding.btnRouteProject.id),
                 FRAGMENT_MAP_TAG
             )
             commit()
