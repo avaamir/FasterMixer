@@ -127,6 +127,7 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
                     currentTileSourceIndex = 0
                 }
             }
+            mBinding.map.invalidate()
         }
 
         btnMyLocation.setOnClickListener {
