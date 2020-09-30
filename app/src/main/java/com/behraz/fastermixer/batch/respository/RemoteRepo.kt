@@ -223,6 +223,7 @@ object RemoteRepo {
                         alternative = false,
                         steps = true
                     )
+                    println("debux: ${response.isSuccessful} , ${response.code()}")
                     if (response.isSuccessful) {
                         response.body()?.let { getRouteResponse ->
                             CoroutineScope(Main).launch {

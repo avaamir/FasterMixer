@@ -98,16 +98,7 @@ class MixerMapFragment : BaseMapFragment() {
         initViews()
         subscribeObservers()
 
-        test() //TODO
-
-
-        println("debux: init: ${System.identityHashCode(this)} ${System.currentTimeMillis()}")
-
         return mBinding.root
-    }
-
-    private fun test() {
-        //mBinding.map.setUseDataConnection(false)
     }
 
     override fun initViews() {
@@ -140,7 +131,7 @@ class MixerMapFragment : BaseMapFragment() {
     private fun subscribeObservers() {
         mixerActivityViewModel.newMissionEvent.observe(viewLifecycleOwner, Observer { event ->
             event.getEventIfNotHandled()?.let { mission ->
-                println("debux: `newMissionEvent` Handled")
+                println("debux: (MixerMapFragment-newMissionEventObserver) `newMissionEvent` Handler Routine Start ==================================")
                 if (mission === Mission.NoMission) {
                     println("debux: `newMissionEvent` NoMission")
                     mBinding.map.overlayManager.remove(destMarker)
@@ -149,7 +140,7 @@ class MixerMapFragment : BaseMapFragment() {
                     println("debux: `newMissionEvent` NewMission")
                     //age ghablan track dar naghshe keshide shode bud
                     destMarker.position = mission.destLocation.center
-                    destMarker.title = "مقصد ${mission.conditionTitle}"
+                    destMarker.title = mission.conditionTitle
                     if (mapViewModel.myLocation != null) {
                         val remainingDistance =
                             mapViewModel.myLocation!!.distanceToAsDouble(mission.destLocation.center)
@@ -180,7 +171,7 @@ class MixerMapFragment : BaseMapFragment() {
 
         mixerActivityViewModel.getMissionError.observe(viewLifecycleOwner, Observer { event ->
             event.getEventIfNotHandled()?.let {
-                println("debux: getMissionError: $it")
+                println("debux: (MixerMapFragment) getMissionError: $it")
                 if (!it.contains("Action")) {
                     toast(it)
                 }
@@ -190,10 +181,8 @@ class MixerMapFragment : BaseMapFragment() {
         mixerActivityViewModel.mixerLocation.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 mapViewModel.myLocation = it.center
-                userMarker.position = it.center
-                println("debux: MixerLocation Came")
+                animateMarker(userMarker, it.center)
                 if (shouldCameraTrackMixer || isFirstCameraMove) {
-                    println("debux: moveCamera")
                     isFirstCameraMove = false
                     moveCamera(it.center)
                 }
@@ -204,7 +193,7 @@ class MixerMapFragment : BaseMapFragment() {
                     val remainingDistance =
                         mapViewModel.myLocation!!.distanceToAsDouble(destLocationArea.center)
                     if (remainingDistance > destLocationArea.radius) {
-                        println("debux: GetRouteCalled After Location Came From server")
+                        println("debux: (MixerMapFragment-mixerLocationObserver) GetRouteCalled After Location Came From server=================")
                         mapViewModel.getRoute(
                             listOf(
                                 mapViewModel.myLocation!!,
@@ -224,15 +213,14 @@ class MixerMapFragment : BaseMapFragment() {
 
         mapViewModel.getRouteResponse.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                println("debux: getRouteResponse Came")
+                println("debux: (MixerMapFragment-GetRouteResponseObserver) getRouteResponse Came====================================")
                 if (it.isSuccessful) {
                     println("debux: getRouteResponse isSuccessful")
                     routePolyline?.let { _routes ->
-                        mBinding.map.overlayManager.remove(_routes)
-                        routePolyline = null
+                        mBinding.map.overlays.remove(_routes)
                     }
                     routePolyline = drawPolyline(it.getRoutePoints())
-                    println("debux: points: ${routePolyline}, ${it} ${it.getRoutePoints()}")
+                    println("debux: drawPolyline Called: ${routePolyline}, $it ${it.getRoutePoints()}")
                 } else {
                     println("debux: getRouteResponse unSuccessful")
                     toast(Constants.SERVER_ERROR)
@@ -269,9 +257,9 @@ class MixerMapFragment : BaseMapFragment() {
         } else {
             toast("شما ماموریتی ندارید")
         }*/
-
-        println("debux: $routePolyline , ${routePolyline?.distance}")
+        println("debux: routeAgain()============================================")
         println("debux: routeAgain: ${mapViewModel.getRouteResponse.value?.getRoutePoints()}")
+        //In dokme vaghti visible mishe ke mission ro gerefte bashim va yek bar ham darkhast getRoute ro zade bashim pas niazi nist check konim (startPoint,Dest) reside hast ya na
         mapViewModel.tryGetRouteAgain()
     }
 }

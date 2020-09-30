@@ -4,6 +4,10 @@ import android.view.View
 import android.widget.TextView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.OverlayWithIW
@@ -50,10 +54,24 @@ class DriverInfoWindow(
             //Title dar super.onOpen set mishe va niazi nist dg setesh konam
         }
 
-        mapView.overlays.forEach {
-            if (it is Marker) {
-                if (it.isInfoWindowShown) {
-                    it.closeInfoWindow()
+        if (mapView.overlays.size < 100) {
+            mapView.overlays.forEach {
+                if (it is Marker) {
+                    if (it.isInfoWindowShown) {
+                        it.closeInfoWindow()
+                    }
+                }
+            }
+        } else { //vase in ke age tedad marker ha ziad bud UI freeze nashe
+            CoroutineScope(Main).launch {
+                mapView.overlays.forEach {
+                    if (it is Marker) {
+                        if (it.isInfoWindowShown) {
+                            withContext(Main) {
+                                it.closeInfoWindow()
+                            }
+                        }
+                    }
                 }
             }
         }

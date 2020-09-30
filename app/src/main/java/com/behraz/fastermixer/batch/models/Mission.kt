@@ -10,7 +10,7 @@ data class Mission(
     @SerializedName("conditionTitle")
     val conditionTitle: String,
     @SerializedName("missionID")
-    val missionId: String,
+    private val _missionId: String,
     @SerializedName("startMissionTime")
     val startMissionTime: String?,
     @SerializedName("endMissionTime")
@@ -18,6 +18,8 @@ data class Mission(
     @SerializedName("clientDatetime")
     val dataDateTime: Date?
 ) {
+
+    val missionId get() = _missionId + conditionTitle
 
     companion object {
         val NoMission = Mission("In Ro Dorost KON", "", "0", null, null, null)

@@ -41,7 +41,7 @@ abstract class ParentViewModel : ViewModel() {
 
 
     init {
-        timer = fixedRateTimer(period = 10000L) {
+        timer = fixedRateTimer(period = 20000L) {
             user.value?.let { user ->  //TODO albate bazam momkene unauthorized bede chun shyad moghe check kardan login bashe ama bad if logout etefagh biofte, AMA jelo exception ro migire
                 getMessages()
                 onTimerTick()

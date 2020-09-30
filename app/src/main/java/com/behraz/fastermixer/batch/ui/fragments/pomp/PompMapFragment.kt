@@ -11,13 +11,10 @@ import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.fragments.BaseMapFragment
-import com.behraz.fastermixer.batch.ui.fragments.mixer.MixerMapFragment
 import com.behraz.fastermixer.batch.ui.osm.DestMarker
-import com.behraz.fastermixer.batch.ui.osm.DriverInfoWindow
 import com.behraz.fastermixer.batch.ui.osm.MixerMarker
 import com.behraz.fastermixer.batch.ui.osm.PompMarker
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
-import com.behraz.fastermixer.batch.utils.general.minus
 import com.behraz.fastermixer.batch.utils.general.now
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
@@ -111,7 +108,7 @@ class PompMapFragment : BaseMapFragment() {
         pompViewModel.pompAreaInfo.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 mapViewModel.myLocation = it.center
-                userMarker.position = it.center
+                animateMarker(userMarker, it.center)
                 if (isFirstTime) {
                     isFirstTime = false
                     moveCamera(it.center)
@@ -228,11 +225,10 @@ class PompMapFragment : BaseMapFragment() {
                 if (it.isSuccessful) {
                     println("debux: getRouteResponse isSuccessful")
                     routePolyline?.let { _routes ->
-                        mBinding.map.overlayManager.remove(_routes)
-                        routePolyline = null
+                        mBinding.map.overlays.remove(_routes)
                     }
                     routePolyline = drawPolyline(it.getRoutePoints())
-                    println("debux: points: ${routePolyline}, ${it} ${it.getRoutePoints()}")
+                    println("debux: points: ${routePolyline}, $it ${it.getRoutePoints()}")
                 } else {
                     println("debux: getRouteResponse unSuccessful")
                     toast(Constants.SERVER_ERROR)
@@ -279,7 +275,7 @@ class PompMapFragment : BaseMapFragment() {
                             )
                         }
                 } else { //mixer already exists, update location
-                    mixerMarker.position = mixer.latLng
+                    animateMarker(mixerMarker, mixer.latLng)
                 }
             }
             excludeMarkerList.forEach { mixerId ->
@@ -291,8 +287,6 @@ class PompMapFragment : BaseMapFragment() {
                 )
             }
             mBinding.map.invalidate()
-            val x = mBinding.map.overlays
-            println()
         }
     }
 
@@ -303,4 +297,5 @@ class PompMapFragment : BaseMapFragment() {
         moveCamera(mixer.latLng)
         mapViewModel.markers[mixer.id]?.showInfoWindow()
     }
+
 }

@@ -3,6 +3,7 @@ package com.behraz.fastermixer.batch.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
@@ -31,20 +32,28 @@ class MixerActivityViewModel : ParentViewModel() {
     val getMissionError = MutableLiveData<Event<String>>()
     private val getMixerMissionEvent = MutableLiveData(Event(Unit))
     private val getMissionResponse = Transformations.switchMap(getMixerMissionEvent) {
-        RemoteRepo.getMixerMission()
+        RemoteRepo.getMixerMission().map {
+            isGetMixerMissionsRequestActive = false
+            it
+        }
     }
 
     init {
         getMissionResponse.observeForever {
-            println("debux: `newMission` Come")
+            println("debux:(MixerActivityViewModel-getMissionResponseForeverObserver) getMissionResponse =====================================")
+            println("debux: `newMission` Come from server")
             if (it != null) {
                 if (it.isSucceed) {
                     //Check if serverMission is a new Mission or Already submitted
                     val serverMission = it.entity
+                    println("debux: `newMissionContent` -> ${it.entity}")
                     if (serverMission != null) { //NewMission
                         val currentMission = newMissionEvent.value?.peekContent()
                         if (serverMission.missionId != currentMission?.missionId) { //serverMission is a NewMission
+                            println("debux: `newMissionEvent happened ")
                             newMissionEvent.value = Event(serverMission)
+                        } else {
+                            println("debux: `newMissionId` and lastMissionId are same")
                         }
                     } else { //NoMission
                         if (newMissionEvent.value?.peekContent() !== Mission.NoMission)
@@ -55,6 +64,7 @@ class MixerActivityViewModel : ParentViewModel() {
                 }
             } else {
                 //TODO check this code , request again to map.ir
+                println("debux: `newMission` SERVER ERROR ")
                 getMissionError.value = Event(Constants.SERVER_ERROR) //TODO?
             }
         }
@@ -88,6 +98,7 @@ class MixerActivityViewModel : ParentViewModel() {
 
     private fun getMixerMission() {
         if (!isGetMixerMissionsRequestActive) {
+            isGetMixerMissionsRequestActive = true
             CoroutineScope(Main).launch {
                 getMixerMissionEvent.value = Event(Unit)
             }

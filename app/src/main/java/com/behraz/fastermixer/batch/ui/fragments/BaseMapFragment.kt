@@ -1,5 +1,7 @@
 package com.behraz.fastermixer.batch.ui.fragments
 
+import android.animation.TimeInterpolator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
@@ -20,7 +22,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.LayoutMapBinding
-import com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView
 import com.behraz.fastermixer.batch.ui.osm.DestMarker
 import com.behraz.fastermixer.batch.ui.osm.DriverInfoWindow
 import com.behraz.fastermixer.batch.ui.osm.MyOSMMapView
@@ -36,6 +37,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.osmdroid.api.IMapController
 import org.osmdroid.bonuspack.location.NominatimPOIProvider
+import org.osmdroid.bonuspack.location.OverpassAPIProvider
 import org.osmdroid.bonuspack.location.POI
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.MapTileProviderArray
@@ -50,8 +52,9 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
-import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow
 import java.io.File
+
+//** read overpassAPI -> https://github.com/MKergall/osmbonuspack/wiki/OverpassAPIProvider
 
 abstract class BaseMapFragment : Fragment(), LocationListener,
     MyOSMMapView.OnMapClickListener {
@@ -149,7 +152,7 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         val line = Polyline()
         line.setPoints(points)
         line.outlinePaint.color = Color.BLUE
-        _mBinding.map.overlayManager.add(line)
+        _mBinding.map.overlays.add(line)
         //moveCamera(GeoPoint(line.bounds.centerLatitude, line.bounds.centerLongitude), 1.0) //todo how move camera to polygon area
         //line.outlinePaint.strokeWidth = 3f
         _mBinding.map.invalidate()
@@ -192,7 +195,6 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         _mBinding.map.setOnMapClickListener(this)
     }
 
-    //TODO add this to sub classes NOT HEEREEEEEEEEEEEEEEEEEEEEEEEEE
     protected fun addUserMarkerToMap(marker: Marker) {
         addMarkerToMap(
             marker = marker,
@@ -208,6 +210,25 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         marker.position = point
         marker.title = title
         _mBinding.map.overlays.add(marker)
+    }
+
+    fun animateMarker(marker: Marker, destGeoPoint: GeoPoint, interpolator: TimeInterpolator = LinearInterpolator()) {
+        //val projection = mBinding.map.projection
+        //val startPoint = projection.toPixels(marker.position, null)
+        val startGeoPoint = marker.position //projection.fromPixels(startPoint.x, startPoint.y)
+        val animator = ValueAnimator.ofFloat(0f, 1f)
+        animator.interpolator = interpolator
+        animator.duration = 500L
+
+        animator.addUpdateListener {
+            val weight = it.animatedFraction
+            val lng = weight * destGeoPoint.longitude + (1 - weight) * startGeoPoint.longitude
+            val lat = weight * destGeoPoint.latitude + (1 - weight) * startGeoPoint.latitude
+
+            marker.position = GeoPoint(lat, lng)
+            _mBinding.map.postInvalidate()
+        }
+        animator.start()
     }
 
 
@@ -388,13 +409,14 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
 
 
 class BaseMapFragmentImpl : BaseMapFragment() {
+    private lateinit var userMarker: Marker
+    //private var routePolyline: Polyline? = null
 
     override val myLocation: GeoPoint?
         get() = Constants.mapStartPoint
 
     override fun onBtnMyLocationClicked() {
     }
-
 
     override fun initMapSettings() {
         super.initMapSettings()
@@ -413,21 +435,21 @@ class BaseMapFragmentImpl : BaseMapFragment() {
 
 
         //marker
-        val marker = DestMarker(mBinding.map, 48, 48)
+        userMarker = DestMarker(mBinding.map, 48, 48)
 
 
         "12,ب,735,48".split(",")
             .run {
-                marker.infoWindow = DriverInfoWindow(mBinding.map).also {
+                userMarker.infoWindow = DriverInfoWindow(mBinding.map).also {
                     it.setPelakText(get(0), get(1), get(2), get(3))
                 }
             }
 
-       // marker.image = ContextCompat.getDrawable(context!!, R.drawable.ic_mixer)!!
-        marker.title = "امیرحسین مهدی پور"
-       // marker.snippet = "توضیحات"
-       // marker.subDescription = "بیشتر"
-        addMarkerToMap(marker, startPoint, "")
+        // marker.image = ContextCompat.getDrawable(context!!, R.drawable.ic_mixer)!!
+        userMarker.title = "امیرحسین مهدی پور"
+        // marker.snippet = "توضیحات"
+        // marker.subDescription = "بیشتر"
+        addMarkerToMap(userMarker, startPoint, "")
         mBinding.map.invalidate()
 
 
@@ -469,6 +491,9 @@ class BaseMapFragmentImpl : BaseMapFragment() {
 
     }
 
+    override fun onMapTapped(geoPoint: GeoPoint) {
+        animateMarker(userMarker, geoPoint)
+    }
 
     private fun setMapOfflineSource() {
         val validFiles = ArrayList<File>()

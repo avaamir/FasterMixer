@@ -212,7 +212,6 @@ class MixerActivity : AppCompatActivity(),
     }
 
     private fun initFragments() {
-        println("debux: initFragments ${System.currentTimeMillis()}")
         supportFragmentManager.beginTransaction().apply {
             add(
                 R.id.mapContainer,
