@@ -84,8 +84,6 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
         _mBinding = DataBindingUtil.inflate(inflater, R.layout.layout_map, container, false)
 
 

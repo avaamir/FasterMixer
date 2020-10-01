@@ -221,7 +221,7 @@ class MixerActivity : AppCompatActivity(),
                     viewModel.mixerTimerValue++
                     val stateColor = when {
                         viewModel.mixerTimerValue < Constants.MIXER_MISSION_MAX_SECONDS_FOR_NORMAL_STATE -> {
-                            ContextCompat.getColor(this@MixerActivity, R.color.green)
+                            ContextCompat.getColor(this@MixerActivity, R.color.material_green)
                         }
                         viewModel.mixerTimerValue > Constants.MIXER_MISSION_MAX_SECONDS_FOR_DANGER_STATE -> {
                             ContextCompat.getColor(this@MixerActivity, R.color.logout_red)
