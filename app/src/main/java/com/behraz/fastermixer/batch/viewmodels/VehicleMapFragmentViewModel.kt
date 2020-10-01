@@ -11,7 +11,7 @@ import org.osmdroid.util.GeoPoint
 open class VehicleMapFragmentViewModel: ViewModel(){
     var myLocation: GeoPoint? = null
 
-    var shouldFindRoutesAfterUserLocationFound: Boolean = false
+    var hasNewMission: Boolean = false
 
 
     private var coordinates: MutableLiveData<List<GeoPoint>> = MutableLiveData()

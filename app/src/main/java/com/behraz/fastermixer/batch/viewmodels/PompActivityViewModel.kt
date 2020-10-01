@@ -8,7 +8,7 @@ import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.utils.general.Event
 
-class PompActivityViewModel : VehicleViewModel() {
+class PompActivityViewModel : VehicleActivityViewModel() {
 
     @Volatile
     private var isGetCustomerRequestActive = false

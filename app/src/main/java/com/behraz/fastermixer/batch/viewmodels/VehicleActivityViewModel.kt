@@ -12,7 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-abstract class VehicleViewModel : ParentViewModel() {
+abstract class VehicleActivityViewModel : ParentViewModel() {
 
     @Volatile
     private var isGetUserLocationRequestActive = false

@@ -11,7 +11,7 @@ import com.behraz.fastermixer.batch.ui.osm.MixerMarker
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 import com.behraz.fastermixer.batch.viewmodels.PompMapFragmentViewModel
 import com.behraz.fastermixer.batch.viewmodels.VehicleMapFragmentViewModel
-import com.behraz.fastermixer.batch.viewmodels.VehicleViewModel
+import com.behraz.fastermixer.batch.viewmodels.VehicleActivityViewModel
 import org.osmdroid.util.GeoPoint
 
 class PompMapFragment : VehicleFragment() {
@@ -19,7 +19,7 @@ class PompMapFragment : VehicleFragment() {
     private lateinit var mapViewModel: PompMapFragmentViewModel
     private lateinit var pompViewModel: PompActivityViewModel
 
-    override val vehicleActivityViewModel: VehicleViewModel get() = pompViewModel
+    override val vehicleActivityViewModel: VehicleActivityViewModel get() = pompViewModel
     override val mMapViewModel: VehicleMapFragmentViewModel get() =  mapViewModel
 
     companion object {

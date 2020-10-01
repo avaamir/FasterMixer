@@ -7,7 +7,7 @@ import com.behraz.fastermixer.batch.ui.fragments.VehicleFragment
 import com.behraz.fastermixer.batch.viewmodels.MixerActivityViewModel
 import com.behraz.fastermixer.batch.viewmodels.MixerMapFragmentViewModel
 import com.behraz.fastermixer.batch.viewmodels.VehicleMapFragmentViewModel
-import com.behraz.fastermixer.batch.viewmodels.VehicleViewModel
+import com.behraz.fastermixer.batch.viewmodels.VehicleActivityViewModel
 import org.osmdroid.util.GeoPoint
 
 class MixerMapFragment : VehicleFragment() {
@@ -15,7 +15,7 @@ class MixerMapFragment : VehicleFragment() {
     private lateinit var mapViewModel: MixerMapFragmentViewModel
     private lateinit var mixerActivityViewModel: MixerActivityViewModel
 
-    override val vehicleActivityViewModel: VehicleViewModel get() = mixerActivityViewModel
+    override val vehicleActivityViewModel: VehicleActivityViewModel get() = mixerActivityViewModel
     override val mMapViewModel: VehicleMapFragmentViewModel get() = mapViewModel
 
     companion object {

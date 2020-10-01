@@ -12,7 +12,7 @@ import com.behraz.fastermixer.batch.ui.osm.MixerMarker
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.VehicleMapFragmentViewModel
-import com.behraz.fastermixer.batch.viewmodels.VehicleViewModel
+import com.behraz.fastermixer.batch.viewmodels.VehicleActivityViewModel
 import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent
 import org.osmdroid.events.ZoomEvent
@@ -22,7 +22,7 @@ import org.osmdroid.views.overlay.Polyline
 abstract class VehicleFragment : BaseMapFragment() {
 
 
-    abstract val vehicleActivityViewModel: VehicleViewModel
+    abstract val vehicleActivityViewModel: VehicleActivityViewModel
     abstract val mMapViewModel: VehicleMapFragmentViewModel
 
     private val destMarker: DestMarker by lazy {
@@ -32,7 +32,7 @@ abstract class VehicleFragment : BaseMapFragment() {
                 it.position,
                 "مقصد"
             )
-            it.setOnMarkerClickListener { marker, mapView ->
+            it.setOnMarkerClickListener { _, _ ->
                 it.showInfoWindow()
                 true
             }
@@ -116,27 +116,9 @@ abstract class VehicleFragment : BaseMapFragment() {
                     isFirstCameraMove = false
                     moveCamera(it.circleFence.center)
                 }
-                if (mMapViewModel.shouldFindRoutesAfterUserLocationFound) {
-                    mMapViewModel.shouldFindRoutesAfterUserLocationFound = false
-                    val destLocationArea =
-                        vehicleActivityViewModel.newMissionEvent.value!!.peekContent().destCircleFence
-                    val remainingDistance =
-                        mMapViewModel.myLocation!!.distanceToAsDouble(destLocationArea.center)
-                    if (remainingDistance > destLocationArea.radius) {
-                        println("debux: (MixerMapFragment-mixerLocationObserver) GetRouteCalled After Location Came From server=================")
-                        mMapViewModel.getRoute(
-                            listOf(
-                                mMapViewModel.myLocation!!,
-                                destLocationArea.center
-                            )
-                        )
-                        /*TODO Add Animation*/
-                        btnRoute?.visibility = View.VISIBLE
-                    } else {
-                        toast("به مقصد رسیدید")
-                        /*TODO Add Animation*/
-                        btnRoute?.visibility = View.GONE
-                    }
+                if (mMapViewModel.hasNewMission) {
+                    mMapViewModel.hasNewMission = false
+                    onNewMission(vehicleActivityViewModel.newMissionEvent.value!!.peekContent())
                 }
             }
         })
@@ -158,27 +140,10 @@ abstract class VehicleFragment : BaseMapFragment() {
                     mBinding.map.overlays.add(destMarker)
                     mBinding.map.invalidate()
                     if (mMapViewModel.myLocation != null) {
-                        val remainingDistance =
-                            mMapViewModel.myLocation!!.distanceToAsDouble(mission.destCircleFence.center)
-                        if (remainingDistance > mission.destCircleFence.radius) {
-                            println("debux: getRouteCalled")
-                            mMapViewModel.getRoute(
-                                listOf(
-                                    mMapViewModel.myLocation!!,
-                                    mission.destCircleFence.center
-                                )
-                            )
-                            /*TODO Add Animation*/
-                            btnRoute?.visibility = View.VISIBLE
-                        } else {
-                            println("debux: Already in DestArea")
-                            toast("به مقصد رسیدید")
-                            /*TODO Add Animation*/
-                            btnRoute?.visibility = View.GONE
-                        }
+                        onNewMission(mission)
                     } else {
                         println("debux: getRoute() will call after userLoc received from server")
-                        mMapViewModel.shouldFindRoutesAfterUserLocationFound = true
+                        mMapViewModel.hasNewMission = true
                     }
 
                 }
@@ -221,14 +186,6 @@ abstract class VehicleFragment : BaseMapFragment() {
         })
     }
 
-    fun routeAgain() {
-        println("debux: routeAgain()============================================")
-        println("debux: routeAgain: ${mMapViewModel.getRouteResponse.value?.getRoutePoints()}")
-        //In dokme vaghti visible mishe ke mission ro gerefte bashim va yek bar ham darkhast getRoute ro zade bashim pas niazi nist check konim (startPoint,Dest) reside hast ya na
-        mMapViewModel.tryGetRouteAgain()
-    }
-
-    //TODO check this
     private fun onNewMission(mission: Mission) {
         val remainingDistance =
             mMapViewModel.myLocation!!.distanceToAsDouble(mission.destCircleFence.center)
@@ -250,19 +207,12 @@ abstract class VehicleFragment : BaseMapFragment() {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    fun routeAgain() {
+        println("debux: routeAgain()============================================")
+        println("debux: routeAgain: ${mMapViewModel.getRouteResponse.value?.getRoutePoints()}")
+        //In dokme vaghti visible mishe ke mission ro gerefte bashim va yek bar ham darkhast getRoute ro zade bashim pas niazi nist check konim (startPoint,Dest) reside hast ya na
+        mMapViewModel.tryGetRouteAgain()
+    }
 
 
 

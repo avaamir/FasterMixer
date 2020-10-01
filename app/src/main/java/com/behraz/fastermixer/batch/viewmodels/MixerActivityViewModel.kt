@@ -2,7 +2,7 @@ package com.behraz.fastermixer.batch.viewmodels
 
 import java.util.*
 
-class MixerActivityViewModel : VehicleViewModel() {
+class MixerActivityViewModel : VehicleActivityViewModel() {
 
     var mixerTimer: Timer? = null
     var mixerTimerValue = 0
