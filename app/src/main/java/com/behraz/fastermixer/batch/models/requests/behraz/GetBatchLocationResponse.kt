@@ -32,5 +32,5 @@ class GetVehicleLocationResponse (
     @SerializedName("clientDatetime")
     val dateTime: Date
 ) {
-    val location: CircleFence get() = CircleFence.circleFenceToCenterGeoPoint(locationStr, dateTime)
+    val circleFence: CircleFence get() = CircleFence.circleFenceToCenterGeoPoint(locationStr, dateTime)
 }

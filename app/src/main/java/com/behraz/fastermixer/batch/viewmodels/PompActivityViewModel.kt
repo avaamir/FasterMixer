@@ -5,8 +5,8 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.models.Mixer
-import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
+import com.behraz.fastermixer.batch.models.requests.behraz.GetVehicleLocationResponse
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.Event
@@ -27,7 +27,7 @@ class PompActivityViewModel : ParentViewModel() {
 
     //we did not use Transformation because it is not always have a observer , But We Always have to update it's value for sorting mixers List, the only observer is in map fragment
     val pompAreaInfo =
-        MutableLiveData<CircleFence?>(null) //TODO implement this // get from GPS // curently it will receive from server from car GPS, In new Version Maybe Needed
+        MutableLiveData<GetVehicleLocationResponse?>(null) //TODO implement this // get from GPS // curently it will receive from server from car GPS, In new Version Maybe Needed
 
     private val getPompEvent = MutableLiveData(Event(Unit))
 
@@ -48,16 +48,16 @@ class PompActivityViewModel : ParentViewModel() {
         val sortedMixers = pompAreaInfo.value?.let { pompLocation ->
             response?.entity?.let {
                 if (it.size == 1) {
-                    if (it[0].state != "تخلیه") it[0].normalizeStateByDistance(pompLocation)
+                    if (it[0].state != "تخلیه") it[0].normalizeStateByDistance(pompLocation.circleFence)
                     it
                 } else
                     it.sortedWith(
                         compareBy { mixer ->
-                            mixer.latLng.distanceToAsDouble(pompLocation.center)
+                            mixer.latLng.distanceToAsDouble(pompLocation.circleFence.center)
                                 .also { distance ->
                                     mixer.normalizeStateByDistance(
                                         distance,
-                                        pompLocation.radius
+                                        pompLocation.circleFence.radius
                                     )
                                 }
                         }
@@ -139,8 +139,7 @@ class PompActivityViewModel : ParentViewModel() {
             if (it != null) {
                 if (it.isSucceed) {
                     //TODO az server vase pomp circle nemiyad khater hamin man mahduda ro ruye 100 gozashtam
-                    pompAreaInfo.value =
-                        it.entity!!.location.copy(radius = 100.0) //age observer nadashte bashe set nemishe, age scenario avaz shod deghat kon, alan mapFragment Observersh hast
+                    pompAreaInfo.value = it.entity
                 } else {
                     //TODO what should i do?
                 }

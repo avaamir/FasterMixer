@@ -81,8 +81,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/btnMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="40dp"
             android:layout_gravity="center_vertical|left"
             android:layout_marginLeft="-6dp"
             android:foreground="?android:attr/selectableItemBackground"
@@ -94,35 +94,18 @@
                 android:layout_marginTop="@dimen/tiny_margin"
                 android:layout_marginBottom="@dimen/tiny_margin"
                 android:minWidth="60dp"
-                android:paddingLeft="@dimen/standard_margin"
+                android:paddingLeft="6dp"
                 android:paddingRight="@dimen/tiny_margin">
 
 
                 <ImageView
                     android:id="@+id/imageView2"
-                    android:layout_width="45dp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_message"
+                    android:layout_width="35dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_sos"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tvMessageCount"
-                    style="@style/my_white_normal_text"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@drawable/shape_drawer_badge"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="@id/imageView2"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView2"
-                    app:layout_constraintStart_toEndOf="@+id/imageView2"
-                    app:layout_constraintTop_toTopOf="@+id/imageView2"
-                    app:layout_constraintVertical_bias="1.0"
-                    tools:text="22" />
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -142,6 +125,52 @@
                 app:layout_constraintTop_toTopOf="parent">
 
             </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/frame_timer"
+                android:layout_width="0dp"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@+id/mapContainer"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:padding="@dimen/standard_margin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvTimerMinute"
+                    android:layout_width="50dp"
+                    android:gravity="right"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/seven_segment"
+                    android:textColor="@color/logout_red"
+                    android:textSize="36sp"
+                    android:layout_marginRight="4dp"
+                    tools:text="39" />
+
+                <TextView
+                    android:id="@+id/tvTimerMiddle"
+                    android:layout_width="wrap_content"
+                    android:gravity="center"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/seven_segment"
+                    android:textColor="@color/logout_red"
+                    android:layout_marginRight="4dp"
+                    android:textSize="36sp"
+                    android:text=":" />
+
+
+                <TextView
+                    android:id="@+id/tvTimerSeconds"
+                    android:layout_width="50dp"
+                    android:gravity="left"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/seven_segment"
+                    android:textColor="@color/logout_red"
+                    android:textSize="36sp"
+                    tools:text="23" />
+
+            </LinearLayout>
 
 
             <androidx.cardview.widget.CardView
@@ -184,6 +213,22 @@
                         app:radius="0dp"
                         app:text="پیام ها"
                         app:textSize="@dimen/pomp_menu_btns_font_size" />
+
+
+                    <TextView
+                        android:id="@+id/tvMessageCount"
+                        style="@style/my_white_normal_text"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/shape_drawer_badge"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_map"
+                        tools:text="22" />
 
                     <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
                         android:id="@+id/btn_voice_message"

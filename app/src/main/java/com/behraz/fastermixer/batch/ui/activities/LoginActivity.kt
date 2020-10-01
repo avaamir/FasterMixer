@@ -65,12 +65,12 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        if (true) {
+
+        if (false) {
             startActivity(Intent(this, TestActivity::class.java))
             finish()
             return
         }
-
 
         viewModel = ViewModelProvider(this).get(LoginActivityViewModel::class.java)
         initViews()
@@ -86,10 +86,8 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
             }
         }
 
-
         //TODO UI Test Purpose
         //imageView5?.setOnClickListener { startActivity(Intent(this, AdminActivity::class.java)) }
-
 
         permissionHelper.checkPermission()
     }

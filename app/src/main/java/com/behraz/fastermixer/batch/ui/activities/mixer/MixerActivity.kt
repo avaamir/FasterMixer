@@ -28,6 +28,10 @@ import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
 import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.MixerActivityViewModel
 import kotlinx.android.synthetic.main.activity_batch.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlin.concurrent.fixedRateTimer
 
 class MixerActivity : AppCompatActivity(),
     ApiService.InternetConnectionListener,
@@ -199,9 +203,9 @@ class MixerActivity : AppCompatActivity(),
             //TODO check if a message is critical and new show in dialog to user
         })
 
-        viewModel.newMessage.observe(this, Observer {
-            it.getEventIfNotHandled()?.let {
-                mBinding.layoutNewMessage.message = it
+        viewModel.newMessage.observe(this, Observer { event ->
+            event.getEventIfNotHandled()?.let { _message ->
+                mBinding.layoutNewMessage.message = _message
                 topSheetBehavior.state = TopSheetBehavior.STATE_EXPANDED
                 Handler().postDelayed({
                     topSheetBehavior.state = TopSheetBehavior.STATE_HIDDEN
@@ -209,7 +213,38 @@ class MixerActivity : AppCompatActivity(),
             }
         })
 
+        viewModel.newMissionEvent.observe(this, Observer {
+            if (it.peekContent().conditionTitle.contains("پروژه")) {
+                mBinding.frameTimer.visibility = View.VISIBLE
+                viewModel.mixerTimerValue = 0
+                viewModel.mixerTimer = fixedRateTimer(period = 1000L) {
+                    viewModel.mixerTimerValue++
+                    CoroutineScope(Main).launch {
+                        //TODO rang avaz shavad
+
+                        val time =
+                            millisToTimeString(viewModel.mixerTimerValue * 1000L).substring(10)
+                        val minutes = time.substring(0, 2)
+                        val seconds = time.substring(5)
+
+                        mBinding.tvTimerMinute.text = minutes
+                        mBinding.tvTimerSeconds.text = seconds
+                        if (viewModel.mixerTimerValue % 2 == 0)
+                            mBinding.tvTimerMiddle.visibility = View.INVISIBLE
+                        else
+                            mBinding.tvTimerMiddle.visibility = View.VISIBLE
+                    }
+                }
+            } else {
+                viewModel.mixerTimer?.cancel()
+                viewModel.mixerTimer?.purge()
+                viewModel.mixerTimer = null
+                mBinding.frameTimer.visibility = View.GONE
+            }
+        })
+
     }
+
 
     private fun initFragments() {
         supportFragmentManager.beginTransaction().apply {

@@ -25,5 +25,5 @@ data class Mission(
         val NoMission = Mission("In Ro Dorost KON", "", "0", null, null, null)
     }
 
-    val destLocation: CircleFence get() = CircleFence.circleFenceToCenterGeoPoint(_destLocation, dataDateTime)
+    val destCircleFence: CircleFence get() = CircleFence.circleFenceToCenterGeoPoint(_destLocation, dataDateTime)
 }

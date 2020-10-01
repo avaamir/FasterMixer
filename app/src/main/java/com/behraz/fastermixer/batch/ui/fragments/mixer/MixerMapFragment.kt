@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.fragments.BaseMapFragment
@@ -139,17 +138,17 @@ class MixerMapFragment : BaseMapFragment() {
                 } else {
                     println("debux: `newMissionEvent` NewMission")
                     //age ghablan track dar naghshe keshide shode bud
-                    destMarker.position = mission.destLocation.center
+                    destMarker.position = mission.destCircleFence.center
                     destMarker.title = mission.conditionTitle
                     if (mapViewModel.myLocation != null) {
                         val remainingDistance =
-                            mapViewModel.myLocation!!.distanceToAsDouble(mission.destLocation.center)
-                        if (remainingDistance > mission.destLocation.radius) {
+                            mapViewModel.myLocation!!.distanceToAsDouble(mission.destCircleFence.center)
+                        if (remainingDistance > mission.destCircleFence.radius) {
                             println("debux: getRouteCalled")
                             mapViewModel.getRoute(
                                 listOf(
                                     mapViewModel.myLocation!!,
-                                    mission.destLocation.center
+                                    mission.destCircleFence.center
                                 )
                             )
                             /*TODO Add Animation*/
@@ -189,7 +188,7 @@ class MixerMapFragment : BaseMapFragment() {
                 if (mapViewModel.shouldFindRoutesAfterUserLocationFound) {
                     mapViewModel.shouldFindRoutesAfterUserLocationFound = false
                     val destLocationArea =
-                        mixerActivityViewModel.newMissionEvent.value!!.peekContent().destLocation
+                        mixerActivityViewModel.newMissionEvent.value!!.peekContent().destCircleFence
                     val remainingDistance =
                         mapViewModel.myLocation!!.distanceToAsDouble(destLocationArea.center)
                     if (remainingDistance > destLocationArea.radius) {

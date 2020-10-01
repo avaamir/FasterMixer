@@ -218,11 +218,14 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         interpolator: TimeInterpolator = LinearInterpolator()
     ) {
         /**
-        * rotation
-        * jam shodan => anti clock wise
-        * tafrigh shdan => clock wise
-        **/
+         * rotation
+         * jam shodan => anti clock wise
+         * tafrigh shdan => clock wise
+         **/
         val startRotation = marker.rotation
+        if (startRotation == destRotation) {
+            return
+        }
         val animator = ValueAnimator.ofFloat(0f, 1f)
         animator.duration = 500L
         animator.interpolator = interpolator
@@ -238,11 +241,15 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         interpolator: TimeInterpolator = LinearInterpolator()
     ) {
         val startOrientation = mBinding.map.mapOrientation
+        if (destOrientation == startOrientation) {
+            return
+        }
         val animator = ValueAnimator.ofFloat(0f, 1f)
         animator.duration = 1000L
         animator.interpolator = interpolator
         animator.addUpdateListener {
-            mBinding.map.mapOrientation = startOrientation + ((destOrientation - startOrientation) * it.animatedFraction)
+            mBinding.map.mapOrientation =
+                startOrientation + ((destOrientation - startOrientation) * it.animatedFraction)
             println("debux: ${mBinding.map.mapOrientation}")
             mBinding.map.postInvalidate()
         }
@@ -254,6 +261,8 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         destGeoPoint: GeoPoint,
         interpolator: TimeInterpolator = LinearInterpolator()
     ) {
+        if ((marker.position.latitude == destGeoPoint.latitude) && (marker.position.longitude == destGeoPoint.longitude))
+            return
         //val projection = mBinding.map.projection
         //val startPoint = projection.toPixels(marker.position, null)
         val startGeoPoint = marker.position //projection.fromPixels(startPoint.x, startPoint.y)

@@ -14,7 +14,7 @@ import kotlin.concurrent.fixedRateTimer
 
 abstract class ParentViewModel : ViewModel() {
 
-    abstract fun onTimerTick()
+    protected abstract fun onTimerTick()
 
     val user get() = UserConfigs.user
 
@@ -41,7 +41,7 @@ abstract class ParentViewModel : ViewModel() {
 
 
     init {
-        timer = fixedRateTimer(period = 20000L) {
+        timer = fixedRateTimer(period = 10000L) {
             user.value?.let { user ->  //TODO albate bazam momkene unauthorized bede chun shyad moghe check kardan login bashe ama bad if logout etefagh biofte, AMA jelo exception ro migire
                 getMessages()
                 onTimerTick()

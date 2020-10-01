@@ -107,14 +107,13 @@ class PompMapFragment : BaseMapFragment() {
 
         pompViewModel.pompAreaInfo.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                mapViewModel.myLocation = it.center
-                animateMarker(userMarker, it.center)
+                mapViewModel.myLocation = it.circleFence.center
+                animateMarker(userMarker, it.circleFence.center)
                 if (isFirstTime) {
                     isFirstTime = false
-                    moveCamera(it.center)
+                    moveCamera(it.circleFence.center)
                 }
                 userMarker.title = "مکان شما"
-
 
                 /*todo add this after tracking added if (shouldCameraTrackMixer || isFirstCameraMove) {
                     println("debux: moveCamera")
@@ -123,25 +122,43 @@ class PompMapFragment : BaseMapFragment() {
                 }*/
                 if (mapViewModel.shouldFindRoutesAfterUserLocationFound) {
                     mapViewModel.shouldFindRoutesAfterUserLocationFound = false
-                    val destLocationArea =
-                        pompViewModel.newMissionEvent.value!!.peekContent().destLocation
-                    val remainingDistance =
-                        mapViewModel.myLocation!!.distanceToAsDouble(destLocationArea.center)
-                    if (remainingDistance > destLocationArea.radius) {
-                        println("debux: GetRouteCalled After Location Came From server")
-                        mapViewModel.getRoute(
-                            listOf(
-                                mapViewModel.myLocation!!,
-                                destLocationArea.center
-                            )
-                        )
-                        /*TODO Add Animation*/
-                        btnRoute?.visibility = View.VISIBLE
-                    } else {
-                        toast("به مقصد رسیدید")
-                        /*TODO Add Animation*/
-                        btnRoute?.visibility = View.GONE
+                    onNewMission(pompViewModel.newMissionEvent.value!!.peekContent())
+                }
+            }
+        })
+
+
+        pompViewModel.newMissionEvent.observe(viewLifecycleOwner, Observer { event ->
+            event.getEventIfNotHandled()?.let { mission ->
+                println("debux: `newMissionEvent` Handled")
+                if (mission === Mission.NoMission) {
+                    println("debux: `newMissionEvent` NoMission")
+                    mBinding.map.overlays.remove(destMarker)
+                    routePolyline?.let { _route ->
+                        mBinding.map.overlays.remove(_route)
                     }
+                    toast("شما ماموریت دیگری ندارید")
+                } else {
+                    println("debux: `newMissionEvent` NewMission")
+                    //age ghablan track dar naghshe keshide shode bud
+                    destMarker.position = mission.destCircleFence.center
+                    destMarker.title = "مقصد ${mission.conditionTitle}"
+                    if (mapViewModel.myLocation != null) {
+                        onNewMission(mission)
+                    } else {
+                        println("debux: getRoute() will call after userLoc received from server")
+                        mapViewModel.shouldFindRoutesAfterUserLocationFound = true
+                    }
+
+                }
+            }
+        })
+
+        pompViewModel.getMissionError.observe(viewLifecycleOwner, Observer { event ->
+            event.getEventIfNotHandled()?.let {
+                println("debux: getMissionError: $it")
+                if (!it.contains("Action")) {
+                    toast(it)
                 }
             }
         })
@@ -165,60 +182,6 @@ class PompMapFragment : BaseMapFragment() {
         pompViewModel.requestMixers.observe(viewLifecycleOwner, Observer {
             if (!pompViewModel.shouldShowAllMixers.value!!) {
                 sortAndShowMixers(it)
-            }
-        })
-        //
-
-        //
-        pompViewModel.newMissionEvent.observe(viewLifecycleOwner, Observer { event ->
-            event.getEventIfNotHandled()?.let { mission ->
-                println("debux: `newMissionEvent` Handled")
-                if (mission === Mission.NoMission) {
-                    println("debux: `newMissionEvent` NoMission")
-                    mBinding.map.overlays.remove(destMarker)
-                    routePolyline?.let { _route ->
-                        mBinding.map.overlays.remove(_route)
-                    }
-                    toast("شما ماموریت دیگری ندارید")
-                } else {
-                    println("debux: `newMissionEvent` NewMission")
-                    //age ghablan track dar naghshe keshide shode bud
-                    destMarker.position = mission.destLocation.center
-                    destMarker.title = "مقصد ${mission.conditionTitle}"
-                    if (mapViewModel.myLocation != null) {
-                        val remainingDistance =
-                            mapViewModel.myLocation!!.distanceToAsDouble(mission.destLocation.center)
-                        if (remainingDistance > mission.destLocation.radius) {
-                            println("debux: getRouteCalled")
-                            mapViewModel.getRoute(
-                                listOf(
-                                    mapViewModel.myLocation!!,
-                                    mission.destLocation.center
-                                )
-                            )
-                            /*TODO Add Animation*/
-                            btnRoute?.visibility = View.VISIBLE
-                        } else {
-                            println("debux: Already in DestArea")
-                            toast("به مقصد رسیدید")
-                            /*TODO Add Animation*/
-                            btnRoute?.visibility = View.GONE
-                        }
-                    } else {
-                        println("debux: getRoute() will call after userLoc received from server")
-                        mapViewModel.shouldFindRoutesAfterUserLocationFound = true
-                    }
-
-                }
-            }
-        })
-
-        pompViewModel.getMissionError.observe(viewLifecycleOwner, Observer { event ->
-            event.getEventIfNotHandled()?.let {
-                println("debux: getMissionError: $it")
-                if (!it.contains("Action")) {
-                    toast(it)
-                }
             }
         })
 
@@ -248,6 +211,27 @@ class PompMapFragment : BaseMapFragment() {
             }
         })
         //
+    }
+
+    private fun onNewMission(mission: Mission) {
+        val remainingDistance =
+            mapViewModel.myLocation!!.distanceToAsDouble(mission.destCircleFence.center)
+        if (remainingDistance > mission.destCircleFence.radius) {
+            println("debux: getRouteCalled")
+            mapViewModel.getRoute(
+                listOf(
+                    mapViewModel.myLocation!!,
+                    mission.destCircleFence.center
+                )
+            )
+            /*TODO Add Animation*/
+            btnRoute?.visibility = View.VISIBLE
+        } else {
+            println("debux: Already in DestArea")
+            toast("به مقصد رسیدید")
+            /*TODO Add Animation*/
+            btnRoute?.visibility = View.GONE
+        }
     }
 
     fun routeAgain() {
