@@ -175,7 +175,10 @@ class PompMapFragment : BaseMapFragment() {
                 println("debux: `newMissionEvent` Handled")
                 if (mission === Mission.NoMission) {
                     println("debux: `newMissionEvent` NoMission")
-                    mBinding.map.overlayManager.remove(destMarker)
+                    mBinding.map.overlays.remove(destMarker)
+                    routePolyline?.let { _route ->
+                        mBinding.map.overlays.remove(_route)
+                    }
                     toast("شما ماموریت دیگری ندارید")
                 } else {
                     println("debux: `newMissionEvent` NewMission")

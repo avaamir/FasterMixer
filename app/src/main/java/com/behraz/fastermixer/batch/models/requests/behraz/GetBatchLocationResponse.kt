@@ -21,6 +21,8 @@ class GetVehicleLocationResponse (
     val id: String,
     @SerializedName("location")
     private val locationStr: String,
+    @SerializedName("course")
+    val bearing: Float,
     @SerializedName("azimuth")
     val azimuth: String,
     @SerializedName("battery")

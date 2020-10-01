@@ -65,7 +65,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        if (false) {
+        if (true) {
             startActivity(Intent(this, TestActivity::class.java))
             finish()
             return

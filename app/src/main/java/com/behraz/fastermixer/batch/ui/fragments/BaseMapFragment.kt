@@ -37,7 +37,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.osmdroid.api.IMapController
 import org.osmdroid.bonuspack.location.NominatimPOIProvider
-import org.osmdroid.bonuspack.location.OverpassAPIProvider
 import org.osmdroid.bonuspack.location.POI
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.MapTileProviderArray
@@ -52,6 +51,7 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
+import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
 import java.io.File
 
 //** read overpassAPI -> https://github.com/MKergall/osmbonuspack/wiki/OverpassAPIProvider
@@ -212,7 +212,48 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         _mBinding.map.overlays.add(marker)
     }
 
-    fun animateMarker(marker: Marker, destGeoPoint: GeoPoint, interpolator: TimeInterpolator = LinearInterpolator()) {
+    fun rotateMarker(
+        marker: Marker,
+        destRotation: Float,
+        interpolator: TimeInterpolator = LinearInterpolator()
+    ) {
+        /**
+        * rotation
+        * jam shodan => anti clock wise
+        * tafrigh shdan => clock wise
+        **/
+        val startRotation = marker.rotation
+        val animator = ValueAnimator.ofFloat(0f, 1f)
+        animator.duration = 500L
+        animator.interpolator = interpolator
+        animator.addUpdateListener {
+            marker.rotation = startRotation + ((destRotation - startRotation) * it.animatedFraction)
+            _mBinding.map.postInvalidate()
+        }
+        animator.start()
+    }
+
+    fun animateCameraToMapOrientation(
+        destOrientation: Float,
+        interpolator: TimeInterpolator = LinearInterpolator()
+    ) {
+        val startOrientation = mBinding.map.mapOrientation
+        val animator = ValueAnimator.ofFloat(0f, 1f)
+        animator.duration = 1000L
+        animator.interpolator = interpolator
+        animator.addUpdateListener {
+            mBinding.map.mapOrientation = startOrientation + ((destOrientation - startOrientation) * it.animatedFraction)
+            println("debux: ${mBinding.map.mapOrientation}")
+            mBinding.map.postInvalidate()
+        }
+        animator.start()
+    }
+
+    fun animateMarker(
+        marker: Marker,
+        destGeoPoint: GeoPoint,
+        interpolator: TimeInterpolator = LinearInterpolator()
+    ) {
         //val projection = mBinding.map.projection
         //val startPoint = projection.toPixels(marker.position, null)
         val startGeoPoint = marker.position //projection.fromPixels(startPoint.x, startPoint.y)
@@ -489,10 +530,23 @@ class BaseMapFragmentImpl : BaseMapFragment() {
 
         setMapOfflineSource()*/
 
+        //==rotation gesture===========================================
+        /*val mRotationGestureOverlay = RotationGestureOverlay(mBinding.map)
+        mRotationGestureOverlay.isEnabled = true
+        mBinding.map.setMultiTouchControls(true)
+        mBinding.map.overlays.add(mRotationGestureOverlay)*/
+
     }
 
     override fun onMapTapped(geoPoint: GeoPoint) {
-        animateMarker(userMarker, geoPoint)
+        //animateMarker(userMarker, geoPoint)
+        val destRotation = userMarker.rotation - 90
+
+        println("debux: INIT: ${mBinding.map.mapOrientation}")
+        //rotateMarker(userMarker, destRotation)
+
+        animateCameraToMapOrientation(mBinding.map.mapOrientation - 90)
+
     }
 
     private fun setMapOfflineSource() {
