@@ -3,6 +3,10 @@ package com.behraz.fastermixer.batch.utils.fastermixer
 import org.osmdroid.util.GeoPoint
 
 object Constants {
+
+    const val MIXER_MISSION_MAX_SECONDS_FOR_NORMAL_STATE = 10 * 60
+    const val MIXER_MISSION_MAX_SECONDS_FOR_DANGER_STATE = 20 * 60
+
     val MAPBOX_ACCESS_TOKEN by lazy { "pk.eyJ1IjoiYW1pcm1wIiwiYSI6ImNrZmt1eDAzbzA3YW8ycm10MnBnZmx3eDYifQ.Q-uGHGQ2TV_R3rYu6REtAA" }
 
     val mapStartPoint by lazy { GeoPoint(31.891413345001638, 54.35357135720551) }

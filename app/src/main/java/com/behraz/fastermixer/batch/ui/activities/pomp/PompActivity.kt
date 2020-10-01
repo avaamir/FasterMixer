@@ -42,8 +42,6 @@ import kotlinx.android.synthetic.main.activity_batch.*
 class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
     PompMessageDialog.Interactions, ApiService.OnUnauthorizedListener {
 
-
-
     private lateinit var topSheetBehavior: TopSheetBehavior<View>
     private var projectCount = -1 // this variable work like a flag for `onNewProjectIncome`
 

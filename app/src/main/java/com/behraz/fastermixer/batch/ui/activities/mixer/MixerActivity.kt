@@ -219,13 +219,27 @@ class MixerActivity : AppCompatActivity(),
                 viewModel.mixerTimerValue = 0
                 viewModel.mixerTimer = fixedRateTimer(period = 1000L) {
                     viewModel.mixerTimerValue++
-                    CoroutineScope(Main).launch {
-                        //TODO rang avaz shavad
+                    val stateColor = when {
+                        viewModel.mixerTimerValue < Constants.MIXER_MISSION_MAX_SECONDS_FOR_NORMAL_STATE -> {
+                            ContextCompat.getColor(this@MixerActivity, R.color.green)
+                        }
+                        viewModel.mixerTimerValue > Constants.MIXER_MISSION_MAX_SECONDS_FOR_DANGER_STATE -> {
+                            ContextCompat.getColor(this@MixerActivity, R.color.logout_red)
+                        }
+                        else -> {
+                            ContextCompat.getColor(this@MixerActivity, R.color.btn_yellow)
+                        }
+                    }
 
-                        val time =
-                            millisToTimeString(viewModel.mixerTimerValue * 1000L).substring(10)
-                        val minutes = time.substring(0, 2)
-                        val seconds = time.substring(5)
+                    val time = millisToTimeString(viewModel.mixerTimerValue * 1000L)
+                        .substring(10)
+                    val minutes = time.substring(0, 2)
+                    val seconds = time.substring(5)
+
+                    runOnUiThread {
+                        mBinding.tvTimerMinute.setTextColor(stateColor)
+                        mBinding.tvTimerMiddle.setTextColor(stateColor)
+                        mBinding.tvTimerSeconds.setTextColor(stateColor)
 
                         mBinding.tvTimerMinute.text = minutes
                         mBinding.tvTimerSeconds.text = seconds
@@ -234,12 +248,13 @@ class MixerActivity : AppCompatActivity(),
                         else
                             mBinding.tvTimerMiddle.visibility = View.VISIBLE
                     }
+
                 }
             } else {
                 viewModel.mixerTimer?.cancel()
                 viewModel.mixerTimer?.purge()
                 viewModel.mixerTimer = null
-                mBinding.frameTimer.visibility = View.GONE
+                runOnUiThread { mBinding.frameTimer.visibility = View.GONE }
             }
         })
 

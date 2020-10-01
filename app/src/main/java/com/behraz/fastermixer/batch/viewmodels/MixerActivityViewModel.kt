@@ -4,7 +4,6 @@ import java.util.*
 
 class MixerActivityViewModel : VehicleViewModel() {
 
-
     var mixerTimer: Timer? = null
     var mixerTimerValue = 0
 
