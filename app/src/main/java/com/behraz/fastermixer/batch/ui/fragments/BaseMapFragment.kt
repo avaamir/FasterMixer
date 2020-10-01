@@ -5,58 +5,37 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.LayoutMapBinding
-import com.behraz.fastermixer.batch.ui.osm.DestMarker
-import com.behraz.fastermixer.batch.ui.osm.DriverInfoWindow
 import com.behraz.fastermixer.batch.ui.osm.MyOSMMapView
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.LocationHandler
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.utils.map.MyMapTileSource
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.osmdroid.api.IMapController
-import org.osmdroid.bonuspack.location.NominatimPOIProvider
-import org.osmdroid.bonuspack.location.POI
 import org.osmdroid.config.Configuration
-import org.osmdroid.tileprovider.MapTileProviderArray
-import org.osmdroid.tileprovider.modules.*
-import org.osmdroid.tileprovider.tilesource.FileBasedTileSource
 import org.osmdroid.tileprovider.tilesource.ITileSource
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.tileprovider.tilesource.XYTileSource
-import org.osmdroid.tileprovider.util.SimpleRegisterReceiver
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
-import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
-import java.io.File
 
 //** read overpassAPI -> https://github.com/MKergall/osmbonuspack/wiki/OverpassAPIProvider
 
-abstract class BaseMapFragment : Fragment(), LocationListener,
+abstract class BaseMapFragment : Fragment(),
     MyOSMMapView.OnMapClickListener {
 
     private var currentTileSourceIndex = 0
@@ -288,69 +267,6 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         }
     }
 
-    @SuppressLint("MissingPermission")
-    private fun setupLocationManager() {
-
-        val locationManager =
-            activity!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-        if (
-            locationManager.allProviders.contains(LocationManager.NETWORK_PROVIDER)
-        ) {
-            println("debug: allProviders contains NETWORK_PROVIDER")
-            locationManager.requestLocationUpdates(
-                LocationManager.NETWORK_PROVIDER,
-                60, //MIN_LOCATION_UPDATE_TIME,
-                5f,
-                this
-            )
-
-            val lastNetworkKnownLocation =
-                locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-
-            if (lastNetworkKnownLocation != null) {
-                onLocationChanged(lastNetworkKnownLocation)
-            }
-        }
-
-        if (
-            locationManager.allProviders.contains(LocationManager.GPS_PROVIDER)
-        ) {
-            println("debug: allProviders contains GPS_PROVIDER")
-            locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                LocationHandler.MIN_LOCATION_UPDATE_TIME,
-                0f,
-                this
-            )
-            val lastGpsKnownLocation =
-                locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            if (lastGpsKnownLocation != null) {
-                onLocationChanged(lastGpsKnownLocation)
-            }
-            println("debug: lastGpsKnownLocation: $lastGpsKnownLocation")
-        }
-
-        /*if (
-            locationManager.allProviders.contains(LocationManager.PASSIVE_PROVIDER)
-        ) {
-            println("debug: allProviders contains GPS_PROVIDER")
-            locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                MIN_TIME,
-                0f,
-                this
-            )
-            val lastGpsKnownLocation =
-                locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER)
-            if (lastGpsKnownLocation != null) {
-                onLocationChanged(lastGpsKnownLocation)
-            }
-            println("debug: lastGpsKnownLocation: $lastGpsKnownLocation")
-        }*/
-
-    }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String?>,
@@ -388,42 +304,6 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
         _mBinding.map.onPause() //needed for compass, my location overlays, v6.0.0 and up
     }
 
-    override fun onLocationChanged(location: Location) {
-        /* mapViewModel.myLocation = GeoPoint(location.latitude, location.longitude)
-        mapViewModel.saveLocation(location)*/
-    }
-
-    override fun onStatusChanged(
-        provider: String?,
-        status: Int,
-        extras: Bundle?
-    ) {
-        println("debug:onStatusChanged: $provider")
-    }
-
-    @SuppressLint("MissingPermission")
-    override fun onProviderEnabled(provider: String?) {
-        //TODO in bayad hatman gps bashe
-        println("debug:onProviderEnabled: $provider")
-        btnMyLocation.setImageDrawable(
-            ContextCompat.getDrawable(
-                context!!,
-                R.drawable.ic_gps
-            )
-        )
-    }
-
-    override fun onProviderDisabled(provider: String?) {
-        //TODO in bayad hatman gps bashe
-        println("debug:onProviderDisabled: $provider")
-        btnMyLocation.setImageDrawable(
-            ContextCompat.getDrawable(
-                context!!,
-                R.drawable.ic_gps_off
-            )
-        )
-    }
-
     override fun onMapTapped(geoPoint: GeoPoint) {
         /*println("debug: onMapTapped: " + geoPoint.latitude + " , " + geoPoint.longitude)
 
@@ -454,252 +334,3 @@ abstract class BaseMapFragment : Fragment(), LocationListener,
 
 
 }
-
-
-class BaseMapFragmentImpl : BaseMapFragment() {
-    private lateinit var userMarker: Marker
-    //private var routePolyline: Polyline? = null
-
-    override val myLocation: GeoPoint?
-        get() = Constants.mapStartPoint
-
-    override fun onBtnMyLocationClicked() {
-    }
-
-    override fun initMapSettings() {
-        super.initMapSettings()
-
-        mBinding.map.setUseDataConnection(true)
-        //Using Offline Map
-        //mBinding.map.setTileSource(MAPQUESTOSM)
-        mBinding.map.setTileSource(TileSourceFactory.MAPNIK)
-
-        val startPoint = Constants.mapStartPoint
-        // GeoPoint(52.516667, 13.383333)
-
-        val mapViewController: IMapController = mBinding.map.controller
-        mapViewController.setZoom(15)
-        mapViewController.setCenter(startPoint)
-
-
-        //marker
-        userMarker = DestMarker(mBinding.map, 48, 48)
-
-
-        "12,ب,735,48".split(",")
-            .run {
-                userMarker.infoWindow = DriverInfoWindow(mBinding.map).also {
-                    it.setPelakText(get(0), get(1), get(2), get(3))
-                }
-            }
-
-        // marker.image = ContextCompat.getDrawable(context!!, R.drawable.ic_mixer)!!
-        userMarker.title = "امیرحسین مهدی پور"
-        // marker.snippet = "توضیحات"
-        // marker.subDescription = "بیشتر"
-        addMarkerToMap(userMarker, startPoint, "")
-        mBinding.map.invalidate()
-
-
-        //poi
-        CoroutineScope(IO).launch {
-            val poiProvider = NominatimPOIProvider("OSMBonusPackTutoUserAgent")
-            //List of facilities is in strings.xml
-            val pois: ArrayList<POI> = poiProvider.getPOICloseTo(startPoint, "Fuel", 50, 0.1)
-
-            val poiMarkers = FolderOverlay(context)
-            withContext(Main) {
-                mBinding.map.overlays.add(poiMarkers)
-
-                val poiIcon: Drawable = ContextCompat.getDrawable(context!!, R.drawable.ic_map)!!
-                pois.forEach { poi ->
-                    val poiMarker = Marker(mBinding.map)
-                    poiMarker.title = poi.mType
-                    poiMarker.snippet = poi.mDescription
-                    poiMarker.position = poi.mLocation
-                    poiMarker.icon = poiIcon
-                    if (poi.mThumbnail != null) {
-                        poiMarker.image = BitmapDrawable(poi.mThumbnail)
-                    }
-                    poiMarkers.add(poiMarker)
-                    mBinding.map.invalidate()
-                }
-            }
-        }
-
-        //gereftan poi haye yek masir
-        //val pois = poiProvider.getPOIAlong(road.getRouteLow(), "fuel", 50, 2.0)
-
-        ////////////////////
-        /*mBinding.map.controller.setZoom(14)
-        mBinding.map.controller.setCenter(Constants.mapStartPoint)
-        mBinding.map.setMultiTouchControls(true)
-
-        setMapOfflineSource()*/
-
-        //==rotation gesture===========================================
-        /*val mRotationGestureOverlay = RotationGestureOverlay(mBinding.map)
-        mRotationGestureOverlay.isEnabled = true
-        mBinding.map.setMultiTouchControls(true)
-        mBinding.map.overlays.add(mRotationGestureOverlay)*/
-
-    }
-
-    override fun onMapTapped(geoPoint: GeoPoint) {
-        //animateMarker(userMarker, geoPoint)
-        val destRotation = userMarker.rotation - 90
-
-        println("debux: INIT: ${mBinding.map.mapOrientation}")
-        //rotateMarker(userMarker, destRotation)
-
-        animateCameraToMapOrientation(mBinding.map.mapOrientation - 90)
-
-    }
-
-    private fun setMapOfflineSource() {
-        val validFiles = ArrayList<File>()
-        val f = File(Environment.getExternalStorageDirectory().absolutePath + "/osmdroid/")
-        if (f.exists()) {
-            println("debux:file found")
-            val files = f.listFiles()
-            println("debux: $files")
-            if (files != null) {
-                println("debux:files is not null")
-                for (file in files) {
-                    if (file.isDirectory) {
-                        println("debux: ${file.name} isDir")
-                        continue
-                    }
-                    var name = file.name.toLowerCase()
-                    if (!name.contains(".")) {
-                        println("debux: ${file.name} , no extension")
-                        continue
-                    }
-                    name = name.substring(name.lastIndexOf(".") + 1)
-                    if (name.isEmpty()) {
-                        println("debux: ${file.name} , no extension")
-                        continue
-                    }
-
-
-                    println("debux:isArchiveSupported?")
-                    if (ArchiveFileFactory.isFileExtensionRegistered(name)) {
-                        println("debux:isArchiveSupported? -> YES ${file.name}")
-                        validFiles.add(file)
-                    }
-                }
-                if (validFiles.isNotEmpty()) {
-                    try {
-                        val tileProvider = OfflineTileProvider(
-                            SimpleRegisterReceiver(activity),
-                            validFiles.toTypedArray()
-                        )
-
-                        mBinding.map.tileProvider = tileProvider
-
-                        val archives = tileProvider.archives
-                        if (archives.isNotEmpty()) {
-                            val tileSources = archives[1].tileSources
-                            if (tileSources.isNotEmpty()) {
-                                val source = tileSources.iterator().next()
-                                mBinding.map.setTileSource(FileBasedTileSource.getSource(source))
-                                println(
-                                    "debux:FINISHED , source: ${
-                                        FileBasedTileSource.getSource(
-                                            source
-                                        )
-                                    }"
-                                )
-                            } else {
-                                println("debux:FINISHED->DEFAULT")
-                                mBinding.map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
-                            }
-                        } else {
-                            println("debux:FINISHED->DEFAULT")
-                            mBinding.map.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
-                        }
-                        mBinding.map.invalidate()
-                        //TODO mapListener.mapLoadSuccess(map, mapUtils)
-                        return
-                    } catch (ex: Exception) {
-                        ex.printStackTrace()
-                        //TODO mapListener.mapLoadFailed(ex.toString())
-                    }
-                }
-            }
-        } else {
-            //TODO should download Map and then call `setMapOfflineSource`
-            println("debux:file not found")
-            /*if (!FileUtils.isMapFileExists()) {
-                FileUtils.copyMapFilesToSdCard(activity, object : FileTransferListener() {
-                    fun onLoadFailed() {
-                        //WARNING Fabric.getInstance() custom event
-                        mapListener.mapLoadFailed("")
-                    }
-
-                    fun onLoadSuccess() {
-                        setMapOfflineSource()
-                    }
-                })
-            }*/
-        }
-    }
-
-}
-
-
-class MyCustomTileProvider(context: Context, mGemfArchiveFilename: File, mapView: MapView) {
-    init {
-        val registerReceiver = SimpleRegisterReceiver(context)
-
-// Create a custom tile source
-        val tileSource = XYTileSource(
-            "Mapnik", 1, 18, 256, ".png",
-            arrayOf(
-                "https://a.tile.openstreetmap.org/",
-                "https://b.tile.openstreetmap.org/",
-                "https://c.tile.openstreetmap.org/"
-            )
-        )
-
-// Create a file cache modular provider
-        val tileWriter = TileWriter()
-        val fileSystemProvider = MapTileFilesystemProvider(
-            registerReceiver, tileSource
-        )
-
-// Create an archive file modular tile provider
-        val gemfFileArchive =
-            GEMFFileArchive.getGEMFFileArchive(mGemfArchiveFilename) // Requires try/catch
-        val fileArchiveProvider = MapTileFileArchiveProvider(
-            registerReceiver, tileSource, arrayOf(gemfFileArchive)
-        )
-
-// Create a download modular tile provider
-        val networkAvailablityCheck = NetworkAvailabliltyCheck(context)
-        val downloaderProvider = MapTileDownloader(
-            tileSource, tileWriter, networkAvailablityCheck
-        )
-
-// Create a custom tile provider array with the custom tile source and the custom tile providers
-        val tileProviderArray = MapTileProviderArray(
-            tileSource,
-            registerReceiver,
-            arrayOf(fileSystemProvider, fileArchiveProvider, downloaderProvider)
-        )
-
-// Create the mapview with the custom tile provider array
-        mapView.tileProvider = tileProviderArray
-    }
-}
-
-val MAPQUESTOSM = XYTileSource(
-    "MapquestOSM",
-    0,
-    17,
-    256,
-    ".png",
-    arrayOf("http://openptmap.org/tiles/"),
-    "© OpenStreetMap contributors"
-)
-
