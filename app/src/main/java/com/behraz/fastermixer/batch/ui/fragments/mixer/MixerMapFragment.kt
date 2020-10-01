@@ -62,8 +62,6 @@ class MixerMapFragment : BaseMapFragment() {
     }
 
 
-
-
     private val userMarker by lazy {
         MixerMarker(mBinding.map).also {
             addMarkerToMap(it, it.position)
@@ -133,13 +131,17 @@ class MixerMapFragment : BaseMapFragment() {
                 println("debux: (MixerMapFragment-newMissionEventObserver) `newMissionEvent` Handler Routine Start ==================================")
                 if (mission === Mission.NoMission) {
                     println("debux: `newMissionEvent` NoMission")
-                    mBinding.map.overlayManager.remove(destMarker)
+                    mBinding.map.overlays.remove(destMarker)
+                    mBinding.map.overlays.remove(routePolyline)
+                    mBinding.map.invalidate()
                     toast("شما ماموریت دیگری ندارید")
                 } else {
                     println("debux: `newMissionEvent` NewMission")
                     //age ghablan track dar naghshe keshide shode bud
                     destMarker.position = mission.destCircleFence.center
                     destMarker.title = mission.conditionTitle
+                    mBinding.map.overlays.add(destMarker)
+                    mBinding.map.invalidate()
                     if (mapViewModel.myLocation != null) {
                         val remainingDistance =
                             mapViewModel.myLocation!!.distanceToAsDouble(mission.destCircleFence.center)
@@ -177,13 +179,13 @@ class MixerMapFragment : BaseMapFragment() {
             }
         })
 
-        mixerActivityViewModel.mixerLocation.observe(viewLifecycleOwner, Observer {
+        mixerActivityViewModel.userLocation.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                mapViewModel.myLocation = it.center
-                animateMarker(userMarker, it.center)
+                mapViewModel.myLocation = it.circleFence.center
+                animateMarker(userMarker, it.circleFence.center)
                 if (shouldCameraTrackMixer || isFirstCameraMove) {
                     isFirstCameraMove = false
-                    moveCamera(it.center)
+                    moveCamera(it.circleFence.center)
                 }
                 if (mapViewModel.shouldFindRoutesAfterUserLocationFound) {
                     mapViewModel.shouldFindRoutesAfterUserLocationFound = false
@@ -243,19 +245,19 @@ class MixerMapFragment : BaseMapFragment() {
     fun routeAgain() {
         /*todo add check if out of road then request to map.ir*/
         /*todo age location ha avaz shode bud ya khat keshide nashode bud req bezan*/
- /*       val mLoc = mapViewModel.myLocation
-        val destLoc =   mixerActivityViewModel.newMissionEvent.value?.peekContent()?.destLocation?.center
-        if (mLoc != null && destLoc != null) {
-            mapViewModel.getRoute(
-                listOf(
-                    mLoc,
-                    destLoc
-                )
-            )
-            destMarker.position = destLoc
-        } else {
-            toast("شما ماموریتی ندارید")
-        }*/
+        /*       val mLoc = mapViewModel.myLocation
+               val destLoc =   mixerActivityViewModel.newMissionEvent.value?.peekContent()?.destLocation?.center
+               if (mLoc != null && destLoc != null) {
+                   mapViewModel.getRoute(
+                       listOf(
+                           mLoc,
+                           destLoc
+                       )
+                   )
+                   destMarker.position = destLoc
+               } else {
+                   toast("شما ماموریتی ندارید")
+               }*/
         println("debux: routeAgain()============================================")
         println("debux: routeAgain: ${mapViewModel.getRouteResponse.value?.getRoutePoints()}")
         //In dokme vaghti visible mishe ke mission ro gerefte bashim va yek bar ham darkhast getRoute ro zade bashim pas niazi nist check konim (startPoint,Dest) reside hast ya na

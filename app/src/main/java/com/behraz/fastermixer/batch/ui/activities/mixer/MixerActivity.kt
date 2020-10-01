@@ -214,7 +214,7 @@ class MixerActivity : AppCompatActivity(),
         })
 
         viewModel.newMissionEvent.observe(this, Observer {
-            if (it.peekContent().conditionTitle.contains("پروژه")) {
+            if (it.peekContent().conditionTitle.contains("سمت مقصد")) {
                 mBinding.frameTimer.visibility = View.VISIBLE
                 viewModel.mixerTimerValue = 0
                 viewModel.mixerTimer = fixedRateTimer(period = 1000L) {

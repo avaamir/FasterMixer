@@ -14,30 +14,24 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PompActivityViewModel : ParentViewModel() {
+class PompActivityViewModel : VehicleViewModel() {
 
     @Volatile
-    private var isGetPompMissionsRequestActive = false
+    private var isGetCustomerRequestActive = false
+
+    @Volatile
+    private var isGetMixerRequestActive = false
 
     var shouldShowAllMixers = MutableLiveData<Boolean>(false)
 
-    private var isGetCustomerRequestActive = false
-    private var isGetMixerRequestActive = false
-
-
-    //we did not use Transformation because it is not always have a observer , But We Always have to update it's value for sorting mixers List, the only observer is in map fragment
-    val pompAreaInfo =
-        MutableLiveData<GetVehicleLocationResponse?>(null) //TODO implement this // get from GPS // curently it will receive from server from car GPS, In new Version Maybe Needed
-
-    private val getPompEvent = MutableLiveData(Event(Unit))
-
-    val allMixers = Transformations.switchMap(getPompEvent) {
+    private val getMixersEvent = MutableLiveData(Event(Unit))
+    val allMixers = Transformations.switchMap(getMixersEvent) {
         RemoteRepo.getAllMixers().map { response ->
             sortMixerResponse(response)
         }
     }
 
-    val requestMixers = Transformations.switchMap(getPompEvent) {
+    val requestMixers = Transformations.switchMap(getMixersEvent) {
         RemoteRepo.getRequestMixers(batchNotPomp = false).map { response ->
             isGetMixerRequestActive = false
             sortMixerResponse(response)
@@ -45,13 +39,13 @@ class PompActivityViewModel : ParentViewModel() {
     }
 
     private fun sortMixerResponse(response: Entity<List<Mixer>>?): Entity<List<Mixer>>? {
-        val sortedMixers = pompAreaInfo.value?.let { pompLocation ->
-            response?.entity?.let {
-                if (it.size == 1) {
-                    if (it[0].state != "تخلیه") it[0].normalizeStateByDistance(pompLocation.circleFence)
-                    it
+        val sortedMixers = userLocation.value?.let { pompLocation ->
+            response?.entity?.let { mixers ->
+                if (mixers.size == 1) {
+                    if (mixers[0].state != "تخلیه") mixers[0].normalizeStateByDistance(pompLocation.circleFence)
+                    mixers
                 } else
-                    it.sortedWith(
+                    mixers.sortedWith(
                         compareBy { mixer ->
                             mixer.latLng.distanceToAsDouble(pompLocation.circleFence.center)
                                 .also { distance ->
@@ -70,14 +64,6 @@ class PompActivityViewModel : ParentViewModel() {
             response
     }
 
-
-    val newMissionEvent = MutableLiveData<Event<Mission>>()
-    val getMissionError = MutableLiveData<Event<String>>()
-    private val getMixerMissionEvent = MutableLiveData(Event(Unit))
-    private val getMissionResponse = Transformations.switchMap(getMixerMissionEvent) {
-        RemoteRepo.getPompMission()
-    }
-
     private val getCustomerEvent = MutableLiveData(Event(Unit))
     val customers = Transformations.switchMap(getCustomerEvent) {
         println("debugx: getCustomerEvent called")
@@ -88,73 +74,23 @@ class PompActivityViewModel : ParentViewModel() {
         }
     }
 
-    init {
-        getMissionResponse.observeForever {
-            println("debux: `newMission` Come")
-            if (it != null) {
-                if (it.isSucceed) {
-                    //Check if serverMission is a new Mission or Already submitted
-                    val serverMission = it.entity
-                    if (serverMission != null) { //NewMission
-                        val currentMission = newMissionEvent.value?.peekContent()
-                        if (serverMission.missionId != currentMission?.missionId) { //serverMission is a NewMission
-                            newMissionEvent.value = Event(serverMission)
-                        }
-                    } else { //NoMission
-                        if (newMissionEvent.value?.peekContent() !== Mission.NoMission)
-                            newMissionEvent.value = Event(Mission.NoMission)
-                    }
-                } else {
-                    getMissionError.value = Event(it.message)  //TODO?
-                }
-            } else {
-                //TODO check this code , request again to map.ir
-                getMissionError.value = Event(Constants.SERVER_ERROR) //TODO?
-            }
-        }
-    }
-
-
-
-
     override fun onTimerTick() {
         user.value?.let { user ->  //TODO albate bazam momkene unauthorized bede chun shyad moghe check kardan login bashe ama bad if logout etefagh biofte, AMA jelo exception ro migire
             refreshCustomers()
             refreshMixers()
-            getPompLocation(user.equipmentId!!)
-            getPompMission()
+            getUserLocation(user.equipmentId!!)
+            getMission()
         }
     }
 
-    private fun getPompMission() {
-        if (!isGetPompMissionsRequestActive) {
-            CoroutineScope(Dispatchers.Main).launch {
-                getMixerMissionEvent.value = Event(Unit)
-            }
-        }
-    }
-
-    private fun getPompLocation(equipmentId: String) {
-        RemoteRepo.getEquipmentLocation(equipmentId) {
-            if (it != null) {
-                if (it.isSucceed) {
-                    //TODO az server vase pomp circle nemiyad khater hamin man mahduda ro ruye 100 gozashtam
-                    pompAreaInfo.value = it.entity
-                } else {
-                    //TODO what should i do?
-                }
-            }
-        }
-    }
-
-    fun refreshMixers() {
+    private fun refreshMixers() {
         if (!isGetMixerRequestActive) {
             isGetCustomerRequestActive = true
-            getPompEvent.postValue(Event(Unit))
+            getMixersEvent.postValue(Event(Unit))
         }
     }
 
-    fun refreshCustomers() {
+    private fun refreshCustomers() {
         if (!isGetCustomerRequestActive) {
             isGetCustomerRequestActive = true
             getCustomerEvent.postValue(Event(Unit))

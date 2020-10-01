@@ -105,7 +105,7 @@ class PompMapFragment : BaseMapFragment() {
 
     private fun subscribeObservers() {
 
-        pompViewModel.pompAreaInfo.observe(viewLifecycleOwner, Observer {
+        pompViewModel.userLocation.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 mapViewModel.myLocation = it.circleFence.center
                 animateMarker(userMarker, it.circleFence.center)
@@ -134,15 +134,15 @@ class PompMapFragment : BaseMapFragment() {
                 if (mission === Mission.NoMission) {
                     println("debux: `newMissionEvent` NoMission")
                     mBinding.map.overlays.remove(destMarker)
-                    routePolyline?.let { _route ->
-                        mBinding.map.overlays.remove(_route)
-                    }
+                    mBinding.map.overlays.remove(routePolyline)
                     toast("شما ماموریت دیگری ندارید")
                 } else {
                     println("debux: `newMissionEvent` NewMission")
                     //age ghablan track dar naghshe keshide shode bud
                     destMarker.position = mission.destCircleFence.center
                     destMarker.title = "مقصد ${mission.conditionTitle}"
+                    mBinding.map.overlays.add(destMarker)
+                    mBinding.map.invalidate()
                     if (mapViewModel.myLocation != null) {
                         onNewMission(mission)
                     } else {

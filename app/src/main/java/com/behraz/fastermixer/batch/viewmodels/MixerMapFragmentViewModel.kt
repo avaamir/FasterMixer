@@ -8,11 +8,10 @@ import com.behraz.fastermixer.batch.models.requests.route.GetRouteResponse
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import org.osmdroid.util.GeoPoint
 
-class MixerMapFragmentViewModel: ViewModel() {
+open class MixerMapFragmentViewModel : ViewModel() {
+    var myLocation: GeoPoint? = null
 
     var shouldFindRoutesAfterUserLocationFound: Boolean = false
-
-    var myLocation: GeoPoint? = null
 
 
     private var coordinates: MutableLiveData<List<GeoPoint>> = MutableLiveData()
@@ -27,8 +26,10 @@ class MixerMapFragmentViewModel: ViewModel() {
     }
 
     fun tryGetRouteAgain() {
-        println("debux:tryGetRouteAgain: ${coordinates.value}===============")
-        this.coordinates.value = this.coordinates.value
+        val lastCoordinates = this.coordinates.value
+        val dest = lastCoordinates!![1]
+        println("debux:tryGetRouteAgain: ${listOf(myLocation!!, dest)}===============")
+        this.coordinates.value = listOf(myLocation!!, dest)
     }
 
 
