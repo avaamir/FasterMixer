@@ -18,6 +18,7 @@ import com.behraz.fastermixer.batch.ui.osm.DestMarker
 import com.behraz.fastermixer.batch.ui.osm.DriverInfoWindow
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.LocationHandler
+import com.behraz.fastermixer.batch.utils.general.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,7 +43,13 @@ class BaseMapFragmentImpl : BaseMapFragment() {
     //private var routePolyline: Polyline? = null
 
     override val myLocation: GeoPoint?
-        get() = Constants.mapStartPoint
+        get() {
+            val mLoc = LocationProvider.location.value
+            if (mLoc != null) {
+                return GeoPoint(mLoc.latitude, mLoc.longitude)
+            }
+            return Constants.mapStartPoint
+        }
 
     override fun onBtnMyLocationClicked() {
     }
@@ -129,6 +136,7 @@ class BaseMapFragmentImpl : BaseMapFragment() {
         LocationProvider.location.observe(viewLifecycleOwner, Observer { location ->
             animateMarker(userMarker, GeoPoint(location.latitude, location.longitude))
             rotateMarker(userMarker, location.bearing)
+            toast("new Location")
         })
 
     }
