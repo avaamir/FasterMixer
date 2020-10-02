@@ -170,7 +170,7 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
                     toast("چیزی انتخاب نشده است")
                 }
             } else {
-                toast("List is NULL")
+                toast("com.behraz.fastermixer.batch.models.requests.openweathermap.List is NULL")
             }
         }
 

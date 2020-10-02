@@ -61,14 +61,12 @@ object MapService {
     @Synchronized
     fun setInternetConnectionListener(action: ApiService.InternetConnectionListener) {
         internetConnectionListener = action
-        println("debugt: apiServiceLevel: attached")
     }
 
     @Synchronized
     fun removeInternetConnectionListener(action: ApiService.InternetConnectionListener) {
         if (action == internetConnectionListener) {
             internetConnectionListener = null
-            println("debugt: apiServiceLevel: removed")
         }
     }
 

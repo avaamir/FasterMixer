@@ -137,7 +137,7 @@ class MapFragment : Fragment(), LocationListener, MyOSMMapView.OnMapClickListene
         }
     }
 
-    private fun drawPolyline(points: List<GeoPoint>): Polyline {
+    private fun drawPolyline(points: com.behraz.fastermixer.batch.models.requests.openweathermap.List<GeoPoint>): Polyline {
         val line = Polyline()
         line.setPoints(points)
         line.outlinePaint.color = Color.BLUE
@@ -412,13 +412,13 @@ class MapViewModel : ViewModel() {
     private val locations = FIFO<Location>(LOCATION_CAPACITY)
     var myLocation = GeoPoint(31.891413345001638, 54.35357135720551)
 
-    private var coordinates: MutableLiveData<List<GeoPoint>> = MutableLiveData()
+    private var coordinates: MutableLiveData<com.behraz.fastermixer.batch.models.requests.openweathermap.List<GeoPoint>> = MutableLiveData()
     val getRouteResponse: LiveData<GetRouteResponse?> =
         Transformations.switchMap(coordinates) { coordinates ->
             RemoteRepo.getRoute(coordinates = coordinates)
         }
 
-    fun getRoute(coordinates: List<GeoPoint>) {
+    fun getRoute(coordinates: com.behraz.fastermixer.batch.models.requests.openweathermap.List<GeoPoint>) {
         this.coordinates.value = coordinates
     }
 

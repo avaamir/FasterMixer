@@ -92,7 +92,7 @@ class BaseMapFragmentImpl : BaseMapFragment() {
         //poi
         CoroutineScope(Dispatchers.IO).launch {
             val poiProvider = NominatimPOIProvider("OSMBonusPackTutoUserAgent")
-            //List of facilities is in strings.xml
+            //com.behraz.fastermixer.batch.models.requests.openweathermap.List of facilities is in strings.xml
             val pois: ArrayList<POI> = poiProvider.getPOICloseTo(startPoint, "Fuel", 50, 0.1)
 
             val poiMarkers = FolderOverlay(context)

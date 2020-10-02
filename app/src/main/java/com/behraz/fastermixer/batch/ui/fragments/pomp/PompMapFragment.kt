@@ -71,7 +71,7 @@ class PompMapFragment : VehicleFragment() {
                 ArrayList(mapViewModel.markers.keys) // we need this for exclude mixers from original list if mixer not exists in new mixerList
 
             serverResponse.entity?.forEach { mixer ->
-                excludeMarkerList.remove(mixer.id) //do not need to exclude this mixer because it's exists in new List too
+                excludeMarkerList.remove(mixer.id) //do not need to exclude this mixer because it's exists in new com.behraz.fastermixer.batch.models.requests.openweathermap.List too
                 val mixerMarker = mapViewModel.markers[mixer.id]
                 if (mixerMarker == null) { //new mixer in pomp incoming list (taze az batch kharej shode va dare be pomp mire)
                     //add to marker hash map and MapView

@@ -82,10 +82,12 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
                 fab.setOnClickListener {
                     //mapFragment.setTileMapSource(MyMapTileSource.GoogleStandardRoadMap)
                     CoroutineScope(IO).launch {
-                        val response = WeatherService.client.getCurrentWeatherByCoordinates(
+                        val response = WeatherService.client.getForecastWeatherByCoordinates(
                             Constants.mapStartPoint.latitude.toString(),
                             Constants.mapStartPoint.longitude.toString()
                         )
+                        val x = response.body()
+
                     }
                 }
 
