@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="viewData"
+            type="com.behraz.fastermixer.batch.models.requests.openweathermap.WeatherViewData" />
+    </data>
+
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        style="@style/my_card_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/standard_margin"
+        android:layout_marginTop="@dimen/tiny_margin"
+        android:layout_marginRight="@dimen/standard_margin"
+        app:cardBackgroundColor="@color/gray50"
+        app:cardCornerRadius="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvCurrentTemp"
+                style="@style/my_black_bold_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:textSize="32sp"
+                android:text="@{viewData.temp}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="20°C" />
+
+            <TextView
+                android:id="@+id/tvDate"
+                style="@style/my_black_bold_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@{viewData.date}"
+                tools:text="1394/2/5"/>
+
+            <TextView
+                android:id="@+id/tvTime"
+                style="@style/my_black_bold_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/tvDate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvCurrentTemp"
+                android:text="@{viewData.time}"
+                tools:text="22 : 23" />
+
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginEnd="8dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                imageUrl="@{viewData.iconURL}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                tools:text="کمی ابری"
+                android:text="@{viewData.description}"
+                style="@style/my_black_bold_text"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView9"
+                app:layout_constraintEnd_toStartOf="@+id/imageView9"
+                app:layout_constraintTop_toTopOf="@+id/imageView9" />
+
+
+            <TextView
+                android:id="@+id/tvMaxTemp"
+                style="@style/my_black_bold_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="8dp"
+                android:text="@{viewData.maxTemp}"
+                tools:text="25°C"
+                app:layout_constraintBottom_toBottomOf="@+id/tvMaxTempLabel"
+                app:layout_constraintEnd_toStartOf="@+id/tvMaxTempLabel"
+                app:layout_constraintTop_toTopOf="@+id/tvMaxTempLabel"
+                />
+
+
+            <TextView
+                android:id="@+id/tvMinTemp"
+                style="@style/my_black_bold_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="10°C"
+                app:layout_constraintBottom_toBottomOf="@+id/tvMinTempLabel"
+                app:layout_constraintStart_toStartOf="@+id/tvMaxTemp"
+                app:layout_constraintTop_toTopOf="@+id/tvMinTempLabel" />
+
+
+
+            <TextView
+                android:id="@+id/tvMaxTempLabel"
+                style="@style/my_black_bold_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="بیشترین دما:"
+                app:layout_constraintEnd_toEndOf="@+id/imageView9"
+                app:layout_constraintTop_toBottomOf="@+id/imageView9" />
+
+            <TextView
+                android:id="@+id/tvMinTempLabel"
+                style="@style/my_black_bold_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                tools:text="کمترین دما:"
+                android:text="@{viewData.minTemp}"
+                app:layout_constraintEnd_toEndOf="@+id/tvMaxTempLabel"
+                app:layout_constraintTop_toBottomOf="@+id/tvMaxTempLabel" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</layout>

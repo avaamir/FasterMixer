@@ -2,6 +2,8 @@ package com.behraz.fastermixer.batch.utils.general
 
 import java.util.*
 import java.util.concurrent.TimeUnit
+import android.text.format.DateFormat
+import java.text.SimpleDateFormat
 
 fun getDateDiff(date1: Date, date2: Date, timeUnit: TimeUnit = TimeUnit.MINUTES): Long {
     val diffInMillies: Long = date2.time - date1.time
@@ -10,6 +12,19 @@ fun getDateDiff(date1: Date, date2: Date, timeUnit: TimeUnit = TimeUnit.MINUTES)
 
 operator fun Date.minus(date: Date): Long { //Return Duration In minutes
     return getDateDiff(this, date, TimeUnit.MINUTES)
+}
+
+/*fun getDateFromTimestamp(timestamp: Long): String {
+    val calendar = Calendar.getInstance(Locale.UK)
+    calendar.timeInMillis = timestamp * 1000
+    return DateFormat.format("yyyy-MM-dd HH:mm:ss", calendar).toString()
+}*/
+
+fun getDateFromTimestamp(timestamp: Long): Date {
+    val calendar = Calendar.getInstance()
+    val tz = TimeZone.getDefault()
+    calendar.add(Calendar.MILLISECOND, tz.getOffset(calendar.timeInMillis))
+    return Date(timestamp * 1000)
 }
 
 fun now(): Date = Calendar.getInstance().time

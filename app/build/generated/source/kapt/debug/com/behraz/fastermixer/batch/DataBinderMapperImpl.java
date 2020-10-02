@@ -26,6 +26,7 @@ import com.behraz.fastermixer.batch.databinding.ItemMessageVerticalBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ItemMixerBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ItemPlanBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ItemPompMixerBindingImpl;
+import com.behraz.fastermixer.batch.databinding.ItemWeatherBindingImpl;
 import com.behraz.fastermixer.batch.databinding.LayoutContactsFragmentBindingImpl;
 import com.behraz.fastermixer.batch.databinding.LayoutMapBindingImpl;
 import com.behraz.fastermixer.batch.databinding.LayoutMixerBindingImpl;
@@ -83,19 +84,21 @@ public class DataBinderMapperImpl extends DataBinderMapper {
 
   private static final int LAYOUT_ITEMPOMPMIXER = 20;
 
-  private static final int LAYOUT_LAYOUTCONTACTSFRAGMENT = 21;
+  private static final int LAYOUT_ITEMWEATHER = 21;
 
-  private static final int LAYOUT_LAYOUTMAP = 22;
+  private static final int LAYOUT_LAYOUTCONTACTSFRAGMENT = 22;
 
-  private static final int LAYOUT_LAYOUTMIXER = 23;
+  private static final int LAYOUT_LAYOUTMAP = 23;
 
-  private static final int LAYOUT_LAYOUTRECORDDIALOG = 24;
+  private static final int LAYOUT_LAYOUTMIXER = 24;
 
-  private static final int LAYOUT_VIEWFASTERMIXERUSERPANEL = 25;
+  private static final int LAYOUT_LAYOUTRECORDDIALOG = 25;
 
-  private static final int LAYOUT_VIEWITEMPROGRESS = 26;
+  private static final int LAYOUT_VIEWFASTERMIXERUSERPANEL = 26;
 
-  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(26);
+  private static final int LAYOUT_VIEWITEMPROGRESS = 27;
+
+  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(27);
 
   static {
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.activity_admin, LAYOUT_ACTIVITYADMIN);
@@ -118,6 +121,7 @@ public class DataBinderMapperImpl extends DataBinderMapper {
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_mixer, LAYOUT_ITEMMIXER);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_plan, LAYOUT_ITEMPLAN);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_pomp_mixer, LAYOUT_ITEMPOMPMIXER);
+    INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_weather, LAYOUT_ITEMWEATHER);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.layout_contacts_fragment, LAYOUT_LAYOUTCONTACTSFRAGMENT);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.layout_map, LAYOUT_LAYOUTMAP);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.layout_mixer, LAYOUT_LAYOUTMIXER);
@@ -255,6 +259,12 @@ public class DataBinderMapperImpl extends DataBinderMapper {
           }
           throw new IllegalArgumentException("The tag for item_pomp_mixer is invalid. Received: " + tag);
         }
+        case  LAYOUT_ITEMWEATHER: {
+          if ("layout/item_weather_0".equals(tag)) {
+            return new ItemWeatherBindingImpl(component, view);
+          }
+          throw new IllegalArgumentException("The tag for item_weather is invalid. Received: " + tag);
+        }
         case  LAYOUT_LAYOUTCONTACTSFRAGMENT: {
           if ("layout/layout_contacts_fragment_0".equals(tag)) {
             return new LayoutContactsFragmentBindingImpl(component, view);
@@ -336,7 +346,7 @@ public class DataBinderMapperImpl extends DataBinderMapper {
   }
 
   private static class InnerBrLookup {
-    static final SparseArray<String> sKeys = new SparseArray<String>(11);
+    static final SparseArray<String> sKeys = new SparseArray<String>(12);
 
     static {
       sKeys.put(0, "_all");
@@ -349,12 +359,13 @@ public class DataBinderMapperImpl extends DataBinderMapper {
       sKeys.put(7, "plan");
       sKeys.put(8, "progress");
       sKeys.put(9, "user");
-      sKeys.put(10, "viewModel");
+      sKeys.put(10, "viewData");
+      sKeys.put(11, "viewModel");
     }
   }
 
   private static class InnerLayoutIdLookup {
-    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(26);
+    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(27);
 
     static {
       sKeys.put("layout/activity_admin_0", com.behraz.fastermixer.batch.R.layout.activity_admin);
@@ -377,6 +388,7 @@ public class DataBinderMapperImpl extends DataBinderMapper {
       sKeys.put("layout/item_mixer_0", com.behraz.fastermixer.batch.R.layout.item_mixer);
       sKeys.put("layout/item_plan_0", com.behraz.fastermixer.batch.R.layout.item_plan);
       sKeys.put("layout/item_pomp_mixer_0", com.behraz.fastermixer.batch.R.layout.item_pomp_mixer);
+      sKeys.put("layout/item_weather_0", com.behraz.fastermixer.batch.R.layout.item_weather);
       sKeys.put("layout/layout_contacts_fragment_0", com.behraz.fastermixer.batch.R.layout.layout_contacts_fragment);
       sKeys.put("layout/layout_map_0", com.behraz.fastermixer.batch.R.layout.layout_map);
       sKeys.put("layout/layout_mixer_0", com.behraz.fastermixer.batch.R.layout.layout_mixer);

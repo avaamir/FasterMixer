@@ -17,8 +17,7 @@ import com.behraz.fastermixer.batch.ui.adapters.MixerAdapter
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.ui.fragments.BaseMapFragmentImpl
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
-import com.behraz.fastermixer.batch.utils.general.subscribeSignalStrengthChangeListener
-import com.behraz.fastermixer.batch.utils.general.toast
+import com.behraz.fastermixer.batch.utils.general.*
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.PendingResult
@@ -81,14 +80,14 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
                 fab.setOnClickListener {
                     //mapFragment.setTileMapSource(MyMapTileSource.GoogleStandardRoadMap)
-                    CoroutineScope(IO).launch {
+                    /*CoroutineScope(IO).launch {
                         val response = WeatherService.client.getForecastWeatherByCoordinates(
                             Constants.mapStartPoint.latitude.toString(),
                             Constants.mapStartPoint.longitude.toString()
                         )
                         val x = response.body()
 
-                    }
+                    */
                 }
 
 

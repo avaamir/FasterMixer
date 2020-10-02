@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 
 data class Forecast (
-	@SerializedName("dt") val dt : Int,
+	@SerializedName("dt") val timestamp : Long,
 	@SerializedName("main") val weatherDetails : WeatherDetails,
 	@SerializedName("weather") val weather : List<Weather>,
 	@SerializedName("clouds") val clouds : Clouds,

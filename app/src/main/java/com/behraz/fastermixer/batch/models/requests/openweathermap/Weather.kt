@@ -7,7 +7,5 @@ data class Weather (
 	@SerializedName("id") val id : Int,
 	@SerializedName("main") val main : String,
 	@SerializedName("description") val description : String,
-	@SerializedName("icon") private val icon : String
-) {
-	val iconURL get() = "http://openweathermap.org/img/wn/${icon}@4x.png"
-}
+	@SerializedName("icon") val icon : String
+)
