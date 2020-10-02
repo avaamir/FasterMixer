@@ -6,18 +6,23 @@ import com.behraz.fastermixer.batch.utils.general.getDateFromTimestamp
 data class WeatherViewData(
     val description: String,
     private val icon: String,
-    val temp: String,
-    val maxTemp: String,
-    val minTemp: String,
+    private val _temp: String,
+    private val _maxTemp: String,
+    private val _minTemp: String,
     val pressure: String,
     val humidity: String,
     val windSpeed: String,
     val windDegree: String,
     private val timestamp: Long
 ) {
-    val iconURL get() = "http://openweathermap.org/img/wn/${icon}@4x.png"
+    val iconURL get() = "http://openweathermap.org/img/wn/${icon}@2x.png"
     val date: String get() = "not yet implemented"
     val time: String get() = "not yet implemented"
+
+    val temp get() = "$_temp°C"
+    val maxTemp get() = "${_maxTemp}°C"
+    val minTemp get() = "${_minTemp}°C"
+
 
     constructor(current: CurrentWeatherByCoordinatesResponse) : this(
         current.weather[0].description,

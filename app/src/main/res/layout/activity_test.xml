@@ -1,21 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+<layout>
 
-    <FrameLayout
-        android:id="@+id/mapContainer"
+    <data>
+
+        <variable
+            name="viewData"
+            type="com.behraz.fastermixer.batch.models.requests.openweathermap.WeatherViewData" />
+    </data>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_margin="@dimen/large_margin"
-        android:layout_height="wrap_content"/>
+        <FrameLayout
+            android:id="@+id/mapContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="100dp"
+            android:visibility="gone"/>
+
+        <include
+            android:visibility="gone"
+            layout="@layout/item_weather"
+            app:viewData="@{viewData}" />
 
 
-</FrameLayout>
+    </FrameLayout>
+
+</layout>

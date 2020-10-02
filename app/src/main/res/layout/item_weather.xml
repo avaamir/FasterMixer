@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
             name="viewData"
             type="com.behraz.fastermixer.batch.models.requests.openweathermap.WeatherViewData" />
     </data>
 
-    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.cardview.widget.CardView
         style="@style/my_card_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,10 +27,10 @@
                 style="@style/my_black_bold_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:textSize="32sp"
                 android:text="@{viewData.temp}"
+                android:textSize="32sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="20°C" />
@@ -67,23 +67,23 @@
                 android:layout_height="64dp"
                 android:layout_marginEnd="8dp"
                 android:adjustViewBounds="true"
-                android:scaleType="centerInside"
-                imageUrl="@{viewData.iconURL}"
+                android:scaleType="fitXY"
+                weatherIcon="@{viewData.iconURL}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
             <TextView
                 android:id="@+id/tvDescription"
+                style="@style/my_black_bold_text"
+                android:textSize="22sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                tools:text="کمی ابری"
                 android:text="@{viewData.description}"
-                style="@style/my_black_bold_text"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView9"
                 app:layout_constraintEnd_toStartOf="@+id/imageView9"
-                app:layout_constraintTop_toTopOf="@+id/imageView9" />
+                app:layout_constraintTop_toTopOf="@+id/imageView9"
+                tools:text="کمی ابری" />
 
 
             <TextView
@@ -107,7 +107,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="10°C"
+                android:text="@{viewData.minTemp}"
+                tools:text="10°C"
                 app:layout_constraintBottom_toBottomOf="@+id/tvMinTempLabel"
                 app:layout_constraintStart_toStartOf="@+id/tvMaxTemp"
                 app:layout_constraintTop_toTopOf="@+id/tvMinTempLabel" />
@@ -129,8 +130,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                tools:text="کمترین دما:"
-                android:text="@{viewData.minTemp}"
+                android:text="کمترین دما:"
                 app:layout_constraintEnd_toEndOf="@+id/tvMaxTempLabel"
                 app:layout_constraintTop_toBottomOf="@+id/tvMaxTempLabel" />
 

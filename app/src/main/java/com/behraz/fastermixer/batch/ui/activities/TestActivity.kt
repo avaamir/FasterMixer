@@ -9,9 +9,12 @@ import android.os.BatteryManager
 import android.os.Bundle
 import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.behraz.fastermixer.batch.R
+import com.behraz.fastermixer.batch.databinding.ActivityTestBinding
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.CircleFence
+import com.behraz.fastermixer.batch.models.requests.openweathermap.WeatherViewData
 import com.behraz.fastermixer.batch.respository.apiservice.WeatherService
 import com.behraz.fastermixer.batch.ui.adapters.MixerAdapter
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
@@ -33,6 +36,8 @@ import java.io.File
 class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener, MixerAdapter.BatchAdapterInteraction {
 
+
+    private lateinit var mBinding: ActivityTestBinding
 
     private var counter = 0
 
@@ -67,6 +72,7 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test)
 
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_test)
 
         if (true) {
             val orientation = resources.configuration.orientation
@@ -80,14 +86,22 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
                 fab.setOnClickListener {
                     //mapFragment.setTileMapSource(MyMapTileSource.GoogleStandardRoadMap)
-                    /*CoroutineScope(IO).launch {
+                    CoroutineScope(IO).launch {
                         val response = WeatherService.client.getForecastWeatherByCoordinates(
                             Constants.mapStartPoint.latitude.toString(),
                             Constants.mapStartPoint.longitude.toString()
                         )
                         val x = response.body()
+                        val viewData = WeatherViewData(x!!.forecasts[0])
 
-                    */
+
+                        println("debug: Glide: ${viewData.iconURL}")
+                        mBinding.viewData = viewData
+
+
+
+                    }
+
                 }
 
 
