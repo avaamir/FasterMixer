@@ -125,6 +125,7 @@ class BaseMapFragmentImpl : BaseMapFragment() {
 
         setMapOfflineSource()*/
 
+
         //==rotation gesture===========================================
         /*val mRotationGestureOverlay = RotationGestureOverlay(mBinding.map)
         mRotationGestureOverlay.isEnabled = true

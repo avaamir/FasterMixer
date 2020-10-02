@@ -1,10 +1,10 @@
 package com.behraz.fastermixer.batch.respository.apiservice
 
-import com.behraz.fastermixer.batch.respository.apiservice.interceptors.NetworkConnectionInterceptor
 import com.behraz.fastermixer.batch.BuildConfig
+import com.behraz.fastermixer.batch.respository.apiservice.interceptors.NetworkConnectionInterceptor
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -12,24 +12,23 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object MapService {
+object WeatherService {
+    private const val Base_API_URL = "https://api.openweathermap.org/data/2.5/"
+    //private val token get() = Constants.OPEN_WEATHER_MAP_ACCESS_TOKEN
 
-    private const val Base_API_URL = "https://map.ir/"
-    private val token get() = Constants.MAP_IR_ACCESS_TOKEN
-
-    val client: MapClient by lazy {
-        retrofitBuilder.build().create(MapClient::class.java)
+    val client: WeatherClient by lazy {
+        retrofitBuilder.build().create(WeatherClient::class.java)
     }
 
     private var internetConnectionListener: ApiService.InternetConnectionListener? = null
 
     private val retrofitBuilder: Retrofit.Builder by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
         val client: OkHttpClient = OkHttpClient.Builder().apply {
-            addNetworkInterceptor { chain ->
+            addInterceptor { chain ->
+                val currentURL = chain.request().url
                 val newRequest: Request = chain.request().newBuilder()
-                    .removeHeader("Content-Type")
-                    .addHeader("Content-Type", "application/json")
-                    .addHeader("x-api-key", token)
+                    //adding {token, language, Units} at end of all request urls
+                    .url("$currentURL&appid=${Constants.OPEN_WEATHER_MAP_ACCESS_TOKEN}&lang=fa&units=metric")
                     .build()
                 chain.proceed(newRequest)
             }
@@ -44,7 +43,7 @@ object MapService {
                 }
 
                 override fun onInternetUnavailable() {
-                    CoroutineScope(Main).launch {
+                    CoroutineScope(Dispatchers.Main).launch {
                         internetConnectionListener?.onInternetUnavailable()
                     }
                 }
@@ -71,6 +70,5 @@ object MapService {
             println("debugt: apiServiceLevel: removed")
         }
     }
-
 
 }

@@ -9,6 +9,27 @@ import org.osmdroid.util.MapTileIndex
 
 object MyMapTileSource {
 
+
+    val OpenWeatherMap: OnlineTileSourceBase by lazy { //https://openweathermap.org/api/weathermaps -> list of layers are here, layers will replace with /temp_new/ in base url for different layer
+        object : XYTileSource(
+            "GoogleAlteredRoadMap",
+            0, 19, 256, ".png",
+            arrayOf(
+                "https://tile.openweathermap.org/map"
+            )
+        ) {
+            override fun getTileURLString(pMapTileIndex: Long): String {
+                return baseUrl.toString() + "/temp_new/${
+                    MapTileIndex.getZoom(pMapTileIndex)
+                }/${
+                    MapTileIndex.getX(pMapTileIndex)
+                }/${
+                    MapTileIndex.getY(pMapTileIndex)
+                }.png?appid=${Constants.OPEN_WEATHER_MAP_ACCESS_TOKEN}"
+            }
+        }
+    }
+
     val MapBoxSat by lazy {
         MapBoxTileSource().also {
             it.accessToken = Constants.MAPBOX_ACCESS_TOKEN
@@ -37,9 +58,11 @@ object MyMapTileSource {
             )
         ) {
             override fun getTileURLString(pMapTileIndex: Long): String? {
-                return baseUrl.toString() + "/vt/lyrs=r&x=" + MapTileIndex.getX(pMapTileIndex) + "&y=" + MapTileIndex.getY(
-                    pMapTileIndex
-                ) + "&z=" + MapTileIndex.getZoom(pMapTileIndex)
+                return baseUrl.toString() + "/vt/lyrs=r&x=${MapTileIndex.getX(pMapTileIndex)}&y=${
+                    MapTileIndex.getY(
+                        pMapTileIndex
+                    )
+                }&z=${MapTileIndex.getZoom(pMapTileIndex)}"
             }
         }
     }

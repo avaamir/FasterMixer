@@ -8,32 +8,26 @@ import android.net.Uri
 import android.os.BatteryManager
 import android.os.Bundle
 import android.os.Environment
-import android.os.Handler
-import android.provider.SyncStateContract
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.behraz.fastermixer.batch.utils.general.AppUpdater
 import com.behraz.fastermixer.batch.R
-import com.behraz.fastermixer.batch.models.LatLng
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.CircleFence
+import com.behraz.fastermixer.batch.respository.apiservice.WeatherService
 import com.behraz.fastermixer.batch.ui.adapters.MixerAdapter
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
-import com.behraz.fastermixer.batch.ui.fragments.BaseMapFragment
 import com.behraz.fastermixer.batch.ui.fragments.BaseMapFragmentImpl
-import com.behraz.fastermixer.batch.ui.fragments.mixer.MixerMapFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.subscribeSignalStrengthChangeListener
 import com.behraz.fastermixer.batch.utils.general.toast
-import com.behraz.fastermixer.batch.utils.map.MyMapTileSource
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.PendingResult
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_test.*
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.util.GeoPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 import java.io.File
 
 
@@ -86,9 +80,14 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
                     .commit()
 
                 fab.setOnClickListener {
-                   mapFragment.setTileMapSource(MyMapTileSource.GoogleStandardRoadMap)
+                    //mapFragment.setTileMapSource(MyMapTileSource.GoogleStandardRoadMap)
+                    CoroutineScope(IO).launch {
+                        val response = WeatherService.client.getCurrentWeatherByCoordinates(
+                            Constants.mapStartPoint.latitude.toString(),
+                            Constants.mapStartPoint.longitude.toString()
+                        )
+                    }
                 }
-
 
 
             }
