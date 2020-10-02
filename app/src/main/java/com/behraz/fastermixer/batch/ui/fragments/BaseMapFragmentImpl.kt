@@ -136,7 +136,7 @@ class BaseMapFragmentImpl : BaseMapFragment() {
         LocationProvider.location.observe(viewLifecycleOwner, Observer { location ->
             animateMarker(userMarker, GeoPoint(location.latitude, location.longitude))
             rotateMarker(userMarker, location.bearing)
-            toast("new Location")
+           // toast("new Location")
         })
 
     }

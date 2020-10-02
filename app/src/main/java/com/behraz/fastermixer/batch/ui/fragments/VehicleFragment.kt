@@ -45,6 +45,7 @@ abstract class VehicleFragment : BaseMapFragment() {
 
 
     private var isFirstCameraMove = true
+
     //age map ro scroll kard dg track nakone ama age dokme myLocation ro zad trackesh bokone
     protected var shouldCameraTrackUser = true
 
@@ -130,14 +131,16 @@ abstract class VehicleFragment : BaseMapFragment() {
                     println("debux: `newMissionEvent` NoMission")
                     mBinding.map.overlays.remove(destMarker)
                     mBinding.map.overlays.remove(routePolyline)
+                    routePolyline = null
                     mBinding.map.invalidate()
                     toast("شما ماموریت دیگری ندارید")
                 } else {
                     println("debux: `newMissionEvent` NewMission")
-                    //age ghablan track dar naghshe keshide shode bud
                     destMarker.position = mission.destCircleFence.center
                     destMarker.title = mission.conditionTitle
-                    mBinding.map.overlays.add(destMarker)
+                    if (routePolyline == null) { //age routePolyline null bashe yaani halat noMission pish umade va destMarker az map remove shode
+                        mBinding.map.overlays.add(destMarker)
+                    }
                     mBinding.map.invalidate()
                     if (mMapViewModel.myLocation != null) {
                         onNewMission(mission)
@@ -213,7 +216,6 @@ abstract class VehicleFragment : BaseMapFragment() {
         //In dokme vaghti visible mishe ke mission ro gerefte bashim va yek bar ham darkhast getRoute ro zade bashim pas niazi nist check konim (startPoint,Dest) reside hast ya na
         mMapViewModel.tryGetRouteAgain()
     }
-
 
 
 }

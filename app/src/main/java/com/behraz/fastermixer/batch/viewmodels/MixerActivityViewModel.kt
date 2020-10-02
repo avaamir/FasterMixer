@@ -14,4 +14,11 @@ class MixerActivityViewModel : VehicleActivityViewModel() {
             getMission()
         }
     }
+
+
+    override fun onCleared() {
+        super.onCleared()
+        mixerTimer?.cancel()
+        mixerTimer?.purge()
+    }
 }
