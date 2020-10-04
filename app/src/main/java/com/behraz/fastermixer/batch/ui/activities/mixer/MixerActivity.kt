@@ -215,8 +215,6 @@ class MixerActivity : AppCompatActivity(),
 
         viewModel.newMissionEvent.observe(this, Observer {
             if (it.peekContent().conditionTitle.contains("سمت مقصد")) {
-                mBinding.frameTimer.visibility = View.VISIBLE
-
                 viewModel.mixerTimerValue = (now() - (it.peekContent().startMissionTime ?: now())).toInt()
                 viewModel.mixerTimer = fixedRateTimer(period = 1000L) {
                     viewModel.mixerTimerValue++
@@ -233,24 +231,33 @@ class MixerActivity : AppCompatActivity(),
                     }
 
                     val time = millisToTimeString(viewModel.mixerTimerValue * 1000L).also { println("debux:$it") }
-                        .substring(10)
-                    val minutes = time.substring(0, 2)
-                    val seconds = time.substring(5)
+                        .substring(5)
+                    val hours = time.substring(0, 2)
+                    val minutes = time.substring(5, 7)
+                    val seconds = time.substring(10, 12)
 
                     runOnUiThread {
+                        mBinding.tvTimerHour.setTextColor(stateColor)
                         mBinding.tvTimerMinute.setTextColor(stateColor)
-                        mBinding.tvTimerMiddle.setTextColor(stateColor)
+                        mBinding.tvTimerMiddle1.setTextColor(stateColor)
+                        mBinding.tvTimerMiddle2.setTextColor(stateColor)
                         mBinding.tvTimerSeconds.setTextColor(stateColor)
 
+                        mBinding.tvTimerHour.text = hours
                         mBinding.tvTimerMinute.text = minutes
                         mBinding.tvTimerSeconds.text = seconds
-                        if (viewModel.mixerTimerValue % 2 == 0)
-                            mBinding.tvTimerMiddle.visibility = View.INVISIBLE
-                        else
-                            mBinding.tvTimerMiddle.visibility = View.VISIBLE
+                        if (viewModel.mixerTimerValue % 2 == 0) {
+                            mBinding.tvTimerMiddle1.visibility = View.INVISIBLE
+                            mBinding.tvTimerMiddle2.visibility = View.INVISIBLE
+                        }
+                        else {
+                            mBinding.tvTimerMiddle1.visibility = View.VISIBLE
+                            mBinding.tvTimerMiddle2.visibility = View.VISIBLE
+                        }
                     }
 
                 }
+                mBinding.frameTimer.visibility = View.VISIBLE
             } else {
                 viewModel.mixerTimer?.cancel()
                 viewModel.mixerTimer?.purge()

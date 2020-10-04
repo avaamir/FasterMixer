@@ -126,53 +126,85 @@
 
             </FrameLayout>
 
-            <LinearLayout
+            <androidx.cardview.widget.CardView
                 android:id="@+id/frame_timer"
                 android:layout_width="wrap_content"
-                android:gravity="center"
-                android:background="#190090ff"
+                android:visibility="invisible"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="@+id/mapContainer"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:cardBackgroundColor="#190090ff"
+                app:cardCornerRadius="5dp"
                 android:layout_marginTop="8dp"
-                android:padding="@dimen/standard_margin"
-                android:orientation="horizontal">
+                >
 
-                <TextView
-                    android:id="@+id/tvTimerMinute"
-                    android:layout_width="50dp"
-                    android:gravity="right"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/seven_segment"
-                    android:textColor="@color/logout_red"
-                    android:textSize="36sp"
-                    android:layout_marginRight="4dp"
-                    tools:text="39" />
-
-                <TextView
-                    android:id="@+id/tvTimerMiddle"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_gravity="center"
+                    android:layout_width="200dp"
                     android:gravity="center"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/seven_segment"
-                    android:textColor="@color/logout_red"
-                    android:layout_marginRight="4dp"
-                    android:textSize="36sp"
-                    android:text=":" />
+                    android:paddingTop="@dimen/standard_margin"
+                    android:paddingBottom="@dimen/standard_margin"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvTimerHour"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:fontFamily="@font/seven_segment"
+                        android:textColor="@color/logout_red"
+                        android:textSize="36sp"
+                        android:layout_marginRight="4dp"
+                        tools:text="02" />
+
+                    <TextView
+                        android:id="@+id/tvTimerMiddle_1"
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/seven_segment"
+                        android:textColor="@color/logout_red"
+                        android:layout_marginRight="0dp"
+                        android:textSize="36sp"
+                        android:text=":" />
 
 
-                <TextView
-                    android:id="@+id/tvTimerSeconds"
-                    android:layout_width="50dp"
-                    android:gravity="left"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/seven_segment"
-                    android:textColor="@color/logout_red"
-                    android:textSize="36sp"
-                    tools:text="23" />
+                    <TextView
+                        android:id="@+id/tvTimerMinute"
+                        android:layout_width="48dp"
+                        android:gravity="center"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/seven_segment"
+                        android:textColor="@color/logout_red"
+                        android:textSize="36sp"
+                        tools:text="39" />
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/tvTimerMiddle_2"
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/seven_segment"
+                        android:textColor="@color/logout_red"
+                        android:layout_marginRight="4dp"
+                        android:textSize="36sp"
+                        android:text=":" />
+
+
+                    <TextView
+                        android:id="@+id/tvTimerSeconds"
+                        android:layout_width="50dp"
+                        android:gravity="left"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/seven_segment"
+                        android:textColor="@color/logout_red"
+                        android:textSize="36sp"
+                        tools:text="23" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
 
             <androidx.cardview.widget.CardView

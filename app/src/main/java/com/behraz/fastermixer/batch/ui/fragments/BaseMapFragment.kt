@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.behraz.fastermixer.batch.R
@@ -125,8 +126,8 @@ abstract class BaseMapFragment : Fragment(),
     protected fun drawPolyline(points: List<GeoPoint>): Polyline {
         val line = Polyline()
         line.setPoints(points)
-        line.outlinePaint.color = Color.CYAN
-        line.outlinePaint.alpha = 100
+        line.outlinePaint.color = ContextCompat.getColor(context!!, R.color.btn_blue)
+        line.outlinePaint.alpha = 150
         _mBinding.map.overlays.add(line)
         //moveCamera(GeoPoint(line.bounds.centerLatitude, line.bounds.centerLongitude), 1.0) //todo how move camera to polygon area
         //line.outlinePaint.strokeWidth = 3f
