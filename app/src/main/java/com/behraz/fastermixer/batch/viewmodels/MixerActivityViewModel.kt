@@ -9,10 +9,8 @@ class MixerActivityViewModel : VehicleActivityViewModel() {
 
 
     override fun onTimerTick() {
-        user.value?.let { user ->  //TODO albate bazam momkene unauthorized bede chun shyad moghe check kardan login bashe ama bad if logout etefagh biofte, AMA jelo exception ro migire
-            getUserLocation(user.equipmentId!!) //get location from Car GPS
-            getMission()
-        }
+        getUserLocation(user.value!!.equipmentId!!) //get location from Car GPS
+        getMission()
     }
 
 

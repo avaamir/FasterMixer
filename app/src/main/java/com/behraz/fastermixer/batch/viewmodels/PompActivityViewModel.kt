@@ -68,25 +68,23 @@ class PompActivityViewModel : VehicleActivityViewModel() {
     }
 
     override fun onTimerTick() {
-        user.value?.let { user ->  //TODO albate bazam momkene unauthorized bede chun shyad moghe check kardan login bashe ama bad if logout etefagh biofte, AMA jelo exception ro migire
-            refreshCustomers()
-            refreshMixers()
-            getUserLocation(user.equipmentId!!)
-            getMission()
-        }
+        refreshCustomers()
+        refreshMixers()
+        getUserLocation(user.value!!.equipmentId!!)
+        getMission()
     }
 
     private fun refreshMixers() {
         if (!isGetMixerRequestActive) {
             isGetCustomerRequestActive = true
-            getMixersEvent.postValue(Event(Unit))
+            getMixersEvent?.postValue(Event(Unit)) //chun timer dar kelas super call mishe inja hanuz init nashode khater hamin not null budan check mishe
         }
     }
 
     private fun refreshCustomers() {
         if (!isGetCustomerRequestActive) {
             isGetCustomerRequestActive = true
-            getCustomerEvent.postValue(Event(Unit))
+            getCustomerEvent?.postValue(Event(Unit)) //chun timer dar kelas super call mishe inja hanuz init nashode khater hamin not null budan check mishe
         }
     }
 }

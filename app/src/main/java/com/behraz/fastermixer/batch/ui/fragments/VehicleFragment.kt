@@ -1,15 +1,23 @@
 package com.behraz.fastermixer.batch.ui.fragments
 
+import android.graphics.Color
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.behraz.fastermixer.batch.models.Mission
+import com.behraz.fastermixer.batch.models.requests.CircleFence
+import com.behraz.fastermixer.batch.models.requests.Fence
+import com.behraz.fastermixer.batch.models.requests.PolygonFence
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
+import com.behraz.fastermixer.batch.ui.fragments.pomp.PompMapFragment
 import com.behraz.fastermixer.batch.ui.osm.DestMarker
 import com.behraz.fastermixer.batch.ui.osm.MixerMarker
+import com.behraz.fastermixer.batch.ui.osm.PompMarker
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
+import com.behraz.fastermixer.batch.utils.general.exhaustive
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.VehicleMapFragmentViewModel
 import com.behraz.fastermixer.batch.viewmodels.VehicleActivityViewModel
@@ -17,7 +25,9 @@ import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent
 import org.osmdroid.events.ZoomEvent
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.overlay.Polygon
 import org.osmdroid.views.overlay.Polyline
+import java.lang.IllegalStateException
 
 abstract class VehicleFragment : BaseMapFragment() {
 
@@ -25,6 +35,8 @@ abstract class VehicleFragment : BaseMapFragment() {
     abstract val vehicleActivityViewModel: VehicleActivityViewModel
     abstract val mMapViewModel: VehicleMapFragmentViewModel
 
+    private var routePolyline: Polyline? = null
+    private var polygon: Polygon? = null
     private val destMarker: DestMarker by lazy {
         DestMarker(mBinding.map, 42, 42).also {
             addMarkerToMap(
@@ -40,8 +52,6 @@ abstract class VehicleFragment : BaseMapFragment() {
     }
 
     private var btnRoute: View? = null
-
-    private var routePolyline: Polyline? = null
 
 
     private var isFirstCameraMove = true
@@ -62,7 +72,7 @@ abstract class VehicleFragment : BaseMapFragment() {
     override val myLocation: GeoPoint? get() = mMapViewModel.myLocation
 
     private val userMarker by lazy {
-        MixerMarker(mBinding.map).also {
+        (if (this is PompMapFragment) PompMarker(mBinding.map) else MixerMarker(mBinding.map)).also {
             addMarkerToMap(it, it.position)
             it.setOnMarkerClickListener { _, _ ->
                 shouldCameraTrackUser = true
@@ -131,6 +141,7 @@ abstract class VehicleFragment : BaseMapFragment() {
                     println("debux: `newMissionEvent` NoMission")
                     mBinding.map.overlays.remove(destMarker)
                     mBinding.map.overlays.remove(routePolyline)
+                    mBinding.map.overlays.remove(polygon)
                     routePolyline = null
                     mBinding.map.invalidate()
                     toast("شما ماموریت دیگری ندارید")
@@ -138,7 +149,10 @@ abstract class VehicleFragment : BaseMapFragment() {
                     println("debux: `newMissionEvent` NewMission")
                     destMarker.position = mission.destFence.center
                     destMarker.title = mission.conditionTitle
+                    polygon = preparePolygon(mission.destFence)
+
                     if (routePolyline == null) { //age routePolyline null bashe yaani halat noMission pish umade va destMarker az map remove shode
+                        mBinding.map.overlays.add(polygon)
                         mBinding.map.overlays.add(destMarker)
                     }
                     mBinding.map.invalidate()
@@ -189,9 +203,33 @@ abstract class VehicleFragment : BaseMapFragment() {
         })
     }
 
-    private fun onNewMission(mission: Mission) {
-        val remainingDistance = mission.destFence.distanceTo(mMapViewModel.myLocation!!)
+    private fun preparePolygon(fence: Fence): Polygon {
+        return when (fence) {
+            is CircleFence -> {
+                Polygon().also {
+                    it.actualPoints.addAll(
+                        Polygon.pointsAsCircle(
+                            fence.center,
+                            fence.radius
+                        )
+                    )
+                }
+            }
+            is PolygonFence -> {
+                Polygon(mBinding.map).also {
+                    it.actualPoints.addAll(fence.points)
+                }
+            }
+            else -> throw IllegalStateException("implement this type of polygon")
+        }.apply {
+            fillPaint.color = Color.CYAN
+            fillPaint.alpha = 100
+            outlinePaint.color = Color.YELLOW
+            outlinePaint.strokeWidth = 2f
+        }
+    }
 
+    private fun onNewMission(mission: Mission) {
         if (!mission.destFence.contains(mMapViewModel.myLocation!!)) { //not yet enter in fence
             println("debux: getRouteCalled")
             mMapViewModel.getRoute(
