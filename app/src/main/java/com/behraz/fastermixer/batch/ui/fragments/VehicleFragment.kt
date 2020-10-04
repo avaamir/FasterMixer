@@ -109,7 +109,7 @@ abstract class VehicleFragment : BaseMapFragment() {
 
 
     protected open fun subscribeObservers() {
-        vehicleActivityViewModel.userLocation.observe(viewLifecycleOwner, Observer {
+        vehicleActivityViewModel.getUserLocationResponse.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 mMapViewModel.myLocation = it.circleFence.center
                 animateMarker(userMarker, it.circleFence.center)
@@ -136,7 +136,7 @@ abstract class VehicleFragment : BaseMapFragment() {
                     toast("شما ماموریت دیگری ندارید")
                 } else {
                     println("debux: `newMissionEvent` NewMission")
-                    destMarker.position = mission.destCircleFence.center
+                    destMarker.position = mission.destFence.center
                     destMarker.title = mission.conditionTitle
                     if (routePolyline == null) { //age routePolyline null bashe yaani halat noMission pish umade va destMarker az map remove shode
                         mBinding.map.overlays.add(destMarker)
@@ -190,14 +190,14 @@ abstract class VehicleFragment : BaseMapFragment() {
     }
 
     private fun onNewMission(mission: Mission) {
-        val remainingDistance =
-            mMapViewModel.myLocation!!.distanceToAsDouble(mission.destCircleFence.center)
-        if (remainingDistance > mission.destCircleFence.radius) {
+        val remainingDistance = mission.destFence.distanceTo(mMapViewModel.myLocation!!)
+
+        if (!mission.destFence.contains(mMapViewModel.myLocation!!)) { //not yet enter in fence
             println("debux: getRouteCalled")
             mMapViewModel.getRoute(
                 listOf(
                     mMapViewModel.myLocation!!,
-                    mission.destCircleFence.center
+                    mission.destFence.center
                 )
             )
             /*TODO Add Animation*/

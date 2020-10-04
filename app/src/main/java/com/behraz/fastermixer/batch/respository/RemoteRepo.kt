@@ -3,8 +3,7 @@ package com.behraz.fastermixer.batch.respository
 import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Plan
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
-import com.behraz.fastermixer.batch.models.requests.CircleFence
-import com.behraz.fastermixer.batch.models.requests.behraz.SeenMessageRequest
+import com.behraz.fastermixer.batch.models.requests.Fence
 import com.behraz.fastermixer.batch.models.requests.behraz.*
 import com.behraz.fastermixer.batch.models.requests.route.GetRouteResponse
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
@@ -161,7 +160,7 @@ object RemoteRepo {
 
     fun getBatchLocation( //be khater in ke mikhastam callback dar bashe va niazi be liveData nabud az Reflection estefade nakardam va dasti code zadam
         equipmentId: String,
-        onResponse: (CircleFence?) -> Unit
+        onResponse: (Fence?) -> Unit
     ) {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         CoroutineScope(IO + serverJobs).launchApi({

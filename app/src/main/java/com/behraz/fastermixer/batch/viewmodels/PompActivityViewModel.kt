@@ -33,7 +33,7 @@ class PompActivityViewModel : VehicleActivityViewModel() {
     }
 
     private fun sortMixerResponse(response: Entity<List<Mixer>>?): Entity<List<Mixer>>? {
-        val sortedMixers = userLocation.value?.let { pompLocation ->
+        val sortedMixers = getUserLocationResponse.value?.let { pompLocation ->
             response?.entity?.let { mixers ->
                 if (mixers.size == 1) {
                     if (mixers[0].state != "تخلیه") mixers[0].normalizeStateByDistance(pompLocation.circleFence)
@@ -41,11 +41,10 @@ class PompActivityViewModel : VehicleActivityViewModel() {
                 } else
                     mixers.sortedWith(
                         compareBy { mixer ->
-                            mixer.latLng.distanceToAsDouble(pompLocation.circleFence.center)
-                                .also { distance ->
+                            mixer.location.distanceToAsDouble(pompLocation.circleFence.center)
+                                .also {
                                     mixer.normalizeStateByDistance(
-                                        distance,
-                                        pompLocation.circleFence.radius
+                                        pompLocation.circleFence
                                     )
                                 }
                         }

@@ -1,17 +1,18 @@
 package com.behraz.fastermixer.batch.models.requests.behraz
 
 import com.behraz.fastermixer.batch.models.requests.CircleFence
+import com.behraz.fastermixer.batch.models.requests.Fence
 import com.google.gson.annotations.SerializedName
-import org.osmdroid.util.GeoPoint
 import java.util.*
 
 class GetBatchLocationResponse(
     // private val equipmentID: String,
     // private val geofenceID: String,
-    private val geofencepoint: String
+    @SerializedName("geofencepoint")
+    private val strFence: String
 ) {
-    val equipmentLocation: CircleFence
-        get() = CircleFence.circleFenceToCenterGeoPoint(geofencepoint, null)
+    val equipmentLocation: Fence
+        get() = Fence.strToFence(strFence)
 }
 
 class GetEquipmentRequest(@SerializedName("id") val id: String)
@@ -32,5 +33,5 @@ class GetVehicleLocationResponse (
     @SerializedName("clientDatetime")
     val dateTime: Date
 ) {
-    val circleFence: CircleFence get() = CircleFence.circleFenceToCenterGeoPoint(locationStr, dateTime)
+    val circleFence: CircleFence get() = CircleFence.strToCircleFence(locationStr)
 }

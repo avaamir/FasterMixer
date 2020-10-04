@@ -77,17 +77,17 @@ class PompMapFragment : VehicleFragment() {
                     //add to marker hash map and MapView
                     mapViewModel.markers[mixer.id] =
                         MixerMarker(mBinding.map).also { _marker ->
-                            _marker.position = mixer.latLng
+                            _marker.position = mixer.location
                             mixer.pelak.split(",")
                                 .run { _marker.setPelakText(get(0), get(1), get(2), get(3)) }
                             addMarkerToMap(
                                 _marker,
-                                mixer.latLng,
+                                mixer.location,
                                 mixer.driverName
                             )
                         }
                 } else { //mixer already exists, update location
-                    animateMarker(mixerMarker, mixer.latLng)
+                    animateMarker(mixerMarker, mixer.location)
                 }
             }
             excludeMarkerList.forEach { mixerId ->
@@ -107,7 +107,7 @@ class PompMapFragment : VehicleFragment() {
 
     fun focusOnMixer(mixer: Mixer) {
         shouldCameraTrackUser = false
-        moveCamera(mixer.latLng)
+        moveCamera(mixer.location)
         mapViewModel.markers[mixer.id]?.showInfoWindow()
     }
 

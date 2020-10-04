@@ -1,6 +1,7 @@
 package com.behraz.fastermixer.batch.models
 
 import com.behraz.fastermixer.batch.models.requests.CircleFence
+import com.behraz.fastermixer.batch.models.requests.Fence
 import com.google.gson.annotations.SerializedName
 import java.util.*
 
@@ -25,5 +26,5 @@ data class Mission(
         val NoMission = Mission("In Ro Dorost KON", "", "0", null, null, null)
     }
 
-    val destCircleFence: CircleFence get() = CircleFence.circleFenceToCenterGeoPoint(_destLocation, dataDateTime)
+    val destFence: Fence get() = Fence.strToFence(_destLocation)
 }

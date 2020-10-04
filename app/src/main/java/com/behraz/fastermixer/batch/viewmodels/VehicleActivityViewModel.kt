@@ -22,7 +22,7 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
 
 
     //TODO  get from GPS // curently it will receive from server from car GPS, In new Version Maybe Needed
-    val userLocation = MutableLiveData<GetVehicleLocationResponse?>() //we did not use Transformation because it is not always have a observer , But We Always have to update it's value for sorting mixers com.behraz.fastermixer.batch.models.requests.openweathermap.List, the only observer is in map fragment
+    val getUserLocationResponse = MutableLiveData<GetVehicleLocationResponse?>() //we did not use Transformation because it is not always have a observer , But We Always have to update it's value for sorting mixers, the only observer is in map fragment
 
 
     val newMissionEvent = MutableLiveData<Event<Mission>>()
@@ -76,7 +76,7 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
                 isGetUserLocationRequestActive = false
                 if (it != null) {
                     if (it.isSucceed) {
-                        userLocation.value =
+                        getUserLocationResponse.value =
                             it.entity //age observer nadashte bashe set nemishe, age scenario avaz shod deghat kon, alan mapFragment Observersh hast
                     } else {
                         //TODO what should i do?

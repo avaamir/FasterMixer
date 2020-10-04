@@ -1,6 +1,6 @@
 package com.behraz.fastermixer.batch.models
 
-import com.behraz.fastermixer.batch.models.requests.CircleFence
+import com.behraz.fastermixer.batch.models.requests.Fence
 import com.google.gson.annotations.SerializedName
 import org.osmdroid.util.GeoPoint
 import java.util.*
@@ -45,7 +45,7 @@ data class Mixer(
     val capacity: Float            // zarifyat machine
 ) {
     val driverName get() = _driverName ?: ""
-    val latLng: GeoPoint get() = GeoPoint(lat.toDouble(), lng.toDouble())
+    val location: GeoPoint get() = GeoPoint(lat.toDouble(), lng.toDouble())
     val loadInfo: LoadInfo
         get() =
             LoadInfo(
@@ -55,36 +55,23 @@ data class Mixer(
                 productTypeName = productTypeName
             )
 
-    fun normalizeStateByDistance(destArea: CircleFence) {
-        val meterDistance = destArea.center.distanceToAsDouble(latLng)
-        val temp = meterDistance.toInt() / 100
-        return when {
-            meterDistance < destArea.radius -> "وارد محدوده شد"
-            temp == 0 || temp / 10 == 0 -> "${meterDistance.toInt()} متر" //meter
-            temp % 10 == 0 -> "${temp / 10} کیلومتر" //km
-            else -> "${temp / 10}.${temp % 10} کیلومتر" //km
-        }.let {
-            state = if (it.contains("رسید") || it.contains("محدوده"))
-                it
-            else
-                "$it مانده"
-        }
+    fun normalizeStateByDistance(destArea: Fence) {
+        val meterDistance = destArea.center.distanceToAsDouble(location)
+         val temp = meterDistance.toInt() / 100
+         return when {
+             destArea.contains(location) -> "وارد محدوده شد"
+             temp == 0 || temp / 10 == 0 -> "${meterDistance.toInt()} متر" //meter
+             temp % 10 == 0 -> "${temp / 10} کیلومتر" //km
+             else -> "${temp / 10}.${temp % 10} کیلومتر" //km
+         }.let {
+             state = if (it.contains("رسید") || it.contains("محدوده"))
+                 it
+             else
+                 "$it مانده"
+         }
     }
 
-    fun normalizeStateByDistance(meterDistance: Double, radius: Double) {
-        val temp = meterDistance.toInt() / 100
-        return when {
-            meterDistance < radius -> "وارد محدوده شد"
-            temp == 0 || temp / 10 == 0 -> "${meterDistance.toInt()} متر" //meter
-            temp % 10 == 0 -> "${temp / 10} کیلومتر" //km
-            else -> "${temp / 10}.${temp % 10} کیلومتر" //km
-        }.let {
-            state = if (it.contains("محدوده"))
-                it
-            else
-                "$it مانده"
-        }
-    }
+
 }
 
 data class LoadInfo(
