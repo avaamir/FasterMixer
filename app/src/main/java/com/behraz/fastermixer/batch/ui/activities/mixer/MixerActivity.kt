@@ -216,7 +216,8 @@ class MixerActivity : AppCompatActivity(),
         viewModel.newMissionEvent.observe(this, Observer {
             if (it.peekContent().conditionTitle.contains("سمت مقصد")) {
                 mBinding.frameTimer.visibility = View.VISIBLE
-                viewModel.mixerTimerValue = ((now() - (it.peekContent().startMissionTime ?: now())) / 1000).toInt()
+
+                viewModel.mixerTimerValue = (now() - (it.peekContent().startMissionTime ?: now())).toInt()
                 viewModel.mixerTimer = fixedRateTimer(period = 1000L) {
                     viewModel.mixerTimerValue++
                     val stateColor = when {
@@ -231,7 +232,7 @@ class MixerActivity : AppCompatActivity(),
                         }
                     }
 
-                    val time = millisToTimeString(viewModel.mixerTimerValue * 1000L)
+                    val time = millisToTimeString(viewModel.mixerTimerValue * 1000L).also { println("debux:$it") }
                         .substring(10)
                     val minutes = time.substring(0, 2)
                     val seconds = time.substring(5)

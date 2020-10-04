@@ -6,6 +6,9 @@ class MixerActivityViewModel : VehicleActivityViewModel() {
 
     var mixerTimer: Timer? = null
     var mixerTimerValue = 0
+        set(value) {
+            field = value
+        }
 
 
     override fun onTimerTick() {
