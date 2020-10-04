@@ -9,6 +9,7 @@ data class CircleFence(
     val dateTime : Date?
 ) {
 
+    //POLYGON (31.900338 54.347477,31.897351 54.350138,31.897788 54.351082,31.900703 54.348335,31.900338 54.347477)
     companion object {
         fun circleFenceToCenterGeoPoint(
             geofencepoint: String, date: Date?

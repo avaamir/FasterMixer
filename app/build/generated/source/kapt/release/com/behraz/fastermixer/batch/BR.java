@@ -21,5 +21,7 @@ public class BR {
 
   public static final int user = 9;
 
-  public static final int viewModel = 10;
+  public static final int viewData = 10;
+
+  public static final int viewModel = 11;
 }

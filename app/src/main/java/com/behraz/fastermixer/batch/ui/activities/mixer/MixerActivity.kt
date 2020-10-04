@@ -216,7 +216,7 @@ class MixerActivity : AppCompatActivity(),
         viewModel.newMissionEvent.observe(this, Observer {
             if (it.peekContent().conditionTitle.contains("سمت مقصد")) {
                 mBinding.frameTimer.visibility = View.VISIBLE
-                viewModel.mixerTimerValue = 0
+                viewModel.mixerTimerValue = ((now() - (it.peekContent().startMissionTime ?: now())) / 1000).toInt()
                 viewModel.mixerTimer = fixedRateTimer(period = 1000L) {
                     viewModel.mixerTimerValue++
                     val stateColor = when {

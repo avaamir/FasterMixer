@@ -2,12 +2,8 @@ package com.behraz.fastermixer.batch.ui.fragments
 
 import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,13 +12,10 @@ import android.view.animation.LinearInterpolator
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.LayoutMapBinding
 import com.behraz.fastermixer.batch.ui.osm.MyOSMMapView
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
-import com.behraz.fastermixer.batch.utils.general.LocationHandler
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.utils.map.MyMapTileSource
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -30,13 +23,17 @@ import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.ITileSource
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
+import kotlin.math.abs
 
 //** read overpassAPI -> https://github.com/MKergall/osmbonuspack/wiki/OverpassAPIProvider
 
 abstract class BaseMapFragment : Fragment(),
     MyOSMMapView.OnMapClickListener {
+
+    protected val mapAnimationUtil = MapSingleMarkerAnimationUtil()
 
     private var currentTileSourceIndex = 0
 
@@ -137,7 +134,7 @@ abstract class BaseMapFragment : Fragment(),
     }
 
 
-    fun setTileMapSource(tileSource: ITileSource) {
+    protected fun setTileMapSource(tileSource: ITileSource) {
         _mBinding.map.setTileSource(tileSource)
     }
 
@@ -169,6 +166,10 @@ abstract class BaseMapFragment : Fragment(),
         mCompassOverlay.enableCompass()
         _mBinding.map.overlays.add(mCompassOverlay)*/
 
+        //TODO TEST CHECK THIS CODE
+        _mBinding.map.isHorizontalMapRepetitionEnabled = false
+        _mBinding.map.isVerticalMapRepetitionEnabled = false
+
         _mBinding.map.setOnMapClickListener(this)
     }
 
@@ -188,76 +189,6 @@ abstract class BaseMapFragment : Fragment(),
         marker.title = title
         _mBinding.map.overlays.add(marker)
     }
-
-    fun rotateMarker(
-        marker: Marker,
-        destRotation: Float,
-        interpolator: TimeInterpolator = LinearInterpolator()
-    ) {
-        /**
-         * rotation
-         * jam shodan => anti clock wise
-         * tafrigh shdan => clock wise
-         **/
-        val startRotation = marker.rotation
-        if (startRotation == destRotation) {
-            return
-        }
-        val animator = ValueAnimator.ofFloat(0f, 1f)
-        animator.duration = 500L
-        animator.interpolator = interpolator
-        animator.addUpdateListener {
-            marker.rotation = startRotation + ((destRotation - startRotation) * it.animatedFraction)
-            _mBinding.map.postInvalidate()
-        }
-        animator.start()
-    }
-
-    fun animateCameraToMapOrientation(
-        destOrientation: Float,
-        interpolator: TimeInterpolator = LinearInterpolator()
-    ) {
-        val startOrientation = mBinding.map.mapOrientation
-        if (destOrientation == startOrientation) {
-            return
-        }
-        val animator = ValueAnimator.ofFloat(0f, 1f)
-        animator.duration = 1000L
-        animator.interpolator = interpolator
-        animator.addUpdateListener {
-            mBinding.map.mapOrientation =
-                startOrientation + ((destOrientation - startOrientation) * it.animatedFraction)
-            println("debux: ${mBinding.map.mapOrientation}")
-            mBinding.map.postInvalidate()
-        }
-        animator.start()
-    }
-
-    fun animateMarker(
-        marker: Marker,
-        destGeoPoint: GeoPoint,
-        interpolator: TimeInterpolator = LinearInterpolator()
-    ) {
-        if ((marker.position.latitude == destGeoPoint.latitude) && (marker.position.longitude == destGeoPoint.longitude))
-            return
-        //val projection = mBinding.map.projection
-        //val startPoint = projection.toPixels(marker.position, null)
-        val startGeoPoint = marker.position //projection.fromPixels(startPoint.x, startPoint.y)
-        val animator = ValueAnimator.ofFloat(0f, 1f)
-        animator.interpolator = interpolator
-        animator.duration = 500L
-
-        animator.addUpdateListener {
-            val weight = it.animatedFraction
-            val lng = weight * destGeoPoint.longitude + (1 - weight) * startGeoPoint.longitude
-            val lat = weight * destGeoPoint.latitude + (1 - weight) * startGeoPoint.latitude
-
-            marker.position = GeoPoint(lat, lng)
-            _mBinding.map.postInvalidate()
-        }
-        animator.start()
-    }
-
 
     fun moveCamera(geoPoint: GeoPoint, zoom: Double = 18.0) {
         _mBinding.map.controller.run {
@@ -304,6 +235,11 @@ abstract class BaseMapFragment : Fragment(),
         _mBinding.map.onPause() //needed for compass, my location overlays, v6.0.0 and up
     }
 
+    override fun onDestroyView() {
+        _mBinding.map.onDetach()
+        super.onDestroyView()
+    }
+
     override fun onMapTapped(geoPoint: GeoPoint) {
         /*println("debug: onMapTapped: " + geoPoint.latitude + " , " + geoPoint.longitude)
 
@@ -333,4 +269,171 @@ abstract class BaseMapFragment : Fragment(),
     }
 
 
+    fun rotateMarker(
+        marker: Marker,
+        destRotation: Float,
+        interpolator: TimeInterpolator = LinearInterpolator()
+    ) {
+        mapAnimationUtil.rotateMarker(_mBinding.map, marker, destRotation, interpolator)
+    }
+
+    fun animateCameraToMapOrientation(
+        destOrientation: Float,
+        interpolator: TimeInterpolator = LinearInterpolator()
+    ) {
+        mapAnimationUtil.animateCameraToMapOrientation(_mBinding.map, destOrientation, interpolator)
+    }
+
+    fun animateMarker(
+        marker: Marker,
+        destGeoPoint: GeoPoint,
+        interpolator: TimeInterpolator = LinearInterpolator()
+    ) {
+        mapAnimationUtil.animateMarker(_mBinding.map, marker, destGeoPoint, interpolator)
+    }
+
+
 }
+
+class MapSingleMarkerAnimationUtil { //TODO in faghat vase ye marker dorost kar mikone , dorost ine ke rotateMarker va aniamteMarker dar class marker bashe na inja
+
+    private var rotateAnimator: ValueAnimator? = null
+    private var moveMarkerAnimator: ValueAnimator? = null
+    private var orientationAnimator: ValueAnimator? = null
+
+
+    private var lastDestOrientation = 0f
+    private var lastDestRotation = 0f
+    private var lastDestLocation: GeoPoint? = null
+
+    fun rotateMarker(
+        map: MapView,
+        marker: Marker,
+        destRotation: Float,
+        interpolator: TimeInterpolator = LinearInterpolator(),
+        duration: Long = 500L
+    ) {
+        /*rotation: jam shodan => anti clock wise , tafrigh shdan => clock wise*/
+
+
+        if (destRotation == lastDestRotation) {
+            return
+        }
+
+        lastDestRotation = destRotation
+        rotateAnimator?.cancel()
+
+        val startRotation = marker.rotation
+        if (startRotation == destRotation) {
+            return
+        }
+
+        /*if (destRotation > 360) {
+            destRotation %= 360
+        }
+        if (startRotation > 360) {
+            startRotation %= 360
+        }*/
+
+        var diff = destRotation - startRotation
+        if (abs(diff) > 180) {
+            if (diff > 0) {
+                diff -= 360
+            } else {
+                diff += 360
+            }
+        }
+
+        rotateAnimator = ValueAnimator.ofFloat(0f, 1f).also { animator ->
+            animator.duration = duration
+            animator.interpolator = interpolator
+            animator.addUpdateListener {
+                marker.rotation =
+                    startRotation + ((diff) * it.animatedFraction)
+                map.postInvalidate()
+            }
+            animator.start()
+        }
+
+    }
+
+    fun animateCameraToMapOrientation(
+        map: MapView,
+        destOrientation: Float,
+        interpolator: TimeInterpolator = LinearInterpolator(),
+        duration: Long = 500L
+    ) {
+
+        if (destOrientation == lastDestOrientation) {
+            return
+        }
+
+        orientationAnimator?.cancel()
+        lastDestOrientation = destOrientation
+
+        val startOrientation = map.mapOrientation
+        if (destOrientation == startOrientation) {
+            return
+        }
+
+        var diff = destOrientation - startOrientation
+        if (abs(diff) > 180) {
+            if (diff > 0) {
+                diff -= 360
+            } else {
+                diff += 360
+            }
+        }
+
+        orientationAnimator = ValueAnimator.ofFloat(0f, 1f).also { animator ->
+            animator.duration = duration
+            animator.interpolator = interpolator
+            animator.addUpdateListener {
+                map.mapOrientation =
+                    startOrientation + (diff * it.animatedFraction)
+                println("debux: ${map.mapOrientation}")
+                map.postInvalidate()
+            }
+            animator.start()
+        }
+    }
+
+    fun animateMarker(
+        map: MapView,
+        marker: Marker,
+        destGeoPoint: GeoPoint,
+        interpolator: TimeInterpolator = LinearInterpolator(),
+        duration: Long = 1000L
+    ) {
+
+        if ((lastDestLocation?.latitude == destGeoPoint.latitude) && (lastDestLocation?.longitude == destGeoPoint.longitude)) {
+            return
+        }
+
+        moveMarkerAnimator?.cancel()
+        lastDestLocation = destGeoPoint
+
+        if ((marker.position.latitude == destGeoPoint.latitude) && (marker.position.longitude == destGeoPoint.longitude))
+            return
+
+        //val projection = mBinding.map.projection
+        //val startPoint = projection.toPixels(marker.position, null)
+        val startGeoPoint = marker.position //projection.fromPixels(startPoint.x, startPoint.y)
+        moveMarkerAnimator = ValueAnimator.ofFloat(0f, 1f).also { animator ->
+            animator.interpolator = interpolator
+            animator.duration = duration
+
+            animator.addUpdateListener {
+                val weight = it.animatedFraction
+                val lng = weight * destGeoPoint.longitude + (1 - weight) * startGeoPoint.longitude
+                val lat = weight * destGeoPoint.latitude + (1 - weight) * startGeoPoint.latitude
+
+                marker.position = GeoPoint(lat, lng)
+                map.postInvalidate()
+            }
+            animator.start()
+        }
+    }
+
+}
+

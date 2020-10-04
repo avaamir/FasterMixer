@@ -11,6 +11,7 @@ import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.behraz.fastermixer.batch.R
+import com.behraz.fastermixer.batch.SampleHeadingCompassUp
 import com.behraz.fastermixer.batch.databinding.ActivityTestBinding
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.CircleFence

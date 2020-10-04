@@ -12,7 +12,7 @@ data class Mission(
     @SerializedName("missionID")
     private val _missionId: String,
     @SerializedName("startMissionTime")
-    val startMissionTime: String?,
+    val startMissionTime: Date?,
     @SerializedName("endMissionTime")
     val endMissionTime: String?,
     @SerializedName("clientDatetime")

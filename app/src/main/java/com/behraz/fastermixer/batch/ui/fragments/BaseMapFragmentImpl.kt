@@ -1,31 +1,14 @@
 package com.behraz.fastermixer.batch.ui.fragments
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
-import android.os.Bundle
+import android.content.pm.ActivityInfo
 import android.os.Environment
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.behraz.fastermixer.batch.R
+import com.behraz.fastermixer.batch.app.LocationCompassProvider
 import com.behraz.fastermixer.batch.ui.osm.DestMarker
 import com.behraz.fastermixer.batch.ui.osm.DriverInfoWindow
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
-import com.behraz.fastermixer.batch.utils.general.LocationHandler
-import com.behraz.fastermixer.batch.utils.general.toast
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.osmdroid.api.IMapController
-import org.osmdroid.bonuspack.location.NominatimPOIProvider
-import org.osmdroid.bonuspack.location.POI
 import org.osmdroid.tileprovider.MapTileProviderArray
 import org.osmdroid.tileprovider.modules.*
 import org.osmdroid.tileprovider.tilesource.FileBasedTileSource
@@ -34,9 +17,9 @@ import org.osmdroid.tileprovider.tilesource.XYTileSource
 import org.osmdroid.tileprovider.util.SimpleRegisterReceiver
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Marker
 import java.io.File
+import kotlin.math.abs
 
 class BaseMapFragmentImpl : BaseMapFragment() {
     private lateinit var userMarker: Marker
@@ -44,7 +27,7 @@ class BaseMapFragmentImpl : BaseMapFragment() {
 
     override val myLocation: GeoPoint?
         get() {
-            val mLoc = LocationProvider.location.value
+            val mLoc = LocationCompassProvider.location.value
             if (mLoc != null) {
                 return GeoPoint(mLoc.latitude, mLoc.longitude)
             }
@@ -52,6 +35,16 @@ class BaseMapFragmentImpl : BaseMapFragment() {
         }
 
     override fun onBtnMyLocationClicked() {
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        //unlock the orientation
+        activity!!.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
 
     override fun initMapSettings() {
@@ -90,7 +83,7 @@ class BaseMapFragmentImpl : BaseMapFragment() {
 
 
         //poi
-        CoroutineScope(Dispatchers.IO).launch {
+        /*CoroutineScope(Dispatchers.IO).launch {
             val poiProvider = NominatimPOIProvider("OSMBonusPackTutoUserAgent")
             //com.behraz.fastermixer.batch.models.requests.openweathermap.List of facilities is in strings.xml
             val pois: ArrayList<POI> = poiProvider.getPOICloseTo(startPoint, "Fuel", 50, 0.1)
@@ -113,7 +106,7 @@ class BaseMapFragmentImpl : BaseMapFragment() {
                     mBinding.map.invalidate()
                 }
             }
-        }
+        }*/
 
         //gereftan poi haye yek masir
         //val pois = poiProvider.getPOIAlong(road.getRouteLow(), "fuel", 50, 2.0)
@@ -132,14 +125,36 @@ class BaseMapFragmentImpl : BaseMapFragment() {
         mBinding.map.setMultiTouchControls(true)
         mBinding.map.overlays.add(mRotationGestureOverlay)*/
 
-        LocationProvider.setupLocationManager(context!!)
 
-        LocationProvider.location.observe(viewLifecycleOwner, Observer { location ->
+        LocationCompassProvider.fixDeviceOrientationForCompassCalculation(activity!!)
+        LocationCompassProvider.start(context!!)
+
+        LocationCompassProvider.location.observe(viewLifecycleOwner, Observer { location ->
             animateMarker(userMarker, GeoPoint(location.latitude, location.longitude))
-            rotateMarker(userMarker, location.bearing)
-           // toast("new Location")
+            // toast("new Location")
         })
 
+        LocationCompassProvider.userAngle.observe(viewLifecycleOwner, Observer {
+            println("debug:$it")
+            if (abs(it.angle - lastOrientation) > 0.5f) {
+                lastOrientation = it.angle
+                println("debug2:$it")
+                animateCameraToMapOrientation(it.angle)
+            }
+        })
+
+        LocationCompassProvider.northAngle.observe(viewLifecycleOwner, Observer {
+            println("debugN: $it")
+        })
+
+
+    }
+
+    var lastOrientation = 0f
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocationCompassProvider.stop(context!!)
     }
 
     override fun onMapTapped(geoPoint: GeoPoint) {
@@ -149,7 +164,7 @@ class BaseMapFragmentImpl : BaseMapFragment() {
         println("debux: INIT: ${mBinding.map.mapOrientation}")
         //rotateMarker(userMarker, destRotation)
 
-        animateCameraToMapOrientation(mBinding.map.mapOrientation - 90)
+        // animateCameraToMapOrientation(mBinding.map.mapOrientation - 90)
 
     }
 
@@ -271,9 +286,9 @@ class MyCustomTileProvider(context: Context, mGemfArchiveFilename: File, mapView
         )
 
 // Create a download modular tile provider
-        val networkAvailablityCheck = NetworkAvailabliltyCheck(context)
+        val networkAvailabilityCheck = NetworkAvailabliltyCheck(context)
         val downloaderProvider = MapTileDownloader(
-            tileSource, tileWriter, networkAvailablityCheck
+            tileSource, tileWriter, networkAvailabilityCheck
         )
 
 // Create a custom tile provider array with the custom tile source and the custom tile providers
@@ -297,80 +312,3 @@ val MAPQUESTOSM = XYTileSource(
     arrayOf("http://openptmap.org/tiles/"),
     "© OpenStreetMap contributors"
 )
-
-
-object LocationProvider : LocationListener {
-
-    private val _location = MutableLiveData<Location>()
-    val location: LiveData<Location> = _location
-
-    private val _providerStateChanged = MutableLiveData<String>()
-    val providerStateChanged: LiveData<String> = _providerStateChanged
-
-
-    fun isProviderEnable(manager: LocationManager, provider: String) =
-        manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-
-    @SuppressLint("MissingPermission")
-    fun setupLocationManager(context: Context) {
-
-        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-        //TODO check this code mabey it casuse to not updating location
-        val provider = when {
-            locationManager.allProviders.contains(LocationManager.GPS_PROVIDER) -> {
-                println("debug: allProviders contains GPS_PROVIDER")
-                LocationManager.GPS_PROVIDER
-            }
-            locationManager.allProviders.contains(LocationManager.NETWORK_PROVIDER) -> {
-                println("debug: allProviders contains NETWORK_PROVIDER")
-                LocationManager.NETWORK_PROVIDER
-            }
-            /*locationManager.allProviders.contains(LocationManager.PASSIVE_PROVIDER) -> {
-                println("debug: allProviders contains NETWORK_PROVIDER")
-                LocationManager.PASSIVE_PROVIDER
-            }*/
-            else -> null
-        }
-
-        if (provider != null) {
-            locationManager.requestLocationUpdates(
-                provider,
-                LocationHandler.MIN_LOCATION_UPDATE_TIME,
-                0f,
-                this
-            )
-            val lastKnownLocation = locationManager.getLastKnownLocation(provider)
-            println("debug: lastGpsKnownLocation: $lastKnownLocation")
-            if (lastKnownLocation != null) {
-                onLocationChanged(lastKnownLocation)
-            }
-        }
-    }
-
-
-    override fun onLocationChanged(location: Location) {
-        _location.value = location
-    }
-
-    override fun onStatusChanged(
-        provider: String?,
-        status: Int,
-        extras: Bundle?
-    ) {
-        println("debug:onStatusChanged: $provider")
-    }
-
-    @SuppressLint("MissingPermission")
-    override fun onProviderEnabled(provider: String?) {
-        //TODO in bayad hatman gps bashe
-        println("debug:onProviderEnabled: $provider")
-        _providerStateChanged.value = provider
-    }
-
-    override fun onProviderDisabled(provider: String?) {
-        //TODO in bayad hatman gps bashe
-        println("debug:onProviderDisabled: $provider")
-        _providerStateChanged.value = provider
-    }
-}
