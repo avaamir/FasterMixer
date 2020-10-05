@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import com.behraz.fastermixer.batch.app.LocationCompassProvider
 import com.behraz.fastermixer.batch.ui.osm.DestMarker
 import com.behraz.fastermixer.batch.ui.osm.DriverInfoWindow
+import com.behraz.fastermixer.batch.ui.osm.ImageMarker
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.MapTileProviderArray
@@ -23,7 +24,7 @@ import java.io.File
 import kotlin.math.abs
 
 class BaseMapFragmentImpl : BaseMapFragment() {
-    private lateinit var userMarker: Marker
+    private lateinit var userMarker: ImageMarker
     //private var routePolyline: Polyline? = null
 
     override val myLocation: GeoPoint?

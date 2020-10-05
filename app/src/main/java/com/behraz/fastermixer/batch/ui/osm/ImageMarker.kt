@@ -7,12 +7,17 @@ import android.graphics.Interpolator
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.view.animation.LinearInterpolator
+import com.behraz.fastermixer.batch.ui.fragments.MarkerAnimationUtil
 import com.behraz.fastermixer.batch.utils.general.getBitmapFromVectorDrawable
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 
-open class ImageMarker(drawableId: Int,val  mapView: MapView, width: Int = 42, height: Int = 42) : Marker(mapView) {
+open class ImageMarker(drawableId: Int, mapView: MapView, width: Int = 42, height: Int = 42) :
+    Marker(mapView) {
+
+    val markerAnimation = MarkerAnimationUtil()
+
     init {
         val markerBitmap =
             getBitmapFromVectorDrawable(
@@ -31,7 +36,7 @@ open class ImageMarker(drawableId: Int,val  mapView: MapView, width: Int = 42, h
             )
         )
         this.icon = dr
-        this.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+        this.setAnchor(ANCHOR_CENTER, ANCHOR_BOTTOM)
     }
 
     init {

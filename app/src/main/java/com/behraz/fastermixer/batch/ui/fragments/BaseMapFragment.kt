@@ -3,7 +3,6 @@ package com.behraz.fastermixer.batch.ui.fragments
 import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +14,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.LayoutMapBinding
+import com.behraz.fastermixer.batch.ui.osm.ImageMarker
 import com.behraz.fastermixer.batch.ui.osm.MyOSMMapView
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.toast
@@ -34,7 +34,11 @@ import kotlin.math.abs
 abstract class BaseMapFragment : Fragment(),
     MyOSMMapView.OnMapClickListener {
 
-    protected val mapAnimationUtil = MapSingleMarkerAnimationUtil()
+    private var orientationAnimator: ValueAnimator? = null
+    private var lastDestOrientation = 0f
+
+
+    protected val mapAnimationUtil = MarkerAnimationUtil()
 
     private var currentTileSourceIndex = 0
 
@@ -272,45 +276,74 @@ abstract class BaseMapFragment : Fragment(),
 
 
     fun rotateMarker(
-        marker: Marker,
+        marker: ImageMarker,
         destRotation: Float,
         interpolator: TimeInterpolator = LinearInterpolator()
     ) {
-        mapAnimationUtil.rotateMarker(_mBinding.map, marker, destRotation, interpolator)
+        marker.markerAnimation.rotateMarker(_mBinding.map, marker, destRotation, interpolator)
+    }
+
+    fun animateMarker(
+        marker: ImageMarker,
+        destGeoPoint: GeoPoint,
+        interpolator: TimeInterpolator = LinearInterpolator()
+    ) {
+        marker.markerAnimation.animateMarker(_mBinding.map, marker, destGeoPoint, interpolator)
     }
 
     fun animateCameraToMapOrientation(
         destOrientation: Float,
-        interpolator: TimeInterpolator = LinearInterpolator()
+        interpolator: TimeInterpolator = LinearInterpolator(),
+        duration: Long = 500L
     ) {
-        mapAnimationUtil.animateCameraToMapOrientation(_mBinding.map, destOrientation, interpolator)
+
+        if (destOrientation == lastDestOrientation) {
+            return
+        }
+
+        orientationAnimator?.cancel()
+        lastDestOrientation = destOrientation
+
+        val startOrientation = _mBinding.map.mapOrientation
+        if (destOrientation == startOrientation) {
+            return
+        }
+
+        var diff = destOrientation - startOrientation
+        if (abs(diff) > 180) {
+            if (diff > 0) {
+                diff -= 360
+            } else {
+                diff += 360
+            }
+        }
+
+        orientationAnimator = ValueAnimator.ofFloat(0f, 1f).also { animator ->
+            animator.duration = duration
+            animator.interpolator = interpolator
+            animator.addUpdateListener {
+                _mBinding.map.mapOrientation =
+                    startOrientation + (diff * it.animatedFraction)
+                println("debux: ${_mBinding.map.mapOrientation}")
+                _mBinding.map.postInvalidate()
+            }
+            animator.start()
+        }
     }
-
-    fun animateMarker(
-        marker: Marker,
-        destGeoPoint: GeoPoint,
-        interpolator: TimeInterpolator = LinearInterpolator()
-    ) {
-        mapAnimationUtil.animateMarker(_mBinding.map, marker, destGeoPoint, interpolator)
-    }
-
-
 }
 
-class MapSingleMarkerAnimationUtil { //TODO in faghat vase ye marker dorost kar mikone , dorost ine ke rotateMarker va aniamteMarker dar class marker bashe na inja
+class MarkerAnimationUtil { //TODO in faghat vase ye marker dorost kar mikone , dorost ine ke rotateMarker va aniamteMarker dar class marker bashe na inja
 
     private var rotateAnimator: ValueAnimator? = null
     private var moveMarkerAnimator: ValueAnimator? = null
-    private var orientationAnimator: ValueAnimator? = null
 
 
-    private var lastDestOrientation = 0f
     private var lastDestRotation = 0f
     private var lastDestLocation: GeoPoint? = null
 
     fun rotateMarker(
         map: MapView,
-        marker: Marker,
+        marker: ImageMarker,
         destRotation: Float,
         interpolator: TimeInterpolator = LinearInterpolator(),
         duration: Long = 500L
@@ -359,50 +392,9 @@ class MapSingleMarkerAnimationUtil { //TODO in faghat vase ye marker dorost kar 
 
     }
 
-    fun animateCameraToMapOrientation(
-        map: MapView,
-        destOrientation: Float,
-        interpolator: TimeInterpolator = LinearInterpolator(),
-        duration: Long = 500L
-    ) {
-
-        if (destOrientation == lastDestOrientation) {
-            return
-        }
-
-        orientationAnimator?.cancel()
-        lastDestOrientation = destOrientation
-
-        val startOrientation = map.mapOrientation
-        if (destOrientation == startOrientation) {
-            return
-        }
-
-        var diff = destOrientation - startOrientation
-        if (abs(diff) > 180) {
-            if (diff > 0) {
-                diff -= 360
-            } else {
-                diff += 360
-            }
-        }
-
-        orientationAnimator = ValueAnimator.ofFloat(0f, 1f).also { animator ->
-            animator.duration = duration
-            animator.interpolator = interpolator
-            animator.addUpdateListener {
-                map.mapOrientation =
-                    startOrientation + (diff * it.animatedFraction)
-                println("debux: ${map.mapOrientation}")
-                map.postInvalidate()
-            }
-            animator.start()
-        }
-    }
-
     fun animateMarker(
         map: MapView,
-        marker: Marker,
+        marker: ImageMarker,
         destGeoPoint: GeoPoint,
         interpolator: TimeInterpolator = LinearInterpolator(),
         duration: Long = 1000L

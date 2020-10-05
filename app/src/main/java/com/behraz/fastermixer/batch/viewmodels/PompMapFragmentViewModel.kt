@@ -1,9 +1,9 @@
 package com.behraz.fastermixer.batch.viewmodels
 
-import org.osmdroid.views.overlay.Marker
+import com.behraz.fastermixer.batch.ui.osm.ImageMarker
 
 
 class PompMapFragmentViewModel : VehicleMapFragmentViewModel() {
-    val markers = HashMap<String, Marker>()
+    val markers = HashMap<String, ImageMarker>()
 }
 
