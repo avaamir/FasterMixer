@@ -25,11 +25,10 @@ object MessageRepo {
     }
 
     val allMessage: LiveData<List<Message>> by lazy {
-        MessageDao.allMessage.map {
-            it.filter {
+        MessageDao.allMessage.map { messages ->
+            messages.filter {
                 it.userId == UserConfigs.user.value!!.personId
             }
-            it
         }
     }
 
@@ -84,5 +83,21 @@ object MessageRepo {
     fun cancelJobs() {
         if (MessageRepo::job.isInitialized && job.isActive)
             job.cancel()
+    }
+
+    fun seenMessage(message: Message) {
+        if (!MessageRepo::job.isInitialized || !job.isActive)
+            job = Job()
+        CoroutineScope(IO + job).launch {
+            MessageDao.update(message.copy(viewed = true))
+        }
+    }
+
+    fun seenAllMessages() {
+        if (!MessageRepo::job.isInitialized || !job.isActive)
+            job = Job()
+        CoroutineScope(IO + job).launch {
+            MessageDao.seenAllMessages()
+        }
     }
 }

@@ -272,7 +272,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
         })
 
         viewModel.messages.observe(this, Observer { messages ->
-            tvMessageCount.text = messages.size.toString()
+            tvMessageCount.text = messages.filter { !it.viewed }.count().toString()
             //TODO show like notification for some seconds then hidden it
             //TODO check if a message is critical and new show in dialog to user
         })
@@ -348,6 +348,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             }
             mBinding.btnMessages.id -> {
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_MESSAGE_LIST_TAG)!!)
+                viewModel.seenAllMessages()
             }
         }
         transaction.commit()

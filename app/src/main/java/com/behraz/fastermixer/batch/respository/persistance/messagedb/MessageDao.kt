@@ -25,7 +25,9 @@ interface MessageDao {
     @Query("SELECT * FROM messages WHERE id = :id")
     suspend fun exists(id: Int): Message?
 
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(items: List<Message>)
+
+    @Query("UPDATE messages SET viewed=1 WHERE viewed=0")
+    fun seenAllMessages()
 }

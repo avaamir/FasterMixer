@@ -3,6 +3,7 @@ package com.behraz.fastermixer.batch.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.map
+import com.behraz.fastermixer.batch.models.User
 import com.behraz.fastermixer.batch.models.requests.Fence
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
@@ -39,21 +40,22 @@ class BatchActivityViewModel : ParentViewModel() {
         }
     }
 
-    override fun onTimerTick() {
+    override fun onTimerTick(user: User) {
         refreshMixers()
+        if (batchFenceLocation == null) {
+            getBatchFenceLocation(user)
+        }
     }
 
-    init {
-        UserConfigs.user.value!!.let { user -> //TODO get this location again if not receiver from server
-            RemoteRepo.getBatchLocation(user.equipmentId!!) {
-                batchFenceLocation =
-                    it
-            }
+
+    private fun getBatchFenceLocation(user: User) {
+        RemoteRepo.getBatchLocation(user.equipmentId!!) {
+            batchFenceLocation = it
         }
     }
 
     fun refreshMixers() {
-        getMixersEvent.postValue(Event(Unit))
+        getMixersEvent?.postValue(Event(Unit)) //chun timer dar kelas super call mishe inja hanuz init nashode khater hamin not null budan check mishe
     }
 
 }

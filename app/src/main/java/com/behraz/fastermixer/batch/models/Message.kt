@@ -22,8 +22,6 @@ data class Message(
     val dateTime: String,
     @SerializedName("text")
     val content: String,
-    @SerializedName("viewed") //TODO not implemented server side
-    val viewed: Boolean,
     @SerializedName("state") //TODO not implemented server side
     val isDelivered: Boolean,
     @SerializedName("priority") //TODO not implemented server side
@@ -31,7 +29,9 @@ data class Message(
     @SerializedName("messageType")
     val _isEvent: Int, //is Event Or Message?
     val senderImage: String?, //TODO not implemented server side
-    var userId: String?
+    var userId: String?,
+    @SerializedName("viewed")
+    var viewed: Boolean
 ) : Parcelable {
 
     val shouldPopUp get() = _isEvent != 1

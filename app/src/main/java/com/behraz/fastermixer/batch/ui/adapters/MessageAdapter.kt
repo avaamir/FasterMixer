@@ -3,6 +3,8 @@ package com.behraz.fastermixer.batch.ui.adapters
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
@@ -72,6 +74,13 @@ class MessageAdapter(
             itemView.setOnClickListener {
                 interaction?.onItemClicked(message)
             }
+            /*if (message.viewed) {
+                (mBinding.root as CardView).setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.white))
+            } else {
+                (mBinding.root as CardView).setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.gray500))
+            }*/
+
+
 
         }
     }

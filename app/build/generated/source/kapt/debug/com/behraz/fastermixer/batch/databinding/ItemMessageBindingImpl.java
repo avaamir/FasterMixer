@@ -16,8 +16,6 @@ public class ItemMessageBindingImpl extends ItemMessageBinding  {
         sViewsWithIds = null;
     }
     // views
-    @NonNull
-    private final androidx.cardview.widget.CardView mboundView0;
     // variables
     // values
     // listeners
@@ -28,11 +26,11 @@ public class ItemMessageBindingImpl extends ItemMessageBinding  {
     }
     private ItemMessageBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
+            , (androidx.cardview.widget.CardView) bindings[0]
             , (android.widget.TextView) bindings[1]
             , (android.widget.TextView) bindings[2]
             );
-        this.mboundView0 = (androidx.cardview.widget.CardView) bindings[0];
-        this.mboundView0.setTag(null);
+        this.root.setTag(null);
         this.textView5.setTag(null);
         this.textView7.setTag(null);
         setRootTag(root);

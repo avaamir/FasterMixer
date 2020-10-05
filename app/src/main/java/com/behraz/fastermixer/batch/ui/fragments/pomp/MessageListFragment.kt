@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -16,20 +15,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentMessageListBinding
 import com.behraz.fastermixer.batch.models.Message
-import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.ui.activities.mixer.MixerActivity
 import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
 import com.behraz.fastermixer.batch.ui.adapters.MessageAdapter
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.MixerActivityViewModel
+import com.behraz.fastermixer.batch.viewmodels.ParentViewModel
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 
 class MessageListFragment : Fragment(), MessageAdapter.Interaction {
 
     private val mAdapter = MessageAdapter(true, this)
     private lateinit var mBinding: FragmentMessageListBinding
-    private lateinit var viewModel: ViewModel
+    private lateinit var viewModel: ParentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,19 +54,13 @@ class MessageListFragment : Fragment(), MessageAdapter.Interaction {
     }
 
     private fun subscribeObservers() {
-        val observer = Observer<List<Message>> {
-            mBinding.tvMessageCount.text = (it.size).toString()
+        viewModel.messages.observe(viewLifecycleOwner, Observer {
             mAdapter.submitList(it)
             if (it.isEmpty())
                 mBinding.gpAnimationView.visibility = View.VISIBLE
             else
                 mBinding.gpAnimationView.visibility = View.GONE
-        }
-        if (this.viewModel is MixerActivityViewModel) {
-            (viewModel as MixerActivityViewModel).messages.observe(viewLifecycleOwner, observer)
-        } else {
-            (viewModel as PompActivityViewModel).messages.observe(viewLifecycleOwner, observer)
-        }
+        })
     }
 
     private fun initViews() {
@@ -90,7 +83,6 @@ class MessageListFragment : Fragment(), MessageAdapter.Interaction {
         }).attachToRecyclerView(mBinding.messageRecycler)
 
 
-        mBinding.tvMessageCount.text = "0"
         mBinding.messageRecycler.adapter = mAdapter
         mBinding.messageRecycler.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -100,14 +92,10 @@ class MessageListFragment : Fragment(), MessageAdapter.Interaction {
                 RecyclerView.VERTICAL
             )
         )
-
-        mBinding.btnMap.setOnClickListener {
-            activity?.onBackPressed()
-        }
     }
 
 
     override fun onItemClicked(message: Message) {
-        //toast("not yet implemented")
+        //viewModel.seenMessage(message)
     }
 }

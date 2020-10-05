@@ -131,6 +131,7 @@ class BaseMapFragmentImpl : BaseMapFragment() {
         LocationCompassProvider.start(context!!)
 
         LocationCompassProvider.location.observe(viewLifecycleOwner, Observer { location ->
+            //TODO age location va lastLocation kheli fasele dasht dg animate nashe va mostaghim bere un noghte
             animateMarker(userMarker, GeoPoint(location.latitude, location.longitude))
             // toast("new Location")
         })

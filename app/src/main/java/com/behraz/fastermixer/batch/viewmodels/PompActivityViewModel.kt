@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.Mixer
+import com.behraz.fastermixer.batch.models.User
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.utils.general.Event
@@ -67,10 +68,10 @@ class PompActivityViewModel : VehicleActivityViewModel() {
         }
     }
 
-    override fun onTimerTick() {
+    override fun onTimerTick(user: User) {
         refreshCustomers()
         refreshMixers()
-        getUserLocation(user.value!!.equipmentId!!)
+        getUserLocation(user.equipmentId!!)
         getMission()
     }
 

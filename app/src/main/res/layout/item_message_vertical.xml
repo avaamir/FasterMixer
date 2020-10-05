@@ -12,6 +12,7 @@
 
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/root"
         style="@style/my_clickable_card_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

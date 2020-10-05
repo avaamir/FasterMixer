@@ -9,7 +9,7 @@ fun getDateDiff(date1: Date, date2: Date, timeUnit: TimeUnit = TimeUnit.MINUTES)
 }
 
 operator fun Date.minus(date: Date): Long { //Return Duration In minutes
-    return getDateDiff(this, date, TimeUnit.SECONDS)
+    return getDateDiff(date, this, TimeUnit.SECONDS)
 }
 
 /*fun getDateFromTimestamp(timestamp: Long): String {

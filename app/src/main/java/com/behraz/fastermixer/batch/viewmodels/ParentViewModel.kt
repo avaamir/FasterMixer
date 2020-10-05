@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.behraz.fastermixer.batch.models.Message
+import com.behraz.fastermixer.batch.models.User
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
@@ -14,7 +15,7 @@ import kotlin.concurrent.fixedRateTimer
 
 abstract class ParentViewModel : ViewModel() {
 
-    protected abstract fun onTimerTick()
+    protected abstract fun onTimerTick(user: User)
 
     val user get() = UserConfigs.user
 
@@ -44,7 +45,7 @@ abstract class ParentViewModel : ViewModel() {
         timer = fixedRateTimer(period = 20000L) {
             user.value?.let { user ->  //TODO albate bazam momkene unauthorized bede chun shyad moghe check kardan login bashe ama bad if logout etefagh biofte, AMA jelo exception ro migire
                 getMessages()
-                onTimerTick()
+                onTimerTick(user)
             }
         }
     }
@@ -75,6 +76,15 @@ abstract class ParentViewModel : ViewModel() {
 
     fun logout() {
         logOutEvent.value = Event(Unit)
+    }
+
+
+    fun seenMessage(message: Message) {
+        MessageRepo.seenMessage(message)
+    }
+
+    fun seenAllMessages() {
+        MessageRepo.seenAllMessages()
     }
 
     override fun onCleared() {

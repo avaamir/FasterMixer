@@ -28,9 +28,6 @@ import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
 import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.MixerActivityViewModel
 import kotlinx.android.synthetic.main.activity_batch.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.launch
 import kotlin.concurrent.fixedRateTimer
 
 class MixerActivity : AppCompatActivity(),
@@ -198,7 +195,7 @@ class MixerActivity : AppCompatActivity(),
         })
 
         viewModel.messages.observe(this, Observer { _messages ->
-            mBinding.tvMessageCount.text = _messages.size.toString()
+            mBinding.tvMessageCount.text = _messages.filter { !it.viewed }.count().toString()
             //TODO show like notification for some seconds then hidden it
             //TODO check if a message is critical and new show in dialog to user
         })
@@ -214,6 +211,7 @@ class MixerActivity : AppCompatActivity(),
         })
 
         viewModel.newMissionEvent.observe(this, Observer {
+
             if (it.peekContent().conditionTitle.contains("سمت مقصد")) {
                 viewModel.mixerTimerValue = (now() - (it.peekContent().startMissionTime ?: now())).toInt()
                 viewModel.mixerTimer = fixedRateTimer(period = 1000L) {
@@ -301,6 +299,7 @@ class MixerActivity : AppCompatActivity(),
             }
             mBinding.btnMessages.id -> {
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_MESSAGE_LIST_TAG)!!)
+                viewModel.seenAllMessages()
             }
         }
         transaction.commit()

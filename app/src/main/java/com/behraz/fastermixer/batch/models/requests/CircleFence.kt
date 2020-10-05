@@ -53,7 +53,13 @@ data class CircleFence(
 data class PolygonFence(val points: List<GeoPoint>) : Fence {
     override val center: GeoPoint
         get() {
-            return points[0] //TODO use a better algorithm
+            var lat = 0.0
+            var lon = 0.0
+            points.forEach {
+                lat += it.latitude
+                lon += it.longitude
+            }
+            return GeoPoint(lat / points.size, lon / points.size)
         }
 
     override fun distanceTo(point: GeoPoint): Double {

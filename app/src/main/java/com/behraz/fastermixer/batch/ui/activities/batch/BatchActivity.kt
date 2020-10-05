@@ -96,7 +96,7 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction,
 
         viewModel.messages.observe(this, Observer { messages ->
             messageAdapter.submitList(messages)
-            tvMessageCount.text = messages.size.toString()
+            tvMessageCount.text = messages.filter { !it.viewed }.count().toString()
         })
 
 
