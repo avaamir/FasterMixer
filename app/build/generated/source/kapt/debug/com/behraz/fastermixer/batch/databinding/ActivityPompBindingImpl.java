@@ -22,14 +22,14 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
         sViewsWithIds.put(R.id.frame_top, 4);
         sViewsWithIds.put(R.id.btnMessage, 5);
         sViewsWithIds.put(R.id.imageView2, 6);
-        sViewsWithIds.put(R.id.tvMessageCount, 7);
-        sViewsWithIds.put(R.id.btnShowAllMixersToggle, 8);
-        sViewsWithIds.put(R.id.mapContainer, 9);
-        sViewsWithIds.put(R.id.frame_user_buttons, 10);
-        sViewsWithIds.put(R.id.btn_map, 11);
-        sViewsWithIds.put(R.id.btn_projects, 12);
-        sViewsWithIds.put(R.id.btn_mixers, 13);
-        sViewsWithIds.put(R.id.btn_messages, 14);
+        sViewsWithIds.put(R.id.btnShowAllMixersToggle, 7);
+        sViewsWithIds.put(R.id.mapContainer, 8);
+        sViewsWithIds.put(R.id.frame_user_buttons, 9);
+        sViewsWithIds.put(R.id.btn_map, 10);
+        sViewsWithIds.put(R.id.btn_projects, 11);
+        sViewsWithIds.put(R.id.btn_mixers, 12);
+        sViewsWithIds.put(R.id.btn_messages, 13);
+        sViewsWithIds.put(R.id.tvMessageCount, 14);
         sViewsWithIds.put(R.id.btn_voice_message, 15);
         sViewsWithIds.put(R.id.btnLogout, 16);
         sViewsWithIds.put(R.id.frameBottomButtons, 17);
@@ -63,16 +63,16 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
     private ActivityPompBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 1
             , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[16]
-            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[11]
+            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[10]
             , (androidx.cardview.widget.CardView) bindings[5]
-            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[14]
             , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[13]
-            , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[19]
             , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[12]
+            , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[19]
+            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[11]
             , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[20]
             , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[22]
             , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[21]
-            , (android.widget.Button) bindings[8]
+            , (android.widget.Button) bindings[7]
             , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[15]
             , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[18]
             , (android.widget.LinearLayout) bindings[17]
@@ -80,7 +80,7 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
             , (android.widget.LinearLayout) bindings[26]
             , (android.widget.LinearLayout) bindings[24]
             , (android.widget.FrameLayout) bindings[4]
-            , (androidx.cardview.widget.CardView) bindings[10]
+            , (androidx.cardview.widget.CardView) bindings[9]
             , (android.widget.LinearLayout) bindings[28]
             , (androidx.constraintlayout.widget.Group) bindings[30]
             , (android.widget.ImageView) bindings[6]
@@ -89,8 +89,8 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
             , (android.widget.ImageView) bindings[29]
             , (android.view.View) bindings[2]
             , (com.behraz.fastermixer.batch.databinding.ItemMessageVerticalBinding) bindings[3]
-            , (android.widget.FrameLayout) bindings[9]
-            , (android.widget.TextView) bindings[7]
+            , (android.widget.FrameLayout) bindings[8]
+            , (android.widget.TextView) bindings[14]
             );
         this.mboundView0 = (androidx.coordinatorlayout.widget.CoordinatorLayout) bindings[0];
         this.mboundView0.setTag(null);

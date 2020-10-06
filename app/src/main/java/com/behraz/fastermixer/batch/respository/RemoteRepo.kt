@@ -1,9 +1,6 @@
 package com.behraz.fastermixer.batch.respository
 
-import com.behraz.fastermixer.batch.models.Message
-import com.behraz.fastermixer.batch.models.Mission
-import com.behraz.fastermixer.batch.models.Plan
-import com.behraz.fastermixer.batch.models.Pomp
+import com.behraz.fastermixer.batch.models.*
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
 import com.behraz.fastermixer.batch.models.requests.Fence
 import com.behraz.fastermixer.batch.models.requests.behraz.*
@@ -11,6 +8,7 @@ import com.behraz.fastermixer.batch.models.requests.route.GetRouteResponse
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.respository.apiservice.MapService
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
+import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
 import com.behraz.fastermixer.batch.utils.fastermixer.fakePlans
 import com.behraz.fastermixer.batch.utils.general.RunOnceLiveData
 import com.behraz.fastermixer.batch.utils.general.launchApi
@@ -72,7 +70,29 @@ object RemoteRepo {
     }
 
 
-    fun login(loginRequest: LoginRequest) = apiReq(
+    fun login(loginRequest: LoginRequest): RunOnceLiveData<Entity<User>?> {
+        if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
+        return object : RunOnceLiveData<Entity<User>?>() {
+            override fun onActiveRunOnce() {
+                CoroutineScope(IO + serverJobs).launchApi({
+                    val response = ApiService.client.login(EntityRequest(loginRequest))
+                    if (response.isSuccessful) {
+                        response.body()?.entity?.let { _user ->
+                            UserRepo.clearAndInsertBlocking(_user)
+                            UserConfigs.loginUser(_user, true)
+                        }
+                    }
+                    postValue(response.body())
+                }, {
+                    postValue(null)
+                })
+            }
+
+        }
+    }
+
+
+    fun login2(loginRequest: LoginRequest) = apiReq(
         EntityRequest(loginRequest),
         ApiService.client::login
     ) { response ->
@@ -93,7 +113,8 @@ object RemoteRepo {
         UserConfigs.logout()
     }
 
-    fun insertBreakdownRequest(description: BreakdownRequest) = apiReq(EntityRequest(description), ApiService.client::insertBreakdown)
+    fun insertBreakdownRequest(description: BreakdownRequest) =
+        apiReq(EntityRequest(description), ApiService.client::insertBreakdown)
 
 
     fun getBatches() = apiReq(ApiService.client::getBatches)

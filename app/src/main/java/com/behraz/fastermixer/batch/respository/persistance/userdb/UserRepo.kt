@@ -24,7 +24,6 @@ object UserRepo {
 
     val users get() = userDao.users
 
-
     fun insert(item: User) {
         if (!UserRepo::job.isInitialized || !job.isActive)
             job = Job()

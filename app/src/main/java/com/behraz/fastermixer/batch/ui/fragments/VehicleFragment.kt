@@ -154,7 +154,7 @@ abstract class VehicleFragment : BaseMapFragment() {
                     destMarker.title = mission.summery
                     mBinding.map.overlays.remove(polygon)
                     polygon = preparePolygon(mission.destFence)
-                    mBinding.map.overlays.add(polygon)
+                    mBinding.map.overlays.add(0, polygon)
                     if (!isDestMarkerAddedToMap) { //age routePolyline null bashe yaani halat noMission pish umade va destMarker az map remove shode
                         isDestMarkerAddedToMap = true
                         mBinding.map.overlays.add(destMarker)
