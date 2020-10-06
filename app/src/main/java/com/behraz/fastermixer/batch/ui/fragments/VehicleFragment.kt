@@ -226,6 +226,7 @@ abstract class VehicleFragment : BaseMapFragment() {
             fillPaint.alpha = 100
             outlinePaint.color = Color.YELLOW
             outlinePaint.strokeWidth = 2f
+            infoWindow = null
         }
     }
 
