@@ -64,15 +64,29 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction,
         initViews()
         subscribeObservers()
 
-        subscribeNetworkStateChangeListener { //TODO add to ui }
-            subscribeGpsStateChangeListener { //TODO add to ui }
-                if (FasterMixerApplication.isDemo) {
-                    mBinding.layoutDemo.visibility = View.VISIBLE
-                }
 
+        subscribeNetworkStateChangeListener {
+            if (it) {
+                mBinding.ivInternet.setImageResource(R.drawable.ic_check)
+            } else {
+                mBinding.ivInternet.setImageResource(R.drawable.ic_error)
             }
         }
+
+        subscribeGpsStateChangeListener {
+            if (it) {
+                mBinding.ivGPS.setImageResource(R.drawable.ic_check)
+            } else {
+                mBinding.ivGPS.setImageResource(R.drawable.ic_error)
+            }
+        }
+
+        if (FasterMixerApplication.isDemo) {
+            mBinding.layoutDemo.visibility = View.VISIBLE
+        }
+
     }
+
 
     private fun subscribeObservers() {
         viewModel.user.observe(this, Observer {
@@ -187,7 +201,7 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction,
         supportFragmentManager.fragments.forEach {
             transaction.hide(it)
         }
-         mBinding.frameGPSState.visibility = View.INVISIBLE
+        mBinding.frameGPSState.visibility = View.INVISIBLE
 
         when (myRaisedButton.id) {
             mBinding.btnMixers.id -> {
