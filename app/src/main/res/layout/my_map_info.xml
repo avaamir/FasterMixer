@@ -28,6 +28,7 @@
             app:thirdText="122"
             android:layout_gravity="left"
             android:visibility="gone"
+            android:layout_marginBottom="@dimen/tiny_margin"
             tools:visibility="visible"
             app:forthText="63" />
 
@@ -38,8 +39,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:fontFamily="@font/iransans_medium"
-            android:layout_marginTop="@dimen/tiny_margin"
             android:textColor="@color/purple"
+            android:maxLines="5"
             android:textSize="12dp"
             tools:text="امرحسین مهدی پور" />
         <ImageView

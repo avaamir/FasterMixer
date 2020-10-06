@@ -148,7 +148,7 @@ abstract class VehicleFragment : BaseMapFragment() {
                 } else {
                     println("debux: `newMissionEvent` NewMission")
                     destMarker.position = mission.destFence.center
-                    destMarker.title = mission.conditionTitle
+                    destMarker.title = mission.summery
                     polygon = preparePolygon(mission.destFence)
 
                     if (routePolyline == null) { //age routePolyline null bashe yaani halat noMission pish umade va destMarker az map remove shode
