@@ -85,7 +85,10 @@ object UserRepo {
         }
     }
 
-
+    fun clearAndInsertBlocking2(user: User) {
+            userDao.deleteAll1()
+            userDao.insert1(user)
+    }
 
 
 }

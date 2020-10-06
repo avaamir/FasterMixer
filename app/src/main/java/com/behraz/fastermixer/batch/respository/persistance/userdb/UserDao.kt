@@ -24,4 +24,11 @@ interface UserDao {
 
     @Query("SELECT * FROM user_tb WHERE personId = :id")
     suspend fun exists(id: Int): User?
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert1(item: User)
+
+    @Query("DELETE FROM user_tb")
+     fun deleteAll1()
 }

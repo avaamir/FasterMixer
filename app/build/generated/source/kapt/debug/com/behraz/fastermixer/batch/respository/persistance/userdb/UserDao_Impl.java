@@ -207,6 +207,18 @@ public final class UserDao_Impl implements UserDao {
   }
 
   @Override
+  public void insert1(final User item) {
+    __db.assertNotSuspendingTransaction();
+    __db.beginTransaction();
+    try {
+      __insertionAdapterOfUser.insert(item);
+      __db.setTransactionSuccessful();
+    } finally {
+      __db.endTransaction();
+    }
+  }
+
+  @Override
   public Object delete(final User item, final Continuation<? super Unit> p1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
@@ -257,6 +269,20 @@ public final class UserDao_Impl implements UserDao {
         }
       }
     }, p0);
+  }
+
+  @Override
+  public void deleteAll1() {
+    __db.assertNotSuspendingTransaction();
+    final SupportSQLiteStatement _stmt = __preparedStmtOfDeleteAll.acquire();
+    __db.beginTransaction();
+    try {
+      _stmt.executeUpdateDelete();
+      __db.setTransactionSuccessful();
+    } finally {
+      __db.endTransaction();
+      __preparedStmtOfDeleteAll.release(_stmt);
+    }
   }
 
   @Override

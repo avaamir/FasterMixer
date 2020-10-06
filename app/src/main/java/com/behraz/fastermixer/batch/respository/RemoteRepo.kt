@@ -78,8 +78,8 @@ object RemoteRepo {
                     val response = ApiService.client.login(EntityRequest(loginRequest))
                     if (response.isSuccessful) {
                         response.body()?.entity?.let { _user ->
-                            UserRepo.clearAndInsertBlocking(_user)
-                            UserConfigs.loginUser(_user, true)
+                            UserRepo.clearAndInsertBlocking2(_user)
+                            //UserConfigs.loginUser(_user, true)
                         }
                     }
                     postValue(response.body())
