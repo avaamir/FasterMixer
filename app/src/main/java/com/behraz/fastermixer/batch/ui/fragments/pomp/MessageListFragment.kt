@@ -16,10 +16,12 @@ import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentMessageListBinding
 import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
+import com.behraz.fastermixer.batch.ui.activities.batch.BatchActivity
 import com.behraz.fastermixer.batch.ui.activities.mixer.MixerActivity
 import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
 import com.behraz.fastermixer.batch.ui.adapters.MessageAdapter
 import com.behraz.fastermixer.batch.utils.general.toast
+import com.behraz.fastermixer.batch.viewmodels.BatchActivityViewModel
 import com.behraz.fastermixer.batch.viewmodels.MixerActivityViewModel
 import com.behraz.fastermixer.batch.viewmodels.ParentViewModel
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
@@ -41,6 +43,9 @@ class MessageListFragment : Fragment(), MessageAdapter.Interaction {
             }
             is PompActivity -> {
                 ViewModelProvider(activity!!).get(PompActivityViewModel::class.java)
+            }
+            is BatchActivity -> {
+                ViewModelProvider(activity!!).get(BatchActivityViewModel::class.java)
             }
             else -> {
                 throw IllegalStateException("PompActivity or MixerActivity is valid")

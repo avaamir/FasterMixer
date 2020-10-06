@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <FrameLayout
+            android:id="@+id/frame_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#00000000"
+            android:paddingLeft="32dp"
+            android:paddingRight="32dp"
+            app:behavior_hideable="true"
+            android:elevation="10dp"
+            app:layout_behavior=".ui.customs.general.TopSheetBehavior">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/layout_new_message"
+                    layout="@layout/item_message_vertical" />
+
+                <!--<FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <FrameLayout
+                        android:id="@+id/frame_customer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <include
+                            android:id="@+id/layout_customer"
+                            layout="@layout/item_customer" />
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/frameMixer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
+
+                        <include
+                            android:id="@+id/layout_mixer"
+                            layout="@layout/layout_mixer" />
+
+                    </FrameLayout>
+                </FrameLayout>-->
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/frame_user_buttons"
+                android:layout_width="120dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/primary_dark"
+                    android:orientation="vertical">
+
+
+                    <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                        android:id="@+id/btn_mixers"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center"
+                        app:backgroundColor="@color/primary_dark"
+                        app:isFlat="true"
+                        app:layout_constraintBottom_toTopOf="@+id/btn_messages"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:radius="0dp"
+                        app:text="میسکر ها"
+                        app:textSize="@dimen/pomp_menu_btns_font_size" />
+
+                    <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                        android:id="@+id/btn_messages"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center"
+                        app:backgroundColor="@color/btn_yellow"
+                        app:isFlat="true"
+                        app:layout_constraintBottom_toTopOf="@+id/btn_voice_message"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_mixers"
+                        app:radius="0dp"
+                        app:text="پیام ها"
+                        app:textSize="@dimen/pomp_menu_btns_font_size" />
+
+
+                    <TextView
+                        android:id="@+id/tvMessageCount"
+                        style="@style/my_white_normal_text"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/shape_drawer_badge"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/btn_messages"
+                        tools:text="22" />
+
+                    <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                        android:id="@+id/btn_voice_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center"
+                        app:backgroundColor="@color/btn_blue"
+                        app:isFlat="true"
+                        app:layout_constraintBottom_toTopOf="@+id/btnLogout"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_messages"
+                        app:radius="0dp"
+                        app:text="پیام صوتی"
+                        app:textSize="@dimen/pomp_menu_btns_font_size" />
+
+                    <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                        android:id="@+id/btnLogout"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center"
+                        app:backgroundColor="@color/logout_red"
+                        app:isFlat="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_voice_message"
+                        app:radius="0dp"
+                        app:text="خروج"
+                        app:textSize="@dimen/pomp_menu_btns_font_size" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+
+            <FrameLayout
+                android:id="@+id/container"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/frame_user_buttons"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <include
+                android:id="@+id/layoutDemo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                layout="@layout/layout_demo"
+                android:layout_margin="@dimen/standard_margin"
+                android:layout_gravity="bottom|left" />
+
+
+            <!--frame hardware state-->
+            <LinearLayout
+                android:id="@+id/frameGPSState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/frame_user_buttons">
+
+
+                <LinearLayout
+                    android:id="@+id/frame_internet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/standard_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:fontFamily="@font/iransans"
+                        android:text="اینترنت"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/ivInternet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_error" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/frame_gps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/standard_margin"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:fontFamily="@font/iransans"
+                        android:text="موقعیت مکانی"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/ivGPS"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_error" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/frame_voip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/standard_margin"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:text="Voip"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/ivVoip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_error" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>
