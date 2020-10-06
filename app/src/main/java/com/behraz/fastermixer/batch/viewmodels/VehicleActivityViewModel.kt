@@ -13,6 +13,7 @@ import com.behraz.fastermixer.batch.utils.general.Event
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.IllegalStateException
 
 abstract class VehicleActivityViewModel : ParentViewModel() {
 
@@ -31,7 +32,13 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
     val getMissionError = MutableLiveData<Event<String>>()
     private val getMissionEvent = MutableLiveData(Event(Unit))
     private val getMissionResponse = Transformations.switchMap(getMissionEvent) {
-        RemoteRepo.getMixerMission().map {
+        RemoteRepo.getMission(
+            when(this) {
+                is MixerActivityViewModel -> false
+                is PompActivityViewModel -> true
+                else -> throw IllegalStateException("this type not yet defined here")
+            }
+        ).map {
             isGetMissionsRequestActive = false
             it
         }

@@ -1,6 +1,5 @@
 package com.behraz.fastermixer.batch.models
 
-import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.models.requests.Fence
 import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat
@@ -21,13 +20,15 @@ data class Customer(
     @SerializedName("productTypeCarat")
     private val _density: Int,
     @SerializedName("volume")
-    private val _amount: Int,
+    private val _amount: Float,
     @SerializedName("countMixer")
     private val _mixerCount: Int, //test
     @SerializedName("geoPoint")
     private val areaStr: String,
     @SerializedName("requestType")
-    private val _jobType: String?
+    private val _jobType: String?,
+    @Transient
+    var isSelected: Boolean
 ) {
     val jobType get() = if (_jobType.isNullOrBlank()) "نامشخص" else _jobType
     val startTime: String get() = SimpleDateFormat.getTimeInstance().format(_startTime)

@@ -3,10 +3,12 @@ package com.behraz.fastermixer.batch.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.map
+import com.behraz.fastermixer.batch.models.Customer
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.User
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.respository.RemoteRepo
+import com.behraz.fastermixer.batch.utils.general.DoubleTrigger
 import com.behraz.fastermixer.batch.utils.general.Event
 
 class PompActivityViewModel : VehicleActivityViewModel() {
@@ -58,13 +60,33 @@ class PompActivityViewModel : VehicleActivityViewModel() {
             response
     }
 
-    private val getCustomerEvent = MutableLiveData(Event(Unit))
-    val customers = Transformations.switchMap(getCustomerEvent) {
+    private var selectedProjectId: String? = null
+    private val getCustomerEvent = MutableLiveData(true) //if true reqServer else selectedProject Changed
+    private var lastGetCustomerResponse: Entity<List<Customer>>? = null
+
+    val customers = Transformations.switchMap(getCustomerEvent) { event ->
         println("debugx: getCustomerEvent called")
-        RemoteRepo.getCustomers().map { response ->
-            println("debugx: getCustomerResponse came")
-            isGetCustomerRequestActive = false
-            response
+        if (event) {
+            RemoteRepo.getCustomers().map { response ->
+                println("debugx: getCustomerResponse came")
+                isGetCustomerRequestActive = false
+                response?.entity?.let {
+                    if (selectedProjectId == null) {
+                        selectedProjectId = it[0].id
+                        it[0].isSelected = true
+                        lastGetCustomerResponse = response
+                    } else {
+                        val selectedProject =
+                            it.find { customer -> customer.id == selectedProjectId }
+                        selectedProject?.isSelected = true
+                    }
+                }
+                response
+            }
+        } else {
+            lastGetCustomerResponse?.entity?.find { customer -> customer.id == selectedProjectId }?.isSelected =
+                true
+            MutableLiveData(lastGetCustomerResponse)
         }
     }
 
@@ -85,7 +107,17 @@ class PompActivityViewModel : VehicleActivityViewModel() {
     private fun refreshCustomers() {
         if (!isGetCustomerRequestActive) {
             isGetCustomerRequestActive = true
-            getCustomerEvent?.postValue(Event(Unit)) //chun timer dar kelas super call mishe inja hanuz init nashode khater hamin not null budan check mishe
+            getCustomerEvent?.postValue(true) //chun timer dar kelas super call mishe inja hanuz init nashode khater hamin not null budan check mishe
+        }
+    }
+
+    fun selectProject(customer: Customer) {
+        if (selectedProjectId != customer.id) {
+            selectedProjectId = customer.id
+            getCustomerEvent.postValue(false)
+            /*todo geofence avaz shavad, masir yabi avaz shavad*/
+            /*todo azesh beporse ke proje tamum nashode motmaeni*/
+            /*todo refresh customer list for recoloring selectedProject*/
         }
     }
 }

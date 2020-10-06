@@ -13,16 +13,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="0dp"
-        app:cardUseCompatPadding="false">
+        app:cardUseCompatPadding="false"
+        app:cardBackgroundColor="@color/gray50">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
-            android:paddingRight="8dp"
-            android:background="@color/gray50">
-
+            android:paddingRight="8dp">
 
             <TextView
                 android:id="@+id/textView23"
@@ -202,18 +201,39 @@
                 app:layout_constraintTop_toTopOf="@+id/textView38"
                 tools:text="6" />
 
-            <com.behraz.fastermixer.batch.ui.customs.fastermixer.CardButton
+            <androidx.cardview.widget.CardView
                 android:id="@+id/btnCustomerList"
-                android:layout_width="wrap_content"
-                android:visibility="gone"
-                android:layout_height="wrap_content"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_marginStart="8dp"
-                app:btn_image="@drawable/ic_factory"
-                app:caption="رفتن به لیست مشتریها"
-                app:layout_constraintBottom_toBottomOf="@+id/textView29"
+                style="@style/my_clickable_card_style"
+                app:cardCornerRadius="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView23"
-                app:layout_constraintVertical_bias="0.506" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center_horizontal"
+                        app:srcCompat="@drawable/ic_factory"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/my_black_bold_text"
+                        android:text="انتخاب پروژه"
+                        />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

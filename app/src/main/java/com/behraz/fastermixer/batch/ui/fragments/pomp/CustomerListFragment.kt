@@ -13,13 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentCustomerListBinding
+import com.behraz.fastermixer.batch.models.Customer
 import com.behraz.fastermixer.batch.ui.adapters.CustomerAdapter
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 
-class CustomerListFragment : Fragment() {
+class CustomerListFragment : Fragment(), CustomerAdapter.Interactions {
     private lateinit var viewModel: PompActivityViewModel
     private lateinit var mBinding: FragmentCustomerListBinding
-    private val mAdapter = CustomerAdapter()
+    private val mAdapter = CustomerAdapter(this)
 
 
     override fun onCreateView(
@@ -62,6 +63,10 @@ class CustomerListFragment : Fragment() {
                 RecyclerView.VERTICAL
             )
         )
+    }
+
+    override fun onSelectProject(customer: Customer) {
+        viewModel.selectProject(customer)
     }
 
 

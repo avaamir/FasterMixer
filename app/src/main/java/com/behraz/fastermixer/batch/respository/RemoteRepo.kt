@@ -1,7 +1,9 @@
 package com.behraz.fastermixer.batch.respository
 
 import com.behraz.fastermixer.batch.models.Message
+import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.models.Plan
+import com.behraz.fastermixer.batch.models.Pomp
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
 import com.behraz.fastermixer.batch.models.requests.Fence
 import com.behraz.fastermixer.batch.models.requests.behraz.*
@@ -200,8 +202,13 @@ object RemoteRepo {
         }) {}
     }
 
-    fun getMixerMission() = apiReq(ApiService.client::getMixerMission)
-    fun getPompMission() = apiReq(ApiService.client::getPompMission)
+    private fun getMixerMission() = apiReq(ApiService.client::getMixerMission)
+    private fun getPompMission() = apiReq(ApiService.client::getPompMission)
+
+    fun getMission(isPomp: Boolean): RunOnceLiveData<Entity<Mission>?> {
+        return if (isPomp) getPompMission() else getMixerMission()
+    }
+
 
     fun getCustomers() = apiReq(ApiService.client::getCustomers)
 

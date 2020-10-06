@@ -1,8 +1,10 @@
 package com.behraz.fastermixer.batch.ui.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -11,7 +13,7 @@ import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ItemCustomerBinding
 import com.behraz.fastermixer.batch.models.Customer
 
-class CustomerAdapter() :
+class CustomerAdapter(val interactions: Interactions) :
     ListAdapter<Customer, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
     companion object {
@@ -22,7 +24,7 @@ class CustomerAdapter() :
             }
 
             override fun areContentsTheSame(oldItem: Customer, newItem: Customer): Boolean {
-                return oldItem == newItem
+                return (oldItem == newItem)
             }
 
         }
@@ -55,13 +57,26 @@ class CustomerAdapter() :
 
         fun bind(item: Customer) {
 
-
             mBinding.customer = item
             mBinding.executePendingBindings()
 
-            mBinding.btnCustomerList.visibility = View.GONE
+
+            (mBinding.root as CardView).setCardBackgroundColor(
+                ContextCompat.getColor(
+                    itemView.context,
+                    if (item.isSelected) R.color.btn_yellow else R.color.gray50
+                )
+            )
+
+            mBinding.btnCustomerList.setOnClickListener {
+                interactions.onSelectProject(item)
+            }
 
         }
+    }
+
+    interface Interactions {
+        fun onSelectProject(customer: Customer)
     }
 
 }

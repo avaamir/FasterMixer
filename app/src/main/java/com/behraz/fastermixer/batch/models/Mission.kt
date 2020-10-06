@@ -1,6 +1,5 @@
 package com.behraz.fastermixer.batch.models
 
-import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.models.requests.Fence
 import com.google.gson.annotations.SerializedName
 import java.util.*
