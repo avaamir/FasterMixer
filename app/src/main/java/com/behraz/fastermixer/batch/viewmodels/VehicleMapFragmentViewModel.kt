@@ -8,7 +8,7 @@ import com.behraz.fastermixer.batch.models.requests.route.GetRouteResponse
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import org.osmdroid.util.GeoPoint
 
-open class VehicleMapFragmentViewModel: ViewModel(){
+open class VehicleMapFragmentViewModel : ViewModel() {
     var myLocation: GeoPoint? = null
 
     var hasNewMission: Boolean = false
@@ -21,6 +21,13 @@ open class VehicleMapFragmentViewModel: ViewModel(){
         }
 
     fun getRoute(coordinates: List<GeoPoint>) {
+        val prevCoords = this.coordinates.value
+        if (prevCoords != null) {
+            if (prevCoords[0] == coordinates[0] && prevCoords[1] == coordinates[1]) {
+                return
+            }
+        }
+
         println("debux: getRoute($coordinates)=====================================")
         this.coordinates.value = coordinates
     }

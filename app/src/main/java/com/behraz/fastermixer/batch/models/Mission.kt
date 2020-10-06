@@ -6,7 +6,7 @@ import java.util.*
 
 data class Mission(
     @SerializedName("destLocation")
-    private val _destLocation: String,
+    private val _destLocation: String, //makani ke server tashkhis dade bayad bere
     @SerializedName("conditionTitle")
     val conditionTitle: String,
     @SerializedName("missionID")
@@ -22,10 +22,14 @@ data class Mission(
     @SerializedName("description")
     val description: String?,
     @SerializedName("requestLocation")
-    val requestLocation: String?,
+    private val _requestLocation: String?,
     @SerializedName("batchLocation")
-    val batchLocation: String?
+    private val _batchLocation: String?
 ) {
+
+    val requestLocation get() = if (_requestLocation != null) Fence.strToFence(_requestLocation) else null
+    val batchLocation get() = if (_batchLocation != null) Fence.strToFence(_batchLocation) else null
+
 
     val missionId get() = _missionId + conditionTitle
 

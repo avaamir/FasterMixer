@@ -1,7 +1,7 @@
 package com.behraz.fastermixer.batch.ui.fragments
 
+import android.content.Context
 import android.graphics.Color
-import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +17,6 @@ import com.behraz.fastermixer.batch.ui.osm.DestMarker
 import com.behraz.fastermixer.batch.ui.osm.MixerMarker
 import com.behraz.fastermixer.batch.ui.osm.PompMarker
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
-import com.behraz.fastermixer.batch.utils.general.exhaustive
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.VehicleMapFragmentViewModel
 import com.behraz.fastermixer.batch.viewmodels.VehicleActivityViewModel
@@ -31,13 +30,17 @@ import java.lang.IllegalStateException
 
 abstract class VehicleFragment : BaseMapFragment() {
 
+    private var onUserAndDestLocRetrieved: OnUserAndDestLocRetrieved? = null
 
     abstract val vehicleActivityViewModel: VehicleActivityViewModel
     abstract val mMapViewModel: VehicleMapFragmentViewModel
 
     private var routePolyline: Polyline? = null
     private var polygon: Polygon? = null
+
+    private var isDestMarkerAddedToMap = false
     private val destMarker: DestMarker by lazy {
+        isDestMarkerAddedToMap = true
         DestMarker(mBinding.map, 42, 42).also {
             addMarkerToMap(
                 it,
@@ -50,8 +53,6 @@ abstract class VehicleFragment : BaseMapFragment() {
             }
         }
     }
-
-    private var btnRoute: View? = null
 
 
     private var isFirstCameraMove = true
@@ -96,12 +97,6 @@ abstract class VehicleFragment : BaseMapFragment() {
 
     override fun initViews() {
         super.initViews()
-
-        val btnRouteId = arguments?.getInt(BUNDLE_BTN_ROUTE_ID) ?: 0
-        if (btnRouteId != 0)
-            btnRoute = activity!!.findViewById(btnRouteId)
-
-
         mBinding.map.addMapListener(object : MapListener {
             override fun onScroll(event: ScrollEvent): Boolean {
                 event.run {
@@ -115,6 +110,13 @@ abstract class VehicleFragment : BaseMapFragment() {
                 return false
             }
         })
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (activity!! is OnUserAndDestLocRetrieved) {
+            onUserAndDestLocRetrieved = activity as OnUserAndDestLocRetrieved
+        }
     }
 
 
@@ -140,6 +142,7 @@ abstract class VehicleFragment : BaseMapFragment() {
                 if (mission === Mission.NoMission) {
                     println("debux: `newMissionEvent` NoMission")
                     mBinding.map.overlays.remove(destMarker)
+                    isDestMarkerAddedToMap = false
                     mBinding.map.overlays.remove(routePolyline)
                     mBinding.map.overlays.remove(polygon)
                     routePolyline = null
@@ -149,10 +152,11 @@ abstract class VehicleFragment : BaseMapFragment() {
                     println("debux: `newMissionEvent` NewMission")
                     destMarker.position = mission.destFence.center
                     destMarker.title = mission.summery
+                    mBinding.map.overlays.remove(polygon)
                     polygon = preparePolygon(mission.destFence)
-
-                    if (routePolyline == null) { //age routePolyline null bashe yaani halat noMission pish umade va destMarker az map remove shode
-                        mBinding.map.overlays.add(polygon)
+                    mBinding.map.overlays.add(polygon)
+                    if (!isDestMarkerAddedToMap) { //age routePolyline null bashe yaani halat noMission pish umade va destMarker az map remove shode
+                        isDestMarkerAddedToMap = true
                         mBinding.map.overlays.add(destMarker)
                     }
                     mBinding.map.invalidate()
@@ -239,22 +243,43 @@ abstract class VehicleFragment : BaseMapFragment() {
                     mission.destFence.center
                 )
             )
-            /*TODO Add Animation*/
-            btnRoute?.visibility = View.VISIBLE
+            onUserAndDestLocRetrieved?.onShowButtons(true)
         } else {
             println("debux: Already in DestArea")
             toast("به مقصد رسیدید")
-            /*TODO Add Animation*/
-            btnRoute?.visibility = View.GONE
+            onUserAndDestLocRetrieved?.onShowButtons(false)
         }
     }
 
-    fun routeAgain() {
+    fun routeAgain() { //route destLocation // khode server tashkhis dade koja bere
         println("debux: routeAgain()============================================")
         println("debux: routeAgain: ${mMapViewModel.getRouteResponse.value?.getRoutePoints()}")
         //In dokme vaghti visible mishe ke mission ro gerefte bashim va yek bar ham darkhast getRoute ro zade bashim pas niazi nist check konim (startPoint,Dest) reside hast ya na
         mMapViewModel.tryGetRouteAgain()
     }
 
+
+    fun routeHomeOrDest(isHome: Boolean) {
+        val mission = vehicleActivityViewModel.newMissionEvent.value!!.peekContent()
+        val fence = if (isHome) mission.batchLocation else mission.requestLocation
+        val title = if (isHome) "بچینگ" else "پروژه"
+        if (fence != null) {
+            mBinding.map.overlays.remove(polygon)
+            polygon = preparePolygon(fence)
+            mBinding.map.overlays.add(0, polygon)
+            destMarker.position = fence.center
+            destMarker.title = title
+
+            mBinding.map.invalidate()
+
+            mMapViewModel.getRoute(listOf(mMapViewModel.myLocation!!, fence.center))
+        } else {
+            toast("آدرس $title نامشخص است")
+        }
+    }
+
+    interface OnUserAndDestLocRetrieved {
+        fun onShowButtons(shouldShow: Boolean)
+    }
 
 }

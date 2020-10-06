@@ -28,6 +28,7 @@ import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.ui.dialogs.PompMessageDialog
 import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
+import com.behraz.fastermixer.batch.ui.fragments.VehicleFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.CustomerListFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.MessageListFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.MixerListFragment
@@ -40,7 +41,7 @@ import kotlinx.android.synthetic.main.activity_batch.*
 
 
 class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
-    PompMessageDialog.Interactions, ApiService.OnUnauthorizedListener {
+    PompMessageDialog.Interactions, ApiService.OnUnauthorizedListener, VehicleFragment.OnUserAndDestLocRetrieved {
 
     private lateinit var topSheetBehavior: TopSheetBehavior<View>
     private var projectCount = -1 // this variable work like a flag for `onNewProjectIncome`
@@ -199,8 +200,16 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
                 getString(R.string.pomp_mixers_on_map_toggle_request)
 
 
+        mBinding.btnRouteDest.setOnClickListener {
+            (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as VehicleFragment).routeAgain()
+        }
+
+        mBinding.btnRouteHome.setOnClickListener {
+            (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as VehicleFragment).routeHomeOrDest(true)
+        }
+
         mBinding.btnRouteProject.setOnClickListener {
-            (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as PompMapFragment).routeAgain()
+            (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as VehicleFragment).routeHomeOrDest(false)
         }
 
     }
@@ -308,7 +317,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             //setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             add(
                 R.id.mapContainer,
-                PompMapFragment.newInstance(mBinding.btnMyLocation.id, mBinding.btnRouteProject.id),
+                PompMapFragment.newInstance(mBinding.btnMyLocation.id, mBinding.btnRouteDest.id),
                 FRAGMENT_MAP_TAG
             )
             commit()
@@ -413,6 +422,19 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
 
     override fun onInternetUnavailable() {
         NoNetworkDialog(this, R.style.my_alert_dialog).show()
+    }
+
+    override fun onShowButtons(shouldShow: Boolean) {
+        /*TODO Add Animation*/
+        if (shouldShow) {
+            mBinding.btnRouteHome.visibility = View.VISIBLE
+            mBinding.btnRouteProject.visibility = View.VISIBLE
+            //mBinding.btnRouteDest.visibility = View.VISIBLE //todo chun 2ta btn dg ezafe shod in ro bardashtam
+        } else {
+            mBinding.btnRouteHome.visibility = View.GONE
+            mBinding.btnRouteProject.visibility = View.GONE
+            //mBinding.btnRouteDest.visibility = View.GONE //todo chun 2ta btn dg ezafe shod in ro bardashtam
+        }
     }
 
 }

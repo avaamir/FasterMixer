@@ -21,6 +21,7 @@ import com.behraz.fastermixer.batch.ui.dialogs.MixerMessageDialog
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
+import com.behraz.fastermixer.batch.ui.fragments.VehicleFragment
 import com.behraz.fastermixer.batch.ui.fragments.mixer.MixerMapFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.MessageListFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
@@ -33,7 +34,7 @@ import kotlin.concurrent.fixedRateTimer
 class MixerActivity : AppCompatActivity(),
     ApiService.InternetConnectionListener,
     ApiService.OnUnauthorizedListener,
-    MixerMessageDialog.Interactions {
+    MixerMessageDialog.Interactions, VehicleFragment.OnUserAndDestLocRetrieved {
 
     private companion object {
         private const val FRAGMENT_MESSAGE_LIST_TAG = "msg-list_frag"
@@ -153,9 +154,22 @@ class MixerActivity : AppCompatActivity(),
         }
 
 
-        mBinding.btnRoute.setOnClickListener {
-            (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as MixerMapFragment).routeAgain()
+        mBinding.btnRouteDest.setOnClickListener {
+            (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as VehicleFragment).routeAgain()
         }
+
+        mBinding.btnRouteHome.setOnClickListener {
+            (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as VehicleFragment).routeHomeOrDest(
+                true
+            )
+        }
+
+        mBinding.btnRouteProject.setOnClickListener {
+            (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as VehicleFragment).routeHomeOrDest(
+                false
+            )
+        }
+
 
     }
 
@@ -213,7 +227,8 @@ class MixerActivity : AppCompatActivity(),
         viewModel.newMissionEvent.observe(this, Observer {
 
             if (it.peekContent().conditionTitle.contains("سمت مقصد")) {
-                viewModel.mixerTimerValue = (now() - (it.peekContent().startMissionTime ?: now())).toInt()
+                viewModel.mixerTimerValue =
+                    (now() - (it.peekContent().startMissionTime ?: now())).toInt()
                 viewModel.mixerTimer = fixedRateTimer(period = 1000L) {
                     viewModel.mixerTimerValue++
                     val stateColor = when {
@@ -228,8 +243,7 @@ class MixerActivity : AppCompatActivity(),
                         }
                     }
 
-                    val time = millisToTimeString(viewModel.mixerTimerValue * 1000L).also { println("debux:$it") }
-                        .substring(5)
+                    val time = millisToTimeString(viewModel.mixerTimerValue * 1000L).substring(5)
                     val hours = time.substring(0, 2)
                     val minutes = time.substring(5, 7)
                     val seconds = time.substring(10, 12)
@@ -247,8 +261,7 @@ class MixerActivity : AppCompatActivity(),
                         if (viewModel.mixerTimerValue % 2 == 0) {
                             mBinding.tvTimerMiddle1.visibility = View.INVISIBLE
                             mBinding.tvTimerMiddle2.visibility = View.INVISIBLE
-                        }
-                        else {
+                        } else {
                             mBinding.tvTimerMiddle1.visibility = View.VISIBLE
                             mBinding.tvTimerMiddle2.visibility = View.VISIBLE
                         }
@@ -275,7 +288,7 @@ class MixerActivity : AppCompatActivity(),
             )
             add(
                 R.id.mapContainer,
-                MixerMapFragment.newInstance(mBinding.btnMyLocation.id, mBinding.btnRoute.id),
+                MixerMapFragment.newInstance(mBinding.btnMyLocation.id, mBinding.btnRouteDest.id),
                 FRAGMENT_MAP_TAG
             )
             commit()
@@ -357,6 +370,18 @@ class MixerActivity : AppCompatActivity(),
 
     override fun onInternetUnavailable() {
         NoNetworkDialog(this, R.style.my_alert_dialog).show()
+    }
+
+    override fun onShowButtons(shouldShow: Boolean) {
+        if (shouldShow) {
+            mBinding.btnRouteHome.visibility = View.VISIBLE
+            mBinding.btnRouteProject.visibility = View.VISIBLE
+            //mBinding.btnRouteDest.visibility = View.VISIBLE //todo chun 2ta btn dg ezafe shod in ro bardashtam
+        } else {
+            mBinding.btnRouteHome.visibility = View.GONE
+            mBinding.btnRouteProject.visibility = View.GONE
+            //mBinding.btnRouteDest.visibility = View.GONE //todo chun 2ta btn dg ezafe shod in ro bardashtam
+        }
     }
 
 

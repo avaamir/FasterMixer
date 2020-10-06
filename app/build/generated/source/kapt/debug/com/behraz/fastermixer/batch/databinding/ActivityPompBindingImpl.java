@@ -12,7 +12,7 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
     @Nullable
     private static final android.util.SparseIntArray sViewsWithIds;
     static {
-        sIncludes = new androidx.databinding.ViewDataBinding.IncludedLayouts(30);
+        sIncludes = new androidx.databinding.ViewDataBinding.IncludedLayouts(31);
         sIncludes.setIncludes(1, 
             new String[] {"item_message_vertical"},
             new int[] {3},
@@ -35,16 +35,17 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
         sViewsWithIds.put(R.id.frameBottomButtons, 17);
         sViewsWithIds.put(R.id.btnWeather, 18);
         sViewsWithIds.put(R.id.btnMyLocation, 19);
-        sViewsWithIds.put(R.id.btnRouteProject, 20);
-        sViewsWithIds.put(R.id.btnRouteHome, 21);
-        sViewsWithIds.put(R.id.frameGPSState, 22);
-        sViewsWithIds.put(R.id.frame_internet, 23);
-        sViewsWithIds.put(R.id.ivInternet, 24);
-        sViewsWithIds.put(R.id.frame_gps, 25);
-        sViewsWithIds.put(R.id.ivGPS, 26);
-        sViewsWithIds.put(R.id.frame_voip, 27);
-        sViewsWithIds.put(R.id.ivVoip, 28);
-        sViewsWithIds.put(R.id.gpBtns, 29);
+        sViewsWithIds.put(R.id.btnRouteDest, 20);
+        sViewsWithIds.put(R.id.btnRouteProject, 21);
+        sViewsWithIds.put(R.id.btnRouteHome, 22);
+        sViewsWithIds.put(R.id.frameGPSState, 23);
+        sViewsWithIds.put(R.id.frame_internet, 24);
+        sViewsWithIds.put(R.id.ivInternet, 25);
+        sViewsWithIds.put(R.id.frame_gps, 26);
+        sViewsWithIds.put(R.id.ivGPS, 27);
+        sViewsWithIds.put(R.id.frame_voip, 28);
+        sViewsWithIds.put(R.id.ivVoip, 29);
+        sViewsWithIds.put(R.id.gpBtns, 30);
     }
     // views
     @NonNull
@@ -57,7 +58,7 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
     // Inverse Binding Event Handlers
 
     public ActivityPompBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 30, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 31, sIncludes, sViewsWithIds));
     }
     private ActivityPompBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 1
@@ -68,23 +69,24 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
             , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[13]
             , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[19]
             , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[12]
-            , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[21]
             , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[20]
+            , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[22]
+            , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[21]
             , (android.widget.Button) bindings[8]
             , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[15]
             , (com.google.android.material.floatingactionbutton.FloatingActionButton) bindings[18]
             , (android.widget.LinearLayout) bindings[17]
-            , (android.widget.LinearLayout) bindings[22]
-            , (android.widget.LinearLayout) bindings[25]
             , (android.widget.LinearLayout) bindings[23]
+            , (android.widget.LinearLayout) bindings[26]
+            , (android.widget.LinearLayout) bindings[24]
             , (android.widget.FrameLayout) bindings[4]
             , (androidx.cardview.widget.CardView) bindings[10]
-            , (android.widget.LinearLayout) bindings[27]
-            , (androidx.constraintlayout.widget.Group) bindings[29]
+            , (android.widget.LinearLayout) bindings[28]
+            , (androidx.constraintlayout.widget.Group) bindings[30]
             , (android.widget.ImageView) bindings[6]
-            , (android.widget.ImageView) bindings[26]
-            , (android.widget.ImageView) bindings[24]
-            , (android.widget.ImageView) bindings[28]
+            , (android.widget.ImageView) bindings[27]
+            , (android.widget.ImageView) bindings[25]
+            , (android.widget.ImageView) bindings[29]
             , (android.view.View) bindings[2]
             , (com.behraz.fastermixer.batch.databinding.ItemMessageVerticalBinding) bindings[3]
             , (android.widget.FrameLayout) bindings[9]
