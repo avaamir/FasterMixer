@@ -13,7 +13,7 @@ object UserRepo {
     private lateinit var job: Job
     private lateinit var context: Context
 
-    private val userDao: UserDao by lazy {
+    val userDao: UserDao by lazy {
         UserDatabase.getInstance(context).getUserDao()
     }
 

@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="میسکری به سمت بچ نمی آید یا پروژه تعریف نشده است"
+            android:text="میکسری به سمت بچ نمی آید یا پروژه تعریف نشده است"
             android:textSize="18sp"
             android:textColor="@color/white"
             app:layout_constraintLeft_toLeftOf="parent"

@@ -209,12 +209,17 @@ class MixerActivity : AppCompatActivity(),
         })
 
         viewModel.messages.observe(this, Observer { _messages ->
-            mBinding.tvMessageCount.text = _messages.filter { !it.viewed }.count().toString()
-            //TODO show like notification for some seconds then hidden it
-            //TODO check if a message is critical and new show in dialog to user
+            val messageFragment =
+                supportFragmentManager.findFragmentByTag(FRAGMENT_MESSAGE_LIST_TAG)
+            if (messageFragment != null && messageFragment.isVisible) {
+                mBinding.tvMessageCount.text = "0"
+            } else {
+                mBinding.tvMessageCount.text = _messages.filter { !it.viewed }.count().toString()
+            }
         })
 
         viewModel.newMessage.observe(this, Observer { event ->
+            //TODO check if a message is critical and new show in dialog to user
             event.getEventIfNotHandled()?.let { _message ->
                 mBinding.layoutNewMessage.message = _message
                 topSheetBehavior.state = TopSheetBehavior.STATE_EXPANDED

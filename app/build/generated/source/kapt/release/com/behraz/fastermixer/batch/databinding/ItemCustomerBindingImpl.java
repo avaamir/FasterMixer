@@ -37,7 +37,7 @@ public class ItemCustomerBindingImpl extends ItemCustomerBinding  {
     }
     private ItemCustomerBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
-            , (com.behraz.fastermixer.batch.ui.customs.fastermixer.CardButton) bindings[17]
+            , (androidx.cardview.widget.CardView) bindings[17]
             , (android.widget.TextView) bindings[9]
             , (android.widget.TextView) bindings[1]
             , (android.widget.TextView) bindings[10]

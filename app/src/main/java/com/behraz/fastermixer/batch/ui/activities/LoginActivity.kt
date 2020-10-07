@@ -277,7 +277,6 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
                                     )
                                     UserType.Admin -> startActivity(Intent(this, AdminActivity::class.java))
                                 }.exhaustive()
-
                             } else {
                                 when (it.entity.userType) {
                                     UserType.Pomp -> startActivity(

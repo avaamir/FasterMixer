@@ -93,7 +93,7 @@
                         app:layout_constraintBottom_toTopOf="@+id/btn_messages"
                         app:layout_constraintTop_toTopOf="parent"
                         app:radius="0dp"
-                        app:text="میسکر ها"
+                        app:text="میکسر ها"
                         app:textSize="@dimen/pomp_menu_btns_font_size" />
 
                     <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton

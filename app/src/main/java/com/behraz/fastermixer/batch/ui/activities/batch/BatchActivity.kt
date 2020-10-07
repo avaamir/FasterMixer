@@ -117,8 +117,14 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction,
         })
 
 
-        viewModel.messages.observe(this, Observer { messages ->
-            mBinding.tvMessageCount.text = messages.filter { !it.viewed }.count().toString()
+        viewModel.messages.observe(this, Observer { _messages ->
+            val messageFragment =
+                supportFragmentManager.findFragmentByTag(FRAGMENT_MESSAGE_LIST_TAG)
+            if (messageFragment != null && messageFragment.isVisible) {
+                mBinding.tvMessageCount.text = "0"
+            } else {
+                mBinding.tvMessageCount.text = _messages.filter { !it.viewed }.count().toString()
+            }
         })
 
         viewModel.newMessage.observe(this, Observer { event ->

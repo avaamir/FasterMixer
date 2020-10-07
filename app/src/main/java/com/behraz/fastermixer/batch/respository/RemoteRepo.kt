@@ -77,9 +77,13 @@ object RemoteRepo {
                 CoroutineScope(IO + serverJobs).launchApi({
                     val response = ApiService.client.login(EntityRequest(loginRequest))
                     if (response.isSuccessful) {
-                        response.body()?.entity?.let { _user ->
-                            UserRepo.clearAndInsertBlocking2(_user)
-                            //UserConfigs.loginUser(_user, true)
+                        val body = response.body()
+                        if (body?.isSucceed == true) {
+                            body.entity?.let { _user ->
+                                UserRepo.userDao.deleteAll()
+                                UserRepo.userDao.insert(_user)
+                                //UserConfigs.loginUser(_user, true)
+                            }
                         }
                     }
                     postValue(response.body())

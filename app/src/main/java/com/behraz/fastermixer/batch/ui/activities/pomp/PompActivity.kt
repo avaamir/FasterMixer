@@ -22,6 +22,7 @@ import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.databinding.ActivityPompBinding
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
+import com.behraz.fastermixer.batch.ui.activities.mixer.MixerActivity
 import com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
 import com.behraz.fastermixer.batch.ui.customs.general.TopSheetBehavior
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
@@ -280,10 +281,14 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             }
         })
 
-        viewModel.messages.observe(this, Observer { messages ->
-            tvMessageCount.text = messages.filter { !it.viewed }.count().toString()
-            //TODO show like notification for some seconds then hidden it
-            //TODO check if a message is critical and new show in dialog to user
+        viewModel.messages.observe(this, Observer { _messages ->
+            val messageFragment =
+                supportFragmentManager.findFragmentByTag(FRAGMENT_MESSAGE_LIST_TAG)
+            if (messageFragment != null && messageFragment.isVisible) {
+                mBinding.tvMessageCount.text = "0"
+            } else {
+                mBinding.tvMessageCount.text = _messages.filter { !it.viewed }.count().toString()
+            }
         })
 
         viewModel.newMessage.observe(this, Observer {

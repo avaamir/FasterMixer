@@ -16,8 +16,8 @@ object UserConfigs {
         UserRepo.users.observeForever { users ->
             if (users.isNotEmpty()) {
                 val user = users[0]
-                println("debug: UserConfigs: $user")
                 ApiService.setToken(user.token)
+                println("debug: UserConfigs token set: $user")
                 userLive.value = user
             }
         }
