@@ -10,8 +10,8 @@ android {
         applicationId "com.behraz.fastermixer.batch"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 18
-        versionName "1.1.8"
+        versionCode 19
+        versionName "1.1.9"
         vectorDrawables.useSupportLibrary = true
     }
     compileOptions {
