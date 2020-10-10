@@ -61,4 +61,5 @@ public abstract class MyBaseDialog extends Dialog {
         }
         return super.dispatchTouchEvent(event);
     }
+
 }

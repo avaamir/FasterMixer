@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.layout_no_network_dialog.*
 class NoNetworkDialog(
     context: Context,
     themeResId: Int
-) : MyBaseDialog(
+) : MyBaseFullScreenDialog(
     context, themeResId,
     R.layout.layout_no_network_dialog
 ) {

@@ -70,12 +70,12 @@ class MixerListFragment : Fragment(), MixerAdapter.PompAdapterInteraction {
                 mixerAdapter.submitList(response.entity)
             } else {
                 toast(response.message)
-                println("debug:error:MixerListFragment:handleServerResponse")
+                println("debug:error:MixerListFragment:handleServerResponse->response.isSucceed=${response.isSucceed}")
                 //TODo
             }
         } else {
             toast(Constants.SERVER_ERROR)
-            println("debug:error:MixerListFragment:handleServerResponse")
+            println("debug:error:MixerListFragment:handleServerResponse->Response is null")
         }
     }
 

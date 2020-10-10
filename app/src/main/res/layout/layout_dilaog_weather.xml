@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="viewData"
+            type="com.behraz.fastermixer.batch.models.requests.openweathermap.WeatherViewData" />
+    </data>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="350dp"
+        android:layout_height="120dp"
+        xmlns:binding="http://schemas.android.com/tools"
+        android:backgroundTint="#00ffffff"
+        android:gravity="center">
+
+        <include
+            android:id="@+id/item_weather"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            layout="@layout/item_weather"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            binding:viewData="@{viewData}"/>
+
+    </LinearLayout>
+</layout>

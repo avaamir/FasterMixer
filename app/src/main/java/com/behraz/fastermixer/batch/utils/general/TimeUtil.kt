@@ -46,7 +46,6 @@ fun estimateTime(duration: Long, sourceUnit: TimeUnit = TimeUnit.MINUTES): Strin
         throw IllegalArgumentException("millis nanos and micros are not valid for TimeUnit")
     }
     TimeUnit.values().reversedArray().forEach { destTimeUnit ->
-        println(destTimeUnit)
         val amount = destTimeUnit.convert(duration, sourceUnit)
         if (amount > 0) {
             return "$amount " + when (destTimeUnit) {

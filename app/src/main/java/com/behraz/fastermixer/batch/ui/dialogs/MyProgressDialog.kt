@@ -9,7 +9,7 @@ class MyProgressDialog(
     context: Context,
     themeResId: Int,
     private val isIntermediate : Boolean = false
-) : MyBaseDialog(
+) : MyBaseFullScreenDialog(
     context, themeResId,
     if (isIntermediate)  R.layout.layout_my_progress_dialog_intermediate  else R.layout.layout_my_progress_dialog
 ) {

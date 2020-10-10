@@ -9,6 +9,7 @@ import com.behraz.fastermixer.batch.models.User
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.utils.general.Event
+import org.osmdroid.util.GeoPoint
 
 class PompActivityViewModel : VehicleActivityViewModel() {
 

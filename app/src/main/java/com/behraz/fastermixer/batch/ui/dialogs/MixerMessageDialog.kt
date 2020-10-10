@@ -11,7 +11,7 @@ class MixerMessageDialog(
     themeResId: Int,
     private val interactions: Interactions
 ) :
-    MyBaseDialog(
+    MyBaseFullScreenDialog(
         activity, themeResId,
         R.layout.mixer_dialog_message
     ) {

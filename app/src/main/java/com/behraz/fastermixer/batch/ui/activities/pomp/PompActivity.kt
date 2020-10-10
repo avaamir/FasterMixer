@@ -1,5 +1,6 @@
 package com.behraz.fastermixer.batch.ui.activities.pomp
 
+import android.animation.Animator
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -10,6 +11,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.view.ViewPropertyAnimator
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -21,14 +23,11 @@ import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.databinding.ActivityPompBinding
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
+import com.behraz.fastermixer.batch.models.requests.openweathermap.WeatherViewData
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
-import com.behraz.fastermixer.batch.ui.activities.mixer.MixerActivity
 import com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
 import com.behraz.fastermixer.batch.ui.customs.general.TopSheetBehavior
-import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
-import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
-import com.behraz.fastermixer.batch.ui.dialogs.PompMessageDialog
-import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
+import com.behraz.fastermixer.batch.ui.dialogs.*
 import com.behraz.fastermixer.batch.ui.fragments.VehicleFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.CustomerListFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.MessageListFragment
@@ -42,8 +41,10 @@ import kotlinx.android.synthetic.main.activity_batch.*
 
 
 class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
-    PompMessageDialog.Interactions, ApiService.OnUnauthorizedListener, VehicleFragment.OnUserAndDestLocRetrieved {
+    PompMessageDialog.Interactions, ApiService.OnUnauthorizedListener,
+    VehicleFragment.OnUserAndDestLocRetrieved {
 
+    private var weatherAnimator: ViewPropertyAnimator? = null
     private lateinit var topSheetBehavior: TopSheetBehavior<View>
     private var projectCount = -1 // this variable work like a flag for `onNewProjectIncome`
 
@@ -187,11 +188,13 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
 
 
         mBinding.btnWeather.setOnClickListener {
-            it.animate().apply {
+            weatherAnimator = it.animate().apply {
                 interpolator = LinearInterpolator()
-                duration = 500
-                rotationBy(360f)
-            }.start()
+                duration = 1000 * 10
+                rotationBy(360f * 10)
+                start()
+            }
+            viewModel.getCurrentWeather()
         }
 
         mBinding.btnShowAllMixersToggle.text =
@@ -206,11 +209,15 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
         }
 
         mBinding.btnRouteHome.setOnClickListener {
-            (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as VehicleFragment).routeHomeOrDest(true)
+            (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as VehicleFragment).routeHomeOrDest(
+                true
+            )
         }
 
         mBinding.btnRouteProject.setOnClickListener {
-            (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as VehicleFragment).routeHomeOrDest(false)
+            (supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG) as VehicleFragment).routeHomeOrDest(
+                false
+            )
         }
 
     }
@@ -221,7 +228,8 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
         if (viewModel.shouldShowAllMixers.value!!) {
             mBinding.btnShowAllMixersToggle.text = getString(R.string.pomp_mixers_on_map_toggle_all)
         } else {
-            mBinding.btnShowAllMixersToggle.text = getString(R.string.pomp_mixers_on_map_toggle_request)
+            mBinding.btnShowAllMixersToggle.text =
+                getString(R.string.pomp_mixers_on_map_toggle_request)
         }
     }
 
@@ -230,6 +238,26 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
         viewModel.user.observe(this, Observer {
             it?.let {
                 //TODO add to ui
+            }
+        })
+
+        viewModel.currentWeather.observe(this, Observer {
+            weatherAnimator?.cancel()
+            mBinding.btnWeather.rotationX = 0f
+            mBinding.btnWeather.rotationY = 0f
+            if (it != null) {
+                if (it.isSucceed) {
+                    WeatherDialog(
+                        this,
+                        R.style.my_alert_dialog,
+                        WeatherViewData(it.entity!!)
+                    ).show()
+                } else {
+                    toast(it.message)
+                }
+            } else {
+                toast(Constants.SERVER_ERROR)
+                println("debug:error:weatherAPI")
             }
         })
 
@@ -262,7 +290,9 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             if (it != null) {
                 if (it.isSucceed) {
                     val customers = it.entity
-                    if (projectCount != (customers?.size ?: 0)) { //age pishfarz projectCount, -1 nabashe age tedad proje haye tarif shode 0 bashe aslan vared in if nemishe
+                    if (projectCount != (customers?.size
+                            ?: 0)
+                    ) { //age pishfarz projectCount, -1 nabashe age tedad proje haye tarif shode 0 bashe aslan vared in if nemishe
                         projectCount = customers?.size ?: 0
                         if (customers.isNullOrEmpty()) {
                             if (viewModel.shouldShowAllMixers.value == false) { //age proje tarif nashode bud mixer haye koli ro neshun bede
@@ -356,7 +386,8 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
                 mBinding.btnShowAllMixersToggle.visibility = View.VISIBLE
                 mBinding.btnShowAllMixersToggle.backgroundTintList =
                     ColorStateList.valueOf(ContextCompat.getColor(this, R.color.btn_blue))
-                val mixerListFragment = supportFragmentManager.findFragmentByTag(FRAGMENT_MIXER_LIST_TAG) as MixerListFragment
+                val mixerListFragment =
+                    supportFragmentManager.findFragmentByTag(FRAGMENT_MIXER_LIST_TAG) as MixerListFragment
                 transaction.show(mixerListFragment)
                 mixerListFragment.scrollToTop()
             }

@@ -8,7 +8,7 @@ class LocationPermissionDialog(
     context: Context,
     themeResId: Int,
     private val onGranted: (Boolean, LocationPermissionDialog) -> Unit
-) : MyBaseDialog(
+) : MyBaseFullScreenDialog(
     context, themeResId,
     R.layout.layout_location_permission_dialog
 ) {

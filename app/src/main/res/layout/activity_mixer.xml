@@ -316,9 +316,9 @@
                     android:layout_marginRight="8dp"
                     android:clickable="true"
                     android:focusable="true"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:backgroundTint="@color/btn_yellow"
-                    app:fabSize="mini"
+                    app:fabSize="normal"
                     app:srcCompat="@drawable/ic_sun"
                     app:tint="@color/white" />
 

@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.view.ViewPropertyAnimator
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -14,13 +15,11 @@ import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.databinding.ActivityMixerBinding
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
+import com.behraz.fastermixer.batch.models.requests.openweathermap.WeatherViewData
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
 import com.behraz.fastermixer.batch.ui.customs.general.TopSheetBehavior
-import com.behraz.fastermixer.batch.ui.dialogs.MixerMessageDialog
-import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
-import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
-import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
+import com.behraz.fastermixer.batch.ui.dialogs.*
 import com.behraz.fastermixer.batch.ui.fragments.VehicleFragment
 import com.behraz.fastermixer.batch.ui.fragments.mixer.MixerMapFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.MessageListFragment
@@ -41,6 +40,7 @@ class MixerActivity : AppCompatActivity(),
         private const val FRAGMENT_MAP_TAG = "map_frag"
     }
 
+    private var weatherAnimator: ViewPropertyAnimator? = null
     private val progressDialog by lazy {
         MyProgressDialog(this, R.style.my_alert_dialog)
     }
@@ -146,11 +146,13 @@ class MixerActivity : AppCompatActivity(),
 
 
         mBinding.btnWeather.setOnClickListener {
-            it.animate().apply {
+            weatherAnimator = it.animate().apply {
                 interpolator = LinearInterpolator()
-                duration = 500
-                rotationBy(360f)
-            }.start()
+                duration = 1000 * 10
+                rotationBy(360f * 10)
+                start()
+            }
+            viewModel.getCurrentWeather()
         }
 
 
@@ -179,6 +181,26 @@ class MixerActivity : AppCompatActivity(),
                 //TODO add user personal info to ui
                 /*mBinding.fasterMixerUserPanel.setUsername(it.name)
                 mBinding.fasterMixerUserPanel.setPersonalCode(it.personalCode)*/
+            }
+        })
+
+        viewModel.currentWeather.observe(this, Observer {
+            weatherAnimator?.cancel()
+            mBinding.btnWeather.rotationX = 0f
+            mBinding.btnWeather.rotationY = 0f
+            if (it != null) {
+                if (it.isSucceed) {
+                    WeatherDialog(
+                        this,
+                        R.style.my_alert_dialog,
+                        WeatherViewData(it.entity!!)
+                    ).show()
+                } else {
+                    toast(it.message)
+                }
+            } else {
+                toast(Constants.SERVER_ERROR)
+                println("debug:error:weatherAPI")
             }
         })
 

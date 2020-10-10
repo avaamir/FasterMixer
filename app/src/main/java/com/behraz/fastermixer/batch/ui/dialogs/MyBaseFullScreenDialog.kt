@@ -1,34 +1,11 @@
 package com.behraz.fastermixer.batch.ui.dialogs
 
-import android.app.Activity
+import android.content.Context
 import android.view.View
 import android.view.WindowManager
-import com.behraz.fastermixer.batch.R
-import kotlinx.android.synthetic.main.layout_behraz_selling_test.*
 
+abstract class MyBaseFullScreenDialog(context: Context, themeResId: Int, layoutResId: Int) : MyBaseDialog(context, themeResId, layoutResId) {
 
-class BehrazSellingTestDialog(
-    activity: Activity,
-    themeResId: Int,
-    private val interactions: Interactions
-) :
-    MyBaseFullScreenDialog(
-        activity, themeResId,
-        R.layout.layout_behraz_selling_test
-    ) {
-
-
-    override fun initViews() {
-        btnMessage.setOnClickListener {
-            interactions.onTestDialogPompLogin()
-            dismiss()
-        }
-
-        btnStop.setOnClickListener {
-            interactions.onTestDialogBatchLogin()
-            dismiss()
-        }
-    }
 
 
     override fun show() {
@@ -51,9 +28,6 @@ class BehrazSellingTestDialog(
         window!!.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
     }
 
-    interface Interactions {
-        fun onTestDialogPompLogin()
-        fun onTestDialogBatchLogin()
-    }
-}
 
+
+}

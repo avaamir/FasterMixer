@@ -4,9 +4,12 @@ import com.behraz.fastermixer.batch.models.*
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
 import com.behraz.fastermixer.batch.models.requests.Fence
 import com.behraz.fastermixer.batch.models.requests.behraz.*
+import com.behraz.fastermixer.batch.models.requests.openweathermap.CurrentWeatherByCoordinatesResponse
+import com.behraz.fastermixer.batch.models.requests.openweathermap.ForecastWeatherByCoordinatesResponse
 import com.behraz.fastermixer.batch.models.requests.route.GetRouteResponse
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.respository.apiservice.MapService
+import com.behraz.fastermixer.batch.respository.apiservice.WeatherService
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
 import com.behraz.fastermixer.batch.utils.fastermixer.fakePlans
@@ -272,6 +275,35 @@ object RemoteRepo {
     }
 
     fun checkUpdates() = apiReq(ApiService.client::checkUpdates)
+
+    fun getCurrentWeatherByCoordinates(location: GeoPoint): RunOnceLiveData<Entity<CurrentWeatherByCoordinatesResponse>> {
+        return object : RunOnceLiveData<Entity<CurrentWeatherByCoordinatesResponse>>() {
+            override fun onActiveRunOnce() {
+                if (!RemoteRepo::serverJobs.isInitialized || !serverJobs.isActive) serverJobs =
+                    Job()
+                CoroutineScope(IO + serverJobs).launchApi({
+                    val response = WeatherService.client.getCurrentWeatherByCoordinates(
+                        location.latitude.toString(),
+                        location.longitude.toString()
+                    )
+                    withContext(Main) {
+                        value = if (response.isSuccessful) {
+                            Entity(response.body(), true, null)
+                        } else {
+                            Entity(
+                                null,
+                                false,
+                                response.code().toString() + ":" + response.message()
+                            )
+
+                        }
+                    }
+                }, {
+                    value = null
+                })
+            }
+        }
+    }
 
 
 }

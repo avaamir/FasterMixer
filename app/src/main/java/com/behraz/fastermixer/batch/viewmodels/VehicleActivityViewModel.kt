@@ -13,6 +13,7 @@ import com.behraz.fastermixer.batch.utils.general.Event
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.osmdroid.util.GeoPoint
 import java.lang.IllegalStateException
 
 abstract class VehicleActivityViewModel : ParentViewModel() {
@@ -27,6 +28,10 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
     //TODO  get from GPS // curently it will receive from server from car GPS, In new Version Maybe Needed
     val getUserLocationResponse = MutableLiveData<GetVehicleLocationResponse?>() //we did not use Transformation because it is not always have a observer , But We Always have to update it's value for sorting mixers, the only observer is in map fragment
 
+    private val getCurrentWeatherEvent = MutableLiveData<GeoPoint>()
+    val currentWeather = Transformations.switchMap(getCurrentWeatherEvent) {
+        RemoteRepo.getCurrentWeatherByCoordinates(it)
+    }
 
     val newMissionEvent = MutableLiveData<Event<Mission>>()
     val getMissionError = MutableLiveData<Event<String>>()
@@ -102,6 +107,11 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
                 getMissionEvent.value = Event(Unit)
             }
         }
+    }
+
+
+    fun getCurrentWeather() {
+        getCurrentWeatherEvent.value = getUserLocationResponse.value!!.circleFence.center
     }
 
 }

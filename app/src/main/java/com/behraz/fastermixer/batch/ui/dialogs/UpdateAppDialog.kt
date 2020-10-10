@@ -10,7 +10,7 @@ class UpdateAppDialog(
     themeResId: Int,
     private val isForce: Boolean,
     private val onGranted: (Boolean, UpdateAppDialog) -> Unit
-) : MyBaseDialog(
+) : MyBaseFullScreenDialog(
     context, themeResId,
     R.layout.layout_update_app_info
 ) {

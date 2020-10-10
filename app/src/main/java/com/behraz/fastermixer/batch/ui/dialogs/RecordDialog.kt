@@ -10,7 +10,7 @@ class RecordDialog(
     context: Context,
     themeResId: Int,
     private val onStopRecordClicked: () -> Unit
-) : MyBaseDialog(
+) : MyBaseFullScreenDialog(
     context, themeResId,
     R.layout.layout_record_dialog
 ) {
