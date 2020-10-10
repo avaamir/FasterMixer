@@ -75,6 +75,9 @@ class AppUpdater(
                 intent.setDataAndType(Uri.fromFile(downloadLocationFile), type)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             }
+            CoroutineScope(Main).launch {
+                interactions.onDownloadFinished()
+            }
             activity.startActivity(intent)
         } else {
             CoroutineScope(Main).launch { interactions.onDownloadCancelled("فایل مورد نظر یافت نشد") }
@@ -105,13 +108,10 @@ class AppUpdater(
         //   withContext(IO) {
         // take CPU lock to prevent CPU from going off if the user
         // presses the power button during download
-
-        // take CPU lock to prevent CPU from going off if the user
-        // presses the power button during download
-        val wl = (activity.getSystemService(Context.POWER_SERVICE) as PowerManager).newWakeLock(
-            PowerManager.PARTIAL_WAKE_LOCK,
-            javaClass.name
-        )
+        val wl = (activity.getSystemService(Context.POWER_SERVICE) as PowerManager)
+            .newWakeLock(
+                PowerManager.PARTIAL_WAKE_LOCK, javaClass.name
+            )
         wl.acquire(10 * 60 * 1000L /*10 minutes*/)
 
 
@@ -153,6 +153,7 @@ class AppUpdater(
                 }
                 CoroutineScope(Main).launch {
                     interactions.onProgressUpdate(100)
+                    interactions.onDownloadFinished()
                     install()
                 }
             }
@@ -173,6 +174,7 @@ class AppUpdater(
     interface Interactions {
         fun onDownloadStarted()
         fun onProgressUpdate(progress: Int)
+        fun onDownloadFinished()
         fun onDownloadCancelled(message: String)
         fun onServerError(serverCode: Int)
     }

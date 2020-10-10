@@ -2,12 +2,13 @@ package com.behraz.fastermixer.batch.ui.activities
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
-import com.behraz.fastermixer.batch.utils.general.AppUpdater
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.models.requests.behraz.UpdateResponse
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
+import com.behraz.fastermixer.batch.utils.general.AppUpdater
 import com.behraz.fastermixer.batch.utils.general.alert
 import com.behraz.fastermixer.batch.utils.general.toast
 import kotlinx.android.synthetic.main.activity_update.*
@@ -39,7 +40,12 @@ class UpdateActivity : AppCompatActivity(), AppUpdater.Interactions {
                             AppUpdater(
                                 this,
                                 it.link,
-                                "$cacheDir/FasterMixer.apk",
+                                //"$cacheDir/FasterMixer.apk",
+                                "${getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)}/FasterMixer.apk".also {
+                                    println(
+                                        "debux:$it"
+                                    )
+                                },
                                 it.version,
                                 this
                             ).startIfNeeded()
@@ -67,8 +73,11 @@ class UpdateActivity : AppCompatActivity(), AppUpdater.Interactions {
 
     override fun onProgressUpdate(progress: Int) {
         dialog.setProgress(progress)
-        if (progress == 100) {
-            isDownloadUpdateFinished = true
+    }
+
+    override fun onDownloadFinished() {
+        isDownloadUpdateFinished = true
+        if (::dialog.isInitialized) {
             dialog.dismiss()
         }
     }

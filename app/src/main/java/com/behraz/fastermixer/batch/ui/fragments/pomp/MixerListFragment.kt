@@ -21,6 +21,7 @@ import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.ui.adapters.MixerAdapter
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
+import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 
 class MixerListFragment : Fragment(), MixerAdapter.PompAdapterInteraction {
@@ -68,10 +69,13 @@ class MixerListFragment : Fragment(), MixerAdapter.PompAdapterInteraction {
             if (response.isSucceed) {
                 mixerAdapter.submitList(response.entity)
             } else {
+                toast(response.message)
+                println("debug:error:MixerListFragment:handleServerResponse")
                 //TODo
             }
         } else {
-            //TODo
+            toast(Constants.SERVER_ERROR)
+            println("debug:error:MixerListFragment:handleServerResponse")
         }
     }
 

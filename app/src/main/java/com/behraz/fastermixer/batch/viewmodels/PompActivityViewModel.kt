@@ -8,7 +8,6 @@ import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.User
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.respository.RemoteRepo
-import com.behraz.fastermixer.batch.utils.general.DoubleTrigger
 import com.behraz.fastermixer.batch.utils.general.Event
 
 class PompActivityViewModel : VehicleActivityViewModel() {
@@ -19,7 +18,7 @@ class PompActivityViewModel : VehicleActivityViewModel() {
     @Volatile
     private var isGetMixerRequestActive = false
 
-    var shouldShowAllMixers = MutableLiveData<Boolean>(false)
+    val shouldShowAllMixers = MutableLiveData<Boolean>(false)
 
     private val getMixersEvent = MutableLiveData(Event(Unit))
     val allMixers = Transformations.switchMap(getMixersEvent) {
