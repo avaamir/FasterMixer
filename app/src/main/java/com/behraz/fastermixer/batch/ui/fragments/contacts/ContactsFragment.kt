@@ -35,43 +35,96 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
         const val user = "root"
         const val password = "4357"
         val teltonikaCommands = listOf(
-            /*//Server IP
-            "$user $password setparam 2004:2.184.49.133",
-            //Server Port
-            "$user $password setparam 2005:5027",
-            //Backup Mode
-            "$user $password setparam 2010:2",
-            //Backup Port
-            "$user $password setparam 2008:5027",
-            //Backup IP
-            "$user $password setparam 2007:78.39.159.41",
-            //onStop Sending Period
-            "$user $password setparam 10000:300",
-            "$user $password setparam 10005:300",
-            //OnMove Sending Period
-            "$user $password setparam 10050:5",
-            "$user $password setparam 10055:5",
             //Open Link Timeout
-            "$user $password setparam 1000:130",
+            "1000:30",
             //Response Timeout
-            "$user $password setparam 1001:300",
-            //Ignition Source
-            "$user $password setparam 101:1",*/
+            "1001:30",
+            //Server IP
+            "2004:2.184.49.133",
+            //Server Port
+            "2005:5027",
+            //Backup Mode
+            "2010:2",
+            //Backup Port
+            "2008:5027",
+            //Backup IP
+            "2007:78.39.159.41",
+            //onStop Sending Period
+            "10000:300",
+            "10005:300",
+
+            //#Home----
+            //OnMove Sending Period
+            "10050:5",
             //Data Sending: Min Distance
-            "$user $password setparam 10051:0",
+            "10051:100",
             //Data Sending: Min Angle
-            "$user $password setparam 10052:0",
+            "10052:10",
             //Data Sending: Min Speed Delta
-            "$user $password setparam 10053:0",
-            //
+            "10053:10",
             //Recorded Data Sending Rate
-            "$user $password setparam 10054:100",
+            "10054:100",
+            //Send Period
+            "10055:5",
+            //#Roaming
+            //OnMove Sending Period
+            "10150:5",
+            //Data Sending: Min Distance
+            "10151:100",
+            //Data Sending: Min Angle
+            "10152:10",
+            //Data Sending: Min Speed Delta
+            "10153:10",
+            //Recorded Data Sending Rate
+            "10154:100",
+            //Send Period
+            "10155:5",
+            //#Unknown
+            //OnMove Sending Period
+            "10250:5",
+            //Data Sending: Min Distance
+            "10251:100",
+            //Data Sending: Min Angle
+            "10252:10",
+            //Data Sending: Min Speed Delta
+            "10253:10",
+            //Recorded Data Sending Rate
+            "10254:100",
+            //Send Period
+            "10255:5",
+            //----
+            //Ignition Source
+            "101:1",
+            //
             //Recorded Data Sending Order
-            "$user $password setparam 1002:0" //0:newest 1:oldest
+            "1002:0" //0:newest 1:oldest
             //Reset CPU
             //"$user $password cpureset"
         )
 
+        /*fun createCommand(ids: List<Int>): String {
+            if (ids.isNotEmpty()) {
+                var result = "$user $password setparam "
+                ids.forEach {
+                    result += "${teltonikaCommands[it]};"
+                }
+                return result
+            } else
+                throw IllegalArgumentException("fuck you")
+        }
+
+        fun createCommand(vararg ids: Int) = createCommand(ids.toList())*/
+
+        fun createCommand(commands: List<String>) : String{
+            if (commands.isNotEmpty()) {
+                var result = "$user $password setparam "
+                commands.forEach {
+                    result += "$it;"
+                }
+                return result
+            } else
+                throw IllegalArgumentException("fuck you")
+        }
 
         private val CONTACTS_JAMKARAN = listOf(
             Contact("سواری شخصی", "09381522686", "jamkaran"),
@@ -157,10 +210,10 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
                 if (contacts.isNotEmpty()) {
                     CoroutineScope(Dispatchers.Main).launch {
                         progressDialog.show()
-                        val isSendSomething = sendCommandsAsync(teltonikaCommands, contacts) {
-                            println("debug:progress:$it")
-                            progressDialog.setProgress(it)
-                        }.await()
+                        val isSendSomething = sendCommandsAsync(createCommand(teltonikaCommands), contacts) {
+                                println("debug:progress:$it")
+                                progressDialog.setProgress(it)
+                            }.await()
                         progressDialog.dismiss()
                         if (isSendSomething) {
                             toast("دستورات ارسال شد")
@@ -252,6 +305,28 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
                 if (contacts.size < 20) //sendingPeriod = contacts.size * 100ms
                     delay(1000)
             }
+            isSendSomething
+        }
+
+    private fun sendCommandsAsync(
+        commands: String,
+        contacts: List<Contact>,
+        onProgressUpdate: (Int) -> Unit
+    ) =
+        CoroutineScope(Dispatchers.Main).async {
+            val total = contacts.size
+            var progress = 0
+            var isSendSomething = false
+
+            contacts.forEach { contact ->
+                sendSMS(contact.mobileNumber, commands)
+                delay(100)
+                isSendSomething = true
+                onProgressUpdate((++progress * 100) / total)
+            }
+            if (contacts.size < 20) //sendingPeriod = contacts.size * 100ms
+                delay(1000)
+
             isSendSomething
         }
 

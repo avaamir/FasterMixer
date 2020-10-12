@@ -198,7 +198,6 @@ abstract class BaseMapFragment : Fragment(),
 
     fun moveCamera(geoPoint: GeoPoint, zoom: Double = 18.0) {
         _mBinding.map.controller.run {
-            println("fuck: $geoPoint")
             setCenter(geoPoint)
             zoomTo(zoom)
             // animateTo(geoPoint)

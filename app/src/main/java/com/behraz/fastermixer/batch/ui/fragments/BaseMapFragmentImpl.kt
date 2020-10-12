@@ -133,7 +133,16 @@ class BaseMapFragmentImpl : BaseMapFragment() {
 
         LocationCompassProvider.location.observe(viewLifecycleOwner, Observer { location ->
             //TODO age location va lastLocation kheli fasele dasht dg animate nashe va mostaghim bere un noghte
-            animateMarker(userMarker, GeoPoint(location.latitude, location.longitude))
+            val point = GeoPoint(location.latitude, location.longitude)
+            animateMarker(userMarker, point)
+            println("debuxL:$point")
+
+            /*lastLocation?.let {
+                if (it.distanceToAsDouble(point) > 10) {
+                    mBinding.map.controller.setCenter(point)
+                }
+            }
+            lastLocation = point*/
             // toast("new Location")
         })
 
@@ -153,6 +162,7 @@ class BaseMapFragmentImpl : BaseMapFragment() {
 
     }
 
+    private var lastLocation: GeoPoint? = null
     var lastOrientation = 0f
 
     override fun onDestroy() {
