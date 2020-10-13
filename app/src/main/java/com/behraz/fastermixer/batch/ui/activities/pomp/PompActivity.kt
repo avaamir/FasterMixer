@@ -382,17 +382,20 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
         supportFragmentManager.beginTransaction().apply {
             add(
                 R.id.mapContainer,
-                MixerListFragment(), FRAGMENT_MIXER_LIST_TAG
+                MixerListFragment().also { hide(it) }
+                , FRAGMENT_MIXER_LIST_TAG
             )
             //addToBackStack(null)
             //setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             add(
                 R.id.mapContainer,
-                CustomerListFragment(), FRAGMENT_CUSTOMER_LIST_TAG
+                CustomerListFragment().also { hide(it) }
+                , FRAGMENT_CUSTOMER_LIST_TAG
             )
             add(
                 R.id.mapContainer,
-                MessageListFragment(), FRAGMENT_MESSAGE_LIST_TAG
+                MessageListFragment().also { hide(it) }
+                , FRAGMENT_MESSAGE_LIST_TAG
             )
             //addToBackStack(null)
             //setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)

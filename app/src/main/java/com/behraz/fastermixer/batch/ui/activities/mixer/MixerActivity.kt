@@ -276,7 +276,7 @@ class MixerActivity : AppCompatActivity(),
         viewModel.messages.observe(this, Observer { _messages ->
             val messageFragment =
                 supportFragmentManager.findFragmentByTag(FRAGMENT_MESSAGE_LIST_TAG)
-            if (messageFragment != null && messageFragment.isVisible) {
+            if (messageFragment?.isVisible == true) {
                 mBinding.tvMessageCount.text = "0"
             } else {
                 mBinding.tvMessageCount.text = _messages.filter { !it.viewed }.count().toString()
@@ -354,7 +354,8 @@ class MixerActivity : AppCompatActivity(),
         supportFragmentManager.beginTransaction().apply {
             add(
                 R.id.mapContainer,
-                MessageListFragment(), FRAGMENT_MESSAGE_LIST_TAG
+                MessageListFragment().also { hide(it) },
+                FRAGMENT_MESSAGE_LIST_TAG
             )
             add(
                 R.id.mapContainer,
