@@ -28,6 +28,9 @@ object LocationCompassProvider : LocationListener, IOrientationConsumer {
         val isCompassProvider: Boolean
     )
 
+
+    //val isStarted get() = compass != null
+
     private val _userAngle = MutableLiveData<AngleResult>()
     private val _northAngle = MutableLiveData<AngleResult>()
     private val _location = MutableLiveData<Location>()
@@ -109,9 +112,8 @@ object LocationCompassProvider : LocationListener, IOrientationConsumer {
         return true
     }
 
-
     fun stop(context: Context) {
-        if (compass != null)
+        if (compass == null)
             throw IllegalStateException("not started")
 
         compass!!.stopOrientationProvider()

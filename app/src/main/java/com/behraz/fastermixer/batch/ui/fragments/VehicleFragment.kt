@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import com.behraz.fastermixer.batch.app.LocationCompassProvider
 import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.models.requests.Fence
@@ -27,8 +28,10 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polygon
 import org.osmdroid.views.overlay.Polyline
 import java.lang.IllegalStateException
+import kotlin.math.abs
 
 abstract class VehicleFragment : BaseMapFragment() {
+    private var lastOrientation: Float = 0f
 
     private var onUserAndDestLocRetrieved: OnUserAndDestLocRetrieved? = null
 
@@ -91,8 +94,15 @@ abstract class VehicleFragment : BaseMapFragment() {
         super.onCreateView(inflater, container, savedInstanceState)
 
         subscribeObservers()
+        initLocationCompassProvider()
 
         return mBinding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        println("debugfuck")
+        LocationCompassProvider.stop(context!!)
     }
 
     override fun initViews() {
@@ -119,22 +129,54 @@ abstract class VehicleFragment : BaseMapFragment() {
         }
     }
 
+    private fun initLocationCompassProvider() {
+        LocationCompassProvider.fixDeviceOrientationForCompassCalculation(activity!!)
+        LocationCompassProvider.start(context!!)
+
+
+        LocationCompassProvider.userAngle.observeForever {
+            if (!vehicleActivityViewModel.isServerLocationProvider) {
+                if (abs(it.angle - lastOrientation) > 0.5f) {
+                    lastOrientation = it.angle
+                    animateCameraToMapOrientation(it.angle)
+                }
+            } else {
+                if (mBinding.map.mapOrientation != 0f) { //TODO badan alamat compass ham mishe biad va ruye un zad dorost beshe
+                    lastOrientation = 0f
+                    animateCameraToMapOrientation(0f)
+                }
+            }
+        }
+
+        /*LocationCompassProvider.northAngle.observe(viewLifecycleOwner, Observer {
+            println("debugN: $it")
+        })*/
+    }
 
     protected open fun subscribeObservers() {
         vehicleActivityViewModel.getUserLocationResponse.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                mMapViewModel.myLocation = it.circleFence.center
-                animateMarker(userMarker, it.circleFence.center)
+                mMapViewModel.myLocation = it.location
+                animateMarker(userMarker, it.location)
                 if (shouldCameraTrackUser || isFirstCameraMove) {
                     isFirstCameraMove = false
-                    moveCamera(it.circleFence.center)
+                    moveCamera(it.location)
                 }
                 if (mMapViewModel.hasNewMission) {
                     mMapViewModel.hasNewMission = false
                     onNewMission(vehicleActivityViewModel.newMissionEvent.value!!.peekContent())
                 }
+                /*lastLocation?.let {
+                    if (it.distanceToAsDouble(point) > 10) {
+                        mBinding.map.controller.setCenter(point)
+                    }
+                }
+                lastLocation = point*/
             }
         })
+
+
+
 
         vehicleActivityViewModel.newMissionEvent.observe(viewLifecycleOwner, Observer { event ->
             event.getEventIfNotHandled()?.let { mission ->

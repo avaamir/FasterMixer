@@ -3,11 +3,10 @@ package com.behraz.fastermixer.batch.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.map
-import com.behraz.fastermixer.batch.models.Message
+import com.behraz.fastermixer.batch.app.LocationCompassProvider
 import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.models.requests.behraz.GetVehicleLocationResponse
 import com.behraz.fastermixer.batch.respository.RemoteRepo
-import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.Event
 import kotlinx.coroutines.CoroutineScope
@@ -18,6 +17,14 @@ import java.lang.IllegalStateException
 
 abstract class VehicleActivityViewModel : ParentViewModel() {
 
+    var isServerLocationProvider: Boolean = false
+        set(value) {
+            if (value) {
+                getUserLocationResponse.value = lastServerLocationResponse
+            }
+            field = value
+        }
+
     @Volatile
     private var isGetUserLocationRequestActive = false
 
@@ -26,7 +33,8 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
 
 
     //TODO  get from GPS // curently it will receive from server from car GPS, In new Version Maybe Needed
-    val getUserLocationResponse = MutableLiveData<GetVehicleLocationResponse?>() //we did not use Transformation because it is not always have a observer , But We Always have to update it's value for sorting mixers, the only observer is in map fragment
+    val getUserLocationResponse =
+        MutableLiveData<GetVehicleLocationResponse?>() //we did not use Transformation because it is not always have a observer , But We Always have to update it's value for sorting mixers, the only observer is in map fragment
 
     private val getCurrentWeatherEvent = MutableLiveData<GeoPoint>()
     val currentWeather = Transformations.switchMap(getCurrentWeatherEvent) {
@@ -38,7 +46,7 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
     private val getMissionEvent = MutableLiveData(Event(Unit))
     private val getMissionResponse = Transformations.switchMap(getMissionEvent) {
         RemoteRepo.getMission(
-            when(this) {
+            when (this) {
                 is MixerActivityViewModel -> false
                 is PompActivityViewModel -> true
                 else -> throw IllegalStateException("this type not yet defined here")
@@ -80,8 +88,17 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
                 getMissionError.value = Event(Constants.SERVER_ERROR) //TODO?
             }
         }
+
+        LocationCompassProvider.location.observeForever { location ->
+            if (!isServerLocationProvider) {
+                //TODO age location va lastLocation kheli fasele dasht dg animate nashe va mostaghim bere un noghte
+                getUserLocationResponse.value = GetVehicleLocationResponse.create(location)
+            }
+        }
+
     }
 
+    private var lastServerLocationResponse: GetVehicleLocationResponse? = null
 
     protected open fun getUserLocation(equipmentId: String) {
         if (!isGetUserLocationRequestActive) {
@@ -90,8 +107,10 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
                 isGetUserLocationRequestActive = false
                 if (it != null) {
                     if (it.isSucceed) {
-                        getUserLocationResponse.value =
-                            it.entity //age observer nadashte bashe set nemishe, age scenario avaz shod deghat kon, alan mapFragment Observersh hast
+                        lastServerLocationResponse = it.entity
+                        if (isServerLocationProvider) {
+                            getUserLocationResponse.value = it.entity//age observer nadashte bashe set nemishe, age scenario avaz shod deghat kon, alan mapFragment Observersh hast
+                        }
                     } else {
                         //TODO what should i do?
                     }
@@ -111,7 +130,6 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
 
 
     fun getCurrentWeather() {
-        getCurrentWeatherEvent.value = getUserLocationResponse.value!!.circleFence.center
+        getCurrentWeatherEvent.value = getUserLocationResponse.value!!.location
     }
-
 }

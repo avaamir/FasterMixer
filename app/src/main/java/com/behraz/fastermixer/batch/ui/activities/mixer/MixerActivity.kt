@@ -1,10 +1,10 @@
 package com.behraz.fastermixer.batch.ui.activities.mixer
 
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
-import android.view.View
-import android.view.ViewPropertyAnimator
+import android.view.*
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -66,6 +66,7 @@ class MixerActivity : AppCompatActivity(),
 
         initViews()
         subscribeObservers()
+        registerMenus()
 
 
         subscribeNetworkStateChangeListener {
@@ -87,6 +88,48 @@ class MixerActivity : AppCompatActivity(),
         }
     }
 
+    private fun registerMenus() {
+        registerForContextMenu(mBinding.btnMyLocation)
+    }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu,
+        v: View,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        if (v.id == mBinding.btnMyLocation.id) {
+            menu.setHeaderTitle(
+                createSpannableString(
+                    "دریافت موقعیت مکانی از",
+                    (application as FasterMixerApplication).iransansMedium,
+                    Color.RED
+                )
+            )
+            menuInflater.inflate(R.menu.choose_location_provider, menu)
+            if (viewModel.isServerLocationProvider)
+                menu.getItem(1).apply { title = " ✓  $title" }
+            else
+                menu.getItem(0).apply { title = " ✓  $title" }
+            applyFontToMenu(menu)
+        }
+    }
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.from_GPS -> {
+                viewModel.isServerLocationProvider = false
+                true
+            }
+            R.id.from_Server -> {
+                viewModel.isServerLocationProvider = true
+                true
+            }
+            else -> super.onContextItemSelected(item)
+        }
+    }
+    override fun onContextMenuClosed(menu: Menu) {
+        super.onContextMenuClosed(menu)
+        fullScreen()
+    }
 
     private fun initViews() {
         mBinding.layoutNewMessage.root.setOnClickListener {

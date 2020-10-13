@@ -1,6 +1,5 @@
 package com.behraz.fastermixer.batch.ui.activities.pomp
 
-import android.animation.Animator
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -8,13 +7,16 @@ import android.content.IntentFilter
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
-import android.view.View
-import android.view.ViewPropertyAnimator
+import android.text.Spannable
+import android.text.SpannableString
+import android.view.*
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -99,6 +101,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
         mBinding.viewModel = viewModel
 
         initViews()
+        registerMenus()
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
             locateMixerReceiver,
@@ -124,6 +127,49 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
         if (FasterMixerApplication.isDemo) {
             mBinding.layoutDemo.visibility = View.VISIBLE
         }
+    }
+
+    private fun registerMenus() {
+        registerForContextMenu(mBinding.btnMyLocation)
+    }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu,
+        v: View,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        if (v.id == mBinding.btnMyLocation.id) {
+            menu.setHeaderTitle(
+                createSpannableString(
+                    "دریافت موقعیت مکانی از",
+                    (application as FasterMixerApplication).iransansMedium,
+                    Color.RED
+                )
+            )
+            menuInflater.inflate(R.menu.choose_location_provider, menu)
+            if (viewModel.isServerLocationProvider)
+                menu.getItem(1).apply { title = " ✓  $title" }
+            else
+                menu.getItem(0).apply { title = " ✓  $title" }
+            applyFontToMenu(menu)
+        }
+    }
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.from_GPS -> {
+                viewModel.isServerLocationProvider = false
+                true
+            }
+            R.id.from_Server -> {
+                viewModel.isServerLocationProvider = true
+                true
+            }
+            else -> super.onContextItemSelected(item)
+        }
+    }
+    override fun onContextMenuClosed(menu: Menu) {
+        super.onContextMenuClosed(menu)
+        fullScreen()
     }
 
     override fun onDestroy() {

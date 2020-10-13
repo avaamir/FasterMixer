@@ -6,10 +6,10 @@ import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.Customer
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.User
+import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.utils.general.Event
-import org.osmdroid.util.GeoPoint
 
 class PompActivityViewModel : VehicleActivityViewModel() {
 
@@ -39,15 +39,15 @@ class PompActivityViewModel : VehicleActivityViewModel() {
         val sortedMixers = getUserLocationResponse.value?.let { pompLocation ->
             response?.entity?.let { mixers ->
                 if (mixers.size == 1) {
-                    if (mixers[0].state != "تخلیه") mixers[0].normalizeStateByDistance(pompLocation.circleFence)
+                    if (mixers[0].state != "تخلیه") mixers[0].normalizeStateByDistance(CircleFence(pompLocation.location, 10.0))
                     mixers
                 } else
                     mixers.sortedWith(
                         compareBy { mixer ->
-                            mixer.location.distanceToAsDouble(pompLocation.circleFence.center)
+                            mixer.location.distanceToAsDouble(pompLocation.location)
                                 .also {
                                     mixer.normalizeStateByDistance(
-                                        pompLocation.circleFence
+                                        CircleFence(pompLocation.location, 10.0)
                                     )
                                 }
                         }

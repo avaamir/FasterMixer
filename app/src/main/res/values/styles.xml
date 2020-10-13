@@ -6,8 +6,21 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
-
+        <item name="textAppearanceLargePopupMenu">@style/AppTheme.TextAppearance.Popup</item>
+        <item name="textAppearancePopupMenuHeader">@style/AppTheme.TextAppearance.Popup</item>
+        <item name="textAppearanceSmallPopupMenu">@style/AppTheme.TextAppearance.Popup</item>
+        <item name="itemTextAppearance">@style/AppTheme.TextAppearance.Popup</item>
     </style>
+
+    <style name="AppTheme.TextAppearance.Popup" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="fontFamily">@font/iransans</item>
+    </style>
+
+<!--
+    <style name="PopupTheme" parent="Theme.AppCompat.Light">
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/red</item>
+    </style>-->
 
     <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_background</item>
