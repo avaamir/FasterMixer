@@ -43,10 +43,11 @@ class MixerListFragment : Fragment(), MixerAdapter.PompAdapterInteraction {
 
     private fun observeViewModel() {
         viewModel.shouldShowAllMixers.observe(viewLifecycleOwner, Observer { shouldShowAll ->
-            if (shouldShowAll)
+            if (shouldShowAll) {
                 handleServerResponse(viewModel.allMixers.value)
-            else
+            } else {
                 handleServerResponse(viewModel.requestMixers.value)
+            }
         })
 
         viewModel.allMixers.observe(viewLifecycleOwner, Observer {
@@ -74,7 +75,6 @@ class MixerListFragment : Fragment(), MixerAdapter.PompAdapterInteraction {
                 //TODo
             }
         } else {
-            toast(Constants.SERVER_ERROR)
             println("debug:error:MixerListFragment:handleServerResponse->Response is null")
         }
     }

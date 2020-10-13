@@ -113,6 +113,7 @@ class MixerActivity : AppCompatActivity(),
             applyFontToMenu(menu)
         }
     }
+
     override fun onContextItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.from_GPS -> {
@@ -126,6 +127,7 @@ class MixerActivity : AppCompatActivity(),
             else -> super.onContextItemSelected(item)
         }
     }
+
     override fun onContextMenuClosed(menu: Menu) {
         super.onContextMenuClosed(menu)
         fullScreen()
@@ -195,7 +197,11 @@ class MixerActivity : AppCompatActivity(),
                 rotationBy(360f * 10)
                 start()
             }
-            viewModel.getCurrentWeather()
+            if (viewModel.getUserLocationResponse.value != null) {
+                viewModel.getCurrentWeather()
+            } else {
+                toast(getString(R.string.location_not_found_yet))
+            }
         }
 
 

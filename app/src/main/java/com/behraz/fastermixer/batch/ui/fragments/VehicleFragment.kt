@@ -234,7 +234,10 @@ abstract class VehicleFragment : BaseMapFragment() {
                     println("debux: drawPolyline Called: ${routePolyline}, $it ${it.getRoutePoints()}")
                 } else {
                     println("debux: getRouteResponse unSuccessful")
-                    toast(Constants.SERVER_ERROR)
+                    if (it.code == "NoRoute")
+                        toast("متاسفانه در این منطقه مسیریابی ممکن نیست")
+                    else
+                        toast(Constants.SERVER_ERROR)
                 }
             } else {
                 println("debux: getRouteResponse null")

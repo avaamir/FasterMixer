@@ -7,16 +7,12 @@ import android.content.IntentFilter
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
-import android.text.Spannable
-import android.text.SpannableString
 import android.view.*
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -240,7 +236,11 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
                 rotationBy(360f * 10)
                 start()
             }
-            viewModel.getCurrentWeather()
+            if (viewModel.getUserLocationResponse.value != null) {
+                viewModel.getCurrentWeather()
+            } else {
+                toast(getString(R.string.location_not_found_yet))
+            }
         }
 
         mBinding.btnShowAllMixersToggle.text =

@@ -79,11 +79,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{viewData.description}"
-                android:textSize="22sp"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView9"
                 app:layout_constraintEnd_toStartOf="@+id/imageView9"
                 app:layout_constraintTop_toTopOf="@+id/imageView9"
-                tools:text="کمی ابری" />
+                tools:text="ابرهای پاره پاره شده" />
 
 
             <TextView

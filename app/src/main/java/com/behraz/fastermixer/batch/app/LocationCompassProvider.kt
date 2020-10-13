@@ -15,10 +15,10 @@ import android.view.WindowManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.behraz.fastermixer.batch.utils.general.LocationHandler
+import okhttp3.internal.immutableListOf
 import org.osmdroid.views.overlay.compass.IOrientationConsumer
 import org.osmdroid.views.overlay.compass.IOrientationProvider
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
-
 
 
 object LocationCompassProvider : LocationListener, IOrientationConsumer {
@@ -79,32 +79,35 @@ object LocationCompassProvider : LocationListener, IOrientationConsumer {
 
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        //TODO check this code mabey it casuse to not updating location
-        val provider = when {
-            locationManager.allProviders.contains(LocationManager.GPS_PROVIDER) -> {
-                println("debug: allProviders contains GPS_PROVIDER")
-                LocationManager.GPS_PROVIDER
-            }
-            locationManager.allProviders.contains(LocationManager.NETWORK_PROVIDER) -> {
-                println("debug: allProviders contains NETWORK_PROVIDER")
-                LocationManager.NETWORK_PROVIDER
-            }
-            /*locationManager.allProviders.contains(LocationManager.PASSIVE_PROVIDER) -> {
-                println("debug: allProviders contains NETWORK_PROVIDER")
-                LocationManager.PASSIVE_PROVIDER
-            }*/
-            else -> null
-        }
 
-        if (provider != null) {
-            locationManager.requestLocationUpdates(
-                provider,
-                LocationHandler.MIN_LOCATION_UPDATE_TIME,
-                0f,
-                this
-            )
-            val lastKnownLocation = locationManager.getLastKnownLocation(provider)
-            if (lastKnownLocation != null) onLocationChanged(lastKnownLocation)
+        val providers = ArrayList<String>()
+        // val provider = when {
+        if (locationManager.allProviders.contains(LocationManager.NETWORK_PROVIDER)) {
+            println("debug: allProviders contains NETWORK_PROVIDER")
+            providers.add(LocationManager.NETWORK_PROVIDER)
+        }
+        if (locationManager.allProviders.contains(LocationManager.GPS_PROVIDER)) {
+            println("debug: allProviders contains GPS_PROVIDER")
+            providers.add(LocationManager.GPS_PROVIDER)
+        }
+        /*locationManager.allProviders.contains(LocationManager.PASSIVE_PROVIDER) -> {
+            println("debug: allProviders contains NETWORK_PROVIDER")
+            LocationManager.PASSIVE_PROVIDER
+        }*/
+        //     else -> null
+        //  }
+
+        if (providers.isNotEmpty()) {
+            providers.forEach {
+                locationManager.requestLocationUpdates(
+                    it,
+                    LocationHandler.MIN_LOCATION_UPDATE_TIME,
+                    0f,
+                    this
+                )
+                val lastKnownLocation = locationManager.getLastKnownLocation(it)
+                if (lastKnownLocation != null) onLocationChanged(lastKnownLocation)
+            }
         } else {
             return false
         }

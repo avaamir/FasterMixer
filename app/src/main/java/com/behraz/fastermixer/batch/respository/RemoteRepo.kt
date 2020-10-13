@@ -42,6 +42,7 @@ object RemoteRepo {
                         value = response.body()
                     }
                 }) {
+                    println("debug:error:RemoteRepo.${requestFunction.name} has exception->${it.message}")
                     CoroutineScope(Main).launch {
                         value = null
                     }
@@ -64,6 +65,7 @@ object RemoteRepo {
                         value = response.body()
                     }
                 }) {
+                    println("debug:error:RemoteRepo.${requestFunction.name} has exception->${it.message}")
                     CoroutineScope(Main).launch {
                         value = null
                     }
@@ -265,7 +267,13 @@ object RemoteRepo {
                             }
                         }
                     } else {
-                        postValue(null)
+                        response.errorBody()?.string()?.let {
+                            if (it.contains("NoRoute")) {
+                                postValue(GetRouteResponse("NoRoute", listOf(), listOf()))
+                            } else {
+                                postValue(null)
+                            }
+                        }
                     }
                 }, {
                     postValue(null)

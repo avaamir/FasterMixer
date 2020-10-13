@@ -110,6 +110,7 @@
     <string name="pomp_mixers_on_map_toggle_request">میکسرهای پروژه</string>
     <string name="menu_item_mobile_gps">جی پی اس موبایل</string>
     <string name="menu_item_car_gps">جی پی اس خودرو</string>
+    <string name="location_not_found_yet">هنوز موقعیت شما دریافت نشده است..</string>
 
 
     <string-array name="osm_poi_tags">

@@ -5,7 +5,7 @@ import org.osmdroid.util.GeoPoint
 
 data class GetRouteResponse(
     @SerializedName("code")
-    private val code: String,
+    val code: String,
     @SerializedName("routes")
     val routes: List<Route>,
     @SerializedName("waypoints")
