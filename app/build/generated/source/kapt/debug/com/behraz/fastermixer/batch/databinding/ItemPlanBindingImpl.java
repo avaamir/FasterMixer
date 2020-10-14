@@ -113,17 +113,17 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
             dirtyFlags = mDirtyFlags;
             mDirtyFlags = 0;
         }
+        java.lang.String planSentAmountJavaLangString = null;
         com.behraz.fastermixer.batch.models.Plan plan = mPlan;
-        java.lang.String planWaitingAmountJavaLangString = null;
         java.lang.String planAddress = null;
-        int planPlannedAmount = 0;
         java.lang.String planPlannedAmountJavaLangString = null;
+        int planPlannedAmount = 0;
         java.lang.String planProgressJavaLangString = null;
         int planWaitingAmount = 0;
         java.lang.String planOwnerName = null;
         int planSentAmount = 0;
         int planProgress = 0;
-        java.lang.String planSentAmountJavaLangString = null;
+        java.lang.String planWaitingAmountJavaLangString = null;
 
         if ((dirtyFlags & 0x3L) != 0) {
 
@@ -145,12 +145,12 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
                 }
 
 
-                // read (plan.plannedAmount) + ("متر مکعب ")
-                planPlannedAmountJavaLangString = (planPlannedAmount) + ("متر مکعب ");
-                // read (plan.waitingAmount) + ("متر مکعب ")
-                planWaitingAmountJavaLangString = (planWaitingAmount) + ("متر مکعب ");
-                // read (plan.sentAmount) + ("متر مکعب ")
-                planSentAmountJavaLangString = (planSentAmount) + ("متر مکعب ");
+                // read (plan.plannedAmount) + (" متر مکعب ")
+                planPlannedAmountJavaLangString = (planPlannedAmount) + (" متر مکعب ");
+                // read (plan.waitingAmount) + (" متر مکعب ")
+                planWaitingAmountJavaLangString = (planWaitingAmount) + (" متر مکعب ");
+                // read (plan.sentAmount) + (" متر مکعب ")
+                planSentAmountJavaLangString = (planSentAmount) + (" متر مکعب ");
                 // read (plan.progress) + ("%")
                 planProgressJavaLangString = (planProgress) + ("%");
         }

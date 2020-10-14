@@ -79,7 +79,7 @@
             android:fontFamily="@font/iransans"
             android:textColor="@color/black"
             tools:text="12 متر مکعب"
-            android:text="@{plan.plannedAmount + `متر مکعب `}"
+            android:text="@{plan.plannedAmount + ` متر مکعب `}"
             app:layout_constraintBottom_toBottomOf="@+id/textView45"
             app:layout_constraintEnd_toStartOf="@+id/textView45"
             app:layout_constraintTop_toTopOf="@+id/textView45" />
@@ -103,7 +103,7 @@
             android:textColor="@color/black"
             android:layout_marginEnd="8dp"
             tools:text="4 متر مکعب"
-            android:text="@{plan.sentAmount + `متر مکعب `}"
+            android:text="@{plan.sentAmount + ` متر مکعب `}"
             app:layout_constraintBottom_toBottomOf="@+id/textView47"
             app:layout_constraintEnd_toStartOf="@+id/textView47"
             app:layout_constraintTop_toTopOf="@+id/textView47" />
@@ -129,7 +129,7 @@
             android:textColor="@color/black"
             android:layout_marginEnd="8dp"
             tools:text="3 متر مکعب"
-            android:text="@{plan.waitingAmount + `متر مکعب `}"
+            android:text="@{plan.waitingAmount + ` متر مکعب `}"
             app:layout_constraintBottom_toBottomOf="@+id/textView49"
             app:layout_constraintEnd_toStartOf="@+id/textView49"
             app:layout_constraintTop_toTopOf="@+id/textView49" />
