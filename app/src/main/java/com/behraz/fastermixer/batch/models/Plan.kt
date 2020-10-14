@@ -10,9 +10,9 @@ data class Plan(
     @SerializedName("customerAddress")
     val address : String,
     @SerializedName("value")
-    val plannedAmount : Int,
+    val plannedAmount : Float,
     @SerializedName("realValue")
-    val sentAmount : Int,
+    val sentAmount : Float,
     @SerializedName("started")
     val started : Boolean,
     @SerializedName("dateTime")
@@ -39,5 +39,5 @@ data class Plan(
 ) {
 
     val waitingAmount get() = plannedAmount - sentAmount
-    val progress: Int get() = if (plannedAmount == 0) 100 else sentAmount * 100 / plannedAmount
+    val progress: Int get() = if (plannedAmount == 0f) 100 else (sentAmount * 100 / plannedAmount).toInt()
 }

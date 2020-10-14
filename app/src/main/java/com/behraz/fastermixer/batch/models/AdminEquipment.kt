@@ -4,7 +4,6 @@ import com.behraz.fastermixer.batch.models.enums.EquipmentState
 import com.behraz.fastermixer.batch.models.enums.EquipmentType
 import com.behraz.fastermixer.batch.utils.general.exhaustiveAsExpression
 import com.google.gson.annotations.SerializedName
-import org.osmdroid.util.GeoPoint
 
 data class AdminEquipment(
     @SerializedName("vehicleID")
