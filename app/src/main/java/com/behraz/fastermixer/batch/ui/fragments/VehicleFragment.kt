@@ -136,9 +136,11 @@ abstract class VehicleFragment : BaseMapFragment() {
 
         LocationCompassProvider.userAngle.observeForever {
             if (!vehicleActivityViewModel.isServerLocationProvider) {
-                if (abs(it.angle - lastOrientation) > 0.5f) {
-                    lastOrientation = it.angle
-                    animateCameraToMapOrientation(it.angle)
+                if (!it.isCompassProvider) { //TODO dar inja niazi be compass provider nadarim va fahgat gps mohem hast
+                    if (abs(it.angle - lastOrientation) > 0.5f) {
+                        lastOrientation = it.angle
+                        animateCameraToMapOrientation(it.angle)
+                    }
                 }
             } else {
                 if (mBinding.map.mapOrientation != 0f) { //TODO badan alamat compass ham mishe biad va ruye un zad dorost beshe
