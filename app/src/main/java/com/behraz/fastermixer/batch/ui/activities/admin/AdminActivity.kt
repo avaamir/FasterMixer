@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ActivityAdminBinding
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
@@ -13,9 +14,11 @@ import com.behraz.fastermixer.batch.ui.fragments.admin.EquipmentsFragment
 import com.behraz.fastermixer.batch.ui.fragments.admin.ManageAccountFragment
 import com.behraz.fastermixer.batch.utils.general.Event
 import com.behraz.fastermixer.batch.utils.general.toast
+import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
 
 class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener, ApiService.InternetConnectionListener {
     private lateinit var mBinding: ActivityAdminBinding
+    private lateinit var viewModel: AdminActivityViewModel
 
     private var currentFragmentTag = HOME_TAG
 
@@ -29,6 +32,7 @@ class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener, Ap
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin)
 
+        viewModel = ViewModelProvider(this).get(AdminActivityViewModel::class.java)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_admin)
         initViews()
     }

@@ -32,7 +32,6 @@ class AdminEquipmentAdapter :
                 newItem: AdminEquipment
             ): Boolean {
                 return oldItem == newItem
-
             }
 
         }

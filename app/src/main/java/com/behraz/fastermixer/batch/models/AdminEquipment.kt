@@ -3,26 +3,43 @@ package com.behraz.fastermixer.batch.models
 import com.behraz.fastermixer.batch.models.enums.EquipmentState
 import com.behraz.fastermixer.batch.models.enums.EquipmentType
 import com.behraz.fastermixer.batch.utils.general.exhaustiveAsExpression
+import com.google.gson.annotations.SerializedName
+import org.osmdroid.util.GeoPoint
 
 data class AdminEquipment(
+    @SerializedName("vehicleID")
     val id: String,
+    @SerializedName("name")
     val name: String,
-    val carId: String,
-    private val _state: Int
+    @SerializedName("vehicleTypeName")
+    val typeName: String,
+    @SerializedName("plaque")
+    val carIdStr: String,
+    @SerializedName("isDamaged")
+    val isDamaged: Boolean,
+    @SerializedName("lat")
+    val lat: String,
+    @SerializedName("lon")
+    val lon: String,
+    @SerializedName("inputLastDataClientDatetime")
+    val dateTime: String,
+    @SerializedName("inputLastDataIgnition")
+    val ignition: Boolean
 ) {
     val type: EquipmentType
         get() = when {
-            name.contains("میکسر") -> EquipmentType.Mixer
-            name.contains("لودر") -> EquipmentType.Loader
-            name.contains("پمپ") -> EquipmentType.Pomp
+            typeName.contains("میکسر") -> EquipmentType.Mixer
+            typeName.contains("لودر") -> EquipmentType.Loader
+            typeName.contains("پمپ") -> EquipmentType.Pomp
             else -> EquipmentType.Other
         }.exhaustiveAsExpression()
 
-    val state get() = when(_state) {
-        1 -> EquipmentState.Fixing
-        2 -> EquipmentState.Off
-        3 -> EquipmentState.Using
-        else -> EquipmentState.Other
-    }
+    val state
+        get() = when {
+            isDamaged -> EquipmentState.Fixing
+            !ignition -> EquipmentState.Off
+            ignition -> EquipmentState.Using
+            else -> EquipmentState.Other
+        }
 
 }

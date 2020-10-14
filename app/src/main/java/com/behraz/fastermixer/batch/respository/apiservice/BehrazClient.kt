@@ -71,5 +71,10 @@ interface BehrazClient {
     @POST("Breakdown/InsertBreakdown")
     suspend fun insertBreakdown(@Body request: EntityRequest<BreakdownRequest>) : Response<Entity<Any>>
 
+    @POST("Vehicle/GetVehicleListForCompany")
+    suspend fun getEquipmentsForAdmin(): Response<Entity<List<AdminEquipment>>>
+
+    @POST("Planning/FindAllPlanningByDate")
+    suspend fun getPlansForAdmin(): Response<Entity<List<Plan>>>
 }
 

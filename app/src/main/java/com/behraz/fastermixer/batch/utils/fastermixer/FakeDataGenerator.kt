@@ -4,16 +4,14 @@ import com.behraz.fastermixer.batch.models.*
 import com.behraz.fastermixer.batch.utils.general.now
 import java.util.*
 
-
-fun fakeAdminEquipments() = listOf(
+/*fun fakeAdminEquipments() = listOf(
     AdminEquipment("1", "میکسر زرد", "24 ب 623 53", 1),
     AdminEquipment("2", "لودر زرد", "14 ب 603 63", 2),
     AdminEquipment("3", "پمپ زرد", "24 ب 613 53", 3),
     AdminEquipment("4", "فرغون زرد", "22 ب 421 53", 4),
     AdminEquipment("5", "پمپ زرد", "22 ب 433 53", 1)
-)
-
-fun fakePlans() = listOf(
+)*/
+/*fun fakePlans() = listOf(
     Plan("1", "علی اکبری", "یزد - صفاییه", 50, 10, 4),
     Plan("2", "علی اکبری", "یزد - صفاییه", 30, 10, 5),
     Plan("3", "علی اکبری", "یزد - صفاییه", 10, 7, 6),
@@ -25,10 +23,8 @@ fun fakePlans() = listOf(
     Plan("9", "علی اکبری", "یزد - صفاییه", 10, 7, 6),
     Plan("10", "علی اکبری", "یزد - صفاییه", 10, 7, 6),
     Plan("11", "علی اکبری", "یزد - صفاییه", 20, 10, 7)
-)
-
+)*/
 /*
-
 fun fakeCustomers() = listOf(
     Customer(
         id = 1,

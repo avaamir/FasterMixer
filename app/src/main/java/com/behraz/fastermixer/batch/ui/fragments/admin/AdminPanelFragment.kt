@@ -1,5 +1,6 @@
 package com.behraz.fastermixer.batch.ui.fragments.admin
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,13 +15,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentAdminPanelBinding
 import com.behraz.fastermixer.batch.ui.adapters.PlanAdapter
+import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.toast
-import com.behraz.fastermixer.batch.viewmodels.AdminPanelFragmentViewModel
+import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
 
 class AdminPanelFragment : Fragment() {
 
     private lateinit var mBinding: FragmentAdminPanelBinding
-    private lateinit var viewModel: AdminPanelFragmentViewModel
+    private lateinit var viewModel: AdminActivityViewModel
     private val mAdapter = PlanAdapter()
 
     override fun onCreateView(
@@ -28,7 +30,7 @@ class AdminPanelFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this).get(AdminPanelFragmentViewModel::class.java)
+        viewModel = ViewModelProvider(activity!!).get(AdminActivityViewModel::class.java)
         mBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_admin_panel, container, false)
         initViews()
@@ -53,9 +55,19 @@ class AdminPanelFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun subscribeObservers() {
         viewModel.plans.observe(viewLifecycleOwner, Observer {
-            mAdapter.submitList(it) //not implemented server side, UI test purpose
+            if (it?.isSucceed == true) {
+                mAdapter.submitList(it.entity)
+                it.entity?.size.toString().let {txt->
+                    if (txt.isNotEmpty()) {
+                        mBinding.tvRequestsCount.text = "($txt درخواست)"
+                    }
+                }
+            } else {
+                toast(it?.message ?: Constants.SERVER_ERROR)
+            }
         })
     }
 

@@ -16,12 +16,14 @@ import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentEquipmentsBinding
 import com.behraz.fastermixer.batch.ui.adapters.AdminEquipmentAdapter
 import com.behraz.fastermixer.batch.ui.adapters.MySimpleSpinnerAdapter
-import com.behraz.fastermixer.batch.viewmodels.EquipmentsFragmentViewModel
+import com.behraz.fastermixer.batch.utils.fastermixer.Constants
+import com.behraz.fastermixer.batch.utils.general.toast
+import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
 
 class EquipmentsFragment : Fragment() {
 
     private lateinit var mBinding: FragmentEquipmentsBinding
-    private lateinit var viewModel: EquipmentsFragmentViewModel
+    private lateinit var viewModel: AdminActivityViewModel
     private val mAdapter = AdminEquipmentAdapter()
 
     override fun onCreateView(
@@ -30,7 +32,7 @@ class EquipmentsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_equipments, container, false)
-        viewModel = ViewModelProvider(this).get(EquipmentsFragmentViewModel::class.java)
+        viewModel = ViewModelProvider(activity!!).get(AdminActivityViewModel::class.java)
 
         initViews()
         subscribeObservers()
@@ -41,7 +43,11 @@ class EquipmentsFragment : Fragment() {
 
     private fun subscribeObservers() {
         viewModel.equipments.observe(viewLifecycleOwner, Observer {
-            mAdapter.submitList(it)
+            if (it?.isSucceed == true) {
+                mAdapter.submitList(it.entity)
+            } else {
+                toast(it?.message ?: Constants.SERVER_ERROR)
+            }
         })
     }
 
@@ -77,7 +83,9 @@ class EquipmentsFragment : Fragment() {
                     position: Int,
                     id: Long
                 ) {
-                    viewModel.sortEquipments(position == 0)
+                    if (!viewModel.sortEquipments(position == 0)) {
+                        toast("در حال دریافت اطلاعات از سرور..")
+                    }
                 }
 
             }
