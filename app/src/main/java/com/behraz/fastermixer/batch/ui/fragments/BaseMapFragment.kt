@@ -196,11 +196,13 @@ abstract class BaseMapFragment : Fragment(),
         _mBinding.map.overlays.add(marker)
     }
 
-    fun moveCamera(geoPoint: GeoPoint, zoom: Double = 18.0) {
+    fun moveCamera(geoPoint: GeoPoint, zoom: Double = 18.0, shouldAnimate: Boolean = true) {
         _mBinding.map.controller.run {
-            setCenter(geoPoint)
             zoomTo(zoom)
-            // animateTo(geoPoint)
+            if (shouldAnimate)
+                animateTo(geoPoint)
+            else
+                setCenter(geoPoint)
         }
     }
 

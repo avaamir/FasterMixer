@@ -31,6 +31,7 @@ import java.lang.IllegalStateException
 import kotlin.math.abs
 
 abstract class VehicleFragment : BaseMapFragment() {
+    private var lastLocation: GeoPoint = Constants.mapStartPoint
     private var lastOrientation: Float = 0f
 
     private var onUserAndDestLocRetrieved: OnUserAndDestLocRetrieved? = null
@@ -101,7 +102,6 @@ abstract class VehicleFragment : BaseMapFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        println("debugfuck")
         LocationCompassProvider.stop(context!!)
     }
 
@@ -159,11 +159,30 @@ abstract class VehicleFragment : BaseMapFragment() {
         vehicleActivityViewModel.getUserLocationResponse.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 mMapViewModel.myLocation = it.location
-                animateMarker(userMarker, it.location)
-                if (shouldCameraTrackUser || isFirstCameraMove) {
-                    isFirstCameraMove = false
-                    moveCamera(it.location)
+                val distance = lastLocation.distanceToAsDouble(it.location)
+                when {
+                    distance > 1000 -> {
+                        lastLocation = it.location
+                        if (shouldCameraTrackUser || isFirstCameraMove) {
+                            isFirstCameraMove = false
+                            userMarker.position = it.location
+                            moveCamera(it.location, shouldAnimate = false)
+                            mBinding.map.invalidate()
+                        } else {
+                            animateMarker(userMarker, it.location)
+                        }
+                    }
+                    distance > 1 -> {
+                        //TODO envolve location accrucey in the logic, if circle(center=lastLoc, radius=accrucy).contains(newPoint) don't move
+                        lastLocation = it.location
+                        animateMarker(userMarker, it.location)
+                        if (shouldCameraTrackUser || isFirstCameraMove) {
+                            isFirstCameraMove = false
+                            moveCamera(it.location)
+                        }
+                    }
                 }
+
                 if (mMapViewModel.hasNewMission) {
                     mMapViewModel.hasNewMission = false
                     onNewMission(vehicleActivityViewModel.newMissionEvent.value!!.peekContent())
@@ -180,7 +199,8 @@ abstract class VehicleFragment : BaseMapFragment() {
 
 
 
-        vehicleActivityViewModel.newMissionEvent.observe(viewLifecycleOwner, Observer { event ->
+        vehicleActivityViewModel.newMissionEvent.observe(viewLifecycleOwner, Observer
+        { event ->
             event.getEventIfNotHandled()?.let { mission ->
                 println("debux: (MixerMapFragment-newMissionEventObserver) `newMissionEvent` Handler Routine Start ==================================")
                 if (mission === Mission.NoMission) {
@@ -215,7 +235,8 @@ abstract class VehicleFragment : BaseMapFragment() {
             }
         })
 
-        vehicleActivityViewModel.getMissionError.observe(viewLifecycleOwner, Observer { event ->
+        vehicleActivityViewModel.getMissionError.observe(viewLifecycleOwner, Observer
+        { event ->
             event.getEventIfNotHandled()?.let {
                 println("debux: (MixerMapFragment) getMissionError: $it")
                 if (!it.contains("Action")) {
@@ -224,7 +245,8 @@ abstract class VehicleFragment : BaseMapFragment() {
             }
         })
 
-        mMapViewModel.getRouteResponse.observe(viewLifecycleOwner, Observer {
+        mMapViewModel.getRouteResponse.observe(viewLifecycleOwner, Observer
+        {
             if (it != null) {
                 println("debux: (MixerMapFragment-GetRouteResponseObserver) getRouteResponse Came====================================")
                 if (it.isSuccessful) {

@@ -117,11 +117,11 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
         com.behraz.fastermixer.batch.models.Plan plan = mPlan;
         java.lang.String planAddress = null;
         java.lang.String planPlannedAmountJavaLangString = null;
-        int planPlannedAmount = 0;
+        float planPlannedAmount = 0f;
         java.lang.String planProgressJavaLangString = null;
-        int planWaitingAmount = 0;
+        float planWaitingAmount = 0f;
         java.lang.String planOwnerName = null;
-        int planSentAmount = 0;
+        float planSentAmount = 0f;
         int planProgress = 0;
         java.lang.String planWaitingAmountJavaLangString = null;
 

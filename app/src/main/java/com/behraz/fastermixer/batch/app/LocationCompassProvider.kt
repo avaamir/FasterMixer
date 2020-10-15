@@ -15,7 +15,6 @@ import android.view.WindowManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.behraz.fastermixer.batch.utils.general.LocationHandler
-import okhttp3.internal.immutableListOf
 import org.osmdroid.views.overlay.compass.IOrientationConsumer
 import org.osmdroid.views.overlay.compass.IOrientationProvider
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
@@ -51,6 +50,10 @@ object LocationCompassProvider : LocationListener, IOrientationConsumer {
 
     private val lock = Any()
     private var deviceOrientation: Int = -1
+        set(value) {
+            println("fuck: $value")
+            field = value
+        }
 
     private var gpsspeed = 0f
     private var lat = 0f
@@ -164,7 +167,6 @@ object LocationCompassProvider : LocationListener, IOrientationConsumer {
                 throw IllegalStateException("deviceOrientation must be 0 or 90 or 180 or 270")
         }
 
-
         //Get User Bearing
         val gpsbearing = location.bearing
         gpsspeed = location.speed
@@ -176,7 +178,7 @@ object LocationCompassProvider : LocationListener, IOrientationConsumer {
 
 
         //use gps bearing instead of the compass
-        var t: Float = 360 - gpsbearing - deviceOrientation
+        var t: Float = 360 - gpsbearing //- deviceOrientation //TODO dar halat landscape dorost javab nemidad, hazf ke shod dorost shod, ruye device haye dg ham barrasi shavad
         if (t < 0) {
             t += 360f
         }
@@ -220,8 +222,8 @@ object LocationCompassProvider : LocationListener, IOrientationConsumer {
         var t = actualHead.toInt().toFloat()
         t /= 5
         t = t.toInt().toFloat()
-        //return t * 5
-        return actualHead //TODO nothing has been smoothed
+        return t * 5
+       // return actualHead //TODO nothing has been smoothed
     }
 
     fun fixDeviceOrientationForCompassCalculation(activity: Activity) {
