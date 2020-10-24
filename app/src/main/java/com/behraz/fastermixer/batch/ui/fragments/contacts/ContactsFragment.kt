@@ -34,21 +34,24 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
     private companion object {
         const val user = "root"
         const val password = "4357"
+        //160 taee, ye dune sms mishe
+        /*
+        *
         val teltonikaCommands = listOf(
             //Open Link Timeout
             "1000:30",
             //Response Timeout
             "1001:30",
             //Server IP
-            "2004:2.184.49.133",
+            //"2004:2.184.49.133",
             //Server Port
-            "2005:5027",
+            //"2005:5027",
             //Backup Mode
-            "2010:2",
+            //"2010:2",
             //Backup Port
-            "2008:5027",
+            //"2008:5027",
             //Backup IP
-            "2007:78.39.159.41",
+            //"2007:78.39.159.41",
             //onStop Sending Period
             "10000:300",
             "10005:300",
@@ -70,7 +73,7 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
             //OnMove Sending Period
             "10150:5",
             //Data Sending: Min Distance
-            "10151:100",
+           // "10151:100",
             //Data Sending: Min Angle
             "10152:10",
             //Data Sending: Min Speed Delta
@@ -81,7 +84,7 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
             "10155:5",
             //#Unknown
             //OnMove Sending Period
-            "10250:5",
+            /*"10250:5",
             //Data Sending: Min Distance
             "10251:100",
             //Data Sending: Min Angle
@@ -91,10 +94,78 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
             //Recorded Data Sending Rate
             "10254:100",
             //Send Period
-            "10255:5",
+            "10255:5",*/
             //----
             //Ignition Source
-            "101:1",
+            //"101:1",
+            //
+            //Recorded Data Sending Order
+            "1002:0" //0:newest 1:oldest
+            //Reset CPU
+            //"$user $password cpureset"
+        )
+        * */
+        val teltonikaCommands = listOf(
+            //Open Link Timeout
+            "1000:30",
+            //Response Timeout
+            "1001:30",
+            //Server IP
+            //"2004:2.184.49.133",
+            //Server Port
+            //"2005:5027",
+            //Backup Mode
+            //"2010:2",
+            //Backup Port
+            //"2008:5027",
+            //Backup IP
+            //"2007:78.39.159.41",
+            //onStop Sending Period
+            "10000:300",
+            "10005:300",
+
+            //#Home----
+            //OnMove Sending Period
+            "10050:5",
+            //Data Sending: Min Distance
+            "10051:100",
+            //Data Sending: Min Angle
+            "10052:10",
+            //Data Sending: Min Speed Delta
+            "10053:10",
+            //Recorded Data Sending Rate
+            "10054:100",
+            //Send Period
+            "10055:5",
+            //#Roaming
+            //OnMove Sending Period
+            "10150:5",
+            //Data Sending: Min Distance
+           // "10151:100",
+            //Data Sending: Min Angle
+            "10152:10",
+            //Data Sending: Min Speed Delta
+            "10153:10",
+            //Recorded Data Sending Rate
+            "10154:100",
+            //Send Period
+            "10155:5",
+            //#Unknown
+            //OnMove Sending Period
+            /*"10250:5",
+            //Data Sending: Min Distance
+            "10251:100",
+            //Data Sending: Min Angle
+            "10252:10",
+            //Data Sending: Min Speed Delta
+            "10253:10",
+            //Recorded Data Sending Rate
+            "10254:100",
+            //Send Period
+            "10255:5",*/
+            //----
+            //Ignition Source
+            //"101:1",
             //
             //Recorded Data Sending Order
             "1002:0" //0:newest 1:oldest
@@ -121,6 +192,7 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
                 commands.forEach {
                     result += "$it;"
                 }
+                println("dexx:" + result.length.toString())
                 return result
             } else
                 throw IllegalArgumentException("fuck you")
@@ -146,16 +218,16 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
         )
 
         private val CONTACTS_BAREZ = listOf(
-            Contact("barez1", "09925356408", "barez"),
-            Contact("barez2", "09925356405", "barez"),
-            Contact("barez3", "09160887340", "barez"),
+            Contact("بی ام سی زرد", "09925356408", "barez"),
+            Contact("بنز آبی اسمانی", "09925356405", "barez"),
+            Contact("بی ام سی سفید", "09160887340", "barez"),
             Contact("barez4", "09921603892", "barez"),
-            Contact("barez5", "09921603893", "barez"),
-            Contact("barez6", "09925356431", "barez"),
-            Contact("barez7", "09921603891", "barez"),
-            Contact("barez8", "09160885890", "barez"),
-            Contact("barez9", "09921603894", "barez"),
-            Contact("barez10", "09160885872", "barez")
+            Contact("پمپ", "09921603893", "barez"),
+            Contact("آمیکو سفید", "09925356431", "barez"),
+            Contact("کامیون", "09921603891", "barez"),
+            Contact("بنز زرد", "09160885890", "barez"),
+            Contact("بی ام سی سفید", "09921603894", "barez"),
+            Contact("بنزا سفید", "09160885872", "barez")
         )
 
     }
@@ -190,6 +262,7 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
         )
 
         context!!.createNewContact(CONTACTS_JAMKARAN)
+        context!!.createNewContact(CONTACTS_BAREZ)
     }
 
 
