@@ -3,8 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-
-
     <item android:id="@+id/nav_account"
         android:title="حساب من"
         android:icon="@drawable/ic_person"
@@ -13,6 +11,11 @@
     <item android:id="@+id/nav_home"
         android:title="پنل مدیریت"
         android:icon="@drawable/ic_calendar"
+        app:iconTint="@color/btn_yellow"/>
+
+    <item android:id="@+id/nav_map"
+        android:title="نقشه"
+        android:icon="@drawable/ic_map"
         app:iconTint="@color/btn_yellow"/>
 
     <item android:id="@+id/nav_equipments"

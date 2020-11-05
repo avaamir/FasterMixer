@@ -89,3 +89,14 @@ data class PolygonFence(val points: List<GeoPoint>) : Fence {
     }
 
 }
+
+
+fun String.toGeoPoint() =
+    this.substring(
+        startIndex = this.indexOf("(") + 1,
+        endIndex = this.indexOf(")")
+    ).split(",").let { locAndRad ->
+        locAndRad[0].split(" ").let { loc ->
+            GeoPoint(loc[0].toDouble(), loc[1].toDouble())
+        }
+    }

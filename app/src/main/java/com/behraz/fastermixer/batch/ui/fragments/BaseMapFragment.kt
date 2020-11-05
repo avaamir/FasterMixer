@@ -13,8 +13,9 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.behraz.fastermixer.batch.R
+import com.behraz.fastermixer.batch.app.LocationCompassProvider
 import com.behraz.fastermixer.batch.databinding.LayoutMapBinding
-import com.behraz.fastermixer.batch.ui.osm.ImageMarker
+import com.behraz.fastermixer.batch.ui.osm.markers.ImageMarker
 import com.behraz.fastermixer.batch.ui.osm.MyOSMMapView
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.toast
@@ -113,6 +114,10 @@ abstract class BaseMapFragment : Fragment(),
         }
 
         btnMyLocation.setOnClickListener {
+            val isGpsEnabled = LocationCompassProvider.isProviderEnable(context!!)
+            if (!isGpsEnabled) {
+                toast("لطفا موقعیت مکانی خود را روشن کنید")
+            }
             if (myLocation != null) {
                 moveCamera(myLocation!!)
                 it.animate().apply {
@@ -122,7 +127,9 @@ abstract class BaseMapFragment : Fragment(),
                     onBtnMyLocationClicked()
                 }.start()
             } else {
-                toast("درحال دریافت موقعیت شما..")
+                if (!isGpsEnabled) {
+                    toast("در حال دریافت موقعیت شما..")
+                }
             }
         }
     }

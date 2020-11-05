@@ -64,7 +64,7 @@ object LocationCompassProvider : LocationListener, IOrientationConsumer {
     private val shouldUseCompass get() = gpsspeed < 1.0//0.01
 
 
-    fun isProviderEnable(context: Context, provider: String) =
+    fun isProviderEnable(context: Context) =
         (context.getSystemService(Context.LOCATION_SERVICE) as LocationManager).isProviderEnabled(
             LocationManager.GPS_PROVIDER
         )

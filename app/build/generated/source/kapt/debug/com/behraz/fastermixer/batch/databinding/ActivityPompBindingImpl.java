@@ -92,6 +92,7 @@ public class ActivityPompBindingImpl extends ActivityPompBinding  {
             , (android.widget.FrameLayout) bindings[8]
             , (android.widget.TextView) bindings[14]
             );
+        setContainedBinding(this.layoutNewMessage);
         this.mboundView0 = (androidx.coordinatorlayout.widget.CoordinatorLayout) bindings[0];
         this.mboundView0.setTag(null);
         this.mboundView1 = (android.widget.LinearLayout) bindings[1];

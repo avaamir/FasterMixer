@@ -12,9 +12,13 @@ import com.behraz.fastermixer.batch.databinding.ItemAdminEquipmentBinding
 import com.behraz.fastermixer.batch.models.AdminEquipment
 import com.behraz.fastermixer.batch.models.enums.EquipmentState
 import com.behraz.fastermixer.batch.models.enums.EquipmentType
+import com.behraz.fastermixer.batch.utils.general.estimateTime
 import com.behraz.fastermixer.batch.utils.general.exhaustive
+import com.behraz.fastermixer.batch.utils.general.minus
+import com.behraz.fastermixer.batch.utils.general.now
+import java.util.concurrent.TimeUnit
 
-class AdminEquipmentAdapter :
+class AdminEquipmentAdapter(private val interactions: Interactions) :
     ListAdapter<AdminEquipment, AdminEquipmentAdapter.EquipmentViewHolder>(DIFF_CALLBACK) {
 
     private companion object {
@@ -81,6 +85,12 @@ class AdminEquipmentAdapter :
                 }
             }.exhaustive()
 
+            mBinding.btnShowMixerOnMap.setOnClickListener {
+                interactions.onBtnShowOnMapClicked(item)
+            }
+
+            mBinding.tvLastDataTime.text = estimateTime(item.dateTime!! - now(), TimeUnit.SECONDS)
+
             when (item.type) {
                 EquipmentType.Mixer -> mBinding.ivEquipment.setImageResource(R.drawable.ic_mixer)
                 EquipmentType.Loader -> mBinding.ivEquipment.setImageResource(R.drawable.ic_loader)
@@ -91,6 +101,10 @@ class AdminEquipmentAdapter :
 
             mBinding.pelakView.setText("24", "ب", "716", "63") //TODO not implemented server side //UI Test Purpose
         }
+    }
+
+    interface Interactions {
+        fun onBtnShowOnMapClicked(adminEquipment: AdminEquipment)
     }
 
 }

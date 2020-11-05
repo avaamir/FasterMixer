@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    style="@style/my_clickable_card_style"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="135dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/tiny_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:layout_marginRight="2dp"
+            android:maxEms="6"
+            tools:text="بنز سفید"
+            android:fontFamily="@font/iransans"
+            android:textColor="@color/black"/>
+
+        <com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView
+            android:id="@+id/carId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:firstText="12"
+            tools:forthText="54"
+            tools:secondText="ب"
+            tools:thirdText="134" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right|center_vertical">
+
+            <TextView
+                android:id="@+id/tvLastDataTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="4dp"
+                android:fontFamily="@font/iransans"
+                android:textColor="@color/black"
+                tools:text="10 دقیقه پیش" />
+
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:srcCompat="@drawable/ic_clock" />
+
+
+
+        </LinearLayout>
+
+
+
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

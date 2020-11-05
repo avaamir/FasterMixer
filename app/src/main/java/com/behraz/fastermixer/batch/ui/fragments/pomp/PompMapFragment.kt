@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.ui.fragments.VehicleFragment
-import com.behraz.fastermixer.batch.ui.osm.MixerMarker
+import com.behraz.fastermixer.batch.ui.osm.markers.MixerMarker
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 import com.behraz.fastermixer.batch.viewmodels.PompMapFragmentViewModel
 import com.behraz.fastermixer.batch.viewmodels.VehicleMapFragmentViewModel

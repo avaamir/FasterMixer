@@ -14,35 +14,38 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentEquipmentsBinding
+import com.behraz.fastermixer.batch.models.AdminEquipment
 import com.behraz.fastermixer.batch.ui.adapters.AdminEquipmentAdapter
 import com.behraz.fastermixer.batch.ui.adapters.MySimpleSpinnerAdapter
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
 
-class EquipmentsFragment : Fragment() {
+class AdminEquipmentsFragment : Fragment(), AdminEquipmentAdapter.Interactions {
 
     private lateinit var mBinding: FragmentEquipmentsBinding
-    private lateinit var viewModel: AdminActivityViewModel
-    private val mAdapter = AdminEquipmentAdapter()
+    private lateinit var adminActivityViewModel: AdminActivityViewModel
+    private val mAdapter = AdminEquipmentAdapter(this)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        println("debux: EqFrag->${System.identityHashCode(this)}")
+
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_equipments, container, false)
-        viewModel = ViewModelProvider(activity!!).get(AdminActivityViewModel::class.java)
+        adminActivityViewModel = ViewModelProvider(activity!!).get(AdminActivityViewModel::class.java)
+
 
         initViews()
         subscribeObservers()
 
         return mBinding.root
-
     }
 
     private fun subscribeObservers() {
-        viewModel.equipments.observe(viewLifecycleOwner, Observer {
+        adminActivityViewModel.equipments.observe(viewLifecycleOwner, Observer {
             if (it?.isSucceed == true) {
                 mAdapter.submitList(it.entity)
             } else {
@@ -83,11 +86,15 @@ class EquipmentsFragment : Fragment() {
                     position: Int,
                     id: Long
                 ) {
-                    if (!viewModel.sortEquipments(position == 0)) {
+                    if (!adminActivityViewModel.sortEquipments(position == 0)) {
                         toast("در حال دریافت اطلاعات از سرور..")
                     }
                 }
 
             }
+    }
+
+    override fun onBtnShowOnMapClicked(adminEquipment: AdminEquipment) {
+        adminActivityViewModel.onVehicleSelectedToShowOnMap.postValue(adminEquipment)
     }
 }

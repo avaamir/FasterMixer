@@ -2,8 +2,10 @@ package com.behraz.fastermixer.batch.models
 
 import com.behraz.fastermixer.batch.models.enums.EquipmentState
 import com.behraz.fastermixer.batch.models.enums.EquipmentType
+import com.behraz.fastermixer.batch.models.requests.toGeoPoint
 import com.behraz.fastermixer.batch.utils.general.exhaustiveAsExpression
 import com.google.gson.annotations.SerializedName
+import java.util.*
 
 data class AdminEquipment(
     @SerializedName("vehicleID")
@@ -16,15 +18,20 @@ data class AdminEquipment(
     val carIdStr: String,
     @SerializedName("isDamaged")
     val isDamaged: Boolean,
-    @SerializedName("lat")
+    /*@SerializedName("lat")
     val lat: String,
     @SerializedName("lon")
-    val lon: String,
+    val lon: String,*/
+    @SerializedName("inputLastDataLocation")
+    private val inputLastDataLocation: String,
     @SerializedName("inputLastDataClientDatetime")
-    val dateTime: String,
+    val dateTime: Date?,
     @SerializedName("inputLastDataIgnition")
     val ignition: Boolean
 ) {
+
+    val location get() = inputLastDataLocation.toGeoPoint()
+
     val type: EquipmentType
         get() = when {
             typeName.contains("میکسر") -> EquipmentType.Mixer

@@ -1,4 +1,4 @@
-package com.behraz.fastermixer.batch.ui.osm
+package com.behraz.fastermixer.batch.ui.osm.infowindows
 
 import android.view.View
 import android.widget.TextView

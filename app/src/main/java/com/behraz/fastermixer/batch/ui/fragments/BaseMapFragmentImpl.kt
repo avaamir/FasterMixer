@@ -5,9 +5,9 @@ import android.content.pm.ActivityInfo
 import android.os.Environment
 import androidx.lifecycle.Observer
 import com.behraz.fastermixer.batch.app.LocationCompassProvider
-import com.behraz.fastermixer.batch.ui.osm.DestMarker
-import com.behraz.fastermixer.batch.ui.osm.DriverInfoWindow
-import com.behraz.fastermixer.batch.ui.osm.ImageMarker
+import com.behraz.fastermixer.batch.ui.osm.markers.DestMarker
+import com.behraz.fastermixer.batch.ui.osm.infowindows.DriverInfoWindow
+import com.behraz.fastermixer.batch.ui.osm.markers.ImageMarker
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.MapTileProviderArray
@@ -18,8 +18,6 @@ import org.osmdroid.tileprovider.tilesource.XYTileSource
 import org.osmdroid.tileprovider.util.SimpleRegisterReceiver
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.Marker
-import org.osmdroid.views.overlay.Polygon
 import java.io.File
 import kotlin.math.abs
 

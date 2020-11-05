@@ -66,8 +66,8 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        if (true) {
-            startActivity(Intent(this, ContactActivity::class.java))
+        if (false) {
+            startActivity(Intent(this, LoginActivity::class.java))
             finish()
             return
         }
@@ -107,6 +107,8 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
 
     @SuppressLint("SetTextI18n")
     private fun initViews() {
+        checkBoxRememberMe.isChecked = true;
+
         tvVersion.text = "v${BuildConfig.VERSION_NAME}"
 
         loadCredentialIfExists()

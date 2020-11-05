@@ -14,9 +14,9 @@ import com.behraz.fastermixer.batch.models.requests.Fence
 import com.behraz.fastermixer.batch.models.requests.PolygonFence
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.fragments.pomp.PompMapFragment
-import com.behraz.fastermixer.batch.ui.osm.DestMarker
-import com.behraz.fastermixer.batch.ui.osm.MixerMarker
-import com.behraz.fastermixer.batch.ui.osm.PompMarker
+import com.behraz.fastermixer.batch.ui.osm.markers.DestMarker
+import com.behraz.fastermixer.batch.ui.osm.markers.MixerMarker
+import com.behraz.fastermixer.batch.ui.osm.markers.PompMarker
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.VehicleMapFragmentViewModel

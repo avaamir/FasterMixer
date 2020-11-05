@@ -16,8 +16,11 @@ public class ItemAdminEquipmentBindingImpl extends ItemAdminEquipmentBinding  {
         sViewsWithIds = new android.util.SparseIntArray();
         sViewsWithIds.put(R.id.pelakView, 3);
         sViewsWithIds.put(R.id.ivEquipment, 4);
-        sViewsWithIds.put(R.id.frame_state, 5);
-        sViewsWithIds.put(R.id.ivState, 6);
+        sViewsWithIds.put(R.id.btn_show_mixer_on_map, 5);
+        sViewsWithIds.put(R.id.frame_state, 6);
+        sViewsWithIds.put(R.id.ivState, 7);
+        sViewsWithIds.put(R.id.tvLastDataTime, 8);
+        sViewsWithIds.put(R.id.imageView8, 9);
     }
     // views
     @NonNull
@@ -28,16 +31,19 @@ public class ItemAdminEquipmentBindingImpl extends ItemAdminEquipmentBinding  {
     // Inverse Binding Event Handlers
 
     public ItemAdminEquipmentBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 7, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 10, sIncludes, sViewsWithIds));
     }
     private ItemAdminEquipmentBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
-            , (android.widget.LinearLayout) bindings[5]
+            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[5]
+            , (android.widget.LinearLayout) bindings[6]
+            , (android.widget.ImageView) bindings[9]
             , (android.widget.ImageView) bindings[4]
-            , (android.widget.ImageView) bindings[6]
+            , (android.widget.ImageView) bindings[7]
             , (com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView) bindings[3]
             , (android.widget.TextView) bindings[1]
             , (android.widget.TextView) bindings[2]
+            , (android.widget.TextView) bindings[8]
             );
         this.mboundView0 = (androidx.constraintlayout.widget.ConstraintLayout) bindings[0];
         this.mboundView0.setTag(null);
@@ -101,20 +107,20 @@ public class ItemAdminEquipmentBindingImpl extends ItemAdminEquipmentBinding  {
             dirtyFlags = mDirtyFlags;
             mDirtyFlags = 0;
         }
+        com.behraz.fastermixer.batch.models.enums.EquipmentState equipmentState = null;
         java.lang.String equipmentStateDesc = null;
         com.behraz.fastermixer.batch.models.AdminEquipment equipment = mEquipment;
         java.lang.String equipmentName = null;
-        com.behraz.fastermixer.batch.models.enums.EquipmentState equipmentState = null;
 
         if ((dirtyFlags & 0x3L) != 0) {
 
 
 
                 if (equipment != null) {
-                    // read equipment.name
-                    equipmentName = equipment.getName();
                     // read equipment.state
                     equipmentState = equipment.getState();
+                    // read equipment.name
+                    equipmentName = equipment.getName();
                 }
 
 

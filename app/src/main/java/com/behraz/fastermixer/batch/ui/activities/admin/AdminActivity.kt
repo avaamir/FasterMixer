@@ -1,6 +1,8 @@
 package com.behraz.fastermixer.batch.ui.activities.admin
 
+import android.content.res.Configuration
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -9,9 +11,10 @@ import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ActivityAdminBinding
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
+import com.behraz.fastermixer.batch.ui.fragments.admin.AdminMapFragment
 import com.behraz.fastermixer.batch.ui.fragments.admin.AdminPanelFragment
-import com.behraz.fastermixer.batch.ui.fragments.admin.EquipmentsFragment
-import com.behraz.fastermixer.batch.ui.fragments.admin.ManageAccountFragment
+import com.behraz.fastermixer.batch.ui.fragments.admin.AdminEquipmentsFragment
+import com.behraz.fastermixer.batch.ui.fragments.admin.AdminManageAccountFragment
 import com.behraz.fastermixer.batch.utils.general.Event
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
@@ -26,15 +29,30 @@ class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener, Ap
         const val EQUIPMENT_TAG = "eq-panel"
         const val HOME_TAG = "home-panel"
         const val ACCOUNT_TAG = "account-panel"
+        const val MAP_TAG = "map-panel"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin)
 
+        val orientation = resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) { //age portrait bud bayad baghiye code ejra beshe ta 2ta fragment ijad nashe va code be moshkel nakhore
+            return
+        }
+
         viewModel = ViewModelProvider(this).get(AdminActivityViewModel::class.java)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_admin)
         initViews()
+        subscribeObservers()
+    }
+
+    private fun subscribeObservers() {
+        viewModel.onVehicleSelectedToShowOnMap.observe(this, {
+            //mBinding.bottomNav.selectedItemId = R.id.nav_map
+            mBinding.bottomNav.findViewById<View>(R.id.nav_map)
+                .performClick()
+        })
     }
 
 
@@ -52,10 +70,13 @@ class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener, Ap
                     addOrRetainFragment(AdminPanelFragment::class.java, HOME_TAG)
                 }
                 R.id.nav_account -> {
-                    addOrRetainFragment(ManageAccountFragment::class.java, ACCOUNT_TAG)
+                    addOrRetainFragment(AdminManageAccountFragment::class.java, ACCOUNT_TAG)
                 }
                 R.id.nav_equipments -> {
-                    addOrRetainFragment(EquipmentsFragment::class.java, EQUIPMENT_TAG)
+                    addOrRetainFragment(AdminEquipmentsFragment::class.java, EQUIPMENT_TAG)
+                }
+                R.id.nav_map -> {
+                    addOrRetainFragment(AdminMapFragment::class.java, MAP_TAG)
                 }
             }
             return@setOnNavigationItemSelectedListener true

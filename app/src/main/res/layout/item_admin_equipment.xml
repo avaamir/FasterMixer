@@ -40,6 +40,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_mixer" />
 
+        <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+            android:id="@+id/btn_show_mixer_on_map"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            app:backgroundColor="@color/white"
+            app:image="@drawable/ic_map"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/frame_state"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:radius="10dp" />
 
         <LinearLayout
             android:id="@+id/frame_state"
@@ -58,7 +70,7 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_gravity="center"
-                android:tint="@color/white"
+                app:tint="@color/white"
                 tools:srcCompat="@drawable/ic_block" />
 
             <TextView
@@ -86,5 +98,35 @@
             app:layout_constraintBottom_toBottomOf="@+id/ivEquipment"
             app:layout_constraintEnd_toStartOf="@+id/ivEquipment"
             app:layout_constraintTop_toTopOf="@+id/ivEquipment" />
+
+
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:gravity="right|center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/frame_state">
+
+            <TextView
+                android:id="@+id/tvLastDataTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="4dp"
+                android:fontFamily="@font/iransans"
+                android:textColor="@color/black"
+                tools:text="10 دقیقه پیش" />
+
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:srcCompat="@drawable/ic_clock" />
+
+
+        </LinearLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

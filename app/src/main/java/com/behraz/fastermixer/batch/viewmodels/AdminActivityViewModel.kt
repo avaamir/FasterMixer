@@ -13,6 +13,10 @@ import com.behraz.fastermixer.batch.utils.general.Event
 
 class AdminActivityViewModel : ParentViewModel() {
 
+    init {
+        println("debux: AdViewModel->${System.identityHashCode(this)}")
+    }
+
     private var isSortByState = true
 
     private val getPlansEvent = MutableLiveData(Event(Unit))
@@ -41,6 +45,8 @@ class AdminActivityViewModel : ParentViewModel() {
             }
         }
 
+
+    val onVehicleSelectedToShowOnMap = MutableLiveData<AdminEquipment>()
 
     fun sortEquipments(byState: Boolean): Boolean {
         equipments.value?.entity?.let {

@@ -77,8 +77,9 @@ class MixerAdapter(private val isForPomp: Boolean, interaction: Interaction) :
                 }
                 mBinding.btnCall.setOnClickListener { interaction.onCallClicked(mixer) }
                 if (mixer.pelak.isNotBlank()) {
-                    mixer.pelak.split(",")
-                        .run { mBinding.carId.setText(get(0), get(1), get(2), get(3)) }
+                    mixer.pelak.split(",").run {
+                        mBinding.carId.setText(get(0), get(1), get(2), get(3))
+                    }
                 }
 
 

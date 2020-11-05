@@ -22,7 +22,7 @@ import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
 class AdminPanelFragment : Fragment() {
 
     private lateinit var mBinding: FragmentAdminPanelBinding
-    private lateinit var viewModel: AdminActivityViewModel
+    private lateinit var adminActivityViewModel: AdminActivityViewModel
     private val mAdapter = PlanAdapter()
 
     override fun onCreateView(
@@ -30,7 +30,7 @@ class AdminPanelFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(activity!!).get(AdminActivityViewModel::class.java)
+        adminActivityViewModel = ViewModelProvider(activity!!).get(AdminActivityViewModel::class.java)
         mBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_admin_panel, container, false)
         initViews()
@@ -49,7 +49,7 @@ class AdminPanelFragment : Fragment() {
             )
         )
 
-        mBinding.tvAdminName.text = viewModel.userAndCompanyName
+        mBinding.tvAdminName.text = adminActivityViewModel.userAndCompanyName
         mBinding.btnCalendar.setOnClickListener {
             toast("not yet implemented")
         }
@@ -57,7 +57,7 @@ class AdminPanelFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun subscribeObservers() {
-        viewModel.plans.observe(viewLifecycleOwner, Observer {
+        adminActivityViewModel.plans.observe(viewLifecycleOwner, Observer {
             if (it?.isSucceed == true) {
                 mAdapter.submitList(it.entity)
                 it.entity?.size.toString().let {txt->
