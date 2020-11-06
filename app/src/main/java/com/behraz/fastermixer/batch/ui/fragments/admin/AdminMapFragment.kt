@@ -17,7 +17,6 @@ import com.behraz.fastermixer.batch.utils.general.exhaustiveAsExpression
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
 import com.behraz.fastermixer.batch.viewmodels.AdminMapFragmentViewModel
-import kotlinx.android.synthetic.main.map_with_locationbox.*
 import org.osmdroid.util.GeoPoint
 
 class AdminMapFragment : BaseMapFragment() {
