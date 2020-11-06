@@ -1,0 +1,469 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="data"
+            type="com.behraz.fastermixer.batch.models.requests.behraz.GetAdminAccountPage" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/standard_margin"
+                android:orientation="vertical">
+
+                <!--user info-->
+                <androidx.cardview.widget.CardView
+                    style="@style/my_card_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/admin_card">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+
+                        <TextView
+                            android:id="@+id/textView55"
+                            style="@style/my_title_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:text="اطلاعات شما"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                        <Button
+                            android:id="@+id/btnEdit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:backgroundTint="@color/btn_blue"
+                            android:fontFamily="@font/iransans"
+                            android:text="ویرایش"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView57"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
+                            android:fontFamily="@font/iransans"
+                            android:text="@{data.username}"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView56"
+                            app:layout_constraintEnd_toStartOf="@+id/textView56"
+                            app:layout_constraintTop_toTopOf="@+id/textView56"
+                            tools:text="امیرحسین مهدی پور" />
+
+
+                        <TextView
+                            android:id="@+id/textView56"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:fontFamily="@font/iransans"
+                            android:text="نام:"
+                            android:textColor="@color/black"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textView55" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
+                            android:fontFamily="@font/iransans"
+                            android:text="@{data.phone}"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView58"
+                            app:layout_constraintEnd_toStartOf="@+id/textView58"
+                            app:layout_constraintTop_toTopOf="@+id/textView58"
+                            tools:text="09362163813" />
+
+                        <TextView
+                            android:id="@+id/textView58"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/iransans"
+                            android:text="تلفن همراه:"
+                            android:textColor="@color/black"
+                            app:layout_constraintEnd_toEndOf="@+id/textView56"
+                            app:layout_constraintTop_toBottomOf="@+id/textView56" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
+                            android:fontFamily="@font/iransans"
+                            android:text="@{data.companyName}"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView59"
+                            app:layout_constraintEnd_toStartOf="@+id/textView59"
+                            app:layout_constraintTop_toTopOf="@+id/textView59"
+                            tools:text="بتن بارز" />
+
+                        <TextView
+                            android:id="@+id/textView59"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/iransans"
+                            android:text="نام شرکت:"
+                            android:textColor="@color/black"
+                            app:layout_constraintEnd_toEndOf="@+id/textView56"
+                            app:layout_constraintTop_toBottomOf="@+id/textView58" />
+
+                        <CheckBox
+                            android:id="@+id/checkBoxSmsAlert"
+                            android:layout_width="32dp"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:enabled="false"
+                            app:layout_constraintEnd_toEndOf="@+id/textView59"
+                            app:layout_constraintTop_toBottomOf="@+id/textView59" />
+
+                        <TextView
+                            android:id="@+id/textView8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/iransans"
+                            android:text="فعالسازی هشدارهای پیامکی"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/checkBoxSmsAlert"
+                            app:layout_constraintEnd_toStartOf="@+id/checkBoxSmsAlert"
+                            app:layout_constraintTop_toTopOf="@+id/checkBoxSmsAlert" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    style="@style/my_card_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/standard_margin"
+                    app:cardBackgroundColor="@color/admin_card">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="vertical"
+                        android:paddingRight="@dimen/standard_margin">
+
+                        <TextView
+                            android:id="@+id/textView63"
+                            style="@style/my_title_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="اشتراک فعال"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView64"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/iransans"
+                            android:text="@{data.currentPackage.name}"
+                            android:textColor="@color/black"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textView63"
+                            tools:text="اشتراک A" />
+
+                        <TextView
+                            android:id="@+id/textView65"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/iransans"
+                            android:text="تاریخ فعال سازی:"
+                            android:textColor="@color/black"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textView64" />
+
+
+                        <TextView
+                            android:id="@+id/textView66"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/iransans"
+                            android:text="تاریخ اتمام:"
+                            android:textColor="@color/black"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textView65" />
+
+
+                        <TextView
+                            android:id="@+id/textView67"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
+                            android:fontFamily="@font/iransans"
+                            android:text="@{data.currentPackage.endDate}"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView66"
+                            app:layout_constraintEnd_toStartOf="@+id/textView66"
+                            app:layout_constraintTop_toTopOf="@+id/textView66"
+                            tools:text="99/2/2" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
+                            android:fontFamily="@font/iransans"
+                            android:text="@{data.currentPackage.startDate}"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView65"
+                            app:layout_constraintEnd_toStartOf="@+id/textView65"
+                            app:layout_constraintTop_toTopOf="@+id/textView65"
+                            tools:text="99/2/2" />
+
+
+                        <ProgressBar
+                            android:id="@+id/progressBar2"
+                            style="?android:progressBarStyleHorizontal"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:progress="@{data.currentPackage.remainingDays}"
+                            android:progressDrawable="@drawable/bg_determined_progress"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:progress="60" />
+
+                        <Button
+                            android:id="@+id/btnRevival"
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/btn_yellow"
+                            android:fontFamily="@font/iransans_bold"
+                            android:text="تمدید"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/progressBar2"
+                            app:layout_constraintStart_toStartOf="@+id/textView51"
+                            app:layout_constraintTop_toBottomOf="@+id/progressBar2" />
+
+                        <TextView
+                            android:id="@+id/textView51"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/iransans"
+                            android:gravity="center"
+                            android:text="@{data.currentPackage.remainingDays + ``}"
+                            android:textColor="@color/red"
+                            app:layout_constraintBottom_toBottomOf="@+id/progressBar2"
+                            app:layout_constraintEnd_toEndOf="@+id/progressBar2"
+                            app:layout_constraintStart_toStartOf="@+id/progressBar2"
+                            app:layout_constraintTop_toTopOf="@+id/progressBar2"
+                            app:layout_constraintVertical_bias="0.39"
+                            tools:text="60" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/iransans"
+                            android:text="روز دیگر"
+                            android:textColor="@color/red"
+                            app:layout_constraintEnd_toEndOf="@id/textView51"
+                            app:layout_constraintStart_toStartOf="@+id/textView51"
+                            app:layout_constraintTop_toTopOf="@+id/textView51" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+                <androidx.cardview.widget.CardView
+                    style="@style/my_card_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/standard_margin"
+                    app:cardBackgroundColor="@color/admin_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/my_title_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:text="اشتراک ها"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerPackages"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:itemCount="1"
+                            tools:listitem="@layout/item_package" />
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+                <androidx.cardview.widget.CardView
+                    style="@style/my_card_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/standard_margin"
+                    app:cardBackgroundColor="@color/admin_card">
+
+                    <LinearLayout
+                        android:id="@+id/frameAnimation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/animationView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="200dp"
+                            android:layout_gravity="center"
+                            android:visibility="visible"
+                            app:lottie_autoPlay="true"
+                            app:lottie_loop="true"
+                            app:lottie_rawRes="@raw/empty_list" />
+
+                        <TextView
+                            android:id="@+id/tv_no_message"
+                            style="@style/my_gray_medium_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="شما هیچ تراکنشی ندارید"
+                            android:textColor="@color/black"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+
+                        <TextView
+                            android:id="@+id/textView71"
+                            style="@style/my_title_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:text="تاریخچه تراکنش ها"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView61"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="4dp"
+                            android:fontFamily="@font/iransans_medium"
+                            android:gravity="center"
+                            android:text="شناسه پیگیری"
+                            android:textColor="@color/black"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/textView68"
+                            app:layout_constraintTop_toBottomOf="@+id/textView71" />
+
+                        <TextView
+                            android:id="@+id/textView68"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/iransans_medium"
+                            android:gravity="center"
+                            android:text="نام  اشتراک"
+                            android:textColor="@color/black"
+                            app:layout_constraintEnd_toStartOf="@+id/textView61"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/textView69"
+                            app:layout_constraintTop_toTopOf="@+id/textView61" />
+
+                        <TextView
+                            android:id="@+id/textView69"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/iransans_medium"
+                            android:gravity="center"
+                            android:text="وضعیت پرداخت"
+                            android:textColor="@color/black"
+                            app:layout_constraintEnd_toStartOf="@+id/textView68"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/textView70"
+                            app:layout_constraintTop_toTopOf="@+id/textView68" />
+
+                        <TextView
+                            android:id="@+id/textView70"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:fontFamily="@font/iransans_medium"
+                            android:gravity="center"
+                            android:text="تاریخ"
+                            android:textColor="@color/black"
+                            app:layout_constraintEnd_toStartOf="@+id/textView69"
+                            app:layout_constraintHorizontal_bias="0.51"
+                            app:layout_constraintHorizontal_chainStyle="spread_inside"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/textView69" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerTransactionHistory"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/textView70"
+                            tools:itemCount="2"
+                            tools:listitem="@layout/item_transaction_history" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+            </LinearLayout>
+
+
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+</layout>

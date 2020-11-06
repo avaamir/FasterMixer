@@ -53,10 +53,6 @@ class MessageAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return currentList.size
-    }
-
     fun getMessageAt(position: Int): Message = currentList[position]
 
 
@@ -79,7 +75,6 @@ class MessageAdapter(
             } else {
                 (mBinding.root as CardView).setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.gray500))
             }*/
-
 
 
         }

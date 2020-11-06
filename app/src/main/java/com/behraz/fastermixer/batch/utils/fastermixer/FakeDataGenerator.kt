@@ -1,8 +1,49 @@
 package com.behraz.fastermixer.batch.utils.fastermixer
 
 import com.behraz.fastermixer.batch.models.*
+import com.behraz.fastermixer.batch.models.requests.behraz.GetAdminAccountPage
 import com.behraz.fastermixer.batch.utils.general.now
 import java.util.*
+
+fun fakeAdminManageAccountPage() = GetAdminAccountPage(
+    fakePackages(),
+    fakeTransactions(),
+    "امیرحسین",
+    "09362163813",
+    "بارز",
+    false
+)
+
+fun fakeTransactions(): List<TransactionHistory> = listOf(
+    TransactionHistory("1", "پکیج A", "213124124", "پرداخت موفق", "99/2/3"),
+    TransactionHistory("2", "پکیج A", "213124124", "پرداخت ناموفق", "99/2/3"),
+    TransactionHistory("2", "پکیج A", "213124124", "پرداخت ناموفق", "99/2/3"),
+    TransactionHistory("2", "پکیج A", "213124124", "پرداخت ناموفق", "99/2/3"),
+    TransactionHistory("2", "پکیج A", "213124124", "پرداخت ناموفق", "99/2/3"),
+    TransactionHistory("2", "پکیج A", "213124124", "پرداخت ناموفق", "99/2/3"),
+    TransactionHistory("2", "پکیج A", "213124124", "پرداخت ناموفق", "99/2/3"),
+    TransactionHistory("2", "پکیج A", "213124124", "پرداخت ناموفق", "99/2/3"),
+    TransactionHistory("2", "پکیج A", "213124124", "پرداخت ناموفق", "99/2/3"),
+    TransactionHistory("2", "پکیج A", "213124124", "پرداخت ناموفق", "99/2/3"),
+    TransactionHistory("2", "پکیج A", "213124124", "پرداخت ناموفق", "99/2/3"),
+    TransactionHistory("2", "پکیج A", "213124124", "پرداخت ناموفق", "99/2/3"),
+    TransactionHistory("2", "پکیج A", "213124124", "پرداخت ناموفق", "99/2/3"),
+    TransactionHistory("2", "پکیج A", "213124124", "پرداخت ناموفق", "99/2/3"),
+    TransactionHistory("2", "پکیج A", "213124124", "پرداخت ناموفق", "99/2/3"),
+    TransactionHistory("2", "پکیج A", "213124124", "پرداخت ناموفق", "99/2/3"),
+    TransactionHistory("2", "پکیج A", "213124124", "پرداخت ناموفق", "99/2/3"),
+    TransactionHistory("2", "پکیج A", "213124124", "پرداخت ناموفق", "99/2/3"),
+    TransactionHistory("2", "پکیج A", "213124124", "پرداخت ناموفق", "99/2/3"),
+)
+
+fun fakePackages(): List<Package> = listOf(
+    Package("1", "پکیج A", "desc", "24000", 10,false, true, "99/2/3", "99/2/23", 5),
+    Package("2", "پکیج B", "desc1", "48000", 10, false, false, null, null, null),
+    Package("3", "پکیج C", "desc2", "100000", 90, true, false, "99/2/5", "99/2/7", 30),
+    Package("4", "پکیج D", "desc3", "1000000", 10, false, false, null, null, null),
+    Package("5", "پکیج E", "desc4", "23000", 10, false, false, null, null, null),
+)
+
 
 /*fun fakeAdminEquipments() = listOf(
     AdminEquipment("1", "میکسر زرد", "24 ب 623 53", 1),

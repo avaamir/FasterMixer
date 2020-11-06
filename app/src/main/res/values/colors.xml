@@ -81,5 +81,6 @@
     <color name="bg_login_shadow">#73000000</color>
     <color name="timer_text_color">@color/primary_dark</color>
     <color name="dialer_nums">#ffffff</color>
+    <color name="admin_card">#F7F8FC</color>
 
 </resources>

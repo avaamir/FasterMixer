@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,7 +34,8 @@ class AdminEquipmentsFragment : Fragment(), AdminEquipmentAdapter.Interactions {
         println("debux: EqFrag->${System.identityHashCode(this)}")
 
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_equipments, container, false)
-        adminActivityViewModel = ViewModelProvider(activity!!).get(AdminActivityViewModel::class.java)
+        adminActivityViewModel =
+            ViewModelProvider(activity!!).get(AdminActivityViewModel::class.java)
 
 
         initViews()
@@ -45,7 +45,7 @@ class AdminEquipmentsFragment : Fragment(), AdminEquipmentAdapter.Interactions {
     }
 
     private fun subscribeObservers() {
-        adminActivityViewModel.equipments.observe(viewLifecycleOwner, Observer {
+        adminActivityViewModel.equipments.observe(viewLifecycleOwner, {
             if (it?.isSucceed == true) {
                 mAdapter.submitList(it.entity)
             } else {
@@ -95,6 +95,9 @@ class AdminEquipmentsFragment : Fragment(), AdminEquipmentAdapter.Interactions {
     }
 
     override fun onBtnShowOnMapClicked(adminEquipment: AdminEquipment) {
-        adminActivityViewModel.onVehicleSelectedToShowOnMap.postValue(adminEquipment)
+        if (adminEquipment.location != null)
+            adminActivityViewModel.onVehicleSelectedToShowOnMap.postValue(adminEquipment)
+        else
+            toast("موقعیت این تجهیز نامشخص است")
     }
 }

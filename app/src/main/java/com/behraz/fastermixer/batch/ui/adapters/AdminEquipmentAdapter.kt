@@ -69,19 +69,39 @@ class AdminEquipmentAdapter(private val interactions: Interactions) :
             when (item.state) {
                 EquipmentState.Fixing -> {
                     mBinding.ivState.setImageResource(R.drawable.ic_construction)
-                    mBinding.frameState.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.red))
+                    mBinding.frameState.setBackgroundColor(
+                        ContextCompat.getColor(
+                            itemView.context,
+                            R.color.red
+                        )
+                    )
                 }
                 EquipmentState.Off -> {
                     mBinding.ivState.setImageResource(R.drawable.ic_block)
-                    mBinding.frameState.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.gray700))
+                    mBinding.frameState.setBackgroundColor(
+                        ContextCompat.getColor(
+                            itemView.context,
+                            R.color.gray700
+                        )
+                    )
                 }
                 EquipmentState.Using -> {
                     mBinding.ivState.setImageResource(R.drawable.ic_engineering)
-                    mBinding.frameState.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.material_green))
+                    mBinding.frameState.setBackgroundColor(
+                        ContextCompat.getColor(
+                            itemView.context,
+                            R.color.material_green
+                        )
+                    )
                 }
                 EquipmentState.Other -> {
                     mBinding.ivState.setImageResource(R.drawable.ic_engineering)
-                    mBinding.frameState.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.orange))
+                    mBinding.frameState.setBackgroundColor(
+                        ContextCompat.getColor(
+                            itemView.context,
+                            R.color.orange
+                        )
+                    )
                 }
             }.exhaustive()
 
@@ -89,7 +109,12 @@ class AdminEquipmentAdapter(private val interactions: Interactions) :
                 interactions.onBtnShowOnMapClicked(item)
             }
 
-            mBinding.tvLastDataTime.text = estimateTime(item.dateTime!! - now(), TimeUnit.SECONDS)
+            mBinding.tvLastDataTime.text =
+                if (item.dateTime != null) {
+                    estimateTime(item.dateTime - now(), TimeUnit.SECONDS)
+                } else {
+                    "نامشخص"
+                }
 
             when (item.type) {
                 EquipmentType.Mixer -> mBinding.ivEquipment.setImageResource(R.drawable.ic_mixer)
@@ -99,7 +124,12 @@ class AdminEquipmentAdapter(private val interactions: Interactions) :
             }.exhaustive()
 
 
-            mBinding.pelakView.setText("24", "ب", "716", "63") //TODO not implemented server side //UI Test Purpose
+            mBinding.pelakView.setText(
+                "24",
+                "ب",
+                "716",
+                "63"
+            ) //TODO not implemented server side //UI Test Purpose
         }
     }
 

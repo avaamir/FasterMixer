@@ -1,5 +1,6 @@
 package com.behraz.fastermixer.batch.viewmodels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.map
@@ -13,8 +14,12 @@ import com.behraz.fastermixer.batch.utils.general.Event
 
 class AdminActivityViewModel : ParentViewModel() {
 
-    init {
-        println("debux: AdViewModel->${System.identityHashCode(this)}")
+
+    private val getAdminAccountPageEvent = MutableLiveData<Unit>()
+
+
+    val adminAccountPageResponse = Transformations.switchMap(getAdminAccountPageEvent) {
+        RemoteRepo.getAdminAccountPageData()
     }
 
     private var isSortByState = true
@@ -75,6 +80,10 @@ class AdminActivityViewModel : ParentViewModel() {
     override fun onTimerTick(user: User) {
         getPlansEvent?.postValue(Event(Unit)) //chun timer dar kelas super call mishe inja hanuz init nashode khater hamin not null budan check mishe
         getEquipmentsEvent?.postValue(Event(Unit))
+    }
+
+    fun getAdminAccountPage() {
+        getAdminAccountPageEvent.value = Unit
     }
 
 }

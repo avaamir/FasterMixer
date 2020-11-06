@@ -85,7 +85,11 @@ class AdminMapFragment : BaseMapFragment() {
                                 item.carIdStr.split(",").run {
                                     marker.setPelakText(get(0), get(1), get(2), get(3))
                                 }
-                                addMarkerToMap(marker, item.location, item.name)
+                                item.location.let { loc ->
+                                    if (loc != null) {
+                                        addMarkerToMap(marker, loc, item.name)
+                                    }
+                                }
                                 return marker
                             }
 
@@ -94,8 +98,10 @@ class AdminMapFragment : BaseMapFragment() {
                                 marker: VehicleMarker,
                                 item: AdminEquipment
                             ) {
-                                if (marker.position != item.location)
-                                    marker.position = item.location
+                                item.location?.let { loc ->
+                                    if (marker.position != loc)
+                                        marker.position = loc
+                                }
                             }
 
                             override fun onRemoveItem(keyId: String) {

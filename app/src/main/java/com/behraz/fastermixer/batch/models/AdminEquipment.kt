@@ -23,14 +23,14 @@ data class AdminEquipment(
     @SerializedName("lon")
     val lon: String,*/
     @SerializedName("inputLastDataLocation")
-    private val inputLastDataLocation: String,
+    private val inputLastDataLocation: String?,
     @SerializedName("inputLastDataClientDatetime")
     val dateTime: Date?,
     @SerializedName("inputLastDataIgnition")
     val ignition: Boolean
 ) {
 
-    val location get() = inputLastDataLocation.toGeoPoint()
+    val location get() = inputLastDataLocation?.toGeoPoint()
 
     val type: EquipmentType
         get() = when {

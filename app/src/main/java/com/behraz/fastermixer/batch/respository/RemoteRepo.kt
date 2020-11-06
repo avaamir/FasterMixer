@@ -1,5 +1,7 @@
 package com.behraz.fastermixer.batch.respository
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.models.User
@@ -13,6 +15,7 @@ import com.behraz.fastermixer.batch.respository.apiservice.MapService
 import com.behraz.fastermixer.batch.respository.apiservice.WeatherService
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
+import com.behraz.fastermixer.batch.utils.fastermixer.fakeAdminManageAccountPage
 import com.behraz.fastermixer.batch.utils.general.RunOnceLiveData
 import com.behraz.fastermixer.batch.utils.general.launchApi
 import kotlinx.coroutines.*
@@ -237,6 +240,13 @@ object RemoteRepo {
     //Admin
     fun getEquipmentsForAdmin() = apiReq(ApiService.client::getEquipmentsForAdmin)
     fun getPlansForAdmin() = apiReq(ApiService.client::getPlansForAdmin)
+
+    fun getAdminAccountPageData(): LiveData<GetAdminAccountPage> {
+        return MutableLiveData(fakeAdminManageAccountPage())
+    }
+
+
+
 
     fun getRoute(coordinates: List<GeoPoint>): RunOnceLiveData<GetRouteResponse?> {
         if (!RemoteRepo::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()

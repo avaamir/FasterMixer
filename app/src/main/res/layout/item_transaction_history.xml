@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable
+            name="data"
+            type="com.behraz.fastermixer.batch.models.TransactionHistory" />
+    </data>
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:cardCornerRadius="5dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginLeft="4dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp">
+
+            <TextView
+                android:id="@+id/textView61"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/iransans_medium"
+                tools:text="22342351"
+                android:text="@{data.orderNumber}"
+                android:gravity="center"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/textView68"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView68"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/iransans_medium"
+                tools:text="پکیج A"
+                android:text="@{data.packageName}"
+                android:gravity="center"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/textView61"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tvPaymentResult"
+                app:layout_constraintTop_toTopOf="@+id/textView61" />
+
+            <TextView
+                android:id="@+id/tvPaymentResult"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/iransans_medium"
+                tools:text="موفق"
+                android:text="@{data.paymentResult}"
+                android:gravity="center"
+                android:textColor="@color/green"
+                app:layout_constraintEnd_toStartOf="@+id/textView68"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/textView70"
+                app:layout_constraintTop_toTopOf="@+id/textView68" />
+
+            <TextView
+                android:id="@+id/textView70"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/iransans_medium"
+                android:gravity="center"
+                tools:text="99/2/2"
+                android:text="@{data.date}"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/tvPaymentResult"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvPaymentResult" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
