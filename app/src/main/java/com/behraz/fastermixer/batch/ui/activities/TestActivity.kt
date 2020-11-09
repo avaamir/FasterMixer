@@ -1,52 +1,55 @@
 package com.behraz.fastermixer.batch.ui.activities
 
 
-import android.app.DownloadManager
-import android.content.*
-import android.content.res.Configuration
-import android.net.Uri
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.IntentSender
+import android.graphics.Color
 import android.os.BatteryManager
 import android.os.Bundle
-import android.os.Environment
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.behraz.fastermixer.batch.R
-import com.behraz.fastermixer.batch.SampleHeadingCompassUp
+import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.databinding.ActivityTestBinding
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.CircleFence
-import com.behraz.fastermixer.batch.models.requests.openweathermap.WeatherViewData
-import com.behraz.fastermixer.batch.respository.apiservice.WeatherService
 import com.behraz.fastermixer.batch.ui.adapters.MixerAdapter
-import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
-import com.behraz.fastermixer.batch.ui.fragments.BaseMapFragmentImpl
-import com.behraz.fastermixer.batch.utils.fastermixer.Constants
-import com.behraz.fastermixer.batch.utils.general.*
+import com.behraz.fastermixer.batch.utils.general.createSpannableString
+import com.behraz.fastermixer.batch.utils.general.subscribeSignalStrengthChangeListener
+import com.behraz.fastermixer.batch.utils.general.toast
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.PercentFormatter
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import com.github.mikephil.charting.utils.ColorTemplate
+import com.github.mikephil.charting.utils.MPPointF
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.PendingResult
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
-import kotlinx.android.synthetic.main.activity_test.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.launch
-import java.io.File
 
 
 class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
-    GoogleApiClient.OnConnectionFailedListener, MixerAdapter.BatchAdapterInteraction {
+    GoogleApiClient.OnConnectionFailedListener, MixerAdapter.BatchAdapterInteraction,
+    OnChartValueSelectedListener {
 
+    protected val parties = arrayOf(
+        "Party A", "Party B", "Party C", "Party D", "Party E", "Party F", "Party G", "Party H",
+        "Party I", "Party J", "Party K", "Party L", "Party M", "Party N", "Party O", "Party P",
+        "Party Q", "Party R", "Party S", "Party T", "Party U", "Party V", "Party W", "Party X",
+        "Party Y", "Party Z"
+    )
 
     private lateinit var mBinding: ActivityTestBinding
 
     private var counter = 0
-
-    private val dialog: MyProgressDialog by lazy {
-        MyProgressDialog(this, R.style.my_dialog_animation, true).also {
-            it.show()
-        }
-    }
 
     private var googleApiClient: GoogleApiClient? = null
 
@@ -75,223 +78,139 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_test)
 
-        if (true) {
-            val orientation = resources.configuration.orientation
-            if (orientation == Configuration.ORIENTATION_PORTRAIT) { //age land bud bayad baghiye code ejra beshe ta 2ta fragment ijad nashe va code be moshkel nakhore
-
-
-                val mapFragment = BaseMapFragmentImpl()
-                supportFragmentManager.beginTransaction()
-                    .add(R.id.mapContainer, mapFragment, "base-map")
-                    .commit()
-
-                fab.setOnClickListener {
-                    //mapFragment.setTileMapSource(MyMapTileSource.GoogleStandardRoadMap)
-                    CoroutineScope(IO).launch {
-                        val response = WeatherService.client.getForecastWeatherByCoordinates(
-                            Constants.mapStartPoint.latitude.toString(),
-                            Constants.mapStartPoint.longitude.toString()
-                        )
-                        val x = response.body()
-                        val viewData = WeatherViewData(x!!.forecasts[0])
-
-
-                        println("debug: Glide: ${viewData.iconURL}")
-                        mBinding.viewData = viewData
-
-
-
-                    }
-
-                }
-
-
-            }
-            return
-        }
-
 
         val x = subscribeSignalStrengthChangeListener(true) {
             println("debug:signal: $it")
         }
 
 
-/*
-        btnLogin.setOnClickListener {
-            *//*  val currentTime: Date = Calendar.getInstance().time
-              println("debug: currentTime : $currentTime, Battery:$batteryLevel")
 
-              val persianCaldroidDialog = PersianCaldroidDialog()
-                  .setOnDateSetListener { dialog, date -> //do something when a date is picked
-                      dialog.dismiss()
-                  }
-              persianCaldroidDialog.typeface = ResourcesCompat.getFont(this, R.font.iransans);
-              //set a date to be selected and shown on calendar
-              persianCaldroidDialog.selectedDate = (PersianDate(1396, 9, 24))
-              persianCaldroidDialog.show(supportFragmentManager,  PersianCaldroidDialog::class.java.name)
-  *//*
-            //downloadAndUpdateApp()
-
-            *//*
-                        fun install(file: File) {
-                            println("debug: ${file.exists()}:: ${file.absolutePath}")
-
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                if (!packageManager.canRequestPackageInstalls()) {
-                                    val intent = Intent(
-                                        Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
-                                        Uri.parse("package:$packageName")
-                                    )
-                                    startActivityForResult(intent, 123)
-                                    return
-                                }
-                            }
-
-
-                            val mimeType = "application/vnd.android.package-archive"
-
-                            val install = Intent(Intent.ACTION_VIEW)
-                            install.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                            // Old Approach
-                            install.setDataAndType(Uri.fromFile(file), mimeType);
-                            // End Old approach
-                            // New Approach
-                            val apkURI = FileProvider.getUriForFile(
-                                this,
-                                applicationContext.packageName + ".provider", file
-                            )
-                            install.setDataAndType(apkURI, mimeType)
-                            install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                            // End New Approach
-                            startActivity(install)
-                        }*//*
-            fun install(file: File) {
-
-                println("debug:" + applicationContext.packageName + ".provider")
-                println("debug:" + BuildConfig.APPLICATION_ID + ".provider")
-                println("debug:" + file.absolutePath)
-                if (file.exists()) {
-                    val intent = Intent(Intent.ACTION_VIEW);
-                    val type = "application/vnd.android.package-archive"
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        val downloadedApk =
-                            FileProvider.getUriForFile(
-                                this,
-                                applicationContext.packageName + ".provider",
-                                file
-                            );
-                        //intent.setData(downloadedApk);
-                        intent.setDataAndType(downloadedApk, type);
-                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    } else {
-                        intent.setDataAndType(Uri.fromFile(file), type);
-                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK;
-                    }
-
-                    startActivity(intent)
-                } else {
-                    Toast.makeText(this, "ّFile not found!", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-
-            val fileName = "AppName.apk"
-            val destination: String =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                    .toString() + "/" + fileName
-
-            install(File(destination))
-        }*/
-
-/*
-        calendarView.setOnDateChangeListener { calendarView, year, month, day ->
-            println("debug: cal: $year/$month/$day -> ${JalaliCalendar.gregorianToJalali(JalaliCalendar.YearMonthDate(year, month, day))}")
-        }*/
-
-
+        // initProgressChart()
         initViews()
 
     }
 
     private fun initViews() {
-
+        initPieChart(
+            "وضعیت ماشین آلات", hashMapOf(
+                Pair("روشن", 30f),
+                Pair("خاموش", 20f),
+                Pair("خراب", 50f),
+            )
+        )
     }
 
+    private fun initPieChart(centerTitle: String, chartData: HashMap<String, Float>) {
+        val chart = mBinding.chartView
+        chart.setUsePercentValues(true)
+        chart.description.isEnabled = false
+        chart.setExtraOffsets(5f, 10f, 5f, 5f)
 
-    private fun downloadAndUpdateApp() {
-        val updateLink =
-            "https://raw.githubusercontent.com/avaamir/FasterMixer/master/app/release/app-release.apk"
+        chart.dragDecelerationFrictionCoef = 0.95f
 
+        chart.setCenterTextTypeface((application as FasterMixerApplication).iransans)
+        chart.centerText = createSpannableString(
+            centerTitle,
+            (application as FasterMixerApplication).iransans,
+            Color.BLACK
+        )
 
-        //get destination to update file and set Uri
-        //TODO: First I wanted to store my update .apk file on internal storage for my app but apparently android does not allow you to open and install
-        //aplication with existing package from there. So for me, alternative solution is Download directory in external storage. If there is better
-        //solution, please inform us in comment
+        chart.isDrawHoleEnabled = true
+        chart.setHoleColor(Color.WHITE)
 
-        //get destination to update file and set Uri
-        //TODO: First I wanted to store my update .apk file on internal storage for my app but apparently android does not allow you to open and install
-        //aplication with existing package from there. So for me, alternative solution is Download directory in external storage. If there is better
-        //solution, please inform us in comment
-        var destination: String =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                .toString() + "/"
+        chart.setTransparentCircleColor(Color.WHITE)
+        chart.setTransparentCircleAlpha(110)
 
-        val fileName = "AppName.apk"
-        destination += fileName
-        val uri: Uri = Uri.parse("file://$destination")
+        chart.holeRadius = 58f
+        chart.transparentCircleRadius = 61f
 
-        //Delete update file if exists
+        chart.setDrawCenterText(true)
 
-        //Delete update file if exists
-        val file = File(destination)
-        if (file.exists()) //file.delete() - test this, I think sometimes it doesnt work
-            file.delete()
+        chart.rotationAngle = 0f
+        // enable rotation of the chart by touch
+        chart.isRotationEnabled = true
+        chart.isHighlightPerTapEnabled = true
 
-        //get url of app on server
+        // chart.setUnit(" €");
+        // chart.setDrawUnitsInChart(true);
 
-        //get url of app on server
-        val url: String = updateLink
+        // add a selection listener
+        chart.setOnChartValueSelectedListener(this)
 
-        //set downloadmanager
+        val l = chart.legend
+        l.verticalAlignment = Legend.LegendVerticalAlignment.TOP
+        l.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
+        l.orientation = Legend.LegendOrientation.VERTICAL
+        l.setDrawInside(false)
+        l.xEntrySpace = 7f
+        l.yEntrySpace = 0f
+        l.yOffset = 0f
 
-        //set downloadmanager
-        val request = DownloadManager.Request(Uri.parse(url))
-        request.setDescription("Downloading New Update")
-        request.setTitle(getString(R.string.app_name))
+        // entry label styling
 
-        //set destination
+        // entry label styling
+        chart.setEntryLabelColor(Color.WHITE)
+        chart.setEntryLabelTypeface((application as FasterMixerApplication).iransansMedium)
+        chart.setEntryLabelTextSize(12f)
 
-        //set destination
-        request.setDestinationUri(uri)
+        chart.setDrawRoundedSlices(false) //age bekhaym round beshe true mikonim
+        setPieData(chartData)
+    }
 
-        // get download service and enqueue file
+    private fun setPieData(chartData: HashMap<String, Float>) { //name , value
+        val entries: ArrayList<PieEntry> = ArrayList()
 
-        // get download service and enqueue file
-        val manager =
-            getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        val downloadId = manager.enqueue(request)
+        // NOTE: The order of the entries when being added to the entries array determines their position around the center of
+        // the chart.
 
-        //set BroadcastReceiver to install app when .apk is downloaded
-
-        //set BroadcastReceiver to install app when .apk is downloaded
-        val onComplete: BroadcastReceiver = object : BroadcastReceiver() {
-            override fun onReceive(ctxt: Context?, intent: Intent?) {
-                val install = Intent(Intent.ACTION_VIEW)
-                install.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                install.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                install.setDataAndType(
-                    uri,
-                    manager.getMimeTypeForDownloadedFile(downloadId)
-                )
-                startActivity(install)
-                unregisterReceiver(this)
-                finish()
-            }
+        chartData.forEach { dat ->
+            entries.add(
+                PieEntry(dat.value, dat.key)
+            )
         }
-        //register receiver for when .apk download is compete
-        //register receiver for when .apk download is compete
-        registerReceiver(onComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+
+
+        val dataSet = PieDataSet(entries, "وضعیت ماشین آلات")
+        dataSet.setDrawIcons(false)
+        dataSet.sliceSpace = 3f
+        dataSet.iconsOffset = MPPointF(0f, 40f)
+        dataSet.selectionShift = 5f
+        dataSet.valueTypeface = (application as FasterMixerApplication).iransans
+
+        // add a lot of colors
+        val colors: ArrayList<Int> = ArrayList()
+        for (c in ColorTemplate.VORDIPLOM_COLORS) colors.add(c)
+        for (c in ColorTemplate.JOYFUL_COLORS) colors.add(c)
+        for (c in ColorTemplate.COLORFUL_COLORS) colors.add(c)
+        for (c in ColorTemplate.LIBERTY_COLORS) colors.add(c)
+        for (c in ColorTemplate.PASTEL_COLORS) colors.add(c)
+        colors.add(ColorTemplate.getHoloBlue())
+        dataSet.colors = colors
+        //dataSet.setSelectionShift(0f);
+        val data = PieData(dataSet)
+        data.setValueFormatter(PercentFormatter())
+        data.setValueTextSize(11f)
+        data.setValueTextColor(Color.WHITE)
+        data.setValueTypeface((application as FasterMixerApplication).iransans)
+        mBinding.chartView.data = data
+
+        // undo all highlights
+        mBinding.chartView.highlightValues(null)
+        mBinding.chartView.invalidate()
+    }
+
+    @Override
+    override fun onValueSelected(e: Entry, h: Highlight) {
+        Log.i(
+            "VAL SELECTED",
+            "Value: " + e.y + ", index: " + h.x
+                    + ", DataSet index: " + h.dataSetIndex
+        )
+    }
+
+    @Override
+    override fun onNothingSelected() {
+        Log.i("PieChart", "nothing selected")
     }
 
 

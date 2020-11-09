@@ -34,6 +34,7 @@ import com.behraz.fastermixer.batch.databinding.ItemWeatherBindingImpl;
 import com.behraz.fastermixer.batch.databinding.LayoutAdminManageAccountFragmentBindingImpl;
 import com.behraz.fastermixer.batch.databinding.LayoutBatchFragmentBindingImpl;
 import com.behraz.fastermixer.batch.databinding.LayoutContactsFragmentBindingImpl;
+import com.behraz.fastermixer.batch.databinding.LayoutDashboardFragmentBindingImpl;
 import com.behraz.fastermixer.batch.databinding.LayoutDilaogWeatherBindingImpl;
 import com.behraz.fastermixer.batch.databinding.LayoutMapBindingImpl;
 import com.behraz.fastermixer.batch.databinding.LayoutMixerBindingImpl;
@@ -107,19 +108,21 @@ public class DataBinderMapperImpl extends DataBinderMapper {
 
   private static final int LAYOUT_LAYOUTCONTACTSFRAGMENT = 28;
 
-  private static final int LAYOUT_LAYOUTDILAOGWEATHER = 29;
+  private static final int LAYOUT_LAYOUTDASHBOARDFRAGMENT = 29;
 
-  private static final int LAYOUT_LAYOUTMAP = 30;
+  private static final int LAYOUT_LAYOUTDILAOGWEATHER = 30;
 
-  private static final int LAYOUT_LAYOUTMIXER = 31;
+  private static final int LAYOUT_LAYOUTMAP = 31;
 
-  private static final int LAYOUT_LAYOUTRECORDDIALOG = 32;
+  private static final int LAYOUT_LAYOUTMIXER = 32;
 
-  private static final int LAYOUT_VIEWFASTERMIXERUSERPANEL = 33;
+  private static final int LAYOUT_LAYOUTRECORDDIALOG = 33;
 
-  private static final int LAYOUT_VIEWITEMPROGRESS = 34;
+  private static final int LAYOUT_VIEWFASTERMIXERUSERPANEL = 34;
 
-  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(34);
+  private static final int LAYOUT_VIEWITEMPROGRESS = 35;
+
+  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(35);
 
   static {
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.activity_admin, LAYOUT_ACTIVITYADMIN);
@@ -150,6 +153,7 @@ public class DataBinderMapperImpl extends DataBinderMapper {
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.layout_admin_manage_account_fragment, LAYOUT_LAYOUTADMINMANAGEACCOUNTFRAGMENT);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.layout_batch_fragment, LAYOUT_LAYOUTBATCHFRAGMENT);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.layout_contacts_fragment, LAYOUT_LAYOUTCONTACTSFRAGMENT);
+    INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.layout_dashboard_fragment, LAYOUT_LAYOUTDASHBOARDFRAGMENT);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.layout_dilaog_weather, LAYOUT_LAYOUTDILAOGWEATHER);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.layout_map, LAYOUT_LAYOUTMAP);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.layout_mixer, LAYOUT_LAYOUTMIXER);
@@ -335,6 +339,12 @@ public class DataBinderMapperImpl extends DataBinderMapper {
           }
           throw new IllegalArgumentException("The tag for layout_contacts_fragment is invalid. Received: " + tag);
         }
+        case  LAYOUT_LAYOUTDASHBOARDFRAGMENT: {
+          if ("layout/layout_dashboard_fragment_0".equals(tag)) {
+            return new LayoutDashboardFragmentBindingImpl(component, view);
+          }
+          throw new IllegalArgumentException("The tag for layout_dashboard_fragment is invalid. Received: " + tag);
+        }
         case  LAYOUT_LAYOUTDILAOGWEATHER: {
           if ("layout/layout_dilaog_weather_0".equals(tag)) {
             return new LayoutDilaogWeatherBindingImpl(component, view);
@@ -436,7 +446,7 @@ public class DataBinderMapperImpl extends DataBinderMapper {
   }
 
   private static class InnerLayoutIdLookup {
-    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(34);
+    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(35);
 
     static {
       sKeys.put("layout/activity_admin_0", com.behraz.fastermixer.batch.R.layout.activity_admin);
@@ -467,6 +477,7 @@ public class DataBinderMapperImpl extends DataBinderMapper {
       sKeys.put("layout/layout_admin_manage_account_fragment_0", com.behraz.fastermixer.batch.R.layout.layout_admin_manage_account_fragment);
       sKeys.put("layout/layout_batch_fragment_0", com.behraz.fastermixer.batch.R.layout.layout_batch_fragment);
       sKeys.put("layout/layout_contacts_fragment_0", com.behraz.fastermixer.batch.R.layout.layout_contacts_fragment);
+      sKeys.put("layout/layout_dashboard_fragment_0", com.behraz.fastermixer.batch.R.layout.layout_dashboard_fragment);
       sKeys.put("layout/layout_dilaog_weather_0", com.behraz.fastermixer.batch.R.layout.layout_dilaog_weather);
       sKeys.put("layout/layout_map_0", com.behraz.fastermixer.batch.R.layout.layout_map);
       sKeys.put("layout/layout_mixer_0", com.behraz.fastermixer.batch.R.layout.layout_mixer);

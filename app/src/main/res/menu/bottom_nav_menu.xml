@@ -8,9 +8,14 @@
         android:icon="@drawable/ic_person"
         app:iconTint="@color/btn_yellow" />
 
-    <item android:id="@+id/nav_home"
+    <item android:id="@+id/nav_requests"
         android:title="پنل مدیریت"
         android:icon="@drawable/ic_calendar"
+        app:iconTint="@color/btn_yellow"/>
+
+    <item android:id="@+id/nav_dashboard"
+        android:title="داشبورد"
+        android:icon="@drawable/ic_dashboard"
         app:iconTint="@color/btn_yellow"/>
 
     <item android:id="@+id/nav_map"

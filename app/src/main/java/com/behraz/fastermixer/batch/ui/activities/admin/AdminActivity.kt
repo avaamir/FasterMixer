@@ -11,10 +11,7 @@ import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ActivityAdminBinding
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
-import com.behraz.fastermixer.batch.ui.fragments.admin.AdminMapFragment
-import com.behraz.fastermixer.batch.ui.fragments.admin.AdminPanelFragment
-import com.behraz.fastermixer.batch.ui.fragments.admin.AdminEquipmentsFragment
-import com.behraz.fastermixer.batch.ui.fragments.admin.AdminManageAccountFragment
+import com.behraz.fastermixer.batch.ui.fragments.admin.*
 import com.behraz.fastermixer.batch.utils.general.Event
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
@@ -23,13 +20,14 @@ class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener, Ap
     private lateinit var mBinding: ActivityAdminBinding
     private lateinit var viewModel: AdminActivityViewModel
 
-    private var currentFragmentTag = HOME_TAG
+    private var currentFragmentTag = REQUESTS_TAG
 
     private companion object {
         const val EQUIPMENT_TAG = "eq-panel"
-        const val HOME_TAG = "home-panel"
+        const val REQUESTS_TAG = "home-panel"
         const val ACCOUNT_TAG = "account-panel"
         const val MAP_TAG = "map-panel"
+        const val DASHBOARD_TAG = "dashboard-tag"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,8 +55,8 @@ class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener, Ap
 
 
     override fun onBackPressed() {
-        if (currentFragmentTag != HOME_TAG)
-            mBinding.bottomNav.selectedItemId = R.id.nav_home
+        if (currentFragmentTag != REQUESTS_TAG)
+            mBinding.bottomNav.selectedItemId = R.id.nav_dashboard
         else
             super.onBackPressed()
     }
@@ -66,8 +64,8 @@ class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener, Ap
     private fun initViews() {
         mBinding.bottomNav.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.nav_home -> {
-                    addOrRetainFragment(AdminPanelFragment::class.java, HOME_TAG)
+                R.id.nav_requests -> {
+                    addOrRetainFragment(AdminPanelFragment::class.java, REQUESTS_TAG)
                 }
                 R.id.nav_account -> {
                     addOrRetainFragment(AdminManageAccountFragment::class.java, ACCOUNT_TAG)
@@ -78,12 +76,14 @@ class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener, Ap
                 R.id.nav_map -> {
                     addOrRetainFragment(AdminMapFragment::class.java, MAP_TAG)
                 }
+                R.id.nav_dashboard -> {
+                    addOrRetainFragment(DashboardFragment::class.java, DASHBOARD_TAG)
+                }
             }
             return@setOnNavigationItemSelectedListener true
         }
-        mBinding.bottomNav.selectedItemId = R.id.nav_home
+        mBinding.bottomNav.selectedItemId = R.id.nav_dashboard
     }
-
 
     private fun <T : Fragment> addOrRetainFragment(fragment: Class<T>, tag: String) {
         val retained = supportFragmentManager.findFragmentByTag(tag)

@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/my_card_style"
+                    app:cardBackgroundColor="@color/admin_card"
+                    android:layout_marginTop="@dimen/standard_margin"
+                    android:layout_marginRight="@dimen/standard_margin"
+                    android:layout_marginLeft="@dimen/standard_margin">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        >
+
+                        <TextView
+                            android:id="@+id/textView73"
+                            style="@style/my_title_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:text="درخواست های امروز"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                        <com.github.mikephil.charting.charts.PieChart
+                            android:id="@+id/requestChart"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView74"
+                            style="@style/my_gray_normal_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:text="تعداد کل:"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toTopOf="@+id/textView77"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        <TextView
+                            android:id="@+id/tvRequestCount"
+                            style="@style/my_gray_normal_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView74"
+                            app:layout_constraintEnd_toStartOf="@+id/textView74"
+                            app:layout_constraintTop_toTopOf="@+id/textView74"
+                            tools:text="24" />
+
+
+                        <TextView
+                            android:id="@+id/textView77"
+                            style="@style/my_gray_normal_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:text="مجموع حجم:"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/requestChart"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        <TextView
+                            android:id="@+id/tvTotalRequestVolume"
+                            style="@style/my_gray_normal_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView77"
+                            app:layout_constraintEnd_toStartOf="@+id/textView77"
+                            app:layout_constraintTop_toTopOf="@+id/textView77"
+                            tools:text="24" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </androidx.cardview.widget.CardView>
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/my_card_style"
+                    android:layout_margin="8dp"
+                    app:cardBackgroundColor="@color/admin_card">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/textView76"
+                            style="@style/my_title_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:text="وضعیت ماشین آلات"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                        <com.github.mikephil.charting.charts.PieChart
+                            android:id="@+id/vehiclesChart"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                        <TextView
+                            android:id="@+id/textView75"
+                            style="@style/my_gray_normal_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:text="تعمیری:"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/vehiclesChart"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        <TextView
+                            android:id="@+id/tvRepair"
+                            style="@style/my_gray_normal_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView75"
+                            app:layout_constraintEnd_toStartOf="@+id/textView75"
+                            app:layout_constraintTop_toTopOf="@+id/textView75"
+                            tools:text="24" />
+
+                        <TextView
+                            android:id="@+id/textView78"
+                            style="@style/my_gray_normal_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:text="خاموش:"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toTopOf="@+id/textView75"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        <TextView
+                            android:id="@+id/tvOff"
+                            style="@style/my_gray_normal_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView78"
+                            app:layout_constraintEnd_toStartOf="@+id/textView78"
+                            app:layout_constraintTop_toTopOf="@+id/textView78"
+                            tools:text="24" />
+
+
+                        <TextView
+                            android:id="@+id/textView79"
+                            style="@style/my_gray_normal_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:text="روشن:"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toTopOf="@+id/textView78"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        <TextView
+                            android:id="@+id/tvOn"
+                            style="@style/my_gray_normal_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView79"
+                            app:layout_constraintEnd_toStartOf="@+id/textView79"
+                            app:layout_constraintTop_toTopOf="@+id/textView79"
+                            tools:text="24" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+
+            </LinearLayout>
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="invisible"/>
+
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</layout>
