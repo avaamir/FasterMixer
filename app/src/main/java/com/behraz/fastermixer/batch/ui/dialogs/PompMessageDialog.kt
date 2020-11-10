@@ -28,7 +28,7 @@ class PompMessageDialog(
             dismiss()
         }
         btnRepair.setOnClickListener {
-            interactions.onRepairClicked()
+            interactions.onBrokenClicked()
             dismiss()
         }
         btnStop.setOnClickListener {
@@ -41,7 +41,7 @@ class PompMessageDialog(
         fun onMessageClicked()
         fun onStopClicked()
         fun onLabClicked()
-        fun onRepairClicked()
+        fun onBrokenClicked()
     }
 }
 

@@ -7,12 +7,12 @@ import kotlin.reflect.KProperty1
 * and you need to newValues set in the source list*/
 
 fun <K, V, T> HashMap<K, V>.diffSourceFromNewValues(
-    newValues: Collection<T>,
+    newValues: Collection<T>?,
     compareProperty: KProperty1<T, K>,
     onSourceMapChange: OnSourceMapChange<K, V, T>
 ) {
     val excludeList = ArrayList(this.keys)
-    newValues.forEach { item ->
+    newValues?.forEach { item ->
         val keyId = compareProperty.get(item)
         val itemInSource = this[keyId]
         if (itemInSource != null) { // if Contains

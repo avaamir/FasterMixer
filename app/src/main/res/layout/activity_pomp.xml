@@ -133,6 +133,23 @@
                 app:layout_constraintEnd_toEndOf="@+id/mapContainer"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <Button
+                android:id="@+id/btnBroken"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="#63FF0000"
+                android:elevation="5dp"
+                android:fontFamily="@font/iransans_bold"
+                android:minWidth="130dp"
+                android:minHeight="60dp"
+                android:text="اعلام درست شدن تجهیز"
+                android:textColor="@color/black"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="@+id/mapContainer"
+                app:layout_constraintTop_toBottomOf="@+id/btnShowAllMixersToggle"
+                />
+
             <FrameLayout
                 android:id="@+id/mapContainer"
                 android:layout_width="0dp"

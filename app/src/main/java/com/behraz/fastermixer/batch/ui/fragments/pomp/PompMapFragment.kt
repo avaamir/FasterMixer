@@ -6,8 +6,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.behraz.Entity
+import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.ui.fragments.VehicleFragment
+import com.behraz.fastermixer.batch.ui.osm.markers.ImageMarker
 import com.behraz.fastermixer.batch.ui.osm.markers.MixerMarker
+import com.behraz.fastermixer.batch.utils.general.OnSourceMapChange
+import com.behraz.fastermixer.batch.utils.general.diffSourceFromNewValues
 import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 import com.behraz.fastermixer.batch.viewmodels.PompMapFragmentViewModel
 import com.behraz.fastermixer.batch.viewmodels.VehicleMapFragmentViewModel
@@ -20,7 +24,7 @@ class PompMapFragment : VehicleFragment() {
     private lateinit var pompViewModel: PompActivityViewModel
 
     override val vehicleActivityViewModel: VehicleActivityViewModel get() = pompViewModel
-    override val mMapViewModel: VehicleMapFragmentViewModel get() =  mapViewModel
+    override val mMapViewModel: VehicleMapFragmentViewModel get() = mapViewModel
 
     companion object {
         fun newInstance(btnMyLocationId: Int, btnRouteId: Int) = PompMapFragment()
@@ -67,37 +71,42 @@ class PompMapFragment : VehicleFragment() {
 
     private fun sortAndShowMixers(serverResponse: Entity<List<Mixer>>?) {
         if (serverResponse?.isSucceed == true) {
-            val excludeMarkerList =
-                ArrayList(mapViewModel.markers.keys) // we need this for exclude mixers from original list if mixer not exists in new mixerList
-
-            serverResponse.entity?.forEach { mixer ->
-                excludeMarkerList.remove(mixer.id) //do not need to exclude this mixer because it's exists in new com.behraz.fastermixer.batch.models.requests.openweathermap.List too
-                val mixerMarker = mapViewModel.markers[mixer.id]
-                if (mixerMarker == null) { //new mixer in pomp incoming list (taze az batch kharej shode va dare be pomp mire)
-                    //add to marker hash map and MapView
-                    mapViewModel.markers[mixer.id] =
-                        MixerMarker(mBinding.map).also { _marker ->
-                            _marker.position = mixer.location
-                            mixer.pelak.split(",")
+            mapViewModel.markers.diffSourceFromNewValues(
+                serverResponse.entity,
+                Mixer::id,
+                object : OnSourceMapChange<String, ImageMarker, Mixer> {
+                    override fun onAddItem(key: String, item: Mixer): ImageMarker {
+                        return MixerMarker(mBinding.map).also { _marker ->
+                            _marker.position = item.location
+                            item.pelak.split(",")
                                 .run { _marker.setPelakText(get(0), get(1), get(2), get(3)) }
-                            addMarkerToMap(
-                                _marker,
-                                mixer.location,
-                                mixer.driverName
-                            )
+                            if (item.id != UserConfigs.user.value?.equipmentId) { //momkene role taraf rannade pomp bashe ama mashinesh pomp nabashe, age in halat pish umad marker marbut be in equipment ro ezafe nemikonim chun userMarker ghablan ezafe shode va ru ham mioftan
+                                addMarkerToMap(
+                                    _marker,
+                                    item.location,
+                                    item.driverName
+                                )
+                            }
                         }
-                } else { //mixer already exists, update location
-                    animateMarker(mixerMarker, mixer.location)
-                }
-            }
-            excludeMarkerList.forEach { mixerId ->
-                mBinding.map.overlayManager.remove(
-                    mapViewModel.markers.remove(mixerId).also {
-                        if (it?.isInfoWindowShown == true)
-                            it.closeInfoWindow()
                     }
-                )
-            }
+
+                    override fun onItemExistInBoth(
+                        keyId: String,
+                        marker: ImageMarker,
+                        item: Mixer
+                    ) {
+                        animateMarker(marker, item.location)
+                    }
+
+                    override fun onRemoveItem(keyId: String) {
+                        mBinding.map.overlayManager.remove(
+                            mapViewModel.markers.remove(keyId).also {
+                                if (it?.isInfoWindowShown == true)
+                                    it.closeInfoWindow()
+                            }
+                        )
+                    }
+                })
             mBinding.map.invalidate()
         }
     }

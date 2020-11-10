@@ -3,9 +3,11 @@ package com.behraz.fastermixer.batch.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.User
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
+import com.behraz.fastermixer.batch.models.requests.behraz.Entity
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
@@ -33,7 +35,13 @@ abstract class ParentViewModel : ViewModel() {
 
     private var breakdownEvent = MutableLiveData<BreakdownRequest>()
     val breakdownResponse = Transformations.switchMap(breakdownEvent) {
-        RemoteRepo.insertBreakdownRequest(it)
+        RemoteRepo.insertBreakdownRequest(it).map { response ->
+            if (response != null) {
+                Entity(it, response.isSucceed, response.message)
+            } else {
+                response
+            }
+        }
     }
 
     val newMessage = MutableLiveData<Event<Message>>()

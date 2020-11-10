@@ -9,7 +9,6 @@ import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
@@ -225,7 +224,7 @@ class MixerActivity : AppCompatActivity(),
     }
 
     private fun subscribeObservers() {
-        viewModel.user.observe(this, Observer {
+        viewModel.user.observe(this, {
             it?.let {
                 //TODO add user personal info to ui
                 /*mBinding.fasterMixerUserPanel.setUsername(it.name)
@@ -233,7 +232,7 @@ class MixerActivity : AppCompatActivity(),
             }
         })
 
-        viewModel.currentWeather.observe(this, Observer {
+        viewModel.currentWeather.observe(this, {
             weatherAnimator?.cancel()
             mBinding.btnWeather.rotationX = 0f
             mBinding.btnWeather.rotationY = 0f
@@ -253,8 +252,13 @@ class MixerActivity : AppCompatActivity(),
             }
         })
 
-        viewModel.breakdownResponse.observe(this, Observer {
+        viewModel.breakdownResponse.observe(this, {
             if (it?.isSucceed == true) {
+                if (it.entity == BreakdownRequest.BREAKDOWN)  {
+                    mBinding.btnBroken.visibility = View.VISIBLE
+                } else if(it.entity == BreakdownRequest.FIXED) {
+                    mBinding.btnBroken.visibility = View.GONE
+                }
                 toast("پیام ارسال شد")
             } else {
                 toast("خطایی به وجود آمد لطفا دوباره تلاش کنید")
@@ -262,7 +266,7 @@ class MixerActivity : AppCompatActivity(),
         })
 
 
-        viewModel.logoutResponse.observe(this, Observer {
+        viewModel.logoutResponse.observe(this, {
             progressDialog.dismiss()
             if (it != null) {
                 if (it.isSucceed) {
@@ -279,7 +283,7 @@ class MixerActivity : AppCompatActivity(),
             }
         })
 
-        viewModel.messages.observe(this, Observer { _messages ->
+        viewModel.messages.observe(this, { _messages ->
             val messageFragment =
                 supportFragmentManager.findFragmentByTag(FRAGMENT_MESSAGE_LIST_TAG)
             if (messageFragment?.isVisible == true) {
@@ -289,7 +293,7 @@ class MixerActivity : AppCompatActivity(),
             }
         })
 
-        viewModel.newMessage.observe(this, Observer { event ->
+        viewModel.newMessage.observe(this, { event ->
             //TODO check if a message is critical and new show in dialog to user
             event.getEventIfNotHandled()?.let { _message ->
                 mBinding.layoutNewMessage.message = _message
@@ -300,7 +304,7 @@ class MixerActivity : AppCompatActivity(),
             }
         })
 
-        viewModel.newMissionEvent.observe(this, Observer {
+        viewModel.newMissionEvent.observe(this, {
 
             if (it.peekContent().conditionTitle.contains("سمت مقصد")) {
                 viewModel.mixerTimerValue =
@@ -436,8 +440,9 @@ class MixerActivity : AppCompatActivity(),
         viewModel.insertBreakdown(BreakdownRequest.SOS)
     }
 
-    override fun onRepairClicked() {
+    override fun onBrokenClicked() {
         viewModel.insertBreakdown(BreakdownRequest.BREAKDOWN)
+        mBinding.btnBroken.visibility = View.VISIBLE
     }
 
     override fun onUnauthorizedAction(event: Event<Unit>) {

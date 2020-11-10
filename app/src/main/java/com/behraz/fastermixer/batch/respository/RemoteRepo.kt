@@ -2,6 +2,7 @@ package com.behraz.fastermixer.batch.respository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.models.User

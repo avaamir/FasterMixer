@@ -7,6 +7,7 @@ class BreakdownRequest private constructor(
     val description: String
 ) {
     companion object {
+        val FIXED = BreakdownRequest("تجهیز درست شد")
         val LAB = BreakdownRequest("حضور آزمایشگاه")
         val SOS = BreakdownRequest("نیاز به کمک فوری")
         val BREAKDOWN = BreakdownRequest("اعلام خرابی دستگاه")

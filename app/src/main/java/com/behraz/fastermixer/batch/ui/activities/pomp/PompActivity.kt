@@ -183,6 +183,10 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             onFasterMixerMenuButtonsClicked(mBinding.btnMessages)
         }
 
+        mBinding.btnBroken.setOnClickListener {
+            viewModel.insertBreakdown(BreakdownRequest.FIXED)
+        }
+
         /*TODO:: make this visible after feature added to server*/
         mBinding.btnVoiceMessage.visibility = View.GONE
 
@@ -307,8 +311,13 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             }
         })
 
-        viewModel.breakdownResponse.observe(this, Observer {
+        viewModel.breakdownResponse.observe(this, {
             if (it?.isSucceed == true) {
+                if (it.entity == BreakdownRequest.BREAKDOWN)  {
+                    mBinding.btnBroken.visibility = View.VISIBLE
+                } else if(it.entity == BreakdownRequest.FIXED) {
+                    mBinding.btnBroken.visibility = View.GONE
+                }
                 toast("پیام ارسال شد")
             } else {
                 toast("خطایی به وجود آمد لطفا دوباره تلاش کنید")
@@ -496,8 +505,9 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
         viewModel.insertBreakdown(BreakdownRequest.LAB)
     }
 
-    override fun onRepairClicked() {
+    override fun onBrokenClicked() {
         viewModel.insertBreakdown(BreakdownRequest.BREAKDOWN)
+        mBinding.btnBroken.visibility = View.VISIBLE
     }
 
     override fun onUnauthorizedAction(event: Event<Unit>) {

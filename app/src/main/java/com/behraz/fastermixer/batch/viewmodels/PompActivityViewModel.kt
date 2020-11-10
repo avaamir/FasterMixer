@@ -19,7 +19,7 @@ class PompActivityViewModel : VehicleActivityViewModel() {
     @Volatile
     private var isGetMixerRequestActive = false
 
-    val shouldShowAllMixers = MutableLiveData<Boolean>(false)
+    val shouldShowAllMixers = MutableLiveData(false)
 
     private val getMixersEvent = MutableLiveData(Event(Unit))
     val allMixers = Transformations.switchMap(getMixersEvent) {

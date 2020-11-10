@@ -248,16 +248,18 @@
                 app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
 
-            <include layout="@layout/gps_internet_status_icons"
+            <include
+                layout="@layout/gps_internet_status_icons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:gravity="right"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/frame_password"
-                app:layout_constraintVertical_bias="1.0"/>
+                app:layout_constraintTop_toBottomOf="@+id/checkBoxRememberMe"
+                app:layout_constraintVertical_bias="1.0" />
 
             <ImageView
                 android:id="@+id/imageView5"

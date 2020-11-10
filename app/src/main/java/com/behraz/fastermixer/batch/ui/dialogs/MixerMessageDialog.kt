@@ -27,7 +27,7 @@ class MixerMessageDialog(
             dismiss()
         }
         btnRepair.setOnClickListener {
-            interactions.onRepairClicked()
+            interactions.onBrokenClicked()
             dismiss()
         }
         btnStop.setOnClickListener {
@@ -61,6 +61,6 @@ class MixerMessageDialog(
         fun onMessageClicked()
         fun onStopClicked()
         fun onSOSClicked()
-        fun onRepairClicked()
+        fun onBrokenClicked()
     }
 }
