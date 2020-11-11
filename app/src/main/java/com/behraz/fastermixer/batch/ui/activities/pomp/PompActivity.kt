@@ -150,6 +150,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             applyFontToMenu(menu)
         }
     }
+
     override fun onContextItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.from_GPS -> {
@@ -163,6 +164,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             else -> super.onContextItemSelected(item)
         }
     }
+
     override fun onContextMenuClosed(menu: Menu) {
         super.onContextMenuClosed(menu)
         fullScreen()
@@ -174,7 +176,6 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
     }
 
     private fun initViews() {
-
         topSheetBehavior = TopSheetBehavior.from(mBinding.frameTop)
         topSheetBehavior.state = TopSheetBehavior.STATE_HIDDEN
         topSheetBehavior.setSwipedEnabled(false)
@@ -291,7 +292,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             }
         })
 
-        viewModel.currentWeather.observe(this, Observer {
+        viewModel.currentWeather.observe(this, {
             weatherAnimator?.cancel()
             mBinding.btnWeather.rotationX = 0f
             mBinding.btnWeather.rotationY = 0f
@@ -313,9 +314,9 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
 
         viewModel.breakdownResponse.observe(this, {
             if (it?.isSucceed == true) {
-                if (it.entity == BreakdownRequest.BREAKDOWN)  {
+                if (it.entity == BreakdownRequest.BREAKDOWN) {
                     mBinding.btnBroken.visibility = View.VISIBLE
-                } else if(it.entity == BreakdownRequest.FIXED) {
+                } else if (it.entity == BreakdownRequest.FIXED) {
                     mBinding.btnBroken.visibility = View.GONE
                 }
                 toast("پیام ارسال شد")
@@ -324,7 +325,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             }
         })
 
-        viewModel.logoutResponse.observe(this, Observer {
+        viewModel.logoutResponse.observe(this, {
             progressDialog.dismiss()
             if (it != null) {
                 if (it.isSucceed) {
@@ -341,7 +342,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             }
         })
 
-        viewModel.customers.observe(this, Observer {
+        viewModel.customers.observe(this, {
             if (it != null) {
                 if (it.isSucceed) {
                     val customers = it.entity
@@ -366,7 +367,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             }
         })
 
-        viewModel.messages.observe(this, Observer { _messages ->
+        viewModel.messages.observe(this, { _messages ->
             val messageFragment =
                 supportFragmentManager.findFragmentByTag(FRAGMENT_MESSAGE_LIST_TAG)
             if (messageFragment != null && messageFragment.isVisible) {
@@ -376,7 +377,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             }
         })
 
-        viewModel.newMessage.observe(this, Observer {
+        viewModel.newMessage.observe(this, {
             it.getEventIfNotHandled()?.let {
                 mBinding.layoutNewMessage.message = it
                 topSheetBehavior.state = TopSheetBehavior.STATE_EXPANDED
@@ -385,26 +386,37 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
                 }, 3000)
             }
         })
+
+        viewModel.getUserLocationResponse.observe(this, {
+            if(it == null)
+                return@observe
+            if(it.isDamaged) {
+                if(mBinding.btnBroken.visibility != View.VISIBLE) {
+                    mBinding.btnBroken.visibility == View.VISIBLE
+                }
+            } else {
+                if(mBinding.btnBroken.visibility == View.VISIBLE) {
+                    mBinding.btnBroken.visibility != View.VISIBLE
+                }
+            }
+        })
     }
 
     private fun initFragments() {
         supportFragmentManager.beginTransaction().apply {
             add(
                 R.id.mapContainer,
-                MixerListFragment().also { hide(it) }
-                , FRAGMENT_MIXER_LIST_TAG
+                MixerListFragment().also { hide(it) }, FRAGMENT_MIXER_LIST_TAG
             )
             //addToBackStack(null)
             //setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             add(
                 R.id.mapContainer,
-                CustomerListFragment().also { hide(it) }
-                , FRAGMENT_CUSTOMER_LIST_TAG
+                CustomerListFragment().also { hide(it) }, FRAGMENT_CUSTOMER_LIST_TAG
             )
             add(
                 R.id.mapContainer,
-                MessageListFragment().also { hide(it) }
-                , FRAGMENT_MESSAGE_LIST_TAG
+                MessageListFragment().also { hide(it) }, FRAGMENT_MESSAGE_LIST_TAG
             )
             //addToBackStack(null)
             //setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)

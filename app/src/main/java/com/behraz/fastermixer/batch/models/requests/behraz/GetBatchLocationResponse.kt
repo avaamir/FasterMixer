@@ -35,7 +35,9 @@ class GetVehicleLocationResponse(
     val ignition: Boolean,
     @SerializedName("clientDatetime")
     val dateTime: Date,
-    private val _location: GeoPoint? = null
+    private val _location: GeoPoint? = null,
+    @SerializedName("isDamaged")
+    val isDamaged: Boolean = false
 ) {
     val location: GeoPoint get() = _location ?: CircleFence.strToCircleFence(locationStr).center
 
@@ -49,7 +51,7 @@ class GetVehicleLocationResponse(
             0f,
             false,
             now(),
-            GeoPoint(location)
+            GeoPoint(location),
         )
     }
 
