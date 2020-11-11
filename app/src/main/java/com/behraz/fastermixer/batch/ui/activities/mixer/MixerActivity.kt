@@ -133,6 +133,10 @@ class MixerActivity : AppCompatActivity(),
     }
 
     private fun initViews() {
+        mBinding.btnBroken.setOnClickListener {
+            viewModel.insertBreakdown(BreakdownRequest.FIXED)
+        }
+
         mBinding.layoutNewMessage.root.setOnClickListener {
             onFasterMixerMenuButtonsClicked(mBinding.btnMessages)
         }
@@ -357,6 +361,20 @@ class MixerActivity : AppCompatActivity(),
             }
         })
 
+        viewModel.getUserLocationResponse.observe(this, {
+            println("debug: ${it?.isDamaged}")
+            if(it == null)
+                return@observe
+            if(it.isDamaged) {
+                if(mBinding.btnBroken.visibility != View.VISIBLE) {
+                    mBinding.btnBroken.visibility = View.VISIBLE
+                }
+            } else {
+                if(mBinding.btnBroken.visibility == View.VISIBLE) {
+                    mBinding.btnBroken.visibility = View.GONE
+                }
+            }
+        })
     }
 
 

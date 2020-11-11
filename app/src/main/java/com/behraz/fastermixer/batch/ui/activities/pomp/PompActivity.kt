@@ -388,15 +388,16 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
         })
 
         viewModel.getUserLocationResponse.observe(this, {
+            println("debug: ${it?.isDamaged}")
             if(it == null)
                 return@observe
             if(it.isDamaged) {
                 if(mBinding.btnBroken.visibility != View.VISIBLE) {
-                    mBinding.btnBroken.visibility == View.VISIBLE
+                    mBinding.btnBroken.visibility = View.VISIBLE
                 }
             } else {
                 if(mBinding.btnBroken.visibility == View.VISIBLE) {
-                    mBinding.btnBroken.visibility != View.VISIBLE
+                    mBinding.btnBroken.visibility = View.GONE
                 }
             }
         })

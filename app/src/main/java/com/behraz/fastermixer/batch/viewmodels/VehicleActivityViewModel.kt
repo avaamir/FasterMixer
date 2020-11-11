@@ -17,6 +17,8 @@ import java.lang.IllegalStateException
 
 abstract class VehicleActivityViewModel : ParentViewModel() {
 
+    private var isDamaged = false
+
     var isServerLocationProvider: Boolean = false
         set(value) {
             if (value) {
@@ -92,7 +94,7 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
         LocationCompassProvider.location.observeForever { location ->
             if (!isServerLocationProvider) {
                 //TODO age location va lastLocation kheli fasele dasht dg animate nashe va mostaghim bere un noghte
-                getUserLocationResponse.value = GetVehicleLocationResponse.create(location)
+                getUserLocationResponse.value = GetVehicleLocationResponse.create(location, isDamaged)
             }
         }
 
@@ -107,6 +109,7 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
                 isGetUserLocationRequestActive = false
                 if (it != null) {
                     if (it.isSucceed) {
+                        isDamaged = it.entity?.isDamaged ?: isDamaged
                         lastServerLocationResponse = it.entity
                         if (isServerLocationProvider) {
                             getUserLocationResponse.value = it.entity//age observer nadashte bashe set nemishe, age scenario avaz shod deghat kon, alan mapFragment Observersh hast

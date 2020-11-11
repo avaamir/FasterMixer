@@ -14,9 +14,10 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
     static {
         sIncludes = null;
         sViewsWithIds = new android.util.SparseIntArray();
-        sViewsWithIds.put(R.id.textView41, 8);
-        sViewsWithIds.put(R.id.textView43, 9);
-        sViewsWithIds.put(R.id.textView45, 10);
+        sViewsWithIds.put(R.id.textView41, 7);
+        sViewsWithIds.put(R.id.textView43, 8);
+        sViewsWithIds.put(R.id.textView45, 9);
+        sViewsWithIds.put(R.id.textView46, 10);
         sViewsWithIds.put(R.id.textView47, 11);
         sViewsWithIds.put(R.id.textView49, 12);
     }
@@ -33,25 +34,24 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
     }
     private ItemPlanBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
-            , (android.widget.ProgressBar) bindings[6]
-            , (android.widget.TextView) bindings[8]
-            , (android.widget.TextView) bindings[1]
-            , (android.widget.TextView) bindings[9]
-            , (android.widget.TextView) bindings[2]
-            , (android.widget.TextView) bindings[10]
-            , (android.widget.TextView) bindings[3]
-            , (android.widget.TextView) bindings[11]
-            , (android.widget.TextView) bindings[4]
-            , (android.widget.TextView) bindings[12]
-            , (android.widget.TextView) bindings[5]
+            , (android.widget.ProgressBar) bindings[5]
             , (android.widget.TextView) bindings[7]
+            , (android.widget.TextView) bindings[1]
+            , (android.widget.TextView) bindings[8]
+            , (android.widget.TextView) bindings[2]
+            , (android.widget.TextView) bindings[9]
+            , (android.widget.TextView) bindings[10]
+            , (android.widget.TextView) bindings[11]
+            , (android.widget.TextView) bindings[3]
+            , (android.widget.TextView) bindings[12]
+            , (android.widget.TextView) bindings[4]
+            , (android.widget.TextView) bindings[6]
             );
         this.mboundView0 = (androidx.constraintlayout.widget.ConstraintLayout) bindings[0];
         this.mboundView0.setTag(null);
         this.progressBar2.setTag(null);
         this.textView42.setTag(null);
         this.textView44.setTag(null);
-        this.textView46.setTag(null);
         this.textView48.setTag(null);
         this.textView50.setTag(null);
         this.textView51.setTag(null);
@@ -113,44 +113,38 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
             dirtyFlags = mDirtyFlags;
             mDirtyFlags = 0;
         }
-        java.lang.String planSentAmountJavaLangString = null;
-        com.behraz.fastermixer.batch.models.Plan plan = mPlan;
-        java.lang.String planAddress = null;
-        java.lang.String planPlannedAmountJavaLangString = null;
-        float planPlannedAmount = 0f;
         java.lang.String planProgressJavaLangString = null;
         float planWaitingAmount = 0f;
         java.lang.String planOwnerName = null;
+        com.behraz.fastermixer.batch.models.Plan plan = mPlan;
         float planSentAmount = 0f;
-        int planProgress = 0;
+        java.lang.String planAddress = null;
+        java.lang.String planSentAmountJavaLangString = null;
         java.lang.String planWaitingAmountJavaLangString = null;
+        int planProgress = 0;
 
         if ((dirtyFlags & 0x3L) != 0) {
 
 
 
                 if (plan != null) {
-                    // read plan.address
-                    planAddress = plan.getAddress();
-                    // read plan.plannedAmount
-                    planPlannedAmount = plan.getPlannedAmount();
                     // read plan.waitingAmount
                     planWaitingAmount = plan.getWaitingAmount();
                     // read plan.ownerName
                     planOwnerName = plan.getOwnerName();
                     // read plan.sentAmount
                     planSentAmount = plan.getSentAmount();
+                    // read plan.address
+                    planAddress = plan.getAddress();
                     // read plan.progress
                     planProgress = plan.getProgress();
                 }
 
 
-                // read (plan.plannedAmount) + (" متر مکعب ")
-                planPlannedAmountJavaLangString = (planPlannedAmount) + (" متر مکعب ");
-                // read (plan.waitingAmount) + (" متر مکعب ")
-                planWaitingAmountJavaLangString = (planWaitingAmount) + (" متر مکعب ");
-                // read (plan.sentAmount) + (" متر مکعب ")
-                planSentAmountJavaLangString = (planSentAmount) + (" متر مکعب ");
+                // read (plan.waitingAmount) + (" متر")
+                planWaitingAmountJavaLangString = (planWaitingAmount) + (" متر");
+                // read (plan.sentAmount) + (" متر")
+                planSentAmountJavaLangString = (planSentAmount) + (" متر");
                 // read (plan.progress) + ("%")
                 planProgressJavaLangString = (planProgress) + ("%");
         }
@@ -161,7 +155,6 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
             this.progressBar2.setProgress(planProgress);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView42, planOwnerName);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView44, planAddress);
-            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView46, planPlannedAmountJavaLangString);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView48, planSentAmountJavaLangString);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView50, planWaitingAmountJavaLangString);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView51, planProgressJavaLangString);
