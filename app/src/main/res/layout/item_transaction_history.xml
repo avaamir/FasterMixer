@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
             name="data"
             type="com.behraz.fastermixer.batch.models.TransactionHistory" />
     </data>
-    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -26,42 +26,45 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/iransans_medium"
-                tools:text="22342351"
-                android:text="@{data.orderNumber}"
                 android:gravity="center"
+                android:text="@{data.orderNumber}"
                 android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/textView68"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="22342351" />
 
             <TextView
                 android:id="@+id/textView68"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/iransans_medium"
-                tools:text="پکیج A"
-                android:text="@{data.packageName}"
                 android:gravity="center"
+                android:text="@{data.packageName}"
                 android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/textView61"
                 app:layout_constraintEnd_toStartOf="@+id/textView61"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/tvPaymentResult"
-                app:layout_constraintTop_toTopOf="@+id/textView61" />
+                app:layout_constraintTop_toTopOf="@+id/textView61"
+                tools:text="پکیج A" />
 
             <TextView
                 android:id="@+id/tvPaymentResult"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/iransans_medium"
-                tools:text="موفق"
-                android:text="@{data.paymentResult}"
                 android:gravity="center"
+                android:text="@{data.paymentResult}"
                 android:textColor="@color/green"
+                app:layout_constraintBottom_toBottomOf="@+id/textView68"
                 app:layout_constraintEnd_toStartOf="@+id/textView68"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/textView70"
-                app:layout_constraintTop_toTopOf="@+id/textView68" />
+                app:layout_constraintTop_toTopOf="@+id/textView68"
+                tools:text="موفق" />
 
             <TextView
                 android:id="@+id/textView70"
@@ -69,14 +72,15 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/iransans_medium"
                 android:gravity="center"
-                tools:text="99/2/2"
                 android:text="@{data.date}"
                 android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/tvPaymentResult"
                 app:layout_constraintEnd_toStartOf="@+id/tvPaymentResult"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tvPaymentResult" />
+                app:layout_constraintTop_toTopOf="@+id/tvPaymentResult"
+                tools:text="99/2/2" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

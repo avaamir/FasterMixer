@@ -410,6 +410,7 @@
                             android:gravity="center"
                             android:text="نام  اشتراک"
                             android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView61"
                             app:layout_constraintEnd_toStartOf="@+id/textView61"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toEndOf="@+id/textView69"
@@ -423,6 +424,7 @@
                             android:gravity="center"
                             android:text="وضعیت پرداخت"
                             android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView68"
                             app:layout_constraintEnd_toStartOf="@+id/textView68"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toEndOf="@+id/textView70"
@@ -437,6 +439,7 @@
                             android:gravity="center"
                             android:text="تاریخ"
                             android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView69"
                             app:layout_constraintEnd_toStartOf="@+id/textView69"
                             app:layout_constraintHorizontal_bias="0.51"
                             app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -452,7 +455,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/textView70"
+                            app:layout_constraintTop_toBottomOf="@+id/textView69"
                             tools:itemCount="2"
                             tools:listitem="@layout/item_transaction_history" />
                     </androidx.constraintlayout.widget.ConstraintLayout>

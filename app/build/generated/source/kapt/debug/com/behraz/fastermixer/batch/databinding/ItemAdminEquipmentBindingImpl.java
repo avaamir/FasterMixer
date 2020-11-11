@@ -19,8 +19,9 @@ public class ItemAdminEquipmentBindingImpl extends ItemAdminEquipmentBinding  {
         sViewsWithIds.put(R.id.btn_show_mixer_on_map, 5);
         sViewsWithIds.put(R.id.frame_state, 6);
         sViewsWithIds.put(R.id.ivState, 7);
-        sViewsWithIds.put(R.id.tvLastDataTime, 8);
-        sViewsWithIds.put(R.id.imageView8, 9);
+        sViewsWithIds.put(R.id.linearLayout4, 8);
+        sViewsWithIds.put(R.id.tvLastDataTime, 9);
+        sViewsWithIds.put(R.id.imageView8, 10);
     }
     // views
     @NonNull
@@ -31,19 +32,20 @@ public class ItemAdminEquipmentBindingImpl extends ItemAdminEquipmentBinding  {
     // Inverse Binding Event Handlers
 
     public ItemAdminEquipmentBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 10, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 11, sIncludes, sViewsWithIds));
     }
     private ItemAdminEquipmentBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
             , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[5]
             , (android.widget.LinearLayout) bindings[6]
-            , (android.widget.ImageView) bindings[9]
+            , (android.widget.ImageView) bindings[10]
             , (android.widget.ImageView) bindings[4]
             , (android.widget.ImageView) bindings[7]
+            , (android.widget.LinearLayout) bindings[8]
             , (com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView) bindings[3]
             , (android.widget.TextView) bindings[1]
             , (android.widget.TextView) bindings[2]
-            , (android.widget.TextView) bindings[8]
+            , (android.widget.TextView) bindings[9]
             );
         this.mboundView0 = (androidx.constraintlayout.widget.ConstraintLayout) bindings[0];
         this.mboundView0.setTag(null);

@@ -12,6 +12,7 @@ import com.behraz.fastermixer.batch.databinding.ItemAdminEquipmentBinding
 import com.behraz.fastermixer.batch.models.AdminEquipment
 import com.behraz.fastermixer.batch.models.enums.EquipmentState
 import com.behraz.fastermixer.batch.models.enums.EquipmentType
+import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.estimateTime
 import com.behraz.fastermixer.batch.utils.general.exhaustive
 import com.behraz.fastermixer.batch.utils.general.minus
@@ -111,7 +112,7 @@ class AdminEquipmentAdapter(private val interactions: Interactions) :
 
             mBinding.tvLastDataTime.text =
                 if (item.dateTime != null) {
-                    estimateTime(item.dateTime - now(), TimeUnit.SECONDS)
+                    estimateTime(now() - item.dateTime, TimeUnit.SECONDS)
                 } else {
                     "نامشخص"
                 }
