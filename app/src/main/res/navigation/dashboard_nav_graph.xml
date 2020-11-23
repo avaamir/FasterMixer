@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dashboard_nav_graph"
+    app:startDestination="@id/dashboardFragment">
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.DashboardFragment"
+        android:label="داشبورد مدیریت"
+        tools:layout="@layout/layout_dashboard_fragment">
+        <action
+            android:id="@+id/action_dashboardFragment_to_requestsFragment"
+            app:destination="@id/requestsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestsFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.RequestsFragment"
+        android:label="درخواست های امروز"
+        tools:layout="@layout/layout_fragment_requests" />
+</navigation>

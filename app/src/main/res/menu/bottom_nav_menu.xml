@@ -3,27 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <item android:id="@+id/nav_account"
+    <item android:id="@+id/menu_nav_account"
         android:title="حساب من"
         android:icon="@drawable/ic_person"
         app:iconTint="@color/btn_yellow" />
 
-    <item android:id="@+id/nav_requests"
-        android:title="پنل مدیریت"
-        android:icon="@drawable/ic_calendar"
+    <item android:id="@+id/menu_nav_report"
+        android:title="گزارشات"
+        android:icon="@drawable/ic_report"
         app:iconTint="@color/btn_yellow"/>
 
-    <item android:id="@+id/nav_dashboard"
+    <item android:id="@+id/menu_nav_dashboard"
         android:title="داشبورد"
         android:icon="@drawable/ic_dashboard"
         app:iconTint="@color/btn_yellow"/>
 
-    <item android:id="@+id/nav_map"
+    <item android:id="@+id/menu_nav_map"
         android:title="نقشه"
-        android:icon="@drawable/ic_map"
+        android:icon="@drawable/ic_map_menu"
         app:iconTint="@color/btn_yellow"/>
 
-    <item android:id="@+id/nav_equipments"
+    <item android:id="@+id/menu_nav_equipments"
         android:title="تجهیزات"
         android:icon="@drawable/ic_agriculture"
         app:iconTint="@color/btn_yellow"/>

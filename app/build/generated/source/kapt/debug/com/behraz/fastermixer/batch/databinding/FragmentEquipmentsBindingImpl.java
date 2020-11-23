@@ -14,9 +14,8 @@ public class FragmentEquipmentsBindingImpl extends FragmentEquipmentsBinding  {
     static {
         sIncludes = null;
         sViewsWithIds = new android.util.SparseIntArray();
-        sViewsWithIds.put(R.id.tvAdminName, 1);
-        sViewsWithIds.put(R.id.spinner_sort_order, 2);
-        sViewsWithIds.put(R.id.recyclerEquipments, 3);
+        sViewsWithIds.put(R.id.spinner_sort_order, 1);
+        sViewsWithIds.put(R.id.recyclerEquipments, 2);
     }
     // views
     @NonNull
@@ -27,13 +26,12 @@ public class FragmentEquipmentsBindingImpl extends FragmentEquipmentsBinding  {
     // Inverse Binding Event Handlers
 
     public FragmentEquipmentsBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 4, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 3, sIncludes, sViewsWithIds));
     }
     private FragmentEquipmentsBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
-            , (androidx.recyclerview.widget.RecyclerView) bindings[3]
-            , (android.widget.Spinner) bindings[2]
-            , (android.widget.TextView) bindings[1]
+            , (androidx.recyclerview.widget.RecyclerView) bindings[2]
+            , (android.widget.Spinner) bindings[1]
             );
         this.mboundView0 = (android.widget.LinearLayout) bindings[0];
         this.mboundView0.setTag(null);

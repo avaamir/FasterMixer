@@ -32,6 +32,33 @@
                         android:layout_height="match_parent"
                         >
 
+                        <LinearLayout
+                            android:id="@+id/frameShowRequestDetails"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="2dp"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView73"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/textView73">
+
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:src="@drawable/ic_keyboard_arrow_left" />
+
+                            <TextView
+                                style="@style/my_gray_normal_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:text="جزییات" />
+
+                        </LinearLayout>
+
                         <TextView
                             android:id="@+id/textView73"
                             style="@style/my_title_text"
@@ -53,7 +80,7 @@
                             android:layout_marginBottom="8dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toBottomOf="@+id/textView73" />
 
                         <TextView
                             android:id="@+id/textView74"
@@ -125,6 +152,34 @@
                         android:orientation="vertical">
 
 
+                        <LinearLayout
+                            android:id="@+id/frameShowEquipmentsDetails"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="2dp"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView76"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/textView76">
+
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:src="@drawable/ic_keyboard_arrow_left" />
+
+                            <TextView
+                                style="@style/my_gray_normal_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:text="جزییات" />
+
+                        </LinearLayout>
+
+
                         <TextView
                             android:id="@+id/textView76"
                             style="@style/my_title_text"
@@ -146,7 +201,7 @@
                             android:layout_marginBottom="8dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toBottomOf="@+id/textView76" />
 
 
                         <TextView

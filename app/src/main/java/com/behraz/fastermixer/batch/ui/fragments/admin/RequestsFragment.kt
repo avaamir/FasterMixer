@@ -13,26 +13,27 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
-import com.behraz.fastermixer.batch.databinding.FragmentAdminPanelBinding
+import com.behraz.fastermixer.batch.databinding.LayoutFragmentRequestsBinding
 import com.behraz.fastermixer.batch.ui.adapters.PlanAdapter
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
 
-class AdminPanelFragment : Fragment() {
+class RequestsFragment : Fragment() {
 
-    private lateinit var mBinding: FragmentAdminPanelBinding
+    private lateinit var mBinding: LayoutFragmentRequestsBinding
     private lateinit var adminActivityViewModel: AdminActivityViewModel
     private val mAdapter = PlanAdapter()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        adminActivityViewModel = ViewModelProvider(activity!!).get(AdminActivityViewModel::class.java)
+        adminActivityViewModel = ViewModelProvider(requireActivity()).get(AdminActivityViewModel::class.java)
         mBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_admin_panel, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.layout_fragment_requests, container, false)
         initViews()
         subscribeObservers()
         return mBinding.root
@@ -48,23 +49,13 @@ class AdminPanelFragment : Fragment() {
                 RecyclerView.VERTICAL
             )
         )
-
-        mBinding.tvAdminName.text = adminActivityViewModel.userAndCompanyName
-        mBinding.btnCalendar.setOnClickListener {
-            toast("not yet implemented")
-        }
     }
 
     @SuppressLint("SetTextI18n")
     private fun subscribeObservers() {
-        adminActivityViewModel.plans.observe(viewLifecycleOwner, Observer {
+        adminActivityViewModel.plans.observe(viewLifecycleOwner, {
             if (it?.isSucceed == true) {
                 mAdapter.submitList(it.entity)
-                it.entity?.size.toString().let {txt->
-                    if (txt.isNotEmpty()) {
-                        mBinding.tvRequestsCount.text = "($txt درخواست)"
-                    }
-                }
             } else {
                 toast(it?.message ?: Constants.SERVER_ERROR)
             }

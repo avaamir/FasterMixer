@@ -38,11 +38,11 @@ class AdminMapFragment : BaseMapFragment() {
         savedInstanceState: Bundle?
     ): View? {
         adminActivityViewModel =
-            ViewModelProvider(activity!!).get(AdminActivityViewModel::class.java)
+            ViewModelProvider(requireActivity()).get(AdminActivityViewModel::class.java)
         mapViewModel = ViewModelProvider(this).get(AdminMapFragmentViewModel::class.java)
 
-        LocationCompassProvider.fixDeviceOrientationForCompassCalculation(activity!!)
-        LocationCompassProvider.start(context!!)
+        LocationCompassProvider.fixDeviceOrientationForCompassCalculation(requireActivity())
+        LocationCompassProvider.start(requireContext())
 
         subscribeObservers()
         return super.onCreateView(inflater, container, savedInstanceState)
@@ -147,10 +147,12 @@ class AdminMapFragment : BaseMapFragment() {
 
         })
 
-        adminActivityViewModel.onVehicleSelectedToShowOnMap.observe(viewLifecycleOwner, {
-            mapViewModel.markers[it.id]?.let { marker ->
-                moveCamera(marker.position, shouldAnimate = false)
-                marker.showInfoWindow()
+        adminActivityViewModel.eventOnVehicleSelectedToShowOnMap.observe(viewLifecycleOwner, { event->
+            event.getEventIfNotHandled()?.let {
+                mapViewModel.markers[it.id]?.let { marker ->
+                    moveCamera(marker.position, shouldAnimate = false)
+                    marker.showInfoWindow()
+                }
             }
         })
     }
@@ -160,7 +162,7 @@ class AdminMapFragment : BaseMapFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        LocationCompassProvider.stop(context!!)
+        LocationCompassProvider.stop(requireContext())
     }
 }
 

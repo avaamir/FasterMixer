@@ -9,12 +9,15 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.databinding.LayoutDashboardFragmentBinding
 import com.behraz.fastermixer.batch.models.enums.EquipmentState
+import com.behraz.fastermixer.batch.utils.general.Event
 import com.behraz.fastermixer.batch.utils.general.createSpannableString
 import com.behraz.fastermixer.batch.utils.general.exhaustive
+import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
@@ -50,7 +53,7 @@ class DashboardFragment : Fragment(), OnChartValueSelectedListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        adminActivityViewModel = ViewModelProvider(this).get(AdminActivityViewModel::class.java)
+        adminActivityViewModel = ViewModelProvider(requireActivity()).get(AdminActivityViewModel::class.java)
         mBinding =
             DataBindingUtil.inflate(inflater, R.layout.layout_dashboard_fragment, container, false)
         initViews()
@@ -66,6 +69,14 @@ class DashboardFragment : Fragment(), OnChartValueSelectedListener {
         mBinding.requestChart.invalidate()
         mBinding.vehiclesChart.legend.isEnabled = false
         mBinding.vehiclesChart.invalidate()
+
+        mBinding.frameShowRequestDetails.setOnClickListener {
+            findNavController().navigate(R.id.action_dashboardFragment_to_requestsFragment)
+        }
+
+        mBinding.frameShowEquipmentsDetails.setOnClickListener {
+            adminActivityViewModel.eventOnShowEquipmentsDetails.value = Event(Unit)
+        }
     }
 
 
@@ -164,10 +175,10 @@ class DashboardFragment : Fragment(), OnChartValueSelectedListener {
 
         chart.dragDecelerationFrictionCoef = 0.95f
 
-        chart.setCenterTextTypeface((activity!!.application as FasterMixerApplication).iransans)
+        chart.setCenterTextTypeface((requireActivity().application as FasterMixerApplication).iransans)
         chart.centerText = createSpannableString(
             centerTitle,
-            (activity!!.application as FasterMixerApplication).iransans,
+            (requireActivity().application as FasterMixerApplication).iransans,
             Color.BLACK
         )
 
@@ -206,7 +217,7 @@ class DashboardFragment : Fragment(), OnChartValueSelectedListener {
 
         // entry label styling
         chart.setEntryLabelColor(Color.WHITE)
-        chart.setEntryLabelTypeface((activity!!.application as FasterMixerApplication).iransansMedium)
+        chart.setEntryLabelTypeface((requireActivity().application as FasterMixerApplication).iransansMedium)
         chart.setEntryLabelTextSize(12f)
 
         chart.setDrawRoundedSlices(false)
@@ -236,7 +247,7 @@ class DashboardFragment : Fragment(), OnChartValueSelectedListener {
         dataSet.sliceSpace = 3f
         dataSet.iconsOffset = MPPointF(0f, 40f)
         dataSet.selectionShift = 5f
-        dataSet.valueTypeface = (activity!!.application as FasterMixerApplication).iransans
+        dataSet.valueTypeface = (requireActivity().application as FasterMixerApplication).iransans
 
         // add a lot of colors
         /*val colors: ArrayList<Int> = ArrayList()
@@ -249,11 +260,11 @@ class DashboardFragment : Fragment(), OnChartValueSelectedListener {
         dataSet.colors = colors
         //dataSet.setSelectionShift(0f);
         val data = PieData(dataSet)
-        data.setValueTypeface((activity!!.application as FasterMixerApplication).iransans)
+        data.setValueTypeface((requireActivity().application as FasterMixerApplication).iransans)
         data.setValueFormatter(PercentFormatter())
         data.setValueTextSize(11f)
         data.setValueTextColor(Color.WHITE)
-        data.setValueTypeface((activity!!.application as FasterMixerApplication).iransans)
+        data.setValueTypeface((requireActivity().application as FasterMixerApplication).iransans)
         chart.data = data
 
         // undo all highlights

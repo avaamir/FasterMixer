@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.behraz.fastermixer.batch.R
 
-fun Activity.toast(text: String, isLongLength: Boolean = true) {
+fun Activity.toast(text: CharSequence, isLongLength: Boolean = true) {
     //TOAST
     val layout = layoutInflater
         .inflate(
@@ -26,7 +26,7 @@ fun Activity.toast(text: String, isLongLength: Boolean = true) {
 }
 
 
-fun Fragment.toast(text: String, isLongLength: Boolean = false) {
+fun Fragment.toast(text: CharSequence, isLongLength: Boolean = false) {
 
     activity?.toast(text, isLongLength)
 

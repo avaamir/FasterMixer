@@ -17,6 +17,7 @@ import com.behraz.fastermixer.batch.models.AdminEquipment
 import com.behraz.fastermixer.batch.ui.adapters.AdminEquipmentAdapter
 import com.behraz.fastermixer.batch.ui.adapters.MySimpleSpinnerAdapter
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
+import com.behraz.fastermixer.batch.utils.general.Event
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
 
@@ -87,7 +88,7 @@ class AdminEquipmentsFragment : Fragment(), AdminEquipmentAdapter.Interactions {
                     id: Long
                 ) {
                     if (!adminActivityViewModel.sortEquipments(position == 0)) {
-                        toast("در حال دریافت اطلاعات از سرور..")
+                       // toast("در حال دریافت اطلاعات از سرور..")
                     }
                 }
 
@@ -96,7 +97,7 @@ class AdminEquipmentsFragment : Fragment(), AdminEquipmentAdapter.Interactions {
 
     override fun onBtnShowOnMapClicked(adminEquipment: AdminEquipment) {
         if (adminEquipment.location != null)
-            adminActivityViewModel.onVehicleSelectedToShowOnMap.postValue(adminEquipment)
+            adminActivityViewModel.eventOnVehicleSelectedToShowOnMap.postValue(Event(adminEquipment))
         else
             toast("موقعیت این تجهیز نامشخص است")
     }

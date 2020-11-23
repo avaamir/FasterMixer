@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/equipments_nav_graph"
+    app:startDestination="@id/adminEquipmentsFragment">
+
+    <fragment
+        android:id="@+id/adminEquipmentsFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.AdminEquipmentsFragment"
+        android:label="ماشین آلات و تجهیزات"
+        tools:layout="@layout/fragment_equipments"/>
+</navigation>

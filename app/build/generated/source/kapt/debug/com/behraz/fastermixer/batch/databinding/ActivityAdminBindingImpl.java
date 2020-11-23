@@ -14,8 +14,9 @@ public class ActivityAdminBindingImpl extends ActivityAdminBinding  {
     static {
         sIncludes = null;
         sViewsWithIds = new android.util.SparseIntArray();
-        sViewsWithIds.put(R.id.container, 1);
-        sViewsWithIds.put(R.id.bottom_nav, 2);
+        sViewsWithIds.put(R.id.toolbar, 1);
+        sViewsWithIds.put(R.id.mainPager, 2);
+        sViewsWithIds.put(R.id.bottom_nav, 3);
     }
     // views
     @NonNull
@@ -26,12 +27,13 @@ public class ActivityAdminBindingImpl extends ActivityAdminBinding  {
     // Inverse Binding Event Handlers
 
     public ActivityAdminBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 3, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 4, sIncludes, sViewsWithIds));
     }
     private ActivityAdminBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
-            , (com.google.android.material.bottomnavigation.BottomNavigationView) bindings[2]
-            , (android.widget.FrameLayout) bindings[1]
+            , (com.google.android.material.bottomnavigation.BottomNavigationView) bindings[3]
+            , (com.behraz.fastermixer.batch.ui.customs.general.NonSwipingViewPagerNoTransition) bindings[2]
+            , (android.view.View) bindings[1]
             );
         this.mboundView0 = (android.widget.RelativeLayout) bindings[0];
         this.mboundView0.setTag(null);
