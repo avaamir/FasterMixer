@@ -70,6 +70,12 @@ class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener,
     }
 
     private fun subscribeObservers() {
+        viewModel.eventOnRouteToCarClicked.observe(this, {event->
+            if (!event.hasBeenHandled) {
+                mBinding.bottomNav.selectedItemId = R.id.menu_nav_map
+            }
+        })
+
         viewModel.eventOnVehicleSelectedToShowOnMap.observe(this, {
             if (!it.hasBeenHandled) {
                 mBinding.bottomNav.selectedItemId = R.id.menu_nav_map

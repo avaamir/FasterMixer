@@ -102,7 +102,7 @@ abstract class VehicleFragment : BaseMapFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        LocationCompassProvider.stop(context!!)
+        LocationCompassProvider.stop(requireContext())
     }
 
     override fun initViews() {
@@ -124,14 +124,14 @@ abstract class VehicleFragment : BaseMapFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (activity!! is OnUserAndDestLocRetrieved) {
+        if (requireActivity() is OnUserAndDestLocRetrieved) {
             onUserAndDestLocRetrieved = activity as OnUserAndDestLocRetrieved
         }
     }
 
     private fun initLocationCompassProvider() {
-        LocationCompassProvider.fixDeviceOrientationForCompassCalculation(activity!!)
-        LocationCompassProvider.start(context!!)
+        LocationCompassProvider.fixDeviceOrientationForCompassCalculation(requireActivity())
+        LocationCompassProvider.start(requireContext())
 
 
         LocationCompassProvider.userAngle.observeForever {
@@ -245,8 +245,7 @@ abstract class VehicleFragment : BaseMapFragment() {
             }
         })
 
-        mMapViewModel.getRouteResponse.observe(viewLifecycleOwner, Observer
-        {
+        mMapViewModel.getRouteResponse.observe(viewLifecycleOwner, {
             if (it != null) {
                 println("debux: (MixerMapFragment-GetRouteResponseObserver) getRouteResponse Came====================================")
                 if (it.isSuccessful) {

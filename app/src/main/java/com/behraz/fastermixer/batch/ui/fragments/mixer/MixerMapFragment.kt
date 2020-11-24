@@ -32,7 +32,7 @@ class MixerMapFragment : VehicleFragment() {
         super.onAttach(context)
         //tuye on attach init shodan chun tuye super.onCreateView bahashun kar daran
         mapViewModel = ViewModelProvider(this).get(MixerMapFragmentViewModel::class.java)
-        mixerActivityViewModel = ViewModelProvider(activity!!).get(MixerActivityViewModel::class.java)
+        mixerActivityViewModel = ViewModelProvider(requireActivity()).get(MixerActivityViewModel::class.java)
     }
 
     override fun onMapTapped(geoPoint: GeoPoint) {

@@ -1,6 +1,5 @@
 package com.behraz.fastermixer.batch.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.map
@@ -17,6 +16,7 @@ class AdminActivityViewModel : ParentViewModel() {
     //UI Events
 
     val eventOnVehicleSelectedToShowOnMap = MutableLiveData<Event<AdminEquipment>>()
+    val eventOnRouteToCarClicked = MutableLiveData<Event<AdminEquipment>>()
     val eventOnShowEquipmentsDetails = MutableLiveData<Event<Unit>>()
 
 

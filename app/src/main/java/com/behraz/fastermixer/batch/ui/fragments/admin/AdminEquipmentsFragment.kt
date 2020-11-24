@@ -32,8 +32,6 @@ class AdminEquipmentsFragment : Fragment(), AdminEquipmentAdapter.Interactions {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        println("debux: EqFrag->${System.identityHashCode(this)}")
-
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_equipments, container, false)
         adminActivityViewModel =
             ViewModelProvider(requireActivity()).get(AdminActivityViewModel::class.java)
@@ -114,7 +112,7 @@ class AdminEquipmentsFragment : Fragment(), AdminEquipmentAdapter.Interactions {
             }
 
             override fun onRoutingToEquipmentClicked() {
-                toast("Not yet implemented")
+                adminActivityViewModel.eventOnRouteToCarClicked.value = Event(adminEquipment)
             }
 
             override fun onDrawRoadReportClicked() {

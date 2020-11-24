@@ -8,7 +8,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.app.LocationCompassProvider
 import com.behraz.fastermixer.batch.models.AdminEquipment
 import com.behraz.fastermixer.batch.models.enums.EquipmentType
+import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.fragments.BaseMapFragment
+import com.behraz.fastermixer.batch.ui.osm.infowindows.AdminDriverInfoWindow
 import com.behraz.fastermixer.batch.ui.osm.markers.*
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.OnSourceMapChange
@@ -18,10 +20,13 @@ import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
 import com.behraz.fastermixer.batch.viewmodels.AdminMapFragmentViewModel
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.overlay.Polyline
 
-class AdminMapFragment : BaseMapFragment() {
+class AdminMapFragment : BaseMapFragment(), AdminDriverInfoWindow.Interactions {
     private lateinit var mapViewModel: AdminMapFragmentViewModel
     private lateinit var adminActivityViewModel: AdminActivityViewModel
+
+    private var routePolyline: Polyline? = null
 
     private val userMarker by lazy {
         DestMarker(mBinding.map, 42, 42)
@@ -49,6 +54,13 @@ class AdminMapFragment : BaseMapFragment() {
     }
 
     private fun subscribeObservers() {
+        adminActivityViewModel.eventOnRouteToCarClicked.observe(viewLifecycleOwner, { event ->
+            event.getEventIfNotHandled()?.let {
+                routeToCar(GeoPoint(it.location))
+            }
+        })
+
+
         LocationCompassProvider.location.observe(viewLifecycleOwner, {
             mapViewModel.myLocation = GeoPoint(it)
             userMarker.position = mapViewModel.myLocation
@@ -76,10 +88,26 @@ class AdminMapFragment : BaseMapFragment() {
                                 item: AdminEquipment
                             ): VehicleMarker {
                                 val marker = when (item.type) {
-                                    EquipmentType.Mixer -> MixerMarker(mBinding.map)
-                                    EquipmentType.Pomp -> PompMarker(mBinding.map)
-                                    EquipmentType.Loader -> LoaderMarker(mBinding.map)
-                                    EquipmentType.Other -> LoaderMarker(mBinding.map)
+                                    EquipmentType.Mixer ->
+                                        MixerMarker(
+                                            mBinding.map,
+                                            interactions = this@AdminMapFragment
+                                        )
+                                    EquipmentType.Pomp ->
+                                        PompMarker(
+                                            mBinding.map,
+                                            interactions = this@AdminMapFragment
+                                        )
+                                    EquipmentType.Loader ->
+                                        LoaderMarker(
+                                            mBinding.map,
+                                            interactions = this@AdminMapFragment
+                                        )
+                                    EquipmentType.Other ->
+                                        LoaderMarker(
+                                            mBinding.map,
+                                            interactions = this@AdminMapFragment
+                                        )
                                 }.exhaustiveAsExpression()
                                 item.carIdStr.split(",").run {
                                     marker.setPelakText(get(0), get(1), get(2), get(3))
@@ -108,36 +136,6 @@ class AdminMapFragment : BaseMapFragment() {
                             }
                         })
                     mBinding.map.invalidate()
-
-                    //
-                    /*
-                    val excludeVehiclesList = mapViewModel.markers.keys
-                    it.entity!!.forEach { _equipment ->
-                        var marker = mapViewModel.markers[_equipment.id]
-                        if (marker == null) {
-                            marker = when (_equipment.type) {
-                                EquipmentType.Mixer -> MixerMarker(mBinding.map)
-                                EquipmentType.Pomp -> PompMarker(mBinding.map)
-                                EquipmentType.Loader -> LoaderMarker(mBinding.map)
-                                EquipmentType.Other -> LoaderMarker(mBinding.map)
-                            }.exhaustiveAsExpression()
-                            _equipment.carIdStr.split(",").run {
-                                marker.setPelakText(get(0), get(1), get(2), get(3))
-                            }
-                            addMarkerToMap(marker, _equipment.location, _equipment.name)
-                            excludeVehiclesList.remove(_equipment.id)
-                            mapViewModel.markers[_equipment.id] = marker
-                        } else {
-                            excludeVehiclesList.remove(_equipment.id)
-                            marker.position = _equipment.location
-                        }
-                    }
-                    mBinding.map.invalidate()
-                    excludeVehiclesList.forEach { vehicleId ->
-                        mapViewModel.markers.remove(vehicleId)
-                    }
-                   */
-                    //
                 } else {
                     toast(it.message)
                 }
@@ -147,23 +145,60 @@ class AdminMapFragment : BaseMapFragment() {
 
         })
 
-        adminActivityViewModel.eventOnVehicleSelectedToShowOnMap.observe(viewLifecycleOwner, { event->
-            event.getEventIfNotHandled()?.let {
-                mapViewModel.markers[it.id]?.let { marker ->
-                    moveCamera(marker.position, shouldAnimate = false)
-                    marker.showInfoWindow()
+        adminActivityViewModel.eventOnVehicleSelectedToShowOnMap.observe(
+            viewLifecycleOwner,
+            { event ->
+                event.getEventIfNotHandled()?.let {
+                    mapViewModel.markers[it.id]?.let { marker ->
+                        moveCamera(marker.position, shouldAnimate = false)
+                        marker.showInfoWindow()
+                    }
+                }
+            })
+
+        mapViewModel.getRouteResponse.observe(viewLifecycleOwner, {
+            if (it != null) {
+                if (it.isSuccessful) {
+                    routePolyline?.let { _routes ->
+                        mBinding.map.overlays.remove(_routes)
+                    }
+                    routePolyline = drawPolyline(it.getRoutePoints())
+                } else {
+                    if (it.code == "NoRoute")
+                        toast("متاسفانه در این منطقه مسیریابی ممکن نیست")
+                    else
+                        toast(Constants.SERVER_ERROR)
+                }
+            } else {
+                if (ApiService.isNetworkAvailable()) {
+                    toast(Constants.SERVER_ERROR)
+                } else {
+                    toast("لطفا وضعیت اینترنت خود را بررسی کنید")
                 }
             }
         })
     }
 
-    override fun onBtnMyLocationClicked() {}
+    private fun routeToCar(dest: GeoPoint) {
+        val userLoc = mapViewModel.myLocation
+        when {
+            userLoc != null -> mapViewModel.getRoute(listOf(userLoc, dest))
+            LocationCompassProvider.isProviderEnable(requireContext()) -> toast("موقعیت شما هنوز یافت نشده است")
+            else -> toast("ابتدا جی پی اس خود را روشن کنید")
+        }
+    }
 
+    override fun onBtnMyLocationClicked() {}
 
     override fun onDestroy() {
         super.onDestroy()
         LocationCompassProvider.stop(requireContext())
     }
+
+    override fun onRouteClicked(marker: VehicleMarker) {
+        routeToCar(marker.position)
+    }
+
 }
 
 
