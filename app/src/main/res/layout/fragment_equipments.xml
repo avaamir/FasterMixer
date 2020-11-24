@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray200"
+        android:background="@color/gray50"
         android:orientation="vertical">
 
         <com.google.android.material.appbar.AppBarLayout

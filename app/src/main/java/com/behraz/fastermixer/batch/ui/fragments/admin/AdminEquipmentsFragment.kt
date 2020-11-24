@@ -8,7 +8,6 @@ import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
@@ -16,6 +15,7 @@ import com.behraz.fastermixer.batch.databinding.FragmentEquipmentsBinding
 import com.behraz.fastermixer.batch.models.AdminEquipment
 import com.behraz.fastermixer.batch.ui.adapters.AdminEquipmentAdapter
 import com.behraz.fastermixer.batch.ui.adapters.MySimpleSpinnerAdapter
+import com.behraz.fastermixer.batch.ui.dialogs.AdminEquipmentDialog
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.Event
 import com.behraz.fastermixer.batch.utils.general.toast
@@ -36,7 +36,7 @@ class AdminEquipmentsFragment : Fragment(), AdminEquipmentAdapter.Interactions {
 
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_equipments, container, false)
         adminActivityViewModel =
-            ViewModelProvider(activity!!).get(AdminActivityViewModel::class.java)
+            ViewModelProvider(requireActivity()).get(AdminActivityViewModel::class.java)
 
 
         initViews()
@@ -59,15 +59,15 @@ class AdminEquipmentsFragment : Fragment(), AdminEquipmentAdapter.Interactions {
         mBinding.recyclerEquipments.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         mBinding.recyclerEquipments.adapter = mAdapter
-        mBinding.recyclerEquipments.addItemDecoration(
+        /*mBinding.recyclerEquipments.addItemDecoration(
             DividerItemDecoration(
                 context,
                 RecyclerView.VERTICAL
             )
-        )
+        )*/
 
         mBinding.spinnerSortOrder.adapter = MySimpleSpinnerAdapter(
-            context!!,
+            requireContext(),
             android.R.layout.simple_spinner_dropdown_item,
             listOf(
                 "بر اساس وضعیت تجهیز",
@@ -95,10 +95,40 @@ class AdminEquipmentsFragment : Fragment(), AdminEquipmentAdapter.Interactions {
             }
     }
 
-    override fun onBtnShowOnMapClicked(adminEquipment: AdminEquipment) {
+
+    private fun showEquipmentOnMap(adminEquipment: AdminEquipment) {
         if (adminEquipment.location != null)
             adminActivityViewModel.eventOnVehicleSelectedToShowOnMap.postValue(Event(adminEquipment))
         else
             toast("موقعیت این تجهیز نامشخص است")
+    }
+
+    override fun onBtnShowOnMapClicked(adminEquipment: AdminEquipment) {
+        showEquipmentOnMap(adminEquipment)
+    }
+
+    override fun onEquipmentClicked(adminEquipment: AdminEquipment) {
+        AdminEquipmentDialog(requireActivity(), R.style.my_dialog_animation, object: AdminEquipmentDialog.Interactions {
+            override fun onShowOnMapClicked() {
+                showEquipmentOnMap(adminEquipment)
+            }
+
+            override fun onRoutingToEquipmentClicked() {
+                toast("Not yet implemented")
+            }
+
+            override fun onDrawRoadReportClicked() {
+                toast("Not yet implemented")
+            }
+
+            override fun onSummeryReportClicked() {
+                toast("Not yet implemented")
+            }
+
+            override fun onFullReportClicked() {
+                toast("Not yet implemented")
+            }
+
+        }).show()
     }
 }

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minWidth="250dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minWidth="250dp"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:padding="@dimen/standard_margin">
+
+
+        <LinearLayout
+            android:id="@+id/frameShowOnMap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|right"
+            android:orientation="horizontal"
+            android:padding="@dimen/standard_margin"
+            android:background="?attr/selectableItemBackground">
+
+
+            <TextView
+                style="@style/my_black_bold_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/iransans"
+                android:layout_marginRight="@dimen/standard_margin"
+                android:text="مشاهده روی نقشه" />
+
+            <androidx.cardview.widget.CardView
+                style="@style/my_card_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="10dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_map"
+                    android:layout_margin="@dimen/tiny_margin"/>
+            </androidx.cardview.widget.CardView>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/frameRouteToCar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|right"
+            android:orientation="horizontal"
+            android:padding="@dimen/standard_margin"
+            android:background="?attr/selectableItemBackground">
+
+
+            <TextView
+                style="@style/my_black_bold_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/iransans"
+                android:layout_marginRight="@dimen/standard_margin"
+                android:text="مسیریابی به سمت خودرو" />
+
+            <androidx.cardview.widget.CardView
+                style="@style/my_card_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="10dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_route"
+                    android:layout_margin="@dimen/tiny_margin"/>
+            </androidx.cardview.widget.CardView>
+
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/frameDrawRoad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|right"
+            android:orientation="horizontal"
+            android:padding="@dimen/standard_margin"
+            android:background="?attr/selectableItemBackground">
+
+
+            <TextView
+                style="@style/my_black_bold_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/iransans"
+                android:layout_marginRight="@dimen/standard_margin"
+                android:text="گزارش رسم مسیر" />
+
+            <androidx.cardview.widget.CardView
+                style="@style/my_card_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="10dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_edit_road"
+                    app:tint="@color/black"
+                    android:layout_margin="@dimen/tiny_margin"/>
+            </androidx.cardview.widget.CardView>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/frameWorkSummeryReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|right"
+            android:orientation="horizontal"
+            android:padding="@dimen/standard_margin"
+            android:background="?attr/selectableItemBackground">
+
+
+            <TextView
+                style="@style/my_black_bold_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/iransans"
+                android:layout_marginRight="@dimen/standard_margin"
+                android:text="گزارش کارکرد خلاصه" />
+
+            <androidx.cardview.widget.CardView
+                style="@style/my_card_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="10dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_edit_road"
+                    app:tint="@color/black"
+                    android:layout_margin="@dimen/tiny_margin"/>
+            </androidx.cardview.widget.CardView>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/frameWorkFullReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|right"
+            android:orientation="horizontal"
+            android:padding="@dimen/standard_margin"
+            android:background="?attr/selectableItemBackground">
+
+
+            <TextView
+                style="@style/my_black_bold_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/iransans"
+                android:layout_marginRight="@dimen/standard_margin"
+                android:text="گزارش کارکرد تفصیلی" />
+
+            <androidx.cardview.widget.CardView
+                style="@style/my_card_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="10dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_edit_road"
+                    app:tint="@color/black"
+                    android:layout_margin="@dimen/tiny_margin"/>
+            </androidx.cardview.widget.CardView>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>
+
+
+

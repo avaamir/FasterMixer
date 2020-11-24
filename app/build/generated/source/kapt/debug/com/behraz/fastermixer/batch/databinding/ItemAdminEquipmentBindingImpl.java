@@ -14,42 +14,40 @@ public class ItemAdminEquipmentBindingImpl extends ItemAdminEquipmentBinding  {
     static {
         sIncludes = null;
         sViewsWithIds = new android.util.SparseIntArray();
-        sViewsWithIds.put(R.id.pelakView, 3);
-        sViewsWithIds.put(R.id.ivEquipment, 4);
-        sViewsWithIds.put(R.id.btn_show_mixer_on_map, 5);
-        sViewsWithIds.put(R.id.frame_state, 6);
-        sViewsWithIds.put(R.id.ivState, 7);
-        sViewsWithIds.put(R.id.linearLayout4, 8);
-        sViewsWithIds.put(R.id.tvLastDataTime, 9);
-        sViewsWithIds.put(R.id.imageView8, 10);
+        sViewsWithIds.put(R.id.pelakView, 2);
+        sViewsWithIds.put(R.id.ivEquipment, 3);
+        sViewsWithIds.put(R.id.btn_show_mixer_on_map, 4);
+        sViewsWithIds.put(R.id.linearLayout4, 5);
+        sViewsWithIds.put(R.id.tvLastDataTime, 6);
+        sViewsWithIds.put(R.id.imageView8, 7);
+        sViewsWithIds.put(R.id.textView53, 8);
+        sViewsWithIds.put(R.id.tvState, 9);
     }
     // views
     @NonNull
-    private final androidx.constraintlayout.widget.ConstraintLayout mboundView0;
+    private final androidx.cardview.widget.CardView mboundView0;
     // variables
     // values
     // listeners
     // Inverse Binding Event Handlers
 
     public ItemAdminEquipmentBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 11, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 10, sIncludes, sViewsWithIds));
     }
     private ItemAdminEquipmentBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
-            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[5]
-            , (android.widget.LinearLayout) bindings[6]
-            , (android.widget.ImageView) bindings[10]
-            , (android.widget.ImageView) bindings[4]
+            , (com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton) bindings[4]
             , (android.widget.ImageView) bindings[7]
-            , (android.widget.LinearLayout) bindings[8]
-            , (com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView) bindings[3]
+            , (android.widget.ImageView) bindings[3]
+            , (android.widget.LinearLayout) bindings[5]
+            , (com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView) bindings[2]
+            , (android.widget.TextView) bindings[8]
             , (android.widget.TextView) bindings[1]
-            , (android.widget.TextView) bindings[2]
+            , (android.widget.TextView) bindings[6]
             , (android.widget.TextView) bindings[9]
             );
-        this.mboundView0 = (androidx.constraintlayout.widget.ConstraintLayout) bindings[0];
+        this.mboundView0 = (androidx.cardview.widget.CardView) bindings[0];
         this.mboundView0.setTag(null);
-        this.textView53.setTag(null);
         this.textView54.setTag(null);
         setRootTag(root);
         // listeners
@@ -109,8 +107,6 @@ public class ItemAdminEquipmentBindingImpl extends ItemAdminEquipmentBinding  {
             dirtyFlags = mDirtyFlags;
             mDirtyFlags = 0;
         }
-        com.behraz.fastermixer.batch.models.enums.EquipmentState equipmentState = null;
-        java.lang.String equipmentStateDesc = null;
         com.behraz.fastermixer.batch.models.AdminEquipment equipment = mEquipment;
         java.lang.String equipmentName = null;
 
@@ -119,23 +115,14 @@ public class ItemAdminEquipmentBindingImpl extends ItemAdminEquipmentBinding  {
 
 
                 if (equipment != null) {
-                    // read equipment.state
-                    equipmentState = equipment.getState();
                     // read equipment.name
                     equipmentName = equipment.getName();
-                }
-
-
-                if (equipmentState != null) {
-                    // read equipment.state.desc
-                    equipmentStateDesc = equipmentState.getDesc();
                 }
         }
         // batch finished
         if ((dirtyFlags & 0x3L) != 0) {
             // api target 1
 
-            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView53, equipmentStateDesc);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView54, equipmentName);
         }
     }

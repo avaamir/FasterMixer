@@ -10,124 +10,129 @@
     </data>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="120dp">
+        style="@style/my_clickable_card_style"
+        android:layout_margin="2dp">
 
-
-        <com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView
-            android:id="@+id/pelakView"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            app:firstText="12"
-            app:forthText="63"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/ivEquipment"
-            app:layout_constraintHorizontal_bias="0.67"
-            app:layout_constraintTop_toBottomOf="@+id/ivEquipment"
-            app:secondText="ب"
-            app:thirdText="242" />
+            android:minHeight="120dp">
 
-        <ImageView
-            android:id="@+id/ivEquipment"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_mixer" />
 
-        <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
-            android:id="@+id/btn_show_mixer_on_map"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="8dp"
-            app:backgroundColor="@color/white"
-            app:image="@drawable/ic_map"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
-            app:layout_constraintStart_toEndOf="@id/frame_state"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:radius="10dp" />
-
-        <LinearLayout
-            android:id="@+id/frame_state"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:gravity="center"
-            android:minWidth="100dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:background="@color/red">
+            <com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView
+                android:id="@+id/pelakView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                app:firstText="12"
+                app:forthText="63"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:secondText="ب"
+                app:thirdText="242" />
 
             <ImageView
-                android:id="@+id/ivState"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_gravity="center"
-                app:tint="@color/white"
-                tools:srcCompat="@drawable/ic_block" />
+                android:id="@+id/ivEquipment"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_mixer" />
+
+            <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
+                android:id="@+id/btn_show_mixer_on_map"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                app:backgroundColor="@color/white"
+                app:image="@drawable/ic_map"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pelakView"
+                app:radius="10dp" />
+
+            <TextView
+                android:id="@+id/textView54"
+                style="@style/my_black_bold_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/iransans"
+                android:text="@{equipment.name}"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/ivEquipment"
+                app:layout_constraintEnd_toStartOf="@+id/ivEquipment"
+                app:layout_constraintTop_toTopOf="@+id/ivEquipment"
+                tools:text="میکسر سبز" />
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView53">
+
+                <TextView
+                    android:id="@+id/tvLastDataTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:fontFamily="@font/iransans"
+                    android:textColor="@color/black"
+                    tools:text="10 دقیقه پیش" />
+
+                <ImageView
+                    android:id="@+id/imageView8"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:srcCompat="@drawable/ic_clock" />
+
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/textView53"
-                style="@style/my_white_normal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@{equipment.state.desc}"
-                tools:text="در حال تعمیر" />
+                android:layout_marginTop="8dp"
 
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/textView54"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:fontFamily="@font/iransans"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            tools:text="میکسر سبز"
-            android:text="@{equipment.name}"
-            style="@style/my_black_bold_text"
-            app:layout_constraintBottom_toBottomOf="@+id/ivEquipment"
-            app:layout_constraintEnd_toStartOf="@+id/ivEquipment"
-            app:layout_constraintTop_toTopOf="@+id/ivEquipment" />
-
-
-        <LinearLayout
-            android:id="@+id/linearLayout4"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:gravity="left|center_vertical"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="@+id/pelakView"
-            app:layout_constraintStart_toStartOf="@+id/btn_show_mixer_on_map">
+                android:fontFamily="@font/iransans"
+                android:text="وضعیت:"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="@+id/ivEquipment"
+                app:layout_constraintTop_toBottomOf="@+id/ivEquipment" />
 
             <TextView
-                android:id="@+id/tvLastDataTime"
+                android:id="@+id/tvState"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
                 android:layout_marginEnd="4dp"
-                android:fontFamily="@font/iransans"
+
+                android:fontFamily="@font/iransans_medium"
+                tools:text="روشن"
                 android:textColor="@color/black"
-                tools:text="10 دقیقه پیش" />
-
-            <ImageView
-                android:id="@+id/imageView8"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                app:srcCompat="@drawable/ic_clock" />
+                app:layout_constraintBottom_toBottomOf="@+id/textView53"
+                app:layout_constraintEnd_toStartOf="@+id/textView53"
+                app:layout_constraintTop_toTopOf="@+id/textView53" />
 
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 </layout>

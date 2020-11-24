@@ -12,7 +12,6 @@ import com.behraz.fastermixer.batch.databinding.ItemAdminEquipmentBinding
 import com.behraz.fastermixer.batch.models.AdminEquipment
 import com.behraz.fastermixer.batch.models.enums.EquipmentState
 import com.behraz.fastermixer.batch.models.enums.EquipmentType
-import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.estimateTime
 import com.behraz.fastermixer.batch.utils.general.exhaustive
 import com.behraz.fastermixer.batch.utils.general.minus
@@ -69,8 +68,8 @@ class AdminEquipmentAdapter(private val interactions: Interactions) :
 
             when (item.state) {
                 EquipmentState.Fixing -> {
-                    mBinding.ivState.setImageResource(R.drawable.ic_construction)
-                    mBinding.frameState.setBackgroundColor(
+                    mBinding.tvState.text = "خراب"
+                    mBinding.tvState.setTextColor(
                         ContextCompat.getColor(
                             itemView.context,
                             R.color.red
@@ -78,8 +77,8 @@ class AdminEquipmentAdapter(private val interactions: Interactions) :
                     )
                 }
                 EquipmentState.Off -> {
-                    mBinding.ivState.setImageResource(R.drawable.ic_block)
-                    mBinding.frameState.setBackgroundColor(
+                    mBinding.tvState.text = "خاموش"
+                    mBinding.tvState.setTextColor(
                         ContextCompat.getColor(
                             itemView.context,
                             R.color.gray700
@@ -87,8 +86,8 @@ class AdminEquipmentAdapter(private val interactions: Interactions) :
                     )
                 }
                 EquipmentState.Using -> {
-                    mBinding.ivState.setImageResource(R.drawable.ic_engineering)
-                    mBinding.frameState.setBackgroundColor(
+                    mBinding.tvState.text = "روشن"
+                    mBinding.tvState.setTextColor(
                         ContextCompat.getColor(
                             itemView.context,
                             R.color.material_green
@@ -96,8 +95,8 @@ class AdminEquipmentAdapter(private val interactions: Interactions) :
                     )
                 }
                 EquipmentState.Other -> {
-                    mBinding.ivState.setImageResource(R.drawable.ic_engineering)
-                    mBinding.frameState.setBackgroundColor(
+                    mBinding.tvState.text = "نامشخص"
+                    mBinding.tvState.setTextColor(
                         ContextCompat.getColor(
                             itemView.context,
                             R.color.orange
@@ -109,6 +108,7 @@ class AdminEquipmentAdapter(private val interactions: Interactions) :
             mBinding.btnShowMixerOnMap.setOnClickListener {
                 interactions.onBtnShowOnMapClicked(item)
             }
+            mBinding.root.setOnClickListener { interactions.onEquipmentClicked(item) }
 
             mBinding.tvLastDataTime.text =
                 if (item.dateTime != null) {
@@ -125,17 +125,15 @@ class AdminEquipmentAdapter(private val interactions: Interactions) :
             }.exhaustive()
 
 
-            mBinding.pelakView.setText(
-                "24",
-                "ب",
-                "716",
-                "63"
-            ) //TODO not implemented server side //UI Test Purpose
+            item.carIdStr.split(",").run {
+                mBinding.pelakView.setText(get(0), get(1), get(2), get(3))
+            }
         }
     }
 
     interface Interactions {
         fun onBtnShowOnMapClicked(adminEquipment: AdminEquipment)
+        fun onEquipmentClicked(adminEquipment: AdminEquipment)
     }
 
 }
