@@ -70,7 +70,7 @@ abstract class BaseMapFragment : Fragment(),
 
 
         Configuration.getInstance()
-            .load(context, context!!.getSharedPreferences("osm_map", Context.MODE_PRIVATE))
+            .load(context, requireContext().getSharedPreferences("osm_map", Context.MODE_PRIVATE))
 
 
         btnMyLocationId = arguments?.getInt(BUNDLE_BTN_MY_LOC_ID) ?: 0
@@ -87,14 +87,14 @@ abstract class BaseMapFragment : Fragment(),
     protected open fun initViews() {
         if (btnMyLocationId != 0) {
             _mBinding.btnFragmentMyLocation.visibility = View.GONE
-            btnMyLocation = activity!!.findViewById(btnMyLocationId)
+            btnMyLocation = requireActivity().findViewById(btnMyLocationId)
         } else {
             btnMyLocation = _mBinding.btnFragmentMyLocation
         }
 
         if (btnLayersId != 0) {
             _mBinding.btnLayers.visibility = View.GONE
-            btnLayers = activity!!.findViewById(btnLayersId)
+            btnLayers = requireActivity().findViewById(btnLayersId)
         } else {
             btnLayers = _mBinding.btnLayers
         }
@@ -114,7 +114,7 @@ abstract class BaseMapFragment : Fragment(),
         }
 
         btnMyLocation.setOnClickListener {
-            val isGpsEnabled = LocationCompassProvider.isProviderEnable(context!!)
+            val isGpsEnabled = LocationCompassProvider.isProviderEnable(requireContext())
             if (!isGpsEnabled) {
                 toast("لطفا موقعیت مکانی خود را روشن کنید")
             }
@@ -137,7 +137,7 @@ abstract class BaseMapFragment : Fragment(),
     protected fun drawPolyline(points: List<GeoPoint>): Polyline {
         val line = Polyline()
         line.setPoints(points)
-        line.outlinePaint.color = ContextCompat.getColor(context!!, R.color.btn_blue)
+        line.outlinePaint.color = ContextCompat.getColor(requireContext(), R.color.btn_blue)
         line.outlinePaint.alpha = 150
         _mBinding.map.overlays.add(line)
         //moveCamera(GeoPoint(line.bounds.centerLatitude, line.bounds.centerLongitude), 1.0) //todo how move camera to polygon area
@@ -205,7 +205,7 @@ abstract class BaseMapFragment : Fragment(),
 
     fun moveCamera(geoPoint: GeoPoint, zoom: Double = 18.0, shouldAnimate: Boolean = true) {
         _mBinding.map.controller.run {
-            zoomTo(zoom)
+            setZoom(zoom)
             if (shouldAnimate)
                 animateTo(geoPoint)
             else
@@ -224,7 +224,7 @@ abstract class BaseMapFragment : Fragment(),
         }
         if (permissionsToRequest.size > 0) {
             ActivityCompat.requestPermissions(
-                activity!!,
+                requireActivity(),
                 permissionsToRequest.toArray(arrayOfNulls(0)),
                 REQUEST_PERMISSIONS_REQUEST_CODE
             )

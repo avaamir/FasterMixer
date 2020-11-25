@@ -22,7 +22,7 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
     }
     // views
     @NonNull
-    private final androidx.constraintlayout.widget.ConstraintLayout mboundView0;
+    private final androidx.cardview.widget.CardView mboundView0;
     // variables
     // values
     // listeners
@@ -46,7 +46,7 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
             , (android.widget.TextView) bindings[5]
             , (android.widget.TextView) bindings[7]
             );
-        this.mboundView0 = (androidx.constraintlayout.widget.ConstraintLayout) bindings[0];
+        this.mboundView0 = (androidx.cardview.widget.CardView) bindings[0];
         this.mboundView0.setTag(null);
         this.progressBar2.setTag(null);
         this.textView42.setTag(null);

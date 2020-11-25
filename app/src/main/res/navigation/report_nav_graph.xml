@@ -9,5 +9,14 @@
         android:id="@+id/reportFragment"
         android:name="com.behraz.fastermixer.batch.ReportFragment"
         android:label="گزارشات"
-        tools:layout="@layout/fragment_report" />
+        tools:layout="@layout/fragment_report" >
+        <action
+            android:id="@+id/action_reportFragment_to_chooseReportDateFragment"
+            app:destination="@id/chooseReportDateFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chooseReportDateFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.ChooseReportDateFragment"
+        android:label="تعیین بازه گزارش"
+        tools:layout="@layout/fragment_choose_report_date" />
 </navigation>

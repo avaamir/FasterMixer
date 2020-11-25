@@ -7,170 +7,180 @@
             name="plan"
             type="com.behraz.fastermixer.batch.models.Plan" />
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        style="@style/my_clickable_card_style"
+        android:layout_margin="2dp">
 
-        <TextView
-            android:id="@+id/textView41"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:text="نام مشتری:"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:fontFamily="@font/iransans"
-            android:textColor="@color/gray700" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/textView42"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:fontFamily="@font/iransans"
-            android:text="@{plan.ownerName}"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/textView41"
-            app:layout_constraintEnd_toStartOf="@+id/textView41"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/progressBar2"
-            app:layout_constraintTop_toTopOf="@+id/textView41"
-            tools:text="امیر امیری" />
+            <TextView
+                android:id="@+id/textView41"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="نام مشتری:"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:fontFamily="@font/iransans"
+                android:textColor="@color/gray700" />
 
-        <TextView
-            android:id="@+id/textView43"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="آدرس:"
-            android:fontFamily="@font/iransans"
-            android:textColor="@color/gray700"
-            app:layout_constraintEnd_toEndOf="@+id/textView41"
-            app:layout_constraintTop_toBottomOf="@+id/textView41" />
+            <TextView
+                android:id="@+id/textView42"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:fontFamily="@font/iransans"
+                android:text="@{plan.ownerName}"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/textView41"
+                app:layout_constraintEnd_toStartOf="@+id/textView41"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/progressBar2"
+                app:layout_constraintTop_toTopOf="@+id/textView41"
+                tools:text="امیر امیری" />
 
-        <TextView
-            android:id="@+id/textView44"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:fontFamily="@font/iransans"
-            android:text="@{plan.requestAddress}"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/textView43"
-            app:layout_constraintEnd_toStartOf="@+id/textView43"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/textView51"
-            app:layout_constraintTop_toTopOf="@+id/textView43"
-            tools:text="یزد- صفاییه" />
+            <TextView
+                android:id="@+id/textView43"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="آدرس:"
+                android:fontFamily="@font/iransans"
+                android:textColor="@color/gray700"
+                app:layout_constraintEnd_toEndOf="@+id/textView41"
+                app:layout_constraintTop_toBottomOf="@+id/textView41" />
 
-        <TextView
-            android:id="@+id/textView45"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="بتن برنامه ریزی شده:"
-            android:fontFamily="@font/iransans"
-            android:textColor="@color/gray700"
-            app:layout_constraintEnd_toEndOf="@+id/textView43"
-            app:layout_constraintTop_toBottomOf="@+id/textView43" />
+            <TextView
+                android:id="@+id/textView44"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:fontFamily="@font/iransans"
+                android:text="@{plan.requestAddress}"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/textView43"
+                app:layout_constraintEnd_toStartOf="@+id/textView43"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/textView51"
+                app:layout_constraintTop_toTopOf="@+id/textView43"
+                tools:text="یزد- صفاییه" />
 
-        <TextView
-            android:id="@+id/textView46"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:fontFamily="@font/iransans"
-            android:text="@{plan.plannedAmount + ` متر`}"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/textView45"
-            app:layout_constraintEnd_toStartOf="@+id/textView45"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/progressBar2"
-            app:layout_constraintTop_toTopOf="@+id/textView45"
-            tools:text="12 متر" />
+            <TextView
+                android:id="@+id/textView45"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="بتن برنامه ریزی شده:"
+                android:fontFamily="@font/iransans"
+                android:textColor="@color/gray700"
+                app:layout_constraintEnd_toEndOf="@+id/textView43"
+                app:layout_constraintTop_toBottomOf="@+id/textView43" />
 
-        <TextView
-            android:id="@+id/textView47"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/iransans"
-            android:textColor="@color/gray700"
-            android:text="بتن ارسال شده:"
-            app:layout_constraintEnd_toEndOf="@+id/textView45"
-            app:layout_constraintTop_toBottomOf="@+id/textView45" />
+            <TextView
+                android:id="@+id/textView46"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:fontFamily="@font/iransans"
+                android:text="@{plan.plannedAmount + ` متر`}"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/textView45"
+                app:layout_constraintEnd_toStartOf="@+id/textView45"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/progressBar2"
+                app:layout_constraintTop_toTopOf="@+id/textView45"
+                tools:text="12 متر" />
 
-        <TextView
-            android:id="@+id/textView48"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:fontFamily="@font/iransans"
-            android:text="@{plan.sentAmount + ` متر`}"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/textView47"
-            app:layout_constraintEnd_toStartOf="@+id/textView47"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/progressBar2"
-            app:layout_constraintTop_toTopOf="@+id/textView47"
-            tools:text="4 متر" />
+            <TextView
+                android:id="@+id/textView47"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/iransans"
+                android:textColor="@color/gray700"
+                android:text="بتن ارسال شده:"
+                app:layout_constraintEnd_toEndOf="@+id/textView45"
+                app:layout_constraintTop_toBottomOf="@+id/textView45" />
 
-        <TextView
-            android:id="@+id/textView49"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:fontFamily="@font/iransans"
-            android:textColor="@color/gray700"
-            android:text="بتن در انتظار:"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/textView47"
-            app:layout_constraintTop_toBottomOf="@+id/textView47" />
+            <TextView
+                android:id="@+id/textView48"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:fontFamily="@font/iransans"
+                android:text="@{plan.sentAmount + ` متر`}"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/textView47"
+                app:layout_constraintEnd_toStartOf="@+id/textView47"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/progressBar2"
+                app:layout_constraintTop_toTopOf="@+id/textView47"
+                tools:text="4 متر" />
 
-        <TextView
-            android:id="@+id/textView50"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:fontFamily="@font/iransans"
-            android:text="@{plan.waitingAmount + ` متر`}"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/textView49"
-            app:layout_constraintEnd_toStartOf="@+id/textView49"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/progressBar2"
-            app:layout_constraintTop_toTopOf="@+id/textView49"
-            tools:text="3 متر" />
+            <TextView
+                android:id="@+id/textView49"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/iransans"
+                android:textColor="@color/gray700"
+                android:text="بتن در انتظار:"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/textView47"
+                app:layout_constraintTop_toBottomOf="@+id/textView47" />
 
-        <ProgressBar
-            android:id="@+id/progressBar2"
-            style="?android:progressBarStyleHorizontal"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:progress="@{plan.progress}"
-            android:progressDrawable="@drawable/bg_determined_progress"
-            app:layout_constraintBottom_toBottomOf="@+id/textView49"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:progress="60" />
+            <TextView
+                android:id="@+id/textView50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:fontFamily="@font/iransans"
+                android:text="@{plan.waitingAmount + ` متر`}"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/textView49"
+                app:layout_constraintEnd_toStartOf="@+id/textView49"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/progressBar2"
+                app:layout_constraintTop_toTopOf="@+id/textView49"
+                tools:text="3 متر" />
 
-        <TextView
-            android:id="@+id/textView51"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/iransans"
-            android:gravity="center"
-            android:text="@{plan.progress + `%`}"
-            android:textColor="@color/red"
-            android:textSize="22sp"
-            app:layout_constraintBottom_toBottomOf="@+id/progressBar2"
-            app:layout_constraintEnd_toEndOf="@+id/progressBar2"
-            app:layout_constraintStart_toStartOf="@+id/progressBar2"
-            app:layout_constraintTop_toTopOf="@+id/progressBar2"
-            tools:text="60%" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ProgressBar
+                android:id="@+id/progressBar2"
+                style="?android:progressBarStyleHorizontal"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:progress="@{plan.progress}"
+                android:progressDrawable="@drawable/bg_determined_progress"
+                app:layout_constraintBottom_toBottomOf="@+id/textView49"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:progress="60" />
+
+            <TextView
+                android:id="@+id/textView51"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/iransans"
+                android:gravity="center"
+                android:text="@{plan.progress + `%`}"
+                android:textColor="@color/red"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="@+id/progressBar2"
+                app:layout_constraintEnd_toEndOf="@+id/progressBar2"
+                app:layout_constraintStart_toStartOf="@+id/progressBar2"
+                app:layout_constraintTop_toTopOf="@+id/progressBar2"
+                tools:text="60%" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
 </layout>

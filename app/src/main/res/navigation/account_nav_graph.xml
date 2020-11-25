@@ -8,6 +8,6 @@
     <fragment
         android:id="@+id/adminManageAccountFragment"
         android:name="com.behraz.fastermixer.batch.ui.fragments.admin.AdminManageAccountFragment"
-        android:label="مدیرت حساب"
+        android:label="مدیریت حساب"
         tools:layout="@layout/layout_admin_manage_account_fragment"/>
 </navigation>
