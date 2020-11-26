@@ -116,15 +116,15 @@ class AdminEquipmentsFragment : Fragment(), AdminEquipmentAdapter.Interactions {
             }
 
             override fun onDrawRoadReportClicked() {
-                toast("Not yet implemented")
+                toast(getString(R.string.msg_not_impl))
             }
 
             override fun onSummeryReportClicked() {
-                toast("Not yet implemented")
+                toast(getString(R.string.msg_not_impl))
             }
 
             override fun onFullReportClicked() {
-                toast("Not yet implemented")
+                toast(getString(R.string.msg_not_impl))
             }
 
         }).show()

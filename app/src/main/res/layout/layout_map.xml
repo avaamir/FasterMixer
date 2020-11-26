@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
-                app:backgroundTint="@color/primary_dark"
+                app:backgroundTint="@color/btn_blue"
                 app:srcCompat="@drawable/ic_gps"
                 app:tint="@color/white"
                 app:fabSize="normal"

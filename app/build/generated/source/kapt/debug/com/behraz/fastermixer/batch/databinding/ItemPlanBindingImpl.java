@@ -117,6 +117,7 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
         com.behraz.fastermixer.batch.models.Plan plan = mPlan;
         java.lang.String planWaitingAmountJavaLangString = null;
         float planPlannedAmount = 0f;
+        boolean planProgressInt0 = false;
         java.lang.String planRequestAddress = null;
         java.lang.String planProgressJavaLangString = null;
         float planWaitingAmount = 0f;
@@ -124,6 +125,7 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
         float planSentAmount = 0f;
         java.lang.String planSentAmountJavaLangString = null;
         int planProgress = 0;
+        int planProgressInt0PlanProgressInt1 = 0;
 
         if ((dirtyFlags & 0x3L) != 0) {
 
@@ -151,14 +153,31 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
                 planWaitingAmountJavaLangString = (planWaitingAmount) + (" متر");
                 // read (plan.sentAmount) + (" متر")
                 planSentAmountJavaLangString = (planSentAmount) + (" متر");
+                // read plan.progress != 0
+                planProgressInt0 = (planProgress) != (0);
                 // read (plan.progress) + ("%")
                 planProgressJavaLangString = (planProgress) + ("%");
+            if((dirtyFlags & 0x3L) != 0) {
+                if(planProgressInt0) {
+                        dirtyFlags |= 0x8L;
+                }
+                else {
+                        dirtyFlags |= 0x4L;
+                }
+            }
+        }
+        // batch finished
+
+        if ((dirtyFlags & 0x3L) != 0) {
+
+                // read plan.progress != 0 ? plan.progress : 1
+                planProgressInt0PlanProgressInt1 = ((planProgressInt0) ? (planProgress) : (1));
         }
         // batch finished
         if ((dirtyFlags & 0x3L) != 0) {
             // api target 1
 
-            this.progressBar2.setProgress(planProgress);
+            this.progressBar2.setProgress(planProgressInt0PlanProgressInt1);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView42, planOwnerName);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView44, planRequestAddress);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView46, planPlannedAmountJavaLangString);
@@ -174,6 +193,8 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
     /* flag mapping
         flag 0 (0x1L): plan
         flag 1 (0x2L): null
+        flag 2 (0x3L): plan.progress != 0 ? plan.progress : 1
+        flag 3 (0x4L): plan.progress != 0 ? plan.progress : 1
     flag mapping end*/
     //end
 }

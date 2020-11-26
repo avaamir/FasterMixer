@@ -6,17 +6,13 @@
     <item android:id="@+id/menu_nav_account"
         android:title="حساب من"
         android:icon="@drawable/ic_person"
-        app:iconTint="@color/btn_yellow" />
+        app:iconTint="@color/btn_yellow"
+        android:visible="false"/>
 
     <item android:id="@+id/menu_nav_report"
         android:title="گزارشات"
-        android:visible="true"
+        android:visible="false"
         android:icon="@drawable/ic_report"
-        app:iconTint="@color/btn_yellow"/>
-
-    <item android:id="@+id/menu_nav_dashboard"
-        android:title="داشبورد"
-        android:icon="@drawable/ic_dashboard"
         app:iconTint="@color/btn_yellow"/>
 
     <item android:id="@+id/menu_nav_map"
@@ -27,6 +23,11 @@
     <item android:id="@+id/menu_nav_equipments"
         android:title="تجهیزات"
         android:icon="@drawable/ic_agriculture"
+        app:iconTint="@color/btn_yellow"/>
+
+    <item android:id="@+id/menu_nav_dashboard"
+        android:title="داشبورد"
+        android:icon="@drawable/ic_dashboard"
         app:iconTint="@color/btn_yellow"/>
 
 </menu>

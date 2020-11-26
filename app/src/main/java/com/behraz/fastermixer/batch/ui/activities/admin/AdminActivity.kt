@@ -39,9 +39,9 @@ class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener,
     private val pageIndexToNavMenuId = mapOf(
         0 to R.id.menu_nav_account,
         1 to R.id.menu_nav_report,
-        2 to R.id.menu_nav_dashboard,
-        3 to R.id.menu_nav_map,
-        4 to R.id.menu_nav_equipments,
+        2 to R.id.menu_nav_map,
+        3 to R.id.menu_nav_equipments,
+        4 to R.id.menu_nav_dashboard,
     )
 
     // list of base destination containers
@@ -51,9 +51,9 @@ class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener,
             R.id.nav_host_admin_account
         ),
         BaseNavFragment.newInstance(R.layout.layout_base_nav_report, R.id.nav_host_report),
-        BaseNavFragment.newInstance(R.layout.layout_base_nav_dashboard, R.id.nav_host_dashboard),
         BaseNavFragment.newInstance(R.layout.layout_base_nav_map, R.id.nav_host_admin_map),
-        BaseNavFragment.newInstance(R.layout.layout_base_nav_equipments, R.id.nav_host_equipments)
+        BaseNavFragment.newInstance(R.layout.layout_base_nav_equipments, R.id.nav_host_equipments),
+        BaseNavFragment.newInstance(R.layout.layout_base_nav_dashboard, R.id.nav_host_dashboard)
     )
 
 
@@ -73,7 +73,7 @@ class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener,
     }
 
     private fun subscribeObservers() {
-        viewModel.eventOnRouteToCarClicked.observe(this, {event->
+        viewModel.eventOnRouteToCarClicked.observe(this, { event ->
             if (!event.hasBeenHandled) {
                 mBinding.bottomNav.selectedItemId = R.id.menu_nav_map
             }
@@ -109,8 +109,8 @@ class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener,
         val fragment = fragments[currentPage]        // check if the page navigates up
         val navigatedUp = fragment.onBackPressed()        // if no fragments were popped
         if (!navigatedUp) {
-            if (currentPage != 2) { //dashboard
-                setItem(2, "onBackPressed")
+            if (currentPage != 4) { //dashboard
+                setItem(4, "onBackPressed")
             } else {
                 super.onBackPressed()
             }
@@ -129,9 +129,8 @@ class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener,
         mBinding.toolbar.frameMessage.setOnClickListener { toast(getString(R.string.msg_not_impl)) }
 
 
-
         //First is Dashboard so
-        mBinding.mainPager.currentItem = 2
+        mBinding.mainPager.currentItem = 4
         mBinding.toolbar.ivBack.visibility = View.GONE
         setToolbarTitle("داشبورد مدیریت")
     }

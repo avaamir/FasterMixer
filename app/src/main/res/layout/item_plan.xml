@@ -156,7 +156,7 @@
                 style="?android:progressBarStyleHorizontal"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:progress="@{plan.progress}"
+                android:progress="@{plan.progress != 0 ? plan.progress : 1}"
                 android:progressDrawable="@drawable/bg_determined_progress"
                 app:layout_constraintBottom_toBottomOf="@+id/textView49"
                 app:layout_constraintStart_toStartOf="parent"
