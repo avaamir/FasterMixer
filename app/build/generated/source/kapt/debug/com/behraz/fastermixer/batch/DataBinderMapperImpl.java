@@ -15,6 +15,7 @@ import com.behraz.fastermixer.batch.databinding.ActivityMixerBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ActivityPompBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ActivityTestBindingImpl;
 import com.behraz.fastermixer.batch.databinding.FragmentChooseReportDateBindingImpl;
+import com.behraz.fastermixer.batch.databinding.FragmentChooseReportEquipmentBindingImpl;
 import com.behraz.fastermixer.batch.databinding.FragmentCustomerListBindingImpl;
 import com.behraz.fastermixer.batch.databinding.FragmentEquipmentsBindingImpl;
 import com.behraz.fastermixer.batch.databinding.FragmentMessageListBindingImpl;
@@ -72,63 +73,65 @@ public class DataBinderMapperImpl extends DataBinderMapper {
 
   private static final int LAYOUT_FRAGMENTCHOOSEREPORTDATE = 9;
 
-  private static final int LAYOUT_FRAGMENTCUSTOMERLIST = 10;
+  private static final int LAYOUT_FRAGMENTCHOOSEREPORTEQUIPMENT = 10;
 
-  private static final int LAYOUT_FRAGMENTEQUIPMENTS = 11;
+  private static final int LAYOUT_FRAGMENTCUSTOMERLIST = 11;
 
-  private static final int LAYOUT_FRAGMENTMESSAGELIST = 12;
+  private static final int LAYOUT_FRAGMENTEQUIPMENTS = 12;
 
-  private static final int LAYOUT_FRAGMENTMIXERLIST = 13;
+  private static final int LAYOUT_FRAGMENTMESSAGELIST = 13;
 
-  private static final int LAYOUT_FRAGMENTREPORT = 14;
+  private static final int LAYOUT_FRAGMENTMIXERLIST = 14;
 
-  private static final int LAYOUT_ITEMADMINEQUIPMENT = 15;
+  private static final int LAYOUT_FRAGMENTREPORT = 15;
 
-  private static final int LAYOUT_ITEMCHOOSEEQUIPMENT = 16;
+  private static final int LAYOUT_ITEMADMINEQUIPMENT = 16;
 
-  private static final int LAYOUT_ITEMCONTACT = 17;
+  private static final int LAYOUT_ITEMCHOOSEEQUIPMENT = 17;
 
-  private static final int LAYOUT_ITEMCUSTOMER = 18;
+  private static final int LAYOUT_ITEMCONTACT = 18;
 
-  private static final int LAYOUT_ITEMMESSAGE = 19;
+  private static final int LAYOUT_ITEMCUSTOMER = 19;
 
-  private static final int LAYOUT_ITEMMESSAGEVERTICAL = 20;
+  private static final int LAYOUT_ITEMMESSAGE = 20;
 
-  private static final int LAYOUT_ITEMMIXER = 21;
+  private static final int LAYOUT_ITEMMESSAGEVERTICAL = 21;
 
-  private static final int LAYOUT_ITEMPACKAGE = 22;
+  private static final int LAYOUT_ITEMMIXER = 22;
 
-  private static final int LAYOUT_ITEMPLAN = 23;
+  private static final int LAYOUT_ITEMPACKAGE = 23;
 
-  private static final int LAYOUT_ITEMPOMPMIXER = 24;
+  private static final int LAYOUT_ITEMPLAN = 24;
 
-  private static final int LAYOUT_ITEMTRANSACTIONHISTORY = 25;
+  private static final int LAYOUT_ITEMPOMPMIXER = 25;
 
-  private static final int LAYOUT_ITEMWEATHER = 26;
+  private static final int LAYOUT_ITEMTRANSACTIONHISTORY = 26;
 
-  private static final int LAYOUT_LAYOUTADMINMANAGEACCOUNTFRAGMENT = 27;
+  private static final int LAYOUT_ITEMWEATHER = 27;
 
-  private static final int LAYOUT_LAYOUTBATCHFRAGMENT = 28;
+  private static final int LAYOUT_LAYOUTADMINMANAGEACCOUNTFRAGMENT = 28;
 
-  private static final int LAYOUT_LAYOUTCONTACTSFRAGMENT = 29;
+  private static final int LAYOUT_LAYOUTBATCHFRAGMENT = 29;
 
-  private static final int LAYOUT_LAYOUTDASHBOARDFRAGMENT = 30;
+  private static final int LAYOUT_LAYOUTCONTACTSFRAGMENT = 30;
 
-  private static final int LAYOUT_LAYOUTDILAOGWEATHER = 31;
+  private static final int LAYOUT_LAYOUTDASHBOARDFRAGMENT = 31;
 
-  private static final int LAYOUT_LAYOUTFRAGMENTREQUESTS = 32;
+  private static final int LAYOUT_LAYOUTDILAOGWEATHER = 32;
 
-  private static final int LAYOUT_LAYOUTMAP = 33;
+  private static final int LAYOUT_LAYOUTFRAGMENTREQUESTS = 33;
 
-  private static final int LAYOUT_LAYOUTMIXER = 34;
+  private static final int LAYOUT_LAYOUTMAP = 34;
 
-  private static final int LAYOUT_LAYOUTRECORDDIALOG = 35;
+  private static final int LAYOUT_LAYOUTMIXER = 35;
 
-  private static final int LAYOUT_VIEWFASTERMIXERUSERPANEL = 36;
+  private static final int LAYOUT_LAYOUTRECORDDIALOG = 36;
 
-  private static final int LAYOUT_VIEWITEMPROGRESS = 37;
+  private static final int LAYOUT_VIEWFASTERMIXERUSERPANEL = 37;
 
-  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(37);
+  private static final int LAYOUT_VIEWITEMPROGRESS = 38;
+
+  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(38);
 
   static {
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.activity_admin, LAYOUT_ACTIVITYADMIN);
@@ -140,6 +143,7 @@ public class DataBinderMapperImpl extends DataBinderMapper {
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.activity_pomp, LAYOUT_ACTIVITYPOMP);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.activity_test, LAYOUT_ACTIVITYTEST);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.fragment_choose_report_date, LAYOUT_FRAGMENTCHOOSEREPORTDATE);
+    INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.fragment_choose_report_equipment, LAYOUT_FRAGMENTCHOOSEREPORTEQUIPMENT);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.fragment_customer_list, LAYOUT_FRAGMENTCUSTOMERLIST);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.fragment_equipments, LAYOUT_FRAGMENTEQUIPMENTS);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.fragment_message_list, LAYOUT_FRAGMENTMESSAGELIST);
@@ -232,6 +236,12 @@ public class DataBinderMapperImpl extends DataBinderMapper {
             return new FragmentChooseReportDateBindingImpl(component, view);
           }
           throw new IllegalArgumentException("The tag for fragment_choose_report_date is invalid. Received: " + tag);
+        }
+        case  LAYOUT_FRAGMENTCHOOSEREPORTEQUIPMENT: {
+          if ("layout/fragment_choose_report_equipment_0".equals(tag)) {
+            return new FragmentChooseReportEquipmentBindingImpl(component, view);
+          }
+          throw new IllegalArgumentException("The tag for fragment_choose_report_equipment is invalid. Received: " + tag);
         }
         case  LAYOUT_FRAGMENTCUSTOMERLIST: {
           if ("layout/fragment_customer_list_0".equals(tag)) {
@@ -466,7 +476,7 @@ public class DataBinderMapperImpl extends DataBinderMapper {
   }
 
   private static class InnerLayoutIdLookup {
-    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(37);
+    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(38);
 
     static {
       sKeys.put("layout/activity_admin_0", com.behraz.fastermixer.batch.R.layout.activity_admin);
@@ -478,6 +488,7 @@ public class DataBinderMapperImpl extends DataBinderMapper {
       sKeys.put("layout/activity_pomp_0", com.behraz.fastermixer.batch.R.layout.activity_pomp);
       sKeys.put("layout/activity_test_0", com.behraz.fastermixer.batch.R.layout.activity_test);
       sKeys.put("layout/fragment_choose_report_date_0", com.behraz.fastermixer.batch.R.layout.fragment_choose_report_date);
+      sKeys.put("layout/fragment_choose_report_equipment_0", com.behraz.fastermixer.batch.R.layout.fragment_choose_report_equipment);
       sKeys.put("layout/fragment_customer_list_0", com.behraz.fastermixer.batch.R.layout.fragment_customer_list);
       sKeys.put("layout/fragment_equipments_0", com.behraz.fastermixer.batch.R.layout.fragment_equipments);
       sKeys.put("layout/fragment_message_list_0", com.behraz.fastermixer.batch.R.layout.fragment_message_list);

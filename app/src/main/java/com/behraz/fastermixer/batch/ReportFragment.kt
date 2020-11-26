@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.behraz.fastermixer.batch.databinding.FragmentReportBinding
-import com.behraz.fastermixer.batch.utils.general.toast
+import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 
 class ReportFragment : Fragment(), View.OnClickListener {
 
@@ -31,13 +32,17 @@ class ReportFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(view: View) {
-        findNavController().apply {
-            when (view.id) {
-                mBinding.frameWorkFullReport.id -> navigate(R.id.action_reportFragment_to_chooseReportDateFragment)
-                mBinding.frameDrawRoad.id -> toast("not yet implemented")
-                mBinding.frameWorkSummeryReport.id -> toast("not yet implemented")
-            }
-        }
+        findNavController().navigate(
+            R.id.action_reportFragment_to_chooseReportDateFragment,
+            bundleOf(
+                Constants.INTENT_REPORT_TYPE to when (view.id) {
+                    mBinding.frameWorkFullReport.id -> Constants.REPORT_TYPE_FULL
+                    mBinding.frameDrawRoad.id -> Constants.REPORT_TYPE_DRAW_ROAD
+                    mBinding.frameWorkSummeryReport.id -> Constants.REPORT_TYPE_SUMMERY
+                    else -> throw Exception("Illegal State")
+                }
+            )
+        )
     }
 
 }

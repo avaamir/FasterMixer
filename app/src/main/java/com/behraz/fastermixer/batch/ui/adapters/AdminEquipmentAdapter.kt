@@ -1,6 +1,7 @@
 package com.behraz.fastermixer.batch.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -18,7 +19,10 @@ import com.behraz.fastermixer.batch.utils.general.minus
 import com.behraz.fastermixer.batch.utils.general.now
 import java.util.concurrent.TimeUnit
 
-class AdminEquipmentAdapter(private val interactions: Interactions) :
+class AdminEquipmentAdapter(
+    private val interactions: Interactions,
+    private val shouldShowMapButton: Boolean = true
+) :
     ListAdapter<AdminEquipment, AdminEquipmentAdapter.EquipmentViewHolder>(DIFF_CALLBACK) {
 
     private companion object {
@@ -61,6 +65,13 @@ class AdminEquipmentAdapter(private val interactions: Interactions) :
     inner class EquipmentViewHolder(private val mBinding: ItemAdminEquipmentBinding) :
         RecyclerView.ViewHolder(mBinding.root) {
 
+        init {
+            mBinding.btnShowMixerOnMap.visibility = if (shouldShowMapButton) {
+                View.VISIBLE
+            } else {
+                View.INVISIBLE
+            }
+        }
 
         fun bind(item: AdminEquipment) {
             mBinding.equipment = item

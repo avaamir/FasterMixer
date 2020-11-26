@@ -20,7 +20,6 @@ class AdminActivityViewModel : ParentViewModel() {
     val eventOnShowEquipmentsDetails = MutableLiveData<Event<Unit>>()
 
 
-
     private val getAdminAccountPageEvent = MutableLiveData<Unit>()
 
 
@@ -87,6 +86,10 @@ class AdminActivityViewModel : ParentViewModel() {
 
     fun getAdminAccountPage() {
         getAdminAccountPageEvent.value = Unit
+    }
+
+    fun getEquipments() {
+        getEquipmentsEvent.value = Event(Unit)
     }
 
 }

@@ -18,5 +18,15 @@
         android:id="@+id/chooseReportDateFragment"
         android:name="com.behraz.fastermixer.batch.ui.fragments.admin.ChooseReportDateFragment"
         android:label="تعیین بازه گزارش"
-        tools:layout="@layout/fragment_choose_report_date" />
+        tools:layout="@layout/fragment_choose_report_date" >
+        <action
+            android:id="@+id/action_chooseReportDateFragment_to_chooseReportEquipmentFragment"
+            app:destination="@id/chooseReportEquipmentFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chooseReportEquipmentFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.ChooseReportEquipmentFragment"
+        android:label="تعیین خودرو گزارش"
+        tools:layout="@layout/fragment_choose_report_equipment"/>
 </navigation>

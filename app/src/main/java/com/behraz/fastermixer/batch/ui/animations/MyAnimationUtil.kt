@@ -11,6 +11,7 @@ import android.view.ViewAnimationUtils
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.BounceInterpolator
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import kotlin.math.hypot
 
 object MyAnimationUtil {
@@ -93,6 +94,11 @@ object MyAnimationUtil {
         animatorSet.playTogether(animatorTranslateX)
         animatorSet.start()
     }
+}
+
+
+fun Fragment.crossfade(contentView: View?, vararg progressView: View?) {
+    requireActivity().crossfade(contentView, *progressView)
 }
 
 fun Activity.crossfade(contentView: View?, vararg progressView: View?) {
