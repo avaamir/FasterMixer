@@ -12,6 +12,10 @@ operator fun Date.minus(date: Date): Long { //Return Duration In minutes
     return getDateDiff(date, this, TimeUnit.SECONDS)
 }
 
+fun Date.howManyYearsAfter(year: Int, month: Int = Calendar.MARCH, day: Int = 1): Int {
+    val startDate = GregorianCalendar(year, month, day).time
+    return (TimeUnit.DAYS.convert( now() - startDate, TimeUnit.SECONDS) / 365).toInt()
+}
 /*fun getDateFromTimestamp(timestamp: Long): String {
     val calendar = Calendar.getInstance(Locale.UK)
     calendar.timeInMillis = timestamp * 1000

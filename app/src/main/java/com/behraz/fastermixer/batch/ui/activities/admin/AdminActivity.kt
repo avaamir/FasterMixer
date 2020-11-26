@@ -29,6 +29,9 @@ class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener,
     BottomNavigationView.OnNavigationItemSelectedListener, ViewPager.OnPageChangeListener,
     BaseNavFragment.OnNavigationChangedListener {
 
+
+    private val currentDest get() = fragments[mBinding.mainPager.currentItem].currentDestination
+
     private lateinit var mBinding: ActivityAdminBinding
     private lateinit var viewModel: AdminActivityViewModel
 
@@ -99,8 +102,6 @@ class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener,
 
     }
 
-    private val currentDest get() = fragments[mBinding.mainPager.currentItem].currentDestination
-
     // control the backStack when back button is pressed
     override fun onBackPressed() {
         // get the current page
@@ -125,13 +126,19 @@ class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener,
         mBinding.mainPager.adapter = ViewPagerAdapter(supportFragmentManager, fragments)
 
         mBinding.toolbar.ivBack.setOnClickListener { onBackPressed() }
-        mBinding.toolbar.frameMessage.setOnClickListener { toast("not yet implemented") }
+        mBinding.toolbar.frameMessage.setOnClickListener { toast(getString(R.string.msg_not_impl)) }
 
-        setItem(2, "initViews") //dashboard
+
+
+        //First is Dashboard so
+        mBinding.mainPager.currentItem = 2
+        mBinding.toolbar.ivBack.visibility = View.GONE
+        setToolbarTitle("داشبورد مدیریت")
     }
 
     override fun onNavigationItemReselected(item: MenuItem) {
-        toast("not yet implemented: onNavigationItemReselected")
+        val position = pageIndexToNavMenuId.values.indexOf(item.itemId)
+        fragments[position].popToRoot()
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {

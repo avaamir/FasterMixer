@@ -54,6 +54,7 @@ class MyPicker : NumberPicker {
 
     private fun updateView(view: View) {
         if (view is EditText) {
+            view.isEnabled = false //age false nakonam mishe text ro select kard va pakesh kard
             view.typeface = typeface ?: ResourcesCompat.getFont(
                 context,
                 R.font.iransans
@@ -61,5 +62,12 @@ class MyPicker : NumberPicker {
             //view.textSize = 25f
             view.setTextColor(Color.BLACK)
         }
+    }
+
+
+    fun initPicker(items: Array<String>) {
+        minValue = 0
+        maxValue = items.size - 1
+        displayedValues = items
     }
 }

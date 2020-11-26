@@ -8,6 +8,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentChooseReportDateBinding
+import com.behraz.fastermixer.batch.utils.general.howManyYearsAfter
+import com.behraz.fastermixer.batch.utils.general.now
+import java.util.*
 
 class ChooseReportDateFragment : Fragment() {
     private lateinit var mBinding: FragmentChooseReportDateBinding
@@ -32,10 +35,23 @@ class ChooseReportDateFragment : Fragment() {
     }
 
     private fun initViews() {
-        val data = arrayOf("فروردین", "اردیبهشت", "Tokyo", "Paris")
-        mBinding.dayPicker.minValue = 0
-        mBinding.dayPicker.maxValue = data.size - 1
-        mBinding.dayPicker.displayedValues = data
+        //year after 20/3/2020 miladi = 1/1/1399 shamsi
+        var yearsAfter = now().howManyYearsAfter(2020, Calendar.MARCH, 1)
+        if (yearsAfter < 0) yearsAfter = 0
+
+        val years = List(yearsAfter + 1) { "${it + 1399}" }.reversed().toTypedArray()
+        val months = resources.getStringArray(R.array.shami_months)
+        val days = List(31) { "${it + 1}" }.toTypedArray()
+
+
+        mBinding.monthPicker.initPicker(months)
+        mBinding.dayPicker.initPicker(days)
+        mBinding.yearPicker.initPicker(years)
+
+
+        mBinding.endMonthPicker.initPicker(months)
+        mBinding.endDayPicker.initPicker(days)
+        mBinding.endYearPicker.initPicker(years)
     }
 
 

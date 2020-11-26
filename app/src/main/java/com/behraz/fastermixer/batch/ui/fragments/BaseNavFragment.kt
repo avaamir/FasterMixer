@@ -11,6 +11,7 @@ import androidx.navigation.findNavController
 
 class BaseNavFragment : Fragment() {
 
+    private var isFirstTimeInit = true
 
     private lateinit var onNavChangeListener: OnNavigationChangedListener
 
@@ -47,7 +48,12 @@ class BaseNavFragment : Fragment() {
         requireActivity().findNavController(navHostId)
             .addOnDestinationChangedListener { controller, destination, arguments ->
                 currentDestination = destination
-                toolbarTitle = onNavChangeListener.notifyNavigationChanged(destination)
+                if (!isFirstTimeInit) {
+                    toolbarTitle = onNavChangeListener.notifyNavigationChanged(destination)
+                } else { //age avalin bar bud ke dasht init mishod chun toolbar beyn hame fragment ha moshtarak hast titr dorost nemikhord va titresh mishod un fragmenti ke akhar az hame init shode be in elat in var ro tarif kardim va bar aval titr ro az label mikhonim
+                    toolbarTitle = destination.label.toString()
+                    isFirstTimeInit = false
+                }
             }
     }
 
@@ -59,6 +65,11 @@ class BaseNavFragment : Fragment() {
     fun onBackPressed(): Boolean = requireActivity()
         .findNavController(navHostId)
         .navigateUp()
+
+    fun popToRoot() {
+        val navController = requireActivity().findNavController(navHostId)
+        navController.popBackStack(navController.graph.startDestination, false)
+    }
 
     interface OnNavigationChangedListener {
         fun notifyNavigationChanged(destination: NavDestination): String //return toolbar title
