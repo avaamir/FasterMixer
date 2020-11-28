@@ -28,5 +28,16 @@
         android:id="@+id/chooseReportEquipmentFragment"
         android:name="com.behraz.fastermixer.batch.ui.fragments.admin.ChooseReportEquipmentFragment"
         android:label="تعیین خودرو گزارش"
-        tools:layout="@layout/fragment_choose_report_equipment"/>
+        tools:layout="@layout/fragment_choose_report_equipment">
+        <action
+            android:id="@+id/action_chooseReportEquipmentFragment_to_fullReportFragment"
+            app:destination="@id/fullReportFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fullReportFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.FullReportFragment"
+        android:label="گزارش تفصیلی"
+        tools:layout="@layout/fragment_full_report"
+        />
 </navigation>

@@ -1,12 +1,15 @@
 package com.behraz.fastermixer.batch.models
 
+import android.os.Parcelable
 import com.behraz.fastermixer.batch.models.enums.EquipmentState
 import com.behraz.fastermixer.batch.models.enums.EquipmentType
 import com.behraz.fastermixer.batch.models.requests.toGeoPoint
 import com.behraz.fastermixer.batch.utils.general.exhaustiveAsExpression
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
+@Parcelize
 data class AdminEquipment(
     @SerializedName("vehicleID")
     val id: String,
@@ -28,7 +31,7 @@ data class AdminEquipment(
     val dateTime: Date?,
     @SerializedName("inputLastDataIgnition")
     val ignition: Boolean
-) {
+) : Parcelable {
 
     val location get() = inputLastDataLocation?.toGeoPoint()
 

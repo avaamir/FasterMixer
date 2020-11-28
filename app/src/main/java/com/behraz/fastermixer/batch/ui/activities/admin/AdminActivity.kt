@@ -13,10 +13,12 @@ import androidx.navigation.NavDestination
 import androidx.viewpager.widget.ViewPager
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ActivityAdminBinding
+import com.behraz.fastermixer.batch.models.AdminEquipment
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.adapters.ViewPagerAdapter
 import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.ui.fragments.BaseNavFragment
+import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.Event
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
@@ -207,7 +209,7 @@ class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener,
     }
 
 
-    override fun notifyNavigationChanged(destination: NavDestination): String {
+    override fun notifyNavigationChanged(destination: NavDestination, arguments: Bundle?): String {
         var toolbarTitle = destination.label
 
         setToolbarBackButton(destination)
@@ -221,6 +223,10 @@ class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener,
                         toolbarTitle = "$toolbarTitle (${planCount})"
                     }
                 }
+            }
+            R.id.fullReportFragment -> {
+                val vehicle = arguments?.getParcelable<AdminEquipment>(Constants.INTENT_REPORT_VEHICLE)
+                toolbarTitle = "$toolbarTitle ${vehicle?.name ?: ""}"
             }
         }
 

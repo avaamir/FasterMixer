@@ -19,6 +19,7 @@
                 android:visibility="visible">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/frameRequests"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/my_card_style"

@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.behraz.fastermixer.batch.databinding.FragmentReportBinding
+import com.behraz.fastermixer.batch.ui.fragments.navigate
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 
 class ReportFragment : Fragment(), View.OnClickListener {
@@ -32,7 +32,7 @@ class ReportFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(view: View) {
-        findNavController().navigate(
+        navigate(
             R.id.action_reportFragment_to_chooseReportDateFragment,
             bundleOf(
                 Constants.INTENT_REPORT_TYPE to when (view.id) {

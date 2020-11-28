@@ -76,5 +76,8 @@ interface BehrazClient {
 
     @POST("Planning/FindAllPlanningByDate")
     suspend fun getPlansForAdmin(): Response<Entity<List<Plan>>>
+
+    @POST("not implemented")
+    suspend fun getFullReport(@Body request: GetReportRequest): Response<Entity<List<FullReport>>>
 }
 

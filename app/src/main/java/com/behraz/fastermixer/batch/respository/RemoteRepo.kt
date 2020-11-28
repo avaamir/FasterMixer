@@ -2,7 +2,6 @@ package com.behraz.fastermixer.batch.respository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.models.User
@@ -17,6 +16,7 @@ import com.behraz.fastermixer.batch.respository.apiservice.WeatherService
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeAdminManageAccountPage
+import com.behraz.fastermixer.batch.utils.fastermixer.fakeFullReports
 import com.behraz.fastermixer.batch.utils.general.RunOnceLiveData
 import com.behraz.fastermixer.batch.utils.general.launchApi
 import kotlinx.coroutines.*
@@ -78,6 +78,19 @@ object RemoteRepo {
         }
     }
 
+
+    private fun <T> mockApiReq(responseEntity: Entity<T>?, duration: Long = 1000L): RunOnceLiveData<Entity<T>?> {
+        return object : RunOnceLiveData<Entity<T>?>() {
+            override fun onActiveRunOnce() {
+                CoroutineScope(IO).launch {
+                    delay(duration)
+                    withContext(Main) {
+                        value = responseEntity
+                    }
+                }
+            }
+        }
+    }
 
     fun login(loginRequest: LoginRequest): RunOnceLiveData<Entity<User>?> {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
@@ -248,8 +261,6 @@ object RemoteRepo {
     }
 
 
-
-
     fun getRoute(coordinates: List<GeoPoint>): RunOnceLiveData<GetRouteResponse?> {
         if (!RemoteRepo::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         return object : RunOnceLiveData<GetRouteResponse?>() {
@@ -321,5 +332,6 @@ object RemoteRepo {
         }
     }
 
-
+    fun getFullReport2(request: GetReportRequest) = apiReq(request, ApiService.client::getFullReport)
+    fun getFullReport(request: GetReportRequest) = mockApiReq(Entity(fakeFullReports(), true, null))
 }

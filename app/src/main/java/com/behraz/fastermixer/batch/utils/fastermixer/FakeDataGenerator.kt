@@ -5,6 +5,16 @@ import com.behraz.fastermixer.batch.models.requests.behraz.GetAdminAccountPage
 import com.behraz.fastermixer.batch.utils.general.now
 import java.util.*
 
+fun fakeFullReports() = listOf(
+    FullReport(1, "آمیکو سفید", "روشن", "2 ساعت", "120", "89", "100", "11:39 تا 12:49", "99/2/22"),
+    FullReport(2, "آمیکو سفید", "روشن", "2 ساعت", "120", "89", "100", "11:39 تا 12:49", "99/2/22"),
+    FullReport(3, "آمیکو سفید", "روشن", "2 ساعت", "120", "89", "100", "11:39 تا 12:49", "99/2/22"),
+    FullReport(4, "آمیکو سفید", "روشن", "2 ساعت", "120", "89", "100", "11:39 تا 12:49", "99/2/22"),
+    FullReport(5, "آمیکو سفید", "روشن", "2 ساعت", "120", "89", "100", "11:39 تا 12:49", "99/2/22"),
+    FullReport(6, "آمیکو سفید", "روشن", "2 ساعت", "120", "89", "100", "11:39 تا 12:49", "99/2/22"),
+)
+
+
 fun fakeAdminManageAccountPage() = GetAdminAccountPage(
     fakePackages(),
     fakeTransactions(),
@@ -37,7 +47,7 @@ fun fakeTransactions(): List<TransactionHistory> = listOf(
 )
 
 fun fakePackages(): List<Package> = listOf(
-    Package("1", "پکیج A", "desc", "24000", 10,false, true, "99/2/3", "99/2/23", 5),
+    Package("1", "پکیج A", "desc", "24000", 10, false, true, "99/2/3", "99/2/23", 5),
     Package("2", "پکیج B", "desc1", "48000", 10, false, false, null, null, null),
     Package("3", "پکیج C", "desc2", "100000", 90, true, false, "99/2/5", "99/2/7", 30),
     Package("4", "پکیج D", "desc3", "1000000", 10, false, false, null, null, null),

@@ -5,9 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDestination
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import com.behraz.fastermixer.batch.R
+
 
 class BaseNavFragment : Fragment() {
 
@@ -49,7 +54,7 @@ class BaseNavFragment : Fragment() {
             .addOnDestinationChangedListener { controller, destination, arguments ->
                 currentDestination = destination
                 if (!isFirstTimeInit) {
-                    toolbarTitle = onNavChangeListener.notifyNavigationChanged(destination)
+                    toolbarTitle = onNavChangeListener.notifyNavigationChanged(destination, arguments)
                 } else { //age avalin bar bud ke dasht init mishod chun toolbar beyn hame fragment ha moshtarak hast titr dorost nemikhord va titresh mishod un fragmenti ke akhar az hame init shode be in elat in var ro tarif kardim va bar aval titr ro az label mikhonim
                     toolbarTitle = destination.label.toString()
                     isFirstTimeInit = false
@@ -72,7 +77,7 @@ class BaseNavFragment : Fragment() {
     }
 
     interface OnNavigationChangedListener {
-        fun notifyNavigationChanged(destination: NavDestination): String //return toolbar title
+        fun notifyNavigationChanged(destination: NavDestination, arguments: Bundle?): String //return toolbar title
     }
 
     companion object {
@@ -86,4 +91,18 @@ class BaseNavFragment : Fragment() {
             }
         }
     }
+}
+
+val navOptions by lazy {
+    NavOptions.Builder()
+        .setEnterAnim(R.anim.fade_enter)
+        .setExitAnim(R.anim.fade_exit)
+        .setPopEnterAnim(R.anim.fade_enter)
+        .setPopExitAnim(R.anim.fade_exit)
+        //.setPopExitAnim(android.R.anim.fade_out)
+        .build()
+}
+
+fun Fragment.navigate(@IdRes resId: Int, bundle: Bundle? = null) {
+    findNavController().navigate(resId, bundle, null)//navOptions)
 }

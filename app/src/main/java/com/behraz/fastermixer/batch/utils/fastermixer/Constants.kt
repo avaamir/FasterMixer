@@ -8,6 +8,7 @@ object Constants {
     const val REPORT_TYPE_DRAW_ROAD = "drawroad"
     const val REPORT_TYPE_FULL: String = "fullroad"
 
+    const val INTENT_REPORT_VEHICLE = "veh-id"
     const val INTENT_REPORT_END_DATE: String = "endD"
     const val INTENT_REPORT_START_DATE: String = "startD"
 

@@ -2,6 +2,8 @@ package com.behraz.fastermixer.batch.ui.fragments.admin
 
 import android.graphics.Color
 import android.os.Bundle
+import android.transition.AutoTransition
+import android.transition.TransitionManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,15 +11,14 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.databinding.LayoutDashboardFragmentBinding
 import com.behraz.fastermixer.batch.models.enums.EquipmentState
+import com.behraz.fastermixer.batch.ui.fragments.navigate
 import com.behraz.fastermixer.batch.utils.general.Event
 import com.behraz.fastermixer.batch.utils.general.createSpannableString
 import com.behraz.fastermixer.batch.utils.general.exhaustive
-import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
@@ -53,7 +54,8 @@ class DashboardFragment : Fragment(), OnChartValueSelectedListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        adminActivityViewModel = ViewModelProvider(requireActivity()).get(AdminActivityViewModel::class.java)
+        adminActivityViewModel =
+            ViewModelProvider(requireActivity()).get(AdminActivityViewModel::class.java)
         mBinding =
             DataBindingUtil.inflate(inflater, R.layout.layout_dashboard_fragment, container, false)
         initViews()
@@ -71,7 +73,7 @@ class DashboardFragment : Fragment(), OnChartValueSelectedListener {
         mBinding.vehiclesChart.invalidate()
 
         mBinding.frameShowRequestDetails.setOnClickListener {
-            findNavController().navigate(R.id.action_dashboardFragment_to_requestsFragment)
+            navigate(R.id.action_dashboardFragment_to_requestsFragment)
         }
 
         mBinding.frameShowEquipmentsDetails.setOnClickListener {
@@ -84,9 +86,15 @@ class DashboardFragment : Fragment(), OnChartValueSelectedListener {
         adminActivityViewModel.plans.observe(viewLifecycleOwner, {
             if (it != null) {
                 if (it.isSucceed) {
+                    if (mBinding.frameRequests.visibility != View.VISIBLE) {
+                        mBinding.frameRequests.visibility = View.VISIBLE
+                        TransitionManager.beginDelayedTransition(
+                            mBinding.frameRequests,
+                            AutoTransition()
+                        )
+                    }
                     var sum = 0.0
                     var delivered = 0.0
-                    var remain = 0.0
 
                     it.entity?.let { plans ->
                         mBinding.tvRequestCount.text = plans.size.toString()
@@ -97,7 +105,7 @@ class DashboardFragment : Fragment(), OnChartValueSelectedListener {
                         mBinding.tvTotalRequestVolume.text = sum.toString()
                     }
 
-                    remain = sum - delivered
+                    val remain = sum - delivered
 
                     setPieData(
                         mBinding.requestChart, hashMapOf(
@@ -108,7 +116,11 @@ class DashboardFragment : Fragment(), OnChartValueSelectedListener {
                     )
                     isFirstReqLoad = false
                 } else {
-                    //TODO
+                    mBinding.frameRequests.visibility = View.GONE
+                    TransitionManager.beginDelayedTransition(
+                        mBinding.frameRequests,
+                        AutoTransition()
+                    )
                 }
             } else {
                 //TODO
