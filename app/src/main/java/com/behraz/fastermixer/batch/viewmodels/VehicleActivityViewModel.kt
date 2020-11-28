@@ -1,5 +1,6 @@
 package com.behraz.fastermixer.batch.viewmodels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.map
@@ -17,7 +18,8 @@ import java.lang.IllegalStateException
 
 abstract class VehicleActivityViewModel : ParentViewModel() {
 
-    private var isDamaged = false
+    private val _isDamaged  = MutableLiveData<Boolean>()
+    val isDamaged: LiveData<Boolean> = _isDamaged
 
     var isServerLocationProvider: Boolean = false
         set(value) {
@@ -94,7 +96,7 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
         LocationCompassProvider.location.observeForever { location ->
             if (!isServerLocationProvider) {
                 //TODO age location va lastLocation kheli fasele dasht dg animate nashe va mostaghim bere un noghte
-                getUserLocationResponse.value = GetVehicleLocationResponse.create(location, isDamaged)
+                getUserLocationResponse.value = GetVehicleLocationResponse.create(location, _isDamaged.value ?: false)
             }
         }
 
@@ -109,7 +111,7 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
                 isGetUserLocationRequestActive = false
                 if (it != null) {
                     if (it.isSucceed) {
-                        isDamaged = it.entity?.isDamaged ?: isDamaged
+                        _isDamaged.value = it.entity?.isDamaged ?: false
                         lastServerLocationResponse = it.entity
                         if (isServerLocationProvider) {
                             getUserLocationResponse.value = it.entity//age observer nadashte bashe set nemishe, age scenario avaz shod deghat kon, alan mapFragment Observersh hast

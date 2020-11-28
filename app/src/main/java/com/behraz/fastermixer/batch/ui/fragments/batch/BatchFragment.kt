@@ -33,7 +33,7 @@ class BatchFragment : Fragment(), MixerAdapter.BatchAdapterInteraction {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(activity!!).get(BatchActivityViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(BatchActivityViewModel::class.java)
         mBinding =
             DataBindingUtil.inflate(inflater, R.layout.layout_batch_fragment, container, false)
         initViews()
@@ -70,10 +70,10 @@ class BatchFragment : Fragment(), MixerAdapter.BatchAdapterInteraction {
     fun initViews() {
         mBinding.mixerRecycler.adapter = mAdapter
         mBinding.mixerRecycler.layoutManager =
-            LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
+            LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         mBinding.mixerRecycler.addItemDecoration(
             DividerItemDecoration(
-                context!!,
+                requireContext(),
                 RecyclerView.VERTICAL
             )
         )

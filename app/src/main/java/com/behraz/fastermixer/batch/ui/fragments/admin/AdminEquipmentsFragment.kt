@@ -25,7 +25,7 @@ class AdminEquipmentsFragment : Fragment(), AdminEquipmentAdapter.Interactions {
 
     private lateinit var mBinding: FragmentEquipmentsBinding
     private lateinit var adminActivityViewModel: AdminActivityViewModel
-    private val mAdapter = AdminEquipmentAdapter(this, false)
+    private val mAdapter = AdminEquipmentAdapter(this, true)
 
     override fun onCreateView(
         inflater: LayoutInflater,

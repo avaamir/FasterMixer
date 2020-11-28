@@ -39,13 +39,13 @@ class MessageListFragment : Fragment(), MessageAdapter.Interaction {
     ): View? {
         viewModel = when (activity) {
             is MixerActivity -> {
-                ViewModelProvider(activity!!).get(MixerActivityViewModel::class.java)
+                ViewModelProvider(requireActivity()).get(MixerActivityViewModel::class.java)
             }
             is PompActivity -> {
-                ViewModelProvider(activity!!).get(PompActivityViewModel::class.java)
+                ViewModelProvider(requireActivity()).get(PompActivityViewModel::class.java)
             }
             is BatchActivity -> {
-                ViewModelProvider(activity!!).get(BatchActivityViewModel::class.java)
+                ViewModelProvider(requireActivity()).get(BatchActivityViewModel::class.java)
             }
             else -> {
                 throw IllegalStateException("PompActivity or MixerActivity is valid")

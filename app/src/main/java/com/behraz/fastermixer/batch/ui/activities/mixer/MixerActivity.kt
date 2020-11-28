@@ -236,7 +236,7 @@ class MixerActivity : AppCompatActivity(),
             }
         })
 
-        viewModel.currentWeather.observe(this, {
+        viewModel.currentWeather.observe(this) {
             weatherAnimator?.cancel()
             mBinding.btnWeather.rotationX = 0f
             mBinding.btnWeather.rotationY = 0f
@@ -254,20 +254,20 @@ class MixerActivity : AppCompatActivity(),
                 toast(Constants.SERVER_ERROR)
                 println("debug:error:weatherAPI")
             }
-        })
+        }
 
-        viewModel.breakdownResponse.observe(this, {
+        viewModel.breakdownResponse.observe(this) {
             if (it?.isSucceed == true) {
-                if (it.entity == BreakdownRequest.BREAKDOWN)  {
+                if (it.entity == BreakdownRequest.BREAKDOWN) {
                     mBinding.btnBroken.visibility = View.VISIBLE
-                } else if(it.entity == BreakdownRequest.FIXED) {
+                } else if (it.entity == BreakdownRequest.FIXED) {
                     mBinding.btnBroken.visibility = View.GONE
                 }
                 toast("پیام ارسال شد")
             } else {
                 toast("خطایی به وجود آمد لطفا دوباره تلاش کنید")
             }
-        })
+        }
 
 
         viewModel.logoutResponse.observe(this, {
@@ -361,20 +361,17 @@ class MixerActivity : AppCompatActivity(),
             }
         })
 
-        viewModel.getUserLocationResponse.observe(this, {
-            println("debug: ${it?.isDamaged}")
-            if(it == null)
-                return@observe
-            if(it.isDamaged) {
-                if(mBinding.btnBroken.visibility != View.VISIBLE) {
+        viewModel.isDamaged.observe(this) { isDamaged ->
+            if (isDamaged) {
+                if (mBinding.btnBroken.visibility != View.VISIBLE) {
                     mBinding.btnBroken.visibility = View.VISIBLE
                 }
             } else {
-                if(mBinding.btnBroken.visibility == View.VISIBLE) {
+                if (mBinding.btnBroken.visibility == View.VISIBLE) {
                     mBinding.btnBroken.visibility = View.GONE
                 }
             }
-        })
+        }
     }
 
 

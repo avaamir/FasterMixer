@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit
 
 class AdminEquipmentAdapter(
     private val interactions: Interactions,
-    private val shouldShowMapButton: Boolean = true
+    private val shouldShowMapButton: Boolean
 ) :
     ListAdapter<AdminEquipment, AdminEquipmentAdapter.EquipmentViewHolder>(DIFF_CALLBACK) {
 
