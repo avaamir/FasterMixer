@@ -99,7 +99,7 @@ class ChooseReportEquipmentFragment : Fragment(), AdminEquipmentAdapter.Interact
         navigate(
             when (reportType) {
                 Constants.REPORT_TYPE_FULL -> R.id.action_chooseReportEquipmentFragment_to_fullReportFragment
-                Constants.REPORT_TYPE_SUMMERY -> TODO("not implemented")
+                Constants.REPORT_TYPE_SUMMERY -> R.id.action_chooseReportEquipmentFragment_to_summeryReportFragment
                 Constants.REPORT_TYPE_DRAW_ROAD -> TODO("not implemented")
                 else -> throw Exception("report Type is not valid: $reportType")
             },

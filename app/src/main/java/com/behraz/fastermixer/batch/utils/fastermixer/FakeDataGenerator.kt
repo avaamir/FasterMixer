@@ -5,6 +5,14 @@ import com.behraz.fastermixer.batch.models.requests.behraz.GetAdminAccountPage
 import com.behraz.fastermixer.batch.utils.general.now
 import java.util.*
 
+fun fakeSummeryReports() = listOf(
+    SummeryReport("1", "آمیکو سفید", "100 ساعت", "61 ساعت", "50 ساعت", "100 کیلومتر", "100"),
+    SummeryReport("2", "آمیکو سفید", "100 ساعت", "62 ساعت", "50 ساعت", "100 کیلومتر", "100"),
+    SummeryReport("3", "آمیکو سفید", "100 ساعت", "63 ساعت", "50 ساعت", "100 کیلومتر", "100"),
+    SummeryReport("4", "آمیکو سفید", "100 ساعت", "64 ساعت", "50 ساعت", "100 کیلومتر", "100"),
+    SummeryReport("5", "آمیکو سفید", "100 ساعت", "65 ساعت", "50 ساعت", "100 کیلومتر", "100"),
+)
+
 fun fakeFullReports() = listOf(
     FullReport(1, "آمیکو سفید", "روشن", "2 ساعت", "120", "89", "100", "11:39 تا 12:49", "99/2/22"),
     FullReport(2, "آمیکو سفید", "روشن", "2 ساعت", "120", "89", "100", "11:39 تا 12:49", "99/2/22"),

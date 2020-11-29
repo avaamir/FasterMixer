@@ -32,12 +32,20 @@
         <action
             android:id="@+id/action_chooseReportEquipmentFragment_to_fullReportFragment"
             app:destination="@id/fullReportFragment" />
+        <action
+            android:id="@+id/action_chooseReportEquipmentFragment_to_summeryReportFragment"
+            app:destination="@id/summeryReportFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/fullReportFragment"
         android:name="com.behraz.fastermixer.batch.ui.fragments.admin.FullReportFragment"
         android:label="گزارش تفصیلی"
-        tools:layout="@layout/fragment_full_report"
-        />
+        tools:layout="@layout/fragment_full_report" />
+
+    <fragment
+        android:id="@+id/summeryReportFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.SummeryReportFragment"
+        android:label="گزارشات خلاصه"
+        tools:layout="@layout/fragment_summery_report"/>
 </navigation>

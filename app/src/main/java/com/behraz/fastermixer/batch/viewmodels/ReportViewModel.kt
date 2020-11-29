@@ -7,6 +7,10 @@ import com.behraz.fastermixer.batch.models.requests.behraz.GetReportRequest
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 
 class ReportViewModel : ViewModel() {
+    private val getSummeryReportEvent = MutableLiveData<GetReportRequest>()
+    val summeryReport = Transformations.switchMap(getSummeryReportEvent) {
+        RemoteRepo.getSummeryReport(it)
+    }
 
     private val getFullReportEvent = MutableLiveData<GetReportRequest>()
     val fullReport = Transformations.switchMap(getFullReportEvent) {
@@ -17,7 +21,16 @@ class ReportViewModel : ViewModel() {
         getFullReportEvent.value = getReportRequest
     }
 
-    fun tryAgain() {
+    fun getSummeryReport(getReportRequest: GetReportRequest) {
+       getSummeryReportEvent.value = getReportRequest
+    }
+
+    fun tryGetFullReportAgain() {
         getFullReportEvent.value = getFullReportEvent.value
     }
+
+    fun tryGetSummeryReportAgain() {
+        getSummeryReportEvent.value = getSummeryReportEvent.value
+    }
+
 }

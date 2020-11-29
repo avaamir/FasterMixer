@@ -1,35 +1,36 @@
-package com.behraz.fastermixer.batch.ui.fragments.admin
+package com.behraz.fastermixer.batch.ui.fragments
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
-import com.behraz.fastermixer.batch.databinding.FragmentFullReportBinding
+import com.behraz.fastermixer.batch.databinding.FragmentSummeryReportBinding
 import com.behraz.fastermixer.batch.models.AdminEquipment
 import com.behraz.fastermixer.batch.models.requests.behraz.GetReportRequest
-import com.behraz.fastermixer.batch.ui.adapters.FullReportAdapter
+import com.behraz.fastermixer.batch.ui.adapters.SummeryReportAdapter
 import com.behraz.fastermixer.batch.ui.animations.crossfade
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.snack
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.ReportViewModel
 
-class FullReportFragment : Fragment() {
+class SummeryReportFragment : Fragment() {
 
+    private val mAdapter = SummeryReportAdapter()
+    private lateinit var mBinding: FragmentSummeryReportBinding
     private lateinit var viewModel: ReportViewModel
-    private lateinit var mBinding: FragmentFullReportBinding
+
 
     private lateinit var vehicle: AdminEquipment
     private lateinit var startDate: Array<String>
     private lateinit var endDate: Array<String>
 
-    private val mAdapter = FullReportAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +48,7 @@ class FullReportFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProvider(this).get(ReportViewModel::class.java)
-        mBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_full_report, container, false)
+        mBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_summery_report, container, false)
         return mBinding.root
     }
 
@@ -56,8 +56,7 @@ class FullReportFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         subscribeObservers()
-
-        viewModel.getFullReport(
+        viewModel.getSummeryReport(
             GetReportRequest(
                 "${startDate[2]}-${startDate[1]}-${startDate[0]}",
                 "${endDate[2]}-${endDate[1]}-${endDate[0]}",
@@ -67,7 +66,7 @@ class FullReportFragment : Fragment() {
     }
 
     private fun subscribeObservers() {
-        viewModel.fullReport.observe(viewLifecycleOwner) {
+        viewModel.summeryReport.observe(viewLifecycleOwner) {
             crossfade(mBinding.recyclerView, mBinding.progressBar)
             if (it != null) {
                 if (it.isSucceed) {
@@ -77,7 +76,7 @@ class FullReportFragment : Fragment() {
                 }
             } else {
                 snack(Constants.SERVER_ERROR, onAction = {
-                    viewModel.tryGetFullReportAgain()
+                    viewModel.tryGetSummeryReportAgain()
                     mBinding.progressBar.visibility = View.VISIBLE
                     mBinding.recyclerView.visibility = View.INVISIBLE
                 })
@@ -90,4 +89,5 @@ class FullReportFragment : Fragment() {
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         mBinding.recyclerView.adapter = mAdapter
     }
+
 }

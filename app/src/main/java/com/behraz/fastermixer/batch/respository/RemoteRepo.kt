@@ -17,6 +17,7 @@ import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRep
 import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeAdminManageAccountPage
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeFullReports
+import com.behraz.fastermixer.batch.utils.fastermixer.fakeSummeryReports
 import com.behraz.fastermixer.batch.utils.general.RunOnceLiveData
 import com.behraz.fastermixer.batch.utils.general.launchApi
 import kotlinx.coroutines.*
@@ -334,4 +335,6 @@ object RemoteRepo {
 
     fun getFullReport2(request: GetReportRequest) = apiReq(request, ApiService.client::getFullReport)
     fun getFullReport(request: GetReportRequest) = mockApiReq(Entity(fakeFullReports(), true, null))
+
+    fun getSummeryReport(request: GetReportRequest) = mockApiReq(Entity(fakeSummeryReports(), true, null))
 }
