@@ -69,7 +69,8 @@ abstract class VehicleFragment : BaseMapFragment() {
         const val BUNDLE_BTN_ROUTE_ID = "route-btn-id"
     }
 
-    override fun onBtnMyLocationClicked() {
+    override fun onBtnMyLocationClicked(view: View) {
+        super.onBtnMyLocationClicked(view)
         shouldCameraTrackUser = true
     }
 

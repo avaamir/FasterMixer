@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/chooseReportDateFragment"
-        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.ChooseReportDateFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.reports.ChooseReportDateFragment"
         android:label="تعیین بازه گزارش"
         tools:layout="@layout/fragment_choose_report_date" >
         <action
@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/chooseReportEquipmentFragment"
-        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.ChooseReportEquipmentFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.reports.ChooseReportEquipmentFragment"
         android:label="تعیین خودرو گزارش"
         tools:layout="@layout/fragment_choose_report_equipment">
         <action
@@ -35,17 +35,25 @@
         <action
             android:id="@+id/action_chooseReportEquipmentFragment_to_summeryReportFragment"
             app:destination="@id/summeryReportFragment" />
+        <action
+            android:id="@+id/action_chooseReportEquipmentFragment_to_drawRoadFragment"
+            app:destination="@id/drawRoadFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/fullReportFragment"
-        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.FullReportFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.reports.FullReportFragment"
         android:label="گزارش تفصیلی"
         tools:layout="@layout/fragment_full_report" />
 
     <fragment
         android:id="@+id/summeryReportFragment"
-        android:name="com.behraz.fastermixer.batch.ui.fragments.SummeryReportFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.reports.SummeryReportFragment"
         android:label="گزارشات خلاصه"
         tools:layout="@layout/fragment_summery_report"/>
+    <fragment
+        android:id="@+id/drawRoadFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.reports.DrawRoadFragment"
+        android:label="گزارش رسم مسیر"
+        tools:layout="@layout/fragment_draw_road"/>
 </navigation>

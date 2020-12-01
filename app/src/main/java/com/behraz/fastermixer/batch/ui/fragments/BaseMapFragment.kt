@@ -1,5 +1,6 @@
 package com.behraz.fastermixer.batch.ui.fragments
 
+import android.animation.Animator
 import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
 import android.content.Context
@@ -15,8 +16,8 @@ import androidx.fragment.app.Fragment
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.LocationCompassProvider
 import com.behraz.fastermixer.batch.databinding.LayoutMapBinding
-import com.behraz.fastermixer.batch.ui.osm.markers.ImageMarker
 import com.behraz.fastermixer.batch.ui.osm.MyOSMMapView
+import com.behraz.fastermixer.batch.ui.osm.markers.ImageMarker
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.utils.map.MyMapTileSource
@@ -44,7 +45,6 @@ abstract class BaseMapFragment : Fragment(),
     private var currentTileSourceIndex = 0
 
     abstract val myLocation: GeoPoint?
-    abstract fun onBtnMyLocationClicked()
 
     private var btnMyLocationId: Int =
         0 //btnMylocation Mitune tu activity bashe niaz hast refrencesh ro dashte bashim age tu activity hast
@@ -84,6 +84,26 @@ abstract class BaseMapFragment : Fragment(),
         return _mBinding.root
     }
 
+
+    open fun onBtnMyLocationClicked(view: View) {
+        val isGpsEnabled = LocationCompassProvider.isProviderEnable(requireContext())
+        if (!isGpsEnabled) {
+            toast("لطفا موقعیت مکانی خود را روشن کنید")
+        }
+        if (myLocation != null) {
+            moveCamera(myLocation!!)
+            view.animate().apply {
+                interpolator = LinearInterpolator()
+                duration = 500
+                rotationBy(360f)
+            }.start()
+        } else {
+            if (!isGpsEnabled) {
+                toast("در حال دریافت موقعیت شما..")
+            }
+        }
+    }
+
     protected open fun initViews() {
         if (btnMyLocationId != 0) {
             _mBinding.btnFragmentMyLocation.visibility = View.GONE
@@ -114,23 +134,7 @@ abstract class BaseMapFragment : Fragment(),
         }
 
         btnMyLocation.setOnClickListener {
-            val isGpsEnabled = LocationCompassProvider.isProviderEnable(requireContext())
-            if (!isGpsEnabled) {
-                toast("لطفا موقعیت مکانی خود را روشن کنید")
-            }
-            if (myLocation != null) {
-                moveCamera(myLocation!!)
-                it.animate().apply {
-                    interpolator = LinearInterpolator()
-                    duration = 500
-                    rotationBy(360f)
-                    onBtnMyLocationClicked()
-                }.start()
-            } else {
-                if (!isGpsEnabled) {
-                    toast("در حال دریافت موقعیت شما..")
-                }
-            }
+            onBtnMyLocationClicked(it)
         }
     }
 
@@ -295,9 +299,18 @@ abstract class BaseMapFragment : Fragment(),
     fun animateMarker(
         marker: ImageMarker,
         destGeoPoint: GeoPoint,
-        interpolator: TimeInterpolator = LinearInterpolator()
-    ) {
-        marker.markerAnimation.animateMarker(_mBinding.map, marker, destGeoPoint, interpolator)
+        interpolator: TimeInterpolator = LinearInterpolator(),
+        duration: Long = 1000L,
+        onAnimationEnd: (() -> Unit)? = null
+    ): ValueAnimator? {
+        return marker.markerAnimation.animateMarker(
+            _mBinding.map,
+            marker,
+            destGeoPoint,
+            interpolator,
+            duration,
+            onAnimationEnd
+        )
     }
 
     fun animateCameraToMapOrientation(
@@ -406,26 +419,44 @@ class MarkerAnimationUtil { //TODO in faghat vase ye marker dorost kar mikone , 
         marker: ImageMarker,
         destGeoPoint: GeoPoint,
         interpolator: TimeInterpolator = LinearInterpolator(),
-        duration: Long = 1000L
-    ) {
+        duration: Long = 1000L,
+        _onAnimationEnd: (() -> Unit)?
+    ): ValueAnimator? {
 
         if ((lastDestLocation?.latitude == destGeoPoint.latitude) && (lastDestLocation?.longitude == destGeoPoint.longitude)) {
-            return
+            _onAnimationEnd?.invoke()
+            return null
         }
 
         moveMarkerAnimator?.cancel()
         lastDestLocation = destGeoPoint
 
-        if ((marker.position.latitude == destGeoPoint.latitude) && (marker.position.longitude == destGeoPoint.longitude))
-            return
+        if ((marker.position.latitude == destGeoPoint.latitude) && (marker.position.longitude == destGeoPoint.longitude)) {
+            _onAnimationEnd?.invoke()
+            return null
+        }
 
         //val projection = mBinding.map.projection
         //val startPoint = projection.toPixels(marker.position, null)
         val startGeoPoint = marker.position //projection.fromPixels(startPoint.x, startPoint.y)
-        moveMarkerAnimator = ValueAnimator.ofFloat(0f, 1f).also { animator ->
+        return ValueAnimator.ofFloat(0f, 1f).also { animator ->
             animator.interpolator = interpolator
             animator.duration = duration
 
+            animator.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(p0: Animator?) {}
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    _onAnimationEnd?.invoke()
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+                }
+
+                override fun onAnimationRepeat(p0: Animator?) {
+                }
+
+            })
             animator.addUpdateListener {
                 val weight = it.animatedFraction
                 val lng = weight * destGeoPoint.longitude + (1 - weight) * startGeoPoint.longitude
@@ -435,6 +466,7 @@ class MarkerAnimationUtil { //TODO in faghat vase ye marker dorost kar mikone , 
                 map.postInvalidate()
             }
             animator.start()
+            moveMarkerAnimator = animator
         }
     }
 

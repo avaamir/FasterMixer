@@ -16,6 +16,7 @@ import com.behraz.fastermixer.batch.respository.apiservice.WeatherService
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeAdminManageAccountPage
+import com.behraz.fastermixer.batch.utils.fastermixer.fakeDrawRoadReport
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeFullReports
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeSummeryReports
 import com.behraz.fastermixer.batch.utils.general.RunOnceLiveData
@@ -337,4 +338,5 @@ object RemoteRepo {
     fun getFullReport(request: GetReportRequest) = mockApiReq(Entity(fakeFullReports(), true, null))
 
     fun getSummeryReport(request: GetReportRequest) = mockApiReq(Entity(fakeSummeryReports(), true, null))
+    fun getDrawRoadReport(request: GetReportRequest) = mockApiReq(Entity(fakeDrawRoadReport(), true, null))
 }

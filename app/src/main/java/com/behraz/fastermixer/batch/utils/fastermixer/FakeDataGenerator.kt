@@ -3,7 +3,22 @@ package com.behraz.fastermixer.batch.utils.fastermixer
 import com.behraz.fastermixer.batch.models.*
 import com.behraz.fastermixer.batch.models.requests.behraz.GetAdminAccountPage
 import com.behraz.fastermixer.batch.utils.general.now
+import org.osmdroid.util.GeoPoint
 import java.util.*
+
+fun fakeDrawRoadReport() = listOf(
+    GeoPoint(31.891413345001638, 54.35357135720551),
+    GeoPoint(31.891413345001638, 54.36357135720551),
+    GeoPoint(31.892413345001638, 54.37357135720551),
+    GeoPoint(31.893413345001638, 54.38357135720551),
+    GeoPoint(31.894413345001638, 54.39357135720551),
+    GeoPoint(31.895413345001638, 54.40357135720551),
+    GeoPoint(31.896413345001638, 54.45357135720551),
+    GeoPoint(31.897413345001638, 54.46357135720551),
+    GeoPoint(31.898413345001638, 54.47357135720551),
+    GeoPoint(31.899413345001638, 54.48357135720551),
+)
+
 
 fun fakeSummeryReports() = listOf(
     SummeryReport("1", "آمیکو سفید", "100 ساعت", "61 ساعت", "50 ساعت", "100 کیلومتر", "100"),

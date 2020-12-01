@@ -1,4 +1,4 @@
-package com.behraz.fastermixer.batch.ui.fragments.admin
+package com.behraz.fastermixer.batch.ui.fragments.admin.dashboard
 
 import android.graphics.Color
 import android.os.Bundle

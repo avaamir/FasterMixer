@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/adminMapFragment"
-        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.AdminMapFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.map.AdminMapFragment"
         android:label="نقشه"
         tools:layout="@layout/layout_map"/>
 </navigation>

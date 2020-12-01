@@ -1,4 +1,4 @@
-package com.behraz.fastermixer.batch.ui.fragments.admin
+package com.behraz.fastermixer.batch.ui.fragments.admin.reports
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,8 +21,8 @@ class ChooseReportDateFragment : Fragment(), NumberPicker.OnValueChangeListener 
     private lateinit var reportType: String
     private lateinit var mBinding: FragmentChooseReportDateBinding
 
-    private val startDate = Array(3) { "" } //0:day , 1:month , 2:year
-    private val endDate = Array(3) { "" }
+    private val startDate = Array(3) { "1" } //0:day , 1:month , 2:year
+    private val endDate = Array(3) { "1" }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +53,6 @@ class ChooseReportDateFragment : Fragment(), NumberPicker.OnValueChangeListener 
         mBinding.btnContinue.setOnClickListener {
             val notAllowedItems = listOf("روز", "ماه", "سال")
             for (i in 0..2) {
-                println("Debux: ${startDate[i]}, ${endDate[i]}")
                 if (startDate[i].isEmpty() || endDate[i].isEmpty()) {
                     toast("لطفا بازه گزارش گیری را مشخص کنید")
                     return@setOnClickListener

@@ -3,6 +3,7 @@ package com.behraz.fastermixer.batch.ui.fragments
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Environment
+import android.view.View
 import androidx.lifecycle.Observer
 import com.behraz.fastermixer.batch.app.LocationCompassProvider
 import com.behraz.fastermixer.batch.ui.osm.markers.DestMarker
@@ -34,7 +35,7 @@ class BaseMapFragmentImpl : BaseMapFragment() {
             return Constants.mapStartPoint
         }
 
-    override fun onBtnMyLocationClicked() {
+    override fun onBtnMyLocationClicked(view: View) {
     }
 
     override fun onResume() {

@@ -1,4 +1,4 @@
-package com.behraz.fastermixer.batch.ui.fragments.admin
+package com.behraz.fastermixer.batch.ui.fragments.admin.reports
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -100,7 +100,7 @@ class ChooseReportEquipmentFragment : Fragment(), AdminEquipmentAdapter.Interact
             when (reportType) {
                 Constants.REPORT_TYPE_FULL -> R.id.action_chooseReportEquipmentFragment_to_fullReportFragment
                 Constants.REPORT_TYPE_SUMMERY -> R.id.action_chooseReportEquipmentFragment_to_summeryReportFragment
-                Constants.REPORT_TYPE_DRAW_ROAD -> TODO("not implemented")
+                Constants.REPORT_TYPE_DRAW_ROAD -> R.id.action_chooseReportEquipmentFragment_to_drawRoadFragment
                 else -> throw Exception("report Type is not valid: $reportType")
             },
             bundleOf(

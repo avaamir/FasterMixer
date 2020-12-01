@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.DashboardFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.dashboard.DashboardFragment"
         android:label="داشبورد مدیریت"
         tools:layout="@layout/layout_dashboard_fragment">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/requestsFragment"
-        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.RequestsFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.dashboard.RequestsFragment"
         android:label="درخواست های امروز"
         tools:layout="@layout/layout_fragment_requests" />
 </navigation>

@@ -1,4 +1,4 @@
-package com.behraz.fastermixer.batch.ui.fragments.admin
+package com.behraz.fastermixer.batch.ui.fragments.admin.map
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -187,8 +187,6 @@ class AdminMapFragment : BaseMapFragment(), AdminDriverInfoWindow.Interactions {
             else -> toast("ابتدا جی پی اس خود را روشن کنید")
         }
     }
-
-    override fun onBtnMyLocationClicked() {}
 
     override fun onDestroy() {
         super.onDestroy()

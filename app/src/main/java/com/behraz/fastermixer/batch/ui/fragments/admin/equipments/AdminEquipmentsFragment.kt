@@ -1,4 +1,4 @@
-package com.behraz.fastermixer.batch.ui.fragments.admin
+package com.behraz.fastermixer.batch.ui.fragments.admin.equipments
 
 import android.os.Bundle
 import android.view.LayoutInflater

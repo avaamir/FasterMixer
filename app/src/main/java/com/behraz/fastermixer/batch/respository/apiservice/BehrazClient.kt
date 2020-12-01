@@ -21,13 +21,16 @@ interface BehrazClient {
     @POST("Equipment/GetBatch")
     suspend fun getBatches(): Response<Entity<List<Batch>>>
 
-    @POST("Equipment/GetPomp")
-    suspend fun getPomps(): Response<Entity<List<Pomp>>> //todo not implemented server side
-
-
     @POST("Equipment/ChoseEquipment")
     suspend fun chooseBatch(@Body chooseEquipmentRequest: ChooseEquipmentRequest): Response<Entity<Unit>>
 
+    @POST("Planning/FindAllPlanningForBatch")
+    suspend fun getBatchMixers(): Response<Entity<List<Mixer>>>
+
+    //TODO hazf shode az scenario
+    @POST("Equipment/GetPomp")
+    suspend fun getPomps(): Response<Entity<List<Pomp>>>
+    //TODO hazf shode az scenario
     @POST("Equipment/ChosePomp")//todo not implemented server side check URL
     suspend fun choosePomp(@Body chooseEquipmentRequest: ChooseEquipmentRequest): Response<Entity<Unit>>
 
@@ -37,9 +40,6 @@ interface BehrazClient {
 
     @POST("SendMessage/FindAllSendMessageByReceiverId")
     suspend fun getMessages(): Response<Entity<List<Message>>>
-
-    @POST("Planning/FindAllPlanningForBatch")
-    suspend fun getBatchMixers(): Response<Entity<List<Mixer>>>
 
     @POST("Planning/FindAllPlanningForPump")
     suspend fun getPompMixers(): Response<Entity<List<Mixer>>>
