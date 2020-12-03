@@ -19,6 +19,7 @@ import com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
 import com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
 import com.behraz.fastermixer.batch.ui.customs.general.TopSheetBehavior
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
+import com.behraz.fastermixer.batch.ui.dialogs.NewMessageDialog
 import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
 import com.behraz.fastermixer.batch.ui.fragments.batch.BatchFragment
@@ -127,13 +128,18 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction,
             }
         })
 
-        viewModel.newMessage.observe(this, Observer { event ->
+        viewModel.newMessage.observe(this, { event ->
+            //TODO check if a message is critical and new show in dialog to user
             event.getEventIfNotHandled()?.let { _message ->
-                mBinding.layoutNewMessage.message = _message
-                topSheetBehavior.state = TopSheetBehavior.STATE_EXPANDED
-                Handler().postDelayed({
-                    topSheetBehavior.state = TopSheetBehavior.STATE_HIDDEN
-                }, 3000)
+                if (false) { //todo if (_message.priority == ?)
+                    mBinding.layoutNewMessage.message = _message
+                    topSheetBehavior.state = TopSheetBehavior.STATE_EXPANDED
+                    Handler().postDelayed({
+                        topSheetBehavior.state = TopSheetBehavior.STATE_HIDDEN
+                    }, 3000)
+                } else {
+                    NewMessageDialog(_message, this, R.style.my_alert_dialog).show()
+                }
             }
         })
 
