@@ -7,6 +7,7 @@ import android.content.IntentSender
 import android.graphics.Color
 import android.os.BatteryManager
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -16,6 +17,9 @@ import com.behraz.fastermixer.batch.databinding.ActivityTestBinding
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.ui.adapters.MixerAdapter
+import com.behraz.fastermixer.batch.ui.dialogs.NewMessageDialog
+import com.behraz.fastermixer.batch.utils.fastermixer.Constants
+import com.behraz.fastermixer.batch.utils.fastermixer.fakeMessages
 import com.behraz.fastermixer.batch.utils.general.createSpannableString
 import com.behraz.fastermixer.batch.utils.general.subscribeSignalStrengthChangeListener
 import com.behraz.fastermixer.batch.utils.general.toast
@@ -79,10 +83,17 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_test)
 
 
+        Handler().postDelayed({
+            NewMessageDialog(
+                fakeMessages()[0].copy(content = Constants.LARGE_TEST_TEXT),
+                this,
+                R.style.my_alert_dialog
+            ).show()
+        }, 3000)
+
         val x = subscribeSignalStrengthChangeListener(true) {
             println("debug:signal: $it")
         }
-
 
 
         // initProgressChart()

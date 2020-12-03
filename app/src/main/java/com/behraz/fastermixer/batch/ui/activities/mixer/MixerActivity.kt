@@ -300,11 +300,15 @@ class MixerActivity : AppCompatActivity(),
         viewModel.newMessage.observe(this, { event ->
             //TODO check if a message is critical and new show in dialog to user
             event.getEventIfNotHandled()?.let { _message ->
-                mBinding.layoutNewMessage.message = _message
-                topSheetBehavior.state = TopSheetBehavior.STATE_EXPANDED
-                Handler().postDelayed({
-                    topSheetBehavior.state = TopSheetBehavior.STATE_HIDDEN
-                }, 3000)
+                if(false) { //todo if (_message.priority == ?)
+                    mBinding.layoutNewMessage.message = _message
+                    topSheetBehavior.state = TopSheetBehavior.STATE_EXPANDED
+                    Handler().postDelayed({
+                        topSheetBehavior.state = TopSheetBehavior.STATE_HIDDEN
+                    }, 3000)
+                } else {
+                    NewMessageDialog(_message, this, R.style.my_alert_dialog).show()
+                }
             }
         })
 
