@@ -328,7 +328,7 @@ object RemoteRepo {
                         }
                     }
                 }, {
-                    value = null
+                    postValue(null)
                 })
             }
         }

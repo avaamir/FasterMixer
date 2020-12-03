@@ -203,15 +203,6 @@ abstract class VehicleFragment : BaseMapFragment() {
 
         vehicleActivityViewModel.newMissionEvent.observe(viewLifecycleOwner) { event ->
             event.getEventIfNotHandled()?.let { mission ->
-
-                val newMissionMessage = Message.newMessage(
-                    mission.missionId,
-                    "ماموریت جدید",
-                    "${mission.conditionTitle}: ${mission.address} - ${mission.requestLocation}"
-                )
-                NewMessageDialog(newMissionMessage, requireContext()).show()
-                MessageRepo.insert(newMissionMessage)
-
                 println("debux: (MixerMapFragment-newMissionEventObserver) `newMissionEvent` Handler Routine Start ==================================")
                 if (mission === Mission.NoMission) {
                     println("debux: `newMissionEvent` NoMission")
@@ -223,6 +214,15 @@ abstract class VehicleFragment : BaseMapFragment() {
                     mBinding.map.invalidate()
                     toast("شما ماموریت دیگری ندارید")
                 } else {
+                    Message.newMessage(
+                        mission.missionId,
+                        "ماموریت جدید",
+                        "${mission.conditionTitle}\r\nتوضیحات:${mission.description}\r\nنشانی:${mission.address}"
+                    ).also {
+                        NewMessageDialog(it, requireContext()).show()
+                        MessageRepo.insert(it)
+                    }
+                    //
                     println("debux: `newMissionEvent` NewMission")
                     destMarker.position = mission.destFence.center
                     destMarker.title = mission.summery
