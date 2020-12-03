@@ -3,10 +3,9 @@ package com.behraz.fastermixer.batch.models
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
+import com.behraz.fastermixer.batch.utils.general.now
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
-import java.util.*
 
 @Parcelize
 @Entity(tableName = "messages")
@@ -33,6 +32,12 @@ data class Message(
     @SerializedName("viewed")
     var viewed: Boolean
 ) : Parcelable {
+
+    companion object {
+        fun newMessage(id: String, senderName: String, content: String): Message {
+            return Message(id, senderName, "", now().toString(), content, true, 0, 1, null, null, true)
+        }
+    }
 
     val shouldPopUp get() = _isEvent != 1
     val isEmergency: Boolean get() = priority == 1  //TODO not implemented server side

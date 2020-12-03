@@ -6,7 +6,7 @@ import android.widget.TextView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.models.Message
 
-class NewMessageDialog(private val message: Message, context: Context, themeResId: Int) :
+class NewMessageDialog(private val message: Message, context: Context, themeResId: Int = R.style.my_alert_dialog) :
     MyBaseFullScreenDialog(context, themeResId, R.layout.new_message_dialog) {
 
     override fun initViews() {

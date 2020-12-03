@@ -6,28 +6,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import com.behraz.fastermixer.batch.app.LocationCompassProvider
+import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.models.requests.Fence
 import com.behraz.fastermixer.batch.models.requests.PolygonFence
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
+import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
+import com.behraz.fastermixer.batch.ui.dialogs.NewMessageDialog
 import com.behraz.fastermixer.batch.ui.fragments.pomp.PompMapFragment
 import com.behraz.fastermixer.batch.ui.osm.markers.DestMarker
 import com.behraz.fastermixer.batch.ui.osm.markers.MixerMarker
 import com.behraz.fastermixer.batch.ui.osm.markers.PompMarker
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.toast
-import com.behraz.fastermixer.batch.viewmodels.VehicleMapFragmentViewModel
 import com.behraz.fastermixer.batch.viewmodels.VehicleActivityViewModel
+import com.behraz.fastermixer.batch.viewmodels.VehicleMapFragmentViewModel
 import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent
 import org.osmdroid.events.ZoomEvent
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polygon
 import org.osmdroid.views.overlay.Polyline
-import java.lang.IllegalStateException
 import kotlin.math.abs
 
 abstract class VehicleFragment : BaseMapFragment() {
@@ -157,7 +158,7 @@ abstract class VehicleFragment : BaseMapFragment() {
     }
 
     protected open fun subscribeObservers() {
-        vehicleActivityViewModel.getUserLocationResponse.observe(viewLifecycleOwner, Observer {
+        vehicleActivityViewModel.getUserLocationResponse.observe(viewLifecycleOwner) {
             if (it != null) {
                 mMapViewModel.myLocation = it.location
                 val distance = lastLocation.distanceToAsDouble(it.location)
@@ -195,14 +196,22 @@ abstract class VehicleFragment : BaseMapFragment() {
                 }
                 lastLocation = point*/
             }
-        })
+        }
 
 
 
 
-        vehicleActivityViewModel.newMissionEvent.observe(viewLifecycleOwner, Observer
-        { event ->
+        vehicleActivityViewModel.newMissionEvent.observe(viewLifecycleOwner) { event ->
             event.getEventIfNotHandled()?.let { mission ->
+
+                val newMissionMessage = Message.newMessage(
+                    mission.missionId,
+                    "ماموریت جدید",
+                    "${mission.conditionTitle}: ${mission.address} - ${mission.requestLocation}"
+                )
+                NewMessageDialog(newMissionMessage, requireContext()).show()
+                MessageRepo.insert(newMissionMessage)
+
                 println("debux: (MixerMapFragment-newMissionEventObserver) `newMissionEvent` Handler Routine Start ==================================")
                 if (mission === Mission.NoMission) {
                     println("debux: `newMissionEvent` NoMission")
@@ -234,17 +243,16 @@ abstract class VehicleFragment : BaseMapFragment() {
 
                 }
             }
-        })
+        }
 
-        vehicleActivityViewModel.getMissionError.observe(viewLifecycleOwner, Observer
-        { event ->
+        vehicleActivityViewModel.getMissionError.observe(viewLifecycleOwner) { event ->
             event.getEventIfNotHandled()?.let {
                 println("debux: (MixerMapFragment) getMissionError: $it")
                 if (!it.contains("Action")) {
                     toast(it)
                 }
             }
-        })
+        }
 
         mMapViewModel.getRouteResponse.observe(viewLifecycleOwner, {
             if (it != null) {

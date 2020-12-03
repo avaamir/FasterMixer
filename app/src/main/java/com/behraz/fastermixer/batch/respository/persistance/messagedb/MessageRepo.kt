@@ -15,7 +15,7 @@ object MessageRepo {
     private lateinit var job: Job
     private lateinit var context: Context
 
-    private val MessageDao: MessageDao by lazy {
+    private val dao: MessageDao by lazy {
         MessageDatabase.getInstance(context).getDao()
     }
 
@@ -25,7 +25,7 @@ object MessageRepo {
     }
 
     val allMessage: LiveData<List<Message>> by lazy {
-        MessageDao.allMessage.map { messages ->
+        dao.allMessage.map { messages ->
             messages.filter {
                 it.userId == UserConfigs.user.value!!.personId
             }
@@ -40,7 +40,7 @@ object MessageRepo {
                 if (item.userId == null)
                     item.userId = UserConfigs.user.value!!.personId
             }
-            MessageDao.insertAll(items)
+            dao.insertAll(items)
         }
     }
 
@@ -50,7 +50,7 @@ object MessageRepo {
         CoroutineScope(IO + job).launch {
             if (item.userId == null)
                 item.userId = UserConfigs.user.value!!.personId
-            MessageDao.insert(item)
+            dao.insert(item)
         }
     }
 
@@ -60,7 +60,7 @@ object MessageRepo {
         CoroutineScope(IO + job).launch {
             if (item.userId == null)
                 item.userId = UserConfigs.user.value!!.personId
-            MessageDao.update(item)
+            dao.update(item)
         }
     }
 
@@ -68,7 +68,7 @@ object MessageRepo {
         if (!MessageRepo::job.isInitialized || !job.isActive)
             job = Job()
         CoroutineScope(IO + job).launch {
-            MessageDao.delete(item)
+            dao.delete(item)
         }
     }
 
@@ -76,7 +76,7 @@ object MessageRepo {
         if (!MessageRepo::job.isInitialized || !job.isActive)
             job = Job()
         CoroutineScope(IO + job).launch {
-            MessageDao.deleteAllMessage()
+            dao.deleteAllMessage()
         }
     }
 
@@ -89,7 +89,7 @@ object MessageRepo {
         if (!MessageRepo::job.isInitialized || !job.isActive)
             job = Job()
         CoroutineScope(IO + job).launch {
-            MessageDao.update(message.copy(viewed = true))
+            dao.update(message.copy(viewed = true))
         }
     }
 
@@ -97,7 +97,7 @@ object MessageRepo {
         if (!MessageRepo::job.isInitialized || !job.isActive)
             job = Job()
         CoroutineScope(IO + job).launch {
-            MessageDao.seenAllMessages()
+            dao.seenAllMessages()
         }
     }
 }
