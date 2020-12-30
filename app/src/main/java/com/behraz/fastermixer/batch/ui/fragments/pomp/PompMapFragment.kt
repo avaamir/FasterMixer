@@ -40,7 +40,7 @@ class PompMapFragment : VehicleFragment() {
         super.onAttach(context)
         //tuye on attach init shodan chun tuye super.onCreateView bahashun kar daran
         mapViewModel = ViewModelProvider(this).get(PompMapFragmentViewModel::class.java)
-        pompViewModel = ViewModelProvider(activity!!).get(PompActivityViewModel::class.java)
+        pompViewModel = ViewModelProvider(requireActivity()).get(PompActivityViewModel::class.java)
     }
 
     override fun subscribeObservers() {

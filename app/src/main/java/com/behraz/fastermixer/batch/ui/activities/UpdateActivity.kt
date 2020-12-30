@@ -29,6 +29,7 @@ class UpdateActivity : AppCompatActivity(), AppUpdater.Interactions {
             updateActivityRootFrame.post {
                 intent.getParcelableExtra<UpdateResponse>(Constants.INTENT_UPDATE_ACTIVITY_UPDATE_RESPONSE)!!
                     .let {
+                        println("debug:AppUpdater:newVersion:${it.version}")
                         alert(
                             "بروزرسانی",
                             "نسخه جدیدی از برنامه موجود میباشد. برای ادامه کار نیاز به بروزرسانی دارید. آیا ادامه میدهید؟",
