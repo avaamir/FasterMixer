@@ -5,7 +5,8 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
-import com.behraz.fastermixer.batch.models.requests.behraz.Entity
+import com.behraz.fastermixer.batch.models.requests.behraz.ApiResult
+import com.behraz.fastermixer.batch.models.requests.behraz.ErrorType
 import com.behraz.fastermixer.batch.models.requests.behraz.LoginRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.UpdateResponse
 import com.behraz.fastermixer.batch.respository.RemoteRepo
@@ -15,8 +16,8 @@ class LoginActivityViewModel : ViewModel() {
 
     private var isCheckedForUpdatesRequestActive = false
 
-    private var updateEvent: Event<Entity<UpdateResponse>> =
-        Event(Entity(UpdateResponse.NoResponse, false, null))
+    private var updateEvent: Event<ApiResult<UpdateResponse>> =
+        Event(ApiResult(UpdateResponse.NoResponse, false, null, ErrorType.Unknown))
 
     private val updateRequestEvent = MutableLiveData<Event<Unit>>()
     val checkUpdateResponse = Transformations.switchMap(updateRequestEvent) {

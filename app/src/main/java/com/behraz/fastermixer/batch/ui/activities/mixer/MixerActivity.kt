@@ -30,8 +30,6 @@ import kotlinx.android.synthetic.main.activity_batch.*
 import kotlin.concurrent.fixedRateTimer
 
 class MixerActivity : AppCompatActivity(),
-    ApiService.InternetConnectionListener,
-    ApiService.OnUnauthorizedListener,
     MixerMessageDialog.Interactions, VehicleFragment.OnUserAndDestLocRetrieved {
 
     private companion object {
@@ -463,16 +461,7 @@ class MixerActivity : AppCompatActivity(),
         viewModel.insertBreakdown(BreakdownRequest.BREAKDOWN)
         mBinding.btnBroken.visibility = View.VISIBLE
     }
-
-    override fun onUnauthorizedAction(event: Event<Unit>) {
-        toast("شما نیاز به ورود مجدد دارید")
-        finish()
-    }
-
-    override fun onInternetUnavailable() {
-        NoNetworkDialog(this, R.style.my_alert_dialog).show()
-    }
-
+    
     override fun onShowButtons(shouldShow: Boolean) {
         if (shouldShow) {
             mBinding.btnRouteHome.visibility = View.VISIBLE

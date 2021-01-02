@@ -30,9 +30,9 @@ public final class MessageDatabase_Impl extends MessageDatabase {
     final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(configuration, new RoomOpenHelper.Delegate(6) {
       @Override
       public void createAllTables(SupportSQLiteDatabase _db) {
-        _db.execSQL("CREATE TABLE IF NOT EXISTS `messages` (`id` TEXT NOT NULL, `sender` TEXT NOT NULL, `senderId` TEXT NOT NULL, `dateTime` TEXT NOT NULL, `content` TEXT NOT NULL, `isDelivered` INTEGER NOT NULL, `priority` INTEGER NOT NULL, `_isEvent` INTEGER NOT NULL, `senderImage` TEXT, `userId` TEXT, `viewed` INTEGER NOT NULL, PRIMARY KEY(`id`))");
+        _db.execSQL("CREATE TABLE IF NOT EXISTS `messages` (`id` TEXT NOT NULL, `sender` TEXT NOT NULL, `senderId` TEXT NOT NULL, `dateTime` TEXT NOT NULL, `content` TEXT NOT NULL, `isDelivered` INTEGER NOT NULL, `priority` INTEGER NOT NULL, `_isEvent` INTEGER NOT NULL, `senderImage` TEXT, `userId` INTEGER, `viewed` INTEGER NOT NULL, PRIMARY KEY(`id`))");
         _db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '57de3f2fb0ae746cc69a8b9b0ad9a625')");
+        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3177a5fb04e43fd41064d6cfd98524ce')");
       }
 
       @Override
@@ -86,7 +86,7 @@ public final class MessageDatabase_Impl extends MessageDatabase {
         _columnsMessages.put("priority", new TableInfo.Column("priority", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsMessages.put("_isEvent", new TableInfo.Column("_isEvent", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsMessages.put("senderImage", new TableInfo.Column("senderImage", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsMessages.put("userId", new TableInfo.Column("userId", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMessages.put("userId", new TableInfo.Column("userId", "INTEGER", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsMessages.put("viewed", new TableInfo.Column("viewed", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysMessages = new HashSet<TableInfo.ForeignKey>(0);
         final HashSet<TableInfo.Index> _indicesMessages = new HashSet<TableInfo.Index>(0);
@@ -99,7 +99,7 @@ public final class MessageDatabase_Impl extends MessageDatabase {
         }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "57de3f2fb0ae746cc69a8b9b0ad9a625", "e8b5b291e976272d866c0af12252d241");
+    }, "3177a5fb04e43fd41064d6cfd98524ce", "d5cd3b9aae077dc6f8bc25b25bac0685");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(configuration.context)
         .name(configuration.name)
         .callback(_openCallback)

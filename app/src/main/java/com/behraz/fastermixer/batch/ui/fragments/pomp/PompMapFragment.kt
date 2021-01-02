@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.models.Mixer
-import com.behraz.fastermixer.batch.models.requests.behraz.Entity
+import com.behraz.fastermixer.batch.models.requests.behraz.ApiResult
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.ui.fragments.VehicleFragment
 import com.behraz.fastermixer.batch.ui.osm.markers.ImageMarker
@@ -46,36 +46,36 @@ class PompMapFragment : VehicleFragment() {
     override fun subscribeObservers() {
         super.subscribeObservers()
 
-        pompViewModel.shouldShowAllMixers.observe(viewLifecycleOwner, Observer { shouldShowAll ->
+        pompViewModel.shouldShowAllMixers.observe(viewLifecycleOwner) { shouldShowAll ->
             if (shouldShowAll) {
                 sortAndShowMixers(pompViewModel.allMixers.value)
             } else {
                 sortAndShowMixers(pompViewModel.requestMixers.value)
             }
 
-        })
+        }
 
-        pompViewModel.allMixers.observe(viewLifecycleOwner, Observer {
+        pompViewModel.allMixers.observe(viewLifecycleOwner) {
             if (pompViewModel.shouldShowAllMixers.value!!) {
                 sortAndShowMixers(it)
             }
-        })
+        }
 
-        pompViewModel.requestMixers.observe(viewLifecycleOwner, Observer {
+        pompViewModel.requestMixers.observe(viewLifecycleOwner) {
             if (!pompViewModel.shouldShowAllMixers.value!!) {
                 sortAndShowMixers(it)
             }
-        })
+        }
     }
 
 
-    private fun sortAndShowMixers(serverResponse: Entity<List<Mixer>>?) {
+    private fun sortAndShowMixers(serverResponse: ApiResult<List<Mixer>>?) {
         if (serverResponse?.isSucceed == true) {
             mapViewModel.markers.diffSourceFromNewValues(
                 serverResponse.entity,
                 Mixer::id,
-                object : OnSourceMapChange<String, ImageMarker, Mixer> {
-                    override fun onAddItem(key: String, item: Mixer): ImageMarker {
+                object : OnSourceMapChange<Int, ImageMarker, Mixer> {
+                    override fun onAddItem(key: Int, item: Mixer): ImageMarker {
                         return MixerMarker(mBinding.map).also { _marker ->
                             _marker.position = item.location
                             item.pelak.split(",")
@@ -91,14 +91,14 @@ class PompMapFragment : VehicleFragment() {
                     }
 
                     override fun onItemExistInBoth(
-                        keyId: String,
+                        keyId: Int,
                         marker: ImageMarker,
                         item: Mixer
                     ) {
                         animateMarker(marker, item.location)
                     }
 
-                    override fun onRemoveItem(keyId: String) {
+                    override fun onRemoveItem(keyId: Int) {
                         mBinding.map.overlayManager.remove(
                             mapViewModel.markers.remove(keyId).also {
                                 if (it?.isInfoWindowShown == true)

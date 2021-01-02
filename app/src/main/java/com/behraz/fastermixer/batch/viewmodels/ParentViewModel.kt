@@ -7,7 +7,8 @@ import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.User
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
-import com.behraz.fastermixer.batch.models.requests.behraz.Entity
+import com.behraz.fastermixer.batch.models.requests.behraz.ApiResult
+import com.behraz.fastermixer.batch.models.requests.behraz.ErrorType
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
@@ -37,7 +38,7 @@ abstract class ParentViewModel : ViewModel() {
     val breakdownResponse = Transformations.switchMap(breakdownEvent) {
         RemoteRepo.insertBreakdownRequest(it).map { response ->
             if (response != null) {
-                Entity(it, response.isSucceed, response.message)
+                ApiResult(it, response.isSucceed, response.message, ErrorType.OK)
             } else {
                 response
             }

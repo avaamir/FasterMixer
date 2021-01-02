@@ -8,7 +8,7 @@ import com.behraz.fastermixer.batch.models.Equipment
 import com.behraz.fastermixer.batch.models.enums.UserType
 import com.behraz.fastermixer.batch.models.enums.UserType.*
 import com.behraz.fastermixer.batch.models.requests.behraz.ChooseEquipmentRequest
-import com.behraz.fastermixer.batch.models.requests.behraz.Entity
+import com.behraz.fastermixer.batch.models.requests.behraz.ApiResult
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.utils.general.Event
@@ -36,14 +36,14 @@ class ChooseEquipmentActivityViewModel : ViewModel() {
     }
 
     private val getEquipmentEvent = MutableLiveData<Event<UserType>>()
-    val equipments: LiveData<Entity<List<Equipment>>?> =
+    val equipments: LiveData<ApiResult<List<Equipment>>?> =
         Transformations.switchMap(getEquipmentEvent) {
             when (it.peekContent()) {
                 Batch -> RemoteRepo.getBatches()
                 Pomp -> RemoteRepo.getPomps()
                 Mixer -> TODO("getMixers")
                 Admin -> throw IllegalStateException()
-            }.exhaustiveAsExpression() as LiveData<Entity<List<Equipment>>?>
+            }.exhaustiveAsExpression() as LiveData<ApiResult<List<Equipment>>?>
         }
 
     fun getEquipments() {
@@ -57,7 +57,7 @@ class ChooseEquipmentActivityViewModel : ViewModel() {
     }
 
 
-    fun chooseEquipment(equipmentId: String? = null, retryLastRequest: Boolean? = null) {
+    fun chooseEquipment(equipmentId: Int? = null, retryLastRequest: Boolean? = null) {
         if (retryLastRequest == true)
             chooseEquipmentRequest.value.let { if (it != null) chooseEquipmentRequest.value = it else throw IllegalStateException("not requested before") }
         else

@@ -7,7 +7,7 @@ import com.behraz.fastermixer.batch.models.Customer
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.User
 import com.behraz.fastermixer.batch.models.requests.CircleFence
-import com.behraz.fastermixer.batch.models.requests.behraz.Entity
+import com.behraz.fastermixer.batch.models.requests.behraz.ApiResult
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.utils.general.Event
 
@@ -35,7 +35,7 @@ class PompActivityViewModel : VehicleActivityViewModel() {
         }
     }
 
-    private fun sortMixerResponse(response: Entity<List<Mixer>>?): Entity<List<Mixer>>? {
+    private fun sortMixerResponse(response: ApiResult<List<Mixer>>?): ApiResult<List<Mixer>>? {
         val sortedMixers = getUserLocationResponse.value?.let { pompLocation ->
             response?.entity?.let { mixers ->
                 if (mixers.size == 1) {
@@ -62,7 +62,7 @@ class PompActivityViewModel : VehicleActivityViewModel() {
 
     private var selectedProjectId: String? = null
     private val getCustomerEvent = MutableLiveData(true) //if true reqServer else selectedProject Changed
-    private var lastGetCustomerResponse: Entity<List<Customer>>? = null
+    private var lastGetCustomerResponse: ApiResult<List<Customer>>? = null
 
     val customers = Transformations.switchMap(getCustomerEvent) { event ->
         println("debugx: getCustomerEvent called")

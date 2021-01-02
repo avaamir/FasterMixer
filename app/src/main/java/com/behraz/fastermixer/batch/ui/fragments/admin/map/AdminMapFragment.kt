@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.app.LocationCompassProvider
+import com.behraz.fastermixer.batch.app.receivers.isNetworkAvailable
 import com.behraz.fastermixer.batch.models.AdminEquipment
 import com.behraz.fastermixer.batch.models.enums.EquipmentType
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
@@ -170,7 +171,7 @@ class AdminMapFragment : BaseMapFragment(), AdminDriverInfoWindow.Interactions {
                         toast(Constants.SERVER_ERROR)
                 }
             } else {
-                if (ApiService.isNetworkAvailable()) {
+                if (isNetworkAvailable()) {
                     toast(Constants.SERVER_ERROR)
                 } else {
                     toast("لطفا وضعیت اینترنت خود را بررسی کنید")

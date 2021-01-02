@@ -11,9 +11,7 @@ import androidx.room.SharedSQLiteStatement;
 import androidx.room.util.CursorUtil;
 import androidx.room.util.DBUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
-import com.behraz.fastermixer.batch.models.Phone;
 import com.behraz.fastermixer.batch.models.User;
-import com.behraz.fastermixer.batch.respository.persistance.typeconverter.PhoneListConverter;
 import java.lang.Exception;
 import java.lang.Integer;
 import java.lang.Object;
@@ -32,8 +30,6 @@ public final class UserDao_Impl implements UserDao {
 
   private final EntityInsertionAdapter<User> __insertionAdapterOfUser;
 
-  private final PhoneListConverter __phoneListConverter = new PhoneListConverter();
-
   private final EntityDeletionOrUpdateAdapter<User> __deletionAdapterOfUser;
 
   private final EntityDeletionOrUpdateAdapter<User> __updateAdapterOfUser;
@@ -45,59 +41,31 @@ public final class UserDao_Impl implements UserDao {
     this.__insertionAdapterOfUser = new EntityInsertionAdapter<User>(__db) {
       @Override
       public String createQuery() {
-        return "INSERT OR REPLACE INTO `user_tb` (`phones`,`adminPhones`,`personId`,`name`,`token`,`profilePic`,`roleId`,`personalCode`,`equipmentId`) VALUES (?,?,?,?,?,?,?,?,?)";
+        return "INSERT OR REPLACE INTO `user_tb` (`personId`,`name`,`token`,`roleId`,`equipmentId`) VALUES (?,?,?,?,?)";
       }
 
       @Override
       public void bind(SupportSQLiteStatement stmt, User value) {
-        final String _tmp;
-        _tmp = __phoneListConverter.fromPhoneList(value.getPhones());
-        if (_tmp == null) {
-          stmt.bindNull(1);
-        } else {
-          stmt.bindString(1, _tmp);
-        }
-        final String _tmp_1;
-        _tmp_1 = __phoneListConverter.fromPhoneList(value.getAdminPhones());
-        if (_tmp_1 == null) {
+        stmt.bindLong(1, value.getPersonId());
+        if (value.getName() == null) {
           stmt.bindNull(2);
         } else {
-          stmt.bindString(2, _tmp_1);
-        }
-        if (value.getPersonId() == null) {
-          stmt.bindNull(3);
-        } else {
-          stmt.bindString(3, value.getPersonId());
-        }
-        if (value.getName() == null) {
-          stmt.bindNull(4);
-        } else {
-          stmt.bindString(4, value.getName());
+          stmt.bindString(2, value.getName());
         }
         if (value.getToken() == null) {
-          stmt.bindNull(5);
+          stmt.bindNull(3);
         } else {
-          stmt.bindString(5, value.getToken());
-        }
-        if (value.getProfilePic() == null) {
-          stmt.bindNull(6);
-        } else {
-          stmt.bindString(6, value.getProfilePic());
+          stmt.bindString(3, value.getToken());
         }
         if (value.getRoleId() == null) {
-          stmt.bindNull(7);
+          stmt.bindNull(4);
         } else {
-          stmt.bindLong(7, value.getRoleId());
-        }
-        if (value.getPersonalCode() == null) {
-          stmt.bindNull(8);
-        } else {
-          stmt.bindString(8, value.getPersonalCode());
+          stmt.bindLong(4, value.getRoleId());
         }
         if (value.getEquipmentId() == null) {
-          stmt.bindNull(9);
+          stmt.bindNull(5);
         } else {
-          stmt.bindString(9, value.getEquipmentId());
+          stmt.bindLong(5, value.getEquipmentId());
         }
       }
     };
@@ -109,75 +77,39 @@ public final class UserDao_Impl implements UserDao {
 
       @Override
       public void bind(SupportSQLiteStatement stmt, User value) {
-        if (value.getPersonId() == null) {
-          stmt.bindNull(1);
-        } else {
-          stmt.bindString(1, value.getPersonId());
-        }
+        stmt.bindLong(1, value.getPersonId());
       }
     };
     this.__updateAdapterOfUser = new EntityDeletionOrUpdateAdapter<User>(__db) {
       @Override
       public String createQuery() {
-        return "UPDATE OR ABORT `user_tb` SET `phones` = ?,`adminPhones` = ?,`personId` = ?,`name` = ?,`token` = ?,`profilePic` = ?,`roleId` = ?,`personalCode` = ?,`equipmentId` = ? WHERE `personId` = ?";
+        return "UPDATE OR ABORT `user_tb` SET `personId` = ?,`name` = ?,`token` = ?,`roleId` = ?,`equipmentId` = ? WHERE `personId` = ?";
       }
 
       @Override
       public void bind(SupportSQLiteStatement stmt, User value) {
-        final String _tmp;
-        _tmp = __phoneListConverter.fromPhoneList(value.getPhones());
-        if (_tmp == null) {
-          stmt.bindNull(1);
-        } else {
-          stmt.bindString(1, _tmp);
-        }
-        final String _tmp_1;
-        _tmp_1 = __phoneListConverter.fromPhoneList(value.getAdminPhones());
-        if (_tmp_1 == null) {
+        stmt.bindLong(1, value.getPersonId());
+        if (value.getName() == null) {
           stmt.bindNull(2);
         } else {
-          stmt.bindString(2, _tmp_1);
-        }
-        if (value.getPersonId() == null) {
-          stmt.bindNull(3);
-        } else {
-          stmt.bindString(3, value.getPersonId());
-        }
-        if (value.getName() == null) {
-          stmt.bindNull(4);
-        } else {
-          stmt.bindString(4, value.getName());
+          stmt.bindString(2, value.getName());
         }
         if (value.getToken() == null) {
-          stmt.bindNull(5);
+          stmt.bindNull(3);
         } else {
-          stmt.bindString(5, value.getToken());
-        }
-        if (value.getProfilePic() == null) {
-          stmt.bindNull(6);
-        } else {
-          stmt.bindString(6, value.getProfilePic());
+          stmt.bindString(3, value.getToken());
         }
         if (value.getRoleId() == null) {
-          stmt.bindNull(7);
+          stmt.bindNull(4);
         } else {
-          stmt.bindLong(7, value.getRoleId());
-        }
-        if (value.getPersonalCode() == null) {
-          stmt.bindNull(8);
-        } else {
-          stmt.bindString(8, value.getPersonalCode());
+          stmt.bindLong(4, value.getRoleId());
         }
         if (value.getEquipmentId() == null) {
-          stmt.bindNull(9);
+          stmt.bindNull(5);
         } else {
-          stmt.bindString(9, value.getEquipmentId());
+          stmt.bindLong(5, value.getEquipmentId());
         }
-        if (value.getPersonId() == null) {
-          stmt.bindNull(10);
-        } else {
-          stmt.bindString(10, value.getPersonId());
-        }
+        stmt.bindLong(6, value.getPersonId());
       }
     };
     this.__preparedStmtOfDeleteAll = new SharedSQLiteStatement(__db) {
@@ -294,47 +226,33 @@ public final class UserDao_Impl implements UserDao {
       public List<User> call() throws Exception {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
-          final int _cursorIndexOfPhones = CursorUtil.getColumnIndexOrThrow(_cursor, "phones");
-          final int _cursorIndexOfAdminPhones = CursorUtil.getColumnIndexOrThrow(_cursor, "adminPhones");
           final int _cursorIndexOfPersonId = CursorUtil.getColumnIndexOrThrow(_cursor, "personId");
           final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
           final int _cursorIndexOfToken = CursorUtil.getColumnIndexOrThrow(_cursor, "token");
-          final int _cursorIndexOfProfilePic = CursorUtil.getColumnIndexOrThrow(_cursor, "profilePic");
           final int _cursorIndexOfRoleId = CursorUtil.getColumnIndexOrThrow(_cursor, "roleId");
-          final int _cursorIndexOfPersonalCode = CursorUtil.getColumnIndexOrThrow(_cursor, "personalCode");
           final int _cursorIndexOfEquipmentId = CursorUtil.getColumnIndexOrThrow(_cursor, "equipmentId");
           final List<User> _result = new ArrayList<User>(_cursor.getCount());
           while(_cursor.moveToNext()) {
             final User _item;
-            final String _tmpPersonId;
-            _tmpPersonId = _cursor.getString(_cursorIndexOfPersonId);
+            final int _tmpPersonId;
+            _tmpPersonId = _cursor.getInt(_cursorIndexOfPersonId);
             final String _tmpName;
             _tmpName = _cursor.getString(_cursorIndexOfName);
             final String _tmpToken;
             _tmpToken = _cursor.getString(_cursorIndexOfToken);
-            final String _tmpProfilePic;
-            _tmpProfilePic = _cursor.getString(_cursorIndexOfProfilePic);
             final Integer _tmpRoleId;
             if (_cursor.isNull(_cursorIndexOfRoleId)) {
               _tmpRoleId = null;
             } else {
               _tmpRoleId = _cursor.getInt(_cursorIndexOfRoleId);
             }
-            final String _tmpPersonalCode;
-            _tmpPersonalCode = _cursor.getString(_cursorIndexOfPersonalCode);
-            final String _tmpEquipmentId;
-            _tmpEquipmentId = _cursor.getString(_cursorIndexOfEquipmentId);
-            _item = new User(_tmpPersonId,_tmpName,_tmpToken,_tmpProfilePic,_tmpRoleId,_tmpPersonalCode,_tmpEquipmentId);
-            final List<Phone> _tmpPhones;
-            final String _tmp;
-            _tmp = _cursor.getString(_cursorIndexOfPhones);
-            _tmpPhones = __phoneListConverter.toPhoneList(_tmp);
-            _item.setPhones(_tmpPhones);
-            final List<Phone> _tmpAdminPhones;
-            final String _tmp_1;
-            _tmp_1 = _cursor.getString(_cursorIndexOfAdminPhones);
-            _tmpAdminPhones = __phoneListConverter.toPhoneList(_tmp_1);
-            _item.setAdminPhones(_tmpAdminPhones);
+            final Integer _tmpEquipmentId;
+            if (_cursor.isNull(_cursorIndexOfEquipmentId)) {
+              _tmpEquipmentId = null;
+            } else {
+              _tmpEquipmentId = _cursor.getInt(_cursorIndexOfEquipmentId);
+            }
+            _item = new User(_tmpPersonId,_tmpName,_tmpToken,_tmpRoleId,_tmpEquipmentId);
             _result.add(_item);
           }
           return _result;
@@ -361,46 +279,32 @@ public final class UserDao_Impl implements UserDao {
       public User call() throws Exception {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
-          final int _cursorIndexOfPhones = CursorUtil.getColumnIndexOrThrow(_cursor, "phones");
-          final int _cursorIndexOfAdminPhones = CursorUtil.getColumnIndexOrThrow(_cursor, "adminPhones");
           final int _cursorIndexOfPersonId = CursorUtil.getColumnIndexOrThrow(_cursor, "personId");
           final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
           final int _cursorIndexOfToken = CursorUtil.getColumnIndexOrThrow(_cursor, "token");
-          final int _cursorIndexOfProfilePic = CursorUtil.getColumnIndexOrThrow(_cursor, "profilePic");
           final int _cursorIndexOfRoleId = CursorUtil.getColumnIndexOrThrow(_cursor, "roleId");
-          final int _cursorIndexOfPersonalCode = CursorUtil.getColumnIndexOrThrow(_cursor, "personalCode");
           final int _cursorIndexOfEquipmentId = CursorUtil.getColumnIndexOrThrow(_cursor, "equipmentId");
           final User _result;
           if(_cursor.moveToFirst()) {
-            final String _tmpPersonId;
-            _tmpPersonId = _cursor.getString(_cursorIndexOfPersonId);
+            final int _tmpPersonId;
+            _tmpPersonId = _cursor.getInt(_cursorIndexOfPersonId);
             final String _tmpName;
             _tmpName = _cursor.getString(_cursorIndexOfName);
             final String _tmpToken;
             _tmpToken = _cursor.getString(_cursorIndexOfToken);
-            final String _tmpProfilePic;
-            _tmpProfilePic = _cursor.getString(_cursorIndexOfProfilePic);
             final Integer _tmpRoleId;
             if (_cursor.isNull(_cursorIndexOfRoleId)) {
               _tmpRoleId = null;
             } else {
               _tmpRoleId = _cursor.getInt(_cursorIndexOfRoleId);
             }
-            final String _tmpPersonalCode;
-            _tmpPersonalCode = _cursor.getString(_cursorIndexOfPersonalCode);
-            final String _tmpEquipmentId;
-            _tmpEquipmentId = _cursor.getString(_cursorIndexOfEquipmentId);
-            _result = new User(_tmpPersonId,_tmpName,_tmpToken,_tmpProfilePic,_tmpRoleId,_tmpPersonalCode,_tmpEquipmentId);
-            final List<Phone> _tmpPhones;
-            final String _tmp;
-            _tmp = _cursor.getString(_cursorIndexOfPhones);
-            _tmpPhones = __phoneListConverter.toPhoneList(_tmp);
-            _result.setPhones(_tmpPhones);
-            final List<Phone> _tmpAdminPhones;
-            final String _tmp_1;
-            _tmp_1 = _cursor.getString(_cursorIndexOfAdminPhones);
-            _tmpAdminPhones = __phoneListConverter.toPhoneList(_tmp_1);
-            _result.setAdminPhones(_tmpAdminPhones);
+            final Integer _tmpEquipmentId;
+            if (_cursor.isNull(_cursorIndexOfEquipmentId)) {
+              _tmpEquipmentId = null;
+            } else {
+              _tmpEquipmentId = _cursor.getInt(_cursorIndexOfEquipmentId);
+            }
+            _result = new User(_tmpPersonId,_tmpName,_tmpToken,_tmpRoleId,_tmpEquipmentId);
           } else {
             _result = null;
           }

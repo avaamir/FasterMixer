@@ -32,8 +32,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_batch.*
 
 class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction,
-    FasterMixerUserPanel.Interactions, ApiService.InternetConnectionListener,
-    ApiService.OnUnauthorizedListener {
+    FasterMixerUserPanel.Interactions {
 
     private companion object {
         private const val FRAGMENT_MESSAGE_LIST_TAG = "msg-list_frag"
@@ -90,17 +89,17 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction,
 
 
     private fun subscribeObservers() {
-        viewModel.user.observe(this, Observer {
+        viewModel.user.observe(this) {
             it?.let {
                 //TODO add view to UI
                 /*fasterMixerUserPanel.setUsername(it.name)
                 fasterMixerUserPanel.setPersonalCode(it.personalCode)*/
             }
-        })
+        }
 
 
 
-        viewModel.logoutResponse.observe(this, Observer {
+        viewModel.logoutResponse.observe(this) {
             progressDialog.dismiss()
             if (it != null) {
                 if (it.isSucceed) {
@@ -115,10 +114,10 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction,
                     viewModel.logout()
                 }
             }
-        })
+        }
 
 
-        viewModel.messages.observe(this, Observer { _messages ->
+        viewModel.messages.observe(this) { _messages ->
             val messageFragment =
                 supportFragmentManager.findFragmentByTag(FRAGMENT_MESSAGE_LIST_TAG)
             if (messageFragment != null && messageFragment.isVisible) {
@@ -126,7 +125,7 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction,
             } else {
                 mBinding.tvMessageCount.text = _messages.filter { !it.viewed }.count().toString()
             }
-        })
+        }
 
         viewModel.newMessage.observe(this, { event ->
             //TODO check if a message is critical and new show in dialog to user
@@ -261,16 +260,6 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction,
 
     override fun onCallClicked(view: View?) {
         toast("Not yet implemented")
-    }
-
-
-    override fun onInternetUnavailable() {
-        NoNetworkDialog(this, R.style.my_alert_dialog).show()
-    }
-
-    override fun onUnauthorizedAction(event: Event<Unit>) {
-        toast("شما نیاز به ورود مجدد دارید")
-        finish()
     }
 
 }

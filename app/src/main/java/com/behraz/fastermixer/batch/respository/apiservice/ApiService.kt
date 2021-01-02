@@ -1,20 +1,12 @@
 package com.behraz.fastermixer.batch.respository.apiservice
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import com.behraz.fastermixer.batch.BuildConfig
-import com.behraz.fastermixer.batch.respository.UserConfigs
+import com.behraz.fastermixer.batch.respository.apiservice.calladapters.ApiResultCallAdapterFactory
 import com.behraz.fastermixer.batch.respository.apiservice.interceptors.AuthCookieInterceptor
 import com.behraz.fastermixer.batch.respository.apiservice.interceptors.EmptyBodyInterceptor
+import com.behraz.fastermixer.batch.respository.apiservice.interceptors.GlobalErrorHandlerInterceptor
 import com.behraz.fastermixer.batch.respository.apiservice.interceptors.NetworkConnectionInterceptor
-import com.behraz.fastermixer.batch.respository.apiservice.interceptors.UnauthorizedInterceptor
-import com.behraz.fastermixer.batch.utils.general.Event
 import com.google.gson.GsonBuilder
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
@@ -23,15 +15,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object ApiService {
-    const val Domain = "http://78.39.159.41:8000"
-    private const val BASE_API_URL = "$Domain/api/"
+    const val Domain = "http://78.39.159.41:9001"
+    private const val BASE_API_URL = "$Domain/api/v1/"
 
-
-    private lateinit var context: Context
-
-    private var event = Event(Unit)
-    private var onUnauthorizedListener: OnUnauthorizedListener? = null
-    private var internetConnectionListener: InternetConnectionListener? = null
+    private lateinit var networkAvailability: NetworkConnectionInterceptor.NetworkAvailability
+    private lateinit var errorHandler: GlobalErrorHandlerInterceptor.ApiResponseErrorHandler
 
     private var token: String? = null
 
@@ -51,38 +39,15 @@ object ApiService {
                         .addHeader("Content-Type", "application/json")
 
                     token?.let { token ->
-                        builder.addHeader("Authorization", token)
+                        builder.addHeader("Authorization", "Bearer $token")
                     }
                     val newRequest: Request = builder.build()
                     chain.proceed(newRequest)
                 }
 
                 addInterceptor(AuthCookieInterceptor())
-                addInterceptor(object : UnauthorizedInterceptor() {
-                    override fun onUnauthorized() {
-                        if (UserConfigs.isLoggedIn) {
-                            UserConfigs.logout()
-                            token = null
-                            event =
-                                Event(
-                                    Unit
-                                )
-                        }
-                        onUnauthorizedListener?.onUnauthorizedAction(event)
-                    }
-                })
-                addInterceptor(object : NetworkConnectionInterceptor() {
-                    override fun isInternetAvailable(): Boolean {
-                        return isNetworkAvailable()
-                    }
-
-                    override fun onInternetUnavailable() {
-                        CoroutineScope(Main).launch {
-                            internetConnectionListener?.onInternetUnavailable()
-                        }
-                    }
-
-                })
+                addInterceptor(GlobalErrorHandlerInterceptor(errorHandler))
+                addInterceptor(NetworkConnectionInterceptor(networkAvailability))
                 addInterceptor(EmptyBodyInterceptor())
 
                 if (BuildConfig.DEBUG) {
@@ -95,72 +60,21 @@ object ApiService {
         val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()
         Retrofit.Builder()
             .baseUrl(BASE_API_URL)
+            .addCallAdapterFactory(ApiResultCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(client)
+    }
+
+    fun init(
+        networkAvailability: NetworkConnectionInterceptor.NetworkAvailability,
+        apiResponseErrorHandler: GlobalErrorHandlerInterceptor.ApiResponseErrorHandler
+    ) {
+        this.networkAvailability = networkAvailability
+        this.errorHandler = apiResponseErrorHandler
     }
 
     @Synchronized
     fun setToken(token: String?) {
         ApiService.token = token
     }
-
-    @Synchronized
-    fun setOnUnauthorizedAction(action: OnUnauthorizedListener) {
-        onUnauthorizedListener = action
-    }
-
-    @Synchronized
-    fun removeUnauthorizedAction(action: OnUnauthorizedListener) {
-        if (action == onUnauthorizedListener)
-            onUnauthorizedListener = null
-    }
-
-    @Synchronized
-    fun setInternetConnectionListener(action: InternetConnectionListener) {
-        internetConnectionListener = action
-    }
-
-    @Synchronized
-    fun removeInternetConnectionListener(action: InternetConnectionListener) {
-        if (action == internetConnectionListener) {
-            internetConnectionListener = null
-        }
-    }
-
-
-    fun isNetworkAvailable(): Boolean {
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val network = connectivityManager.activeNetwork ?: return false
-            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
-            return when {
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                //for other device how are able to connect with Ethernet
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-                //for check internet over Bluetooth
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
-                else -> false
-            }
-        } else {
-            val nwInfo = connectivityManager.activeNetworkInfo ?: return false
-            return nwInfo.isConnected
-        }
-    }
-
-
-    fun setContext(context: Context) {
-        ApiService.context = context.applicationContext
-    }
-
-    interface OnUnauthorizedListener {
-        fun onUnauthorizedAction(event: Event<Unit>)
-    }
-
-    interface InternetConnectionListener {
-        fun onInternetUnavailable()
-    }
-
-
 }

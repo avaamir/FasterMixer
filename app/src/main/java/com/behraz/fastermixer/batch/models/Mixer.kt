@@ -7,7 +7,7 @@ import java.util.*
 
 data class Mixer(
     @SerializedName("vehicleID")
-    val id: String,
+    val id: Int,
     @SerializedName("planningServiceItemID")
     val serviceId: String, //id service ke dare bar ro mibare
     @SerializedName("vehicleName")

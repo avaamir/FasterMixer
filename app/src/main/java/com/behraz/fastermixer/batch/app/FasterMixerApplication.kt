@@ -7,9 +7,16 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import com.behraz.fastermixer.batch.R
+import com.behraz.fastermixer.batch.app.receivers.isNetworkAvailable
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
+import com.behraz.fastermixer.batch.respository.apiservice.MapService
+import com.behraz.fastermixer.batch.respository.apiservice.WeatherService
+import com.behraz.fastermixer.batch.respository.apiservice.interceptors.GlobalErrorHandlerInterceptor
+import com.behraz.fastermixer.batch.respository.apiservice.interceptors.NetworkConnectionInterceptor
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
 import com.behraz.fastermixer.batch.respository.sharedprefrence.PrefsRepo
@@ -17,35 +24,42 @@ import com.behraz.fastermixer.batch.ui.activities.ContactActivity
 import com.behraz.fastermixer.batch.ui.activities.LoginActivity
 import com.behraz.fastermixer.batch.ui.activities.TestActivity
 import com.behraz.fastermixer.batch.ui.activities.admin.AdminActivity
+import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
+import com.behraz.fastermixer.batch.utils.general.Event
 import com.behraz.fastermixer.batch.utils.general.fullScreen
 import com.behraz.fastermixer.batch.utils.general.hideStatusBar
+import java.lang.IllegalStateException
 
-class FasterMixerApplication : Application() {
+class FasterMixerApplication : Application(), NetworkConnectionInterceptor.NetworkAvailability,
+    GlobalErrorHandlerInterceptor.ApiResponseErrorHandler {
     companion object {
         var isDemo: Boolean = false
     }
 
+    //Global Events
+    private val onAuthorizeEvent = MutableLiveData<Event<Unit>>()
+    private val onInternetUnavailableEvent = MutableLiveData<Event<Unit>>()
+
 
     //Typefaces
     val iransans: Typeface by lazy {
-        ResourcesCompat.getFont(this,
+        ResourcesCompat.getFont(
+            this,
             R.font.iransans
         )!!
     }
     val iransansMedium: Typeface by lazy {
-        ResourcesCompat.getFont(this,
+        ResourcesCompat.getFont(
+            this,
             R.font.iransans_medium
         )!!
     }
     val iransansLight: Typeface by lazy {
-        ResourcesCompat.getFont(this,
+        ResourcesCompat.getFont(
+            this,
             R.font.iransans_light
         )!!
     }
-    val belham: Typeface by lazy {
-        ResourcesCompat.getFont(this, R.font.belham)!!
-    }
-
 
     override fun onCreate() {
         super.onCreate()
@@ -56,7 +70,9 @@ class FasterMixerApplication : Application() {
 
     private fun initRepos() {
         UserRepo.setContext(applicationContext)
-        ApiService.setContext(applicationContext)
+        ApiService.init(this, this)
+        MapService.init(this, this)
+        WeatherService.init(this, this)
         MessageRepo.setContext(applicationContext)
         PrefsRepo.setContext(applicationContext)
         UserConfigs.init()
@@ -65,56 +81,88 @@ class FasterMixerApplication : Application() {
 
     private fun registerApiInterceptorsCallbacks() {
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
-            override fun onActivityResumed(activity: Activity) {
-                if (activity !is LoginActivity && activity !is AdminActivity && activity !is ContactActivity && activity !is AdminActivity ) {
-                    activity.fullScreen()
-                }
-
-                if (activity is ApiService.InternetConnectionListener) {
-                    ApiService.setInternetConnectionListener(activity)
-                }
-                if (activity is ApiService.OnUnauthorizedListener) {
-                    ApiService.setOnUnauthorizedAction(activity)
-                }
-            }
-
-            override fun onActivityPaused(activity: Activity) {
-                if (activity is ApiService.InternetConnectionListener) {
-                    ApiService.removeInternetConnectionListener(activity)
-                }
-                if (activity is ApiService.OnUnauthorizedListener) {
-                    ApiService.removeUnauthorizedAction(activity)
-                }
-            }
-
+            override fun onActivityPaused(activity: Activity) {}
             override fun onActivityStarted(activity: Activity?) {}
-            override fun onActivityDestroyed(activity: Activity?) {}
             override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {}
             override fun onActivityStopped(activity: Activity?) {}
+            override fun onActivityDestroyed(activity: Activity?) {}
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-
-
-                if (activity !is LoginActivity && activity !is TestActivity && activity !is ContactActivity && activity !is AdminActivity ) {
-                    if (resources.getBoolean(R.bool.landscape_only)) {
-                        activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                    } else {
-                        activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                        //todo activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT //todo make another layout for phones
-                    }
-                }
-                if (activity is ApiService.InternetConnectionListener) {
-                    ApiService.setInternetConnectionListener(activity)
-                }
-
+                handleScreenOrientation(activity)
                 activity.hideStatusBar()
-                if (activity !is LoginActivity && activity !is AdminActivity && activity !is ContactActivity && activity !is AdminActivity ) {
-                    activity.fullScreen()
-                }
-
-                activity.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
+                fullScreen(activity)
+                wakeLock(activity)
+                registerGlobalEventObservers(activity)
             }
+
+            override fun onActivityResumed(activity: Activity) {
+                fullScreen(activity)
+                consumeOnAuthorizeEvent(activity)
+            }
+
         })
+    }
+
+    private fun wakeLock(activity: Activity) {
+        activity.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
+    private fun handleScreenOrientation(activity: Activity) {
+        if (activity !is LoginActivity && activity !is TestActivity && activity !is ContactActivity && activity !is AdminActivity) {
+            if (resources.getBoolean(R.bool.landscape_only)) {
+                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            } else {
+                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                //todo activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT //todo make another layout for phones
+            }
+        }
+    }
+
+    private fun consumeOnAuthorizeEvent(activity: Activity) {
+        if (activity is LoginActivity) {
+            val event =
+                Event(Unit).also { it.getEventIfNotHandled() } //dar loginActivity in event hatman bayad consume shode bashe ke hey safhe ha baste nashe
+            onAuthorizeEvent.postValue(event)
+        }
+    }
+
+    private fun fullScreen(activity: Activity) {
+        if (activity !is LoginActivity && activity !is AdminActivity && activity !is ContactActivity && activity !is AdminActivity) {
+            activity.fullScreen()
+        }
+    }
+
+    private fun registerGlobalEventObservers(activity: Activity) {
+        activity as LifecycleOwner
+        onInternetUnavailableEvent.observe(activity) {
+            NoNetworkDialog(activity, R.style.my_alert_dialog).show()
+        }
+        if (activity !is LoginActivity) {
+            onAuthorizeEvent.observe(activity) {
+                if (!it.hasBeenHandled) {
+                    activity.finish()
+                }
+            }
+        }
+    }
+
+    override fun isInternetAvailable(): Boolean {
+        return isNetworkAvailable()
+    }
+
+    override fun onInternetUnavailable() {
+        onInternetUnavailableEvent.postValue(Event(Unit))
+    }
+
+    override fun onHandleError(code: Int, errorBody: String?) {
+        when (code) {
+            401 -> {
+                onAuthorizeEvent.postValue(Event(Unit))
+            }
+            403, 500 -> { }
+            else -> {
+                throw IllegalStateException("http error code not handled:$code")
+            }
+        }
     }
 
 }

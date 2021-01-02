@@ -1,6 +1,7 @@
 package com.behraz.fastermixer.batch.respository.apiservice
 
 import com.behraz.fastermixer.batch.BuildConfig
+import com.behraz.fastermixer.batch.respository.apiservice.interceptors.GlobalErrorHandlerInterceptor
 import com.behraz.fastermixer.batch.respository.apiservice.interceptors.NetworkConnectionInterceptor
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import kotlinx.coroutines.CoroutineScope
@@ -16,11 +17,13 @@ object WeatherService {
     private const val Base_API_URL = "https://api.openweathermap.org/data/2.5/"
     //private val token get() = Constants.OPEN_WEATHER_MAP_ACCESS_TOKEN
 
+    private lateinit var networkAvailability: NetworkConnectionInterceptor.NetworkAvailability
+    private lateinit var errorHandler: GlobalErrorHandlerInterceptor.ApiResponseErrorHandler
+
     val client: WeatherClient by lazy {
         retrofitBuilder.build().create(WeatherClient::class.java)
     }
 
-    private var internetConnectionListener: ApiService.InternetConnectionListener? = null
 
     private val retrofitBuilder: Retrofit.Builder by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
         val client: OkHttpClient = OkHttpClient.Builder().apply {
@@ -37,18 +40,6 @@ object WeatherService {
                     level = HttpLoggingInterceptor.Level.BODY
                 })
             }
-            addInterceptor(object : NetworkConnectionInterceptor() {
-                override fun isInternetAvailable(): Boolean {
-                    return ApiService.isNetworkAvailable()
-                }
-
-                override fun onInternetUnavailable() {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        internetConnectionListener?.onInternetUnavailable()
-                    }
-                }
-
-            })
         }.build()
 
         Retrofit.Builder()
@@ -57,16 +48,12 @@ object WeatherService {
             .client(client)
     }
 
-    @Synchronized
-    fun setInternetConnectionListener(action: ApiService.InternetConnectionListener) {
-        internetConnectionListener = action
-    }
-
-    @Synchronized
-    fun removeInternetConnectionListener(action: ApiService.InternetConnectionListener) {
-        if (action == internetConnectionListener) {
-            internetConnectionListener = null
-        }
+    fun init(
+        networkAvailability: NetworkConnectionInterceptor.NetworkAvailability,
+        apiResponseErrorHandler: GlobalErrorHandlerInterceptor.ApiResponseErrorHandler
+    ) {
+        this.networkAvailability = networkAvailability
+        this.errorHandler = apiResponseErrorHandler
     }
 
 }

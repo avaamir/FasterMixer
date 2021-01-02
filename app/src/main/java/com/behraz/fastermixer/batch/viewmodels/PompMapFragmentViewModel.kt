@@ -4,6 +4,6 @@ import com.behraz.fastermixer.batch.ui.osm.markers.ImageMarker
 
 
 class PompMapFragmentViewModel : VehicleMapFragmentViewModel() {
-    val markers = HashMap<String, ImageMarker>()
+    val markers = HashMap<Int, ImageMarker>()
 }
 

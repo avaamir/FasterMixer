@@ -7,24 +7,23 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.provider.Settings
 import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.BuildConfig
 import com.behraz.fastermixer.batch.R
+import com.behraz.fastermixer.batch.app.receivers.isNetworkAvailable
 import com.behraz.fastermixer.batch.models.enums.UserType
 import com.behraz.fastermixer.batch.models.requests.behraz.UpdateResponse
-import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.activities.admin.AdminActivity
 import com.behraz.fastermixer.batch.ui.activities.batch.BatchActivity
 import com.behraz.fastermixer.batch.ui.activities.mixer.MixerActivity
 import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.NumericKeyboard
 import com.behraz.fastermixer.batch.ui.dialogs.LocationPermissionDialog
-import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.*
 import com.behraz.fastermixer.batch.viewmodels.LoginActivityViewModel
@@ -33,8 +32,7 @@ import kotlinx.android.synthetic.main.gps_internet_status_icons.*
 
 
 class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
-    PermissionHelper.Interactions,
-    ApiService.InternetConnectionListener {
+    PermissionHelper.Interactions {
 
     companion object {
         private const val REQ_GO_TO_SETTINGS_PERMISSION = 12
@@ -105,7 +103,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
 
     @SuppressLint("SetTextI18n")
     private fun initViews() {
-        checkBoxRememberMe.isChecked = true;
+        checkBoxRememberMe.isChecked = true
 
         tvVersion.text = "v${BuildConfig.VERSION_NAME}"
 
@@ -223,7 +221,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
 
 
     private fun subscribeObservers() {
-        viewModel.checkUpdateResponse.observe(this, Observer { event ->
+        viewModel.checkUpdateResponse.observe(this) { event ->
             event.getEventIfNotHandled()?.let {
                 if (it.entity !== UpdateResponse.NoResponse) {
                     if (it.isSucceed) {
@@ -237,28 +235,28 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
                             finish()
                         }
                     } else {
-                        if (ApiService.isNetworkAvailable()) {
-                            viewModel.checkUpdates()
+                        if (isNetworkAvailable()) {
+                            Handler().postDelayed({ viewModel.checkUpdates() }, 5000)
+
                         }
                         //TODO show proper message
                     }
                 } else {
-                    if (ApiService.isNetworkAvailable()) {
-                        viewModel.checkUpdates()
+                    if (isNetworkAvailable()) {
+                        Handler().postDelayed({ viewModel.checkUpdates() }, 5000)
                     }
                     //TODO show proper message
                 }
             }
-        })
+        }
 
-        viewModel.loginResponse.observe(this, Observer { event ->
+        viewModel.loginResponse.observe(this) { event ->
             if (!event.hasBeenHandled) {
                 event.getEventIfNotHandled().let {
                     println("debug: loginResponse Observed")
                     btnLogin.showProgressBar(false)
                     if (it != null) {
                         if (it.isSucceed) {
-
                             if (checkBoxRememberMe.isChecked) {
                                 shouldRememberCredential(true)
                             } else {
@@ -275,7 +273,12 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
                                             ChooseEquipmentActivity::class.java
                                         )
                                     )
-                                    UserType.Admin -> startActivity(Intent(this, AdminActivity::class.java))
+                                    UserType.Admin -> startActivity(
+                                        Intent(
+                                            this,
+                                            AdminActivity::class.java
+                                        )
+                                    )
                                 }.exhaustive()
                             } else {
                                 when (it.entity.userType) {
@@ -297,7 +300,12 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
                                             BatchActivity::class.java
                                         )
                                     )
-                                    UserType.Admin -> startActivity(Intent(this, AdminActivity::class.java))
+                                    UserType.Admin -> startActivity(
+                                        Intent(
+                                            this,
+                                            AdminActivity::class.java
+                                        )
+                                    )
                                 }.exhaustive()
                             }
                         } else {
@@ -311,7 +319,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
                     }
                 }
             }
-        })
+        }
     }
 
     private fun shouldRememberCredential(shouldRemember: Boolean) {
@@ -395,7 +403,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
     }
 
     override fun onPermissionsGranted() {
-        if (ApiService.isNetworkAvailable())
+        if (isNetworkAvailable())
             viewModel.checkUpdates()
     }
 
@@ -403,10 +411,6 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         deniedPermissions.forEach { println("debug: $it denied") }
         toast("اجازه دسترسی داده نشد")
         finish()
-    }
-
-    override fun onInternetUnavailable() {
-        NoNetworkDialog(this, R.style.my_alert_dialog).show()
     }
 
     override fun onFocusChange(view: View, hasFocus: Boolean) {

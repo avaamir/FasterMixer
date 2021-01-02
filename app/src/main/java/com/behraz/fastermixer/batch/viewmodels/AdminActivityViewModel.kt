@@ -5,7 +5,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.AdminEquipment
 import com.behraz.fastermixer.batch.models.User
-import com.behraz.fastermixer.batch.models.requests.behraz.Entity
+import com.behraz.fastermixer.batch.models.requests.behraz.succeedRequest
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.utils.general.DoubleTrigger
@@ -41,17 +41,15 @@ class AdminActivityViewModel : ParentViewModel() {
             if (it.first?.getEventIfNotHandled() != null) {
                 RemoteRepo.getEquipmentsForAdmin().map { response ->
                     if (response?.entity != null) {
-                        Entity(
-                            sortEquipments(response.entity, isSortByState),
-                            true,
-                            response.message
+                        response.copy(
+                            entity = sortEquipments(response.entity, isSortByState)
                         )
                     } else {
                         response
                     }
                 }
             } else {
-                MutableLiveData(Entity(sortEquipments(it.second!!, isSortByState), true, null))
+                MutableLiveData(succeedRequest(sortEquipments(it.second!!, isSortByState)))
             }
         }
 

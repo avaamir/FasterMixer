@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 class ChooseEquipmentRequest(
     @SerializedName("id")
-    val equipmentId: String
+    val equipmentId: Int
 )

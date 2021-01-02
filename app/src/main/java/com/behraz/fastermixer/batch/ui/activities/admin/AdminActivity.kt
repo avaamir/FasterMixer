@@ -14,19 +14,15 @@ import androidx.viewpager.widget.ViewPager
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ActivityAdminBinding
 import com.behraz.fastermixer.batch.models.AdminEquipment
-import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.adapters.ViewPagerAdapter
-import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.ui.fragments.BaseNavFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
-import com.behraz.fastermixer.batch.utils.general.Event
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.shared_toolbar.view.*
 
-class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener,
-    ApiService.InternetConnectionListener,
+class AdminActivity : AppCompatActivity(),
     BottomNavigationView.OnNavigationItemReselectedListener,
     BottomNavigationView.OnNavigationItemSelectedListener, ViewPager.OnPageChangeListener,
     BaseNavFragment.OnNavigationChangedListener {
@@ -231,15 +227,6 @@ class AdminActivity : AppCompatActivity(), ApiService.OnUnauthorizedListener,
         }
 
         return toolbarTitle.toString().also { setToolbarTitle(it) }
-    }
-
-    override fun onUnauthorizedAction(event: Event<Unit>) {
-        toast("شما نیاز به ورود مجدد دارید")
-        finish()
-    }
-
-    override fun onInternetUnavailable() {
-        NoNetworkDialog(this, R.style.my_alert_dialog).show()
     }
 
 

@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentMixerListBinding
 import com.behraz.fastermixer.batch.models.Mixer
-import com.behraz.fastermixer.batch.models.requests.behraz.Entity
+import com.behraz.fastermixer.batch.models.requests.behraz.ApiResult
 import com.behraz.fastermixer.batch.ui.adapters.MixerAdapter
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.toast
@@ -34,7 +34,7 @@ class MixerListFragment : Fragment(), MixerAdapter.PompAdapterInteraction {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(activity!!).get(PompActivityViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(PompActivityViewModel::class.java)
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_mixer_list, container, false)
         initViews()
         observeViewModel()
@@ -42,30 +42,30 @@ class MixerListFragment : Fragment(), MixerAdapter.PompAdapterInteraction {
     }
 
     private fun observeViewModel() {
-        viewModel.shouldShowAllMixers.observe(viewLifecycleOwner, Observer { shouldShowAll ->
+        viewModel.shouldShowAllMixers.observe(viewLifecycleOwner) { shouldShowAll ->
             if (shouldShowAll) {
                 handleServerResponse(viewModel.allMixers.value)
             } else {
                 handleServerResponse(viewModel.requestMixers.value)
             }
-        })
+        }
 
-        viewModel.allMixers.observe(viewLifecycleOwner, Observer {
+        viewModel.allMixers.observe(viewLifecycleOwner) {
             if (viewModel.shouldShowAllMixers.value!!) {
                 handleServerResponse(it)
             }
-        })
+        }
 
-        viewModel.requestMixers.observe(viewLifecycleOwner, Observer {
+        viewModel.requestMixers.observe(viewLifecycleOwner) {
             if (!viewModel.shouldShowAllMixers.value!!) {
                 handleServerResponse(it)
             }
-        })
+        }
 
 
     }
 
-    private fun handleServerResponse(response: Entity<List<Mixer>>?) {
+    private fun handleServerResponse(response: ApiResult<List<Mixer>>?) {
         if (response != null) {
             if (response.isSucceed) {
                 mixerAdapter.submitList(response.entity)
@@ -80,7 +80,7 @@ class MixerListFragment : Fragment(), MixerAdapter.PompAdapterInteraction {
     }
 
     private fun initViews() {
-        mBinding.btnMap.setOnClickListener { activity!!.onBackPressed() }
+        mBinding.btnMap.setOnClickListener { requireActivity().onBackPressed() }
 
         mBinding.mixerRecycler.adapter = mixerAdapter
         mBinding.mixerRecycler.addItemDecoration(
@@ -90,7 +90,7 @@ class MixerListFragment : Fragment(), MixerAdapter.PompAdapterInteraction {
             )
         )
         mBinding.mixerRecycler.layoutManager =
-            LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
+            LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
     }
 
 
@@ -101,7 +101,7 @@ class MixerListFragment : Fragment(), MixerAdapter.PompAdapterInteraction {
     }
 
     override fun onShowOnMapClicked(mixer: Mixer) {
-        LocalBroadcastManager.getInstance(context!!)
+        LocalBroadcastManager.getInstance(requireContext())
             .sendBroadcast(Intent(Constants.ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP).apply {
                 putExtra(Constants.ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP_MIXER_ID, mixer.id)
             })

@@ -5,7 +5,7 @@ import java.util.*
 
 open class Equipment(
     @SerializedName("equipmentID")
-    val id: String,
+    val id: Int,
     @SerializedName("name")
     val name: String,
     @SerializedName("isAvailable")

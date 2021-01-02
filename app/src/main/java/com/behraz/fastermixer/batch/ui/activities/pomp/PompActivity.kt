@@ -14,7 +14,6 @@ import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.behraz.fastermixer.batch.R
@@ -22,7 +21,6 @@ import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.databinding.ActivityPompBinding
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
 import com.behraz.fastermixer.batch.models.requests.openweathermap.WeatherViewData
-import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
 import com.behraz.fastermixer.batch.ui.customs.general.TopSheetBehavior
 import com.behraz.fastermixer.batch.ui.dialogs.*
@@ -38,8 +36,8 @@ import com.behraz.fastermixer.batch.viewmodels.PompActivityViewModel
 import kotlinx.android.synthetic.main.activity_batch.*
 
 
-class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
-    PompMessageDialog.Interactions, ApiService.OnUnauthorizedListener,
+class PompActivity : AppCompatActivity(),
+    PompMessageDialog.Interactions,
     VehicleFragment.OnUserAndDestLocRetrieved {
 
     private var weatherAnimator: ViewPropertyAnimator? = null
@@ -51,7 +49,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             if (intent.action == Constants.ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP) {
                 //TODO put mixer or mixerId in intent from MixerListFragment
                 val mixerId =
-                    intent.getStringExtra(Constants.ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP_MIXER_ID)
+                    intent.getIntExtra(Constants.ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP_MIXER_ID, 0)
                 val mixer = viewModel.allMixers.value?.entity?.find { it.id == mixerId }
                     ?: viewModel.requestMixers.value?.entity?.find { it.id == mixerId }
                 if (mixer != null) {
@@ -286,13 +284,13 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
 
     private fun subscribeObservers() {
 
-        viewModel.user.observe(this, Observer {
+        viewModel.user.observe(this) {
             it?.let {
                 //TODO add to ui
             }
-        })
+        }
 
-        viewModel.currentWeather.observe(this, {
+        viewModel.currentWeather.observe(this) {
             weatherAnimator?.cancel()
             mBinding.btnWeather.rotationX = 0f
             mBinding.btnWeather.rotationY = 0f
@@ -310,9 +308,9 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
                 toast(Constants.SERVER_ERROR)
                 println("debug:error:weatherAPI")
             }
-        })
+        }
 
-        viewModel.breakdownResponse.observe(this, {
+        viewModel.breakdownResponse.observe(this) {
             if (it?.isSucceed == true) {
                 if (it.entity == BreakdownRequest.BREAKDOWN) {
                     mBinding.btnBroken.visibility = View.VISIBLE
@@ -323,9 +321,9 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             } else {
                 toast("خطایی به وجود آمد لطفا دوباره تلاش کنید")
             }
-        })
+        }
 
-        viewModel.logoutResponse.observe(this, {
+        viewModel.logoutResponse.observe(this) {
             progressDialog.dismiss()
             if (it != null) {
                 if (it.isSucceed) {
@@ -340,9 +338,9 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
                     viewModel.logout()
                 }
             }
-        })
+        }
 
-        viewModel.customers.observe(this, {
+        viewModel.customers.observe(this) {
             if (it != null) {
                 if (it.isSucceed) {
                     val customers = it.entity
@@ -365,9 +363,9 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             } else {
                 //todo Server Error chekar konam??
             }
-        })
+        }
 
-        viewModel.messages.observe(this, { _messages ->
+        viewModel.messages.observe(this) { _messages ->
             val messageFragment =
                 supportFragmentManager.findFragmentByTag(FRAGMENT_MESSAGE_LIST_TAG)
             if (messageFragment != null && messageFragment.isVisible) {
@@ -375,9 +373,9 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
             } else {
                 mBinding.tvMessageCount.text = _messages.filter { !it.viewed }.count().toString()
             }
-        })
+        }
 
-        viewModel.newMessage.observe(this, { event ->
+        viewModel.newMessage.observe(this) { event ->
             //TODO check if a message is critical and new show in dialog to user
             event.getEventIfNotHandled()?.let { _message ->
                 if (false) { //todo if (_message.priority == ?)
@@ -390,7 +388,7 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
                     NewMessageDialog(_message, this, R.style.my_alert_dialog).show()
                 }
             }
-        })
+        }
 
         viewModel.isDamaged.observe(this) { isDamaged ->
             if (isDamaged) {
@@ -523,15 +521,6 @@ class PompActivity : AppCompatActivity(), ApiService.InternetConnectionListener,
     override fun onBrokenClicked() {
         viewModel.insertBreakdown(BreakdownRequest.BREAKDOWN)
         mBinding.btnBroken.visibility = View.VISIBLE
-    }
-
-    override fun onUnauthorizedAction(event: Event<Unit>) {
-        toast("شما نیاز به ورود مجدد دارید")
-        finish()
-    }
-
-    override fun onInternetUnavailable() {
-        NoNetworkDialog(this, R.style.my_alert_dialog).show()
     }
 
     override fun onShowButtons(shouldShow: Boolean) {

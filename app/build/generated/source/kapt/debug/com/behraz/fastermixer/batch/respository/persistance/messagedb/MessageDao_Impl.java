@@ -13,6 +13,7 @@ import androidx.room.util.DBUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
 import com.behraz.fastermixer.batch.models.Message;
 import java.lang.Exception;
+import java.lang.Integer;
 import java.lang.Object;
 import java.lang.Override;
 import java.lang.String;
@@ -85,7 +86,7 @@ public final class MessageDao_Impl implements MessageDao {
         if (value.getUserId() == null) {
           stmt.bindNull(10);
         } else {
-          stmt.bindString(10, value.getUserId());
+          stmt.bindLong(10, value.getUserId());
         }
         final int _tmp_1;
         _tmp_1 = value.getViewed() ? 1 : 0;
@@ -153,7 +154,7 @@ public final class MessageDao_Impl implements MessageDao {
         if (value.getUserId() == null) {
           stmt.bindNull(10);
         } else {
-          stmt.bindString(10, value.getUserId());
+          stmt.bindLong(10, value.getUserId());
         }
         final int _tmp_1;
         _tmp_1 = value.getViewed() ? 1 : 0;
@@ -325,8 +326,12 @@ public final class MessageDao_Impl implements MessageDao {
             _tmp_isEvent = _cursor.getInt(_cursorIndexOfIsEvent);
             final String _tmpSenderImage;
             _tmpSenderImage = _cursor.getString(_cursorIndexOfSenderImage);
-            final String _tmpUserId;
-            _tmpUserId = _cursor.getString(_cursorIndexOfUserId);
+            final Integer _tmpUserId;
+            if (_cursor.isNull(_cursorIndexOfUserId)) {
+              _tmpUserId = null;
+            } else {
+              _tmpUserId = _cursor.getInt(_cursorIndexOfUserId);
+            }
             final boolean _tmpViewed;
             final int _tmp_1;
             _tmp_1 = _cursor.getInt(_cursorIndexOfViewed);
@@ -391,8 +396,12 @@ public final class MessageDao_Impl implements MessageDao {
             _tmp_isEvent = _cursor.getInt(_cursorIndexOfIsEvent);
             final String _tmpSenderImage;
             _tmpSenderImage = _cursor.getString(_cursorIndexOfSenderImage);
-            final String _tmpUserId;
-            _tmpUserId = _cursor.getString(_cursorIndexOfUserId);
+            final Integer _tmpUserId;
+            if (_cursor.isNull(_cursorIndexOfUserId)) {
+              _tmpUserId = null;
+            } else {
+              _tmpUserId = _cursor.getInt(_cursorIndexOfUserId);
+            }
             final boolean _tmpViewed;
             final int _tmp_1;
             _tmp_1 = _cursor.getInt(_cursorIndexOfViewed);

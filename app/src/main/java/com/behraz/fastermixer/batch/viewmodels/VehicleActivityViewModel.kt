@@ -104,7 +104,7 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
 
     private var lastServerLocationResponse: GetVehicleLocationResponse? = null
 
-    protected open fun getUserLocation(equipmentId: String) {
+    protected open fun getUserLocation(equipmentId: Int) {
         if (!isGetUserLocationRequestActive) {
             isGetUserLocationRequestActive = true
             RemoteRepo.getEquipmentLocation(equipmentId) {

@@ -4,30 +4,30 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.models.Equipment
-import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.activities.batch.BatchActivity
 import com.behraz.fastermixer.batch.ui.adapters.ChooseEquipmentAdapter
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
-import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
-import com.behraz.fastermixer.batch.utils.general.*
+import com.behraz.fastermixer.batch.utils.general.snack
+import com.behraz.fastermixer.batch.utils.general.subscribeGpsStateChangeListener
+import com.behraz.fastermixer.batch.utils.general.subscribeNetworkStateChangeListener
+import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.ChooseEquipmentActivityViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_choose_batch.*
 
 class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Interactions,
-    ChooseEquipmentAdapter.Interaction, ApiService.OnUnauthorizedListener, ApiService.InternetConnectionListener {
+    ChooseEquipmentAdapter.Interaction {
 
     private var snackbar: Snackbar? = null
     private lateinit var viewModel: ChooseEquipmentActivityViewModel
@@ -56,7 +56,7 @@ class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Intera
     }
 
     private fun subscribeObservers() {
-        viewModel.equipments.observe(this, Observer {
+        viewModel.equipments.observe(this) {
             progressBar.visibility = View.GONE
             if (it != null) {
                 if (it.isSucceed) {
@@ -73,10 +73,10 @@ class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Intera
                 }
                 //   }, 500)
             }
-        })
+        }
 
 
-        viewModel.chooseEquipmentResponse.observe(this, Observer {
+        viewModel.chooseEquipmentResponse.observe(this) {
             progressDialog.dismiss()
             if (it != null) {
                 if (it.isSucceed) {
@@ -92,17 +92,17 @@ class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Intera
                     viewModel.chooseEquipment(retryLastRequest = true)
                 }
             }
-        })
+        }
 
 
-        viewModel.user.observe(this, Observer {
+        viewModel.user.observe(this) {
             it?.let {
                 userPanel.setUsername(it.name)
-                userPanel.setPersonalCode(it.personalCode)
+                //userPanel.setPersonalCode(it.personalCode)
             }
-        })
+        }
 
-        viewModel.logoutResponse.observe(this, Observer {
+        viewModel.logoutResponse.observe(this) {
             progressDialog.dismiss()
             if (it != null) {
                 if (it.isSucceed) {
@@ -118,7 +118,7 @@ class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Intera
                     viewModel.logout()
                 }
             }
-        })
+        }
     }
 
     private fun initViews() {
@@ -151,14 +151,4 @@ class ChooseEquipmentActivity : AppCompatActivity(), FasterMixerUserPanel.Intera
         }
 
     }
-
-    override fun onUnauthorizedAction(event: Event<Unit>) {
-        toast("شما نیاز به ورود مجدد دارید")
-        finish()
-    }
-
-    override fun onInternetUnavailable() {
-        NoNetworkDialog(this, R.style.my_alert_dialog).show()
-    }
-
 }

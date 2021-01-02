@@ -155,11 +155,11 @@ fun fakeProgresses(isMixer: Boolean) = if (isMixer) {
 
 
 fun fakeBatches() = listOf(
-    Equipment("1", "بچ شماره یک", true),
-    Equipment("2", "بچ شماره دو", false),
-    Equipment("3", "بچ شماره سه", true),
-    Equipment("4", "بچ شماره چهار", true),
-    Equipment("5", "بچ شماره پنج", false)
+    Equipment(1, "بچ شماره یک", true),
+    Equipment(2, "بچ شماره دو", false),
+    Equipment(3, "بچ شماره سه", true),
+    Equipment(4, "بچ شماره چهار", true),
+    Equipment(5, "بچ شماره پنج", false)
 )
 
 
@@ -221,7 +221,7 @@ fun fakeMixers(): List<Mixer> {
     for (i in 1..6) {
         mixers.add(
             Mixer(
-                id = "$i",
+                id = i,
                 serviceId = "$i",
                 carName = "امیرحسین مهدی پور$i",
                 phone = "0936216381$i",

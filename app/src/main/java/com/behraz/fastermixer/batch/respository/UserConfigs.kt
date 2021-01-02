@@ -42,7 +42,7 @@ object UserConfigs {
         userLive.postValue(null)
     }
 
-    fun updateUser(equipmentId: String, blocking: Boolean) {
+    fun updateUser(equipmentId: Int, blocking: Boolean) {
         user.value!!.copy(equipmentId = equipmentId).let { user ->
             if (!blocking) {
                 UserRepo.update(user)

@@ -18,7 +18,7 @@ class GetBatchLocationResponse(
         get() = Fence.strToFence(strFence)
 }
 
-class GetEquipmentRequest(@SerializedName("id") val id: String)
+class GetEquipmentRequest(@SerializedName("id") val id: Int)
 
 class GetVehicleLocationResponse(
     @SerializedName("vehicleID")

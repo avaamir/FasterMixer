@@ -13,13 +13,14 @@ import com.behraz.fastermixer.batch.models.requests.route.GetRouteResponse
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.respository.apiservice.MapService
 import com.behraz.fastermixer.batch.respository.apiservice.WeatherService
+import com.behraz.fastermixer.batch.respository.apiservice.interceptors.fromJsonToModel
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
-import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeAdminManageAccountPage
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeDrawRoadReport
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeFullReports
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeSummeryReports
 import com.behraz.fastermixer.batch.utils.general.RunOnceLiveData
+import com.behraz.fastermixer.batch.utils.general.RunOnceMutableLiveData
 import com.behraz.fastermixer.batch.utils.general.launchApi
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
@@ -33,19 +34,47 @@ import kotlin.reflect.KSuspendFunction1
 object RemoteRepo {
     private lateinit var serverJobs: CompletableJob
 
-    private fun <ResM, ReqM> apiReq(
+    fun <T: Any> Response<T>.handleError(onHandled: (ApiResult<T>) -> Unit) {
+        onHandled(
+            failedRequest(
+                this.code().parseHttpCodeToErrorType(),
+                try {
+                    when (this.code()) {
+                        401, 403, 500 -> {
+                            val apiResult = this.errorBody()!!.string()
+                                .fromJsonToModel<ApiResult<T>>()
+                            apiResult.message
+                        }
+                        else -> throw IllegalStateException("Unhandled Error Code")
+                    }
+                } catch (ex: Exception) {
+                    println("debux:${ex.message} in `RemoteRepo::handleError2`")
+                    null
+                }
+            )
+
+        )
+    }
+
+    private fun <ResM: Any, ReqM> apiReq(
         request: ReqM,
-        requestFunction: KSuspendFunction1<ReqM, Response<Entity<ResM>>>,
-        repoLevelHandler: ((Response<Entity<ResM>>) -> (Unit))? = null
-    ): RunOnceLiveData<Entity<ResM>?> {
+        requestFunction: KSuspendFunction1<ReqM, Response<ApiResult<ResM>>>,
+        repoLevelHandler: ((Response<ApiResult<ResM>>) -> (Unit))? = null
+    ): RunOnceLiveData<ApiResult<ResM>?> {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
-        return object : RunOnceLiveData<Entity<ResM>?>() {
+        return object : RunOnceMutableLiveData<ApiResult<ResM>?>() {
             override fun onActiveRunOnce() {
                 CoroutineScope(IO + serverJobs).launchApi({
                     val response = requestFunction(request)
                     repoLevelHandler?.invoke(response)
-                    CoroutineScope(Main).launch {
-                        value = response.body()
+
+                    if (response.isSuccessful) {
+                        CoroutineScope(Main).launch {
+                            value = response.body()
+                        }
+                    } else {
+                        //handleError(response)
+                        TODO()
                     }
                 }) {
                     println("debug:error:RemoteRepo.${requestFunction.name} has exception->${it.message}")
@@ -57,18 +86,47 @@ object RemoteRepo {
         }
     }
 
-    private fun <ResM> apiReq(
-        requestFunction: KSuspendFunction0<Response<Entity<ResM>>>,
-        repoLevelHandler: ((Response<Entity<ResM>>) -> (Unit))? = null  //This will only excute if LiveData has an observer, because it called on active method
-    ): RunOnceLiveData<Entity<ResM>?> {
+    private fun <T: Any> apiReq(
+        apiFunction: suspend () -> ApiResult<T>?,
+        repoLevelHandler: ((ApiResult<T>?) -> Unit)? = null
+    ): RunOnceLiveData<ApiResult<T>?> {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
-        return object : RunOnceLiveData<Entity<ResM>?>() {
+        return object : RunOnceMutableLiveData<ApiResult<T>?>() {
+            override fun onActiveRunOnce() {
+                CoroutineScope(IO + serverJobs).launchApi({
+                    val response = apiFunction()
+                    repoLevelHandler?.invoke(response)
+                    withContext(Main) {
+                        value = response
+                    }
+                }) {
+                    println("debug:error:RemoteRepo.${apiFunction} has exception->${it.message}")
+                    CoroutineScope(Main).launch {
+                        value = null
+                    }
+                }
+            }
+        }
+    }
+
+
+    private fun <ResM: Any> apiReq(
+        requestFunction: KSuspendFunction0<Response<ApiResult<ResM>>>,
+        repoLevelHandler: ((Response<ApiResult<ResM>>) -> (Unit))? = null  //This will only excute if LiveData has an observer, because it called on active method
+    ): RunOnceLiveData<ApiResult<ResM>?> {
+        if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
+        return object : RunOnceMutableLiveData<ApiResult<ResM>?>() {
             override fun onActiveRunOnce() {
                 CoroutineScope(IO + serverJobs).launchApi({
                     val response = requestFunction()
                     repoLevelHandler?.invoke(response)
-                    CoroutineScope(Main).launch {
-                        value = response.body()
+                    if (response.isSuccessful) {
+                        CoroutineScope(Main).launch {
+                            value = response.body()
+                        }
+                    } else {
+                        //val model = handleError(response)
+                        TODO()
                     }
                 }) {
                     println("debug:error:RemoteRepo.${requestFunction.name} has exception->${it.message}")
@@ -81,59 +139,67 @@ object RemoteRepo {
     }
 
 
-    private fun <T> mockApiReq(responseEntity: Entity<T>?, duration: Long = 1000L): RunOnceLiveData<Entity<T>?> {
-        return object : RunOnceLiveData<Entity<T>?>() {
+    private fun <T: Any> mockApiReq(
+        responseApiResult: ApiResult<T>?,
+        duration: Long = 1000L
+    ): RunOnceLiveData<ApiResult<T>?> {
+        return object : RunOnceLiveData<ApiResult<T>?>() {
             override fun onActiveRunOnce() {
                 CoroutineScope(IO).launch {
                     delay(duration)
                     withContext(Main) {
-                        value = responseEntity
+                        value = responseApiResult
                     }
                 }
             }
         }
     }
 
-    fun login(loginRequest: LoginRequest): RunOnceLiveData<Entity<User>?> {
+    fun login(loginRequest: LoginRequest): RunOnceLiveData<ApiResult<User>?> {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
-        return object : RunOnceLiveData<Entity<User>?>() {
+        return object : RunOnceMutableLiveData<ApiResult<User>?>() {
             override fun onActiveRunOnce() {
                 CoroutineScope(IO + serverJobs).launchApi({
-                    val response = ApiService.client.login(EntityRequest(loginRequest))
-                    if (response.isSuccessful) {
-                        val body = response.body()
-                        if (body?.isSucceed == true) {
-                            body.entity?.let { _user ->
-                                UserRepo.userDao.deleteAll()
-                                UserRepo.userDao.insert(_user)
-                                //UserConfigs.loginUser(_user, true)
+                    val loginResponse = ApiService.client.login(loginRequest)
+                    if (loginResponse.isSuccessful) {
+                        val body = loginResponse.body()
+                        if (body?.token != null) {
+                            ApiService.setToken(body.token)
+                            val userInfoResponse = ApiService.client.getUserInfo()
+                            if (userInfoResponse.isSucceed) {
+                                val userInfo = userInfoResponse.entity!!
+                                val user = User(
+                                    userInfo.id,
+                                    userInfo.name,
+                                    body.token,
+                                    userInfo.roleId,
+                                    userInfo.equipmentId
+                                )
+                                UserConfigs.loginUser(user, true)
+                                withContext(Main) {
+                                    value = succeedRequest(user)
+                                }
+                            } else {
+                                CoroutineScope(Main).launch {
+                                    value = failedRequest(
+                                        userInfoResponse.errorType,
+                                        userInfoResponse.message
+                                    )
+                                }
+                            }
+                        }
+                    } else {
+                        loginResponse.handleError {
+                            CoroutineScope(Main).launch {
+                                value = failedRequest(loginResponse.code().parseHttpCodeToErrorType())
                             }
                         }
                     }
-                    postValue(response.body())
                 }, {
                     postValue(null)
                 })
             }
 
-        }
-    }
-
-
-    fun login2(loginRequest: LoginRequest) = apiReq(
-        EntityRequest(loginRequest),
-        ApiService.client::login
-    ) { response ->
-        if (response.isSuccessful) {
-            response.body()?.let {
-                if (it.isSucceed) {
-                    println("debug:login: ${it.entity}")
-                    UserConfigs.loginUser(
-                        it.entity!!,
-                        blocking = true
-                    ) //block the response till changes saved to db
-                }
-            }
         }
     }
 
@@ -167,7 +233,7 @@ object RemoteRepo {
 
     fun getAllMixers() = apiReq(ApiService.client::getAllMixers)
 
-    fun getMessage(onResponse: (Entity<List<Message>>?) -> Unit) { //Resonse ro mikhad
+    fun getMessage(onResponse: (ApiResult<List<Message>>?) -> Unit) { //Resonse ro mikhad
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         CoroutineScope(IO + serverJobs).launchApi({
             val response = ApiService.client.getMessages()
@@ -202,7 +268,7 @@ object RemoteRepo {
         apiReq(imageRequest, ApiService.client::sendVoiceMessage)
 
     fun getBatchLocation( //be khater in ke mikhastam callback dar bashe va niazi be liveData nabud az Reflection estefade nakardam va dasti code zadam
-        equipmentId: String,
+        equipmentId: Int,
         onResponse: (Fence?) -> Unit
     ) {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
@@ -219,8 +285,8 @@ object RemoteRepo {
     }
 
     fun getEquipmentLocation( //be khater in ke mikhastam callback dar bashe (chun momkene dar ui observer nadashte bashe) va niazi be liveData nabud az Reflection estefade nakardam va dasti code zadam
-        equipmentId: String,
-        onResponse: (Entity<GetVehicleLocationResponse>?) -> Unit
+        equipmentId: Int,
+        onResponse: (ApiResult<GetVehicleLocationResponse>?) -> Unit
     ) {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         CoroutineScope(IO + serverJobs).launchApi({
@@ -246,7 +312,7 @@ object RemoteRepo {
     private fun getMixerMission() = apiReq(ApiService.client::getMixerMission)
     private fun getPompMission() = apiReq(ApiService.client::getPompMission)
 
-    fun getMission(isPomp: Boolean): RunOnceLiveData<Entity<Mission>?> {
+    fun getMission(isPomp: Boolean): RunOnceLiveData<ApiResult<Mission>?> {
         return if (isPomp) getPompMission() else getMixerMission()
     }
 
@@ -303,10 +369,12 @@ object RemoteRepo {
         }
     }
 
-    fun checkUpdates() = apiReq(ApiService.client::checkUpdates)
+    fun checkUpdates() = apiReq(ApiService.client::checkUpdates) {
+        println("debux:$it")
+    }
 
-    fun getCurrentWeatherByCoordinates(location: GeoPoint): RunOnceLiveData<Entity<CurrentWeatherByCoordinatesResponse>> {
-        return object : RunOnceLiveData<Entity<CurrentWeatherByCoordinatesResponse>>() {
+    fun getCurrentWeatherByCoordinates(location: GeoPoint): RunOnceLiveData<ApiResult<CurrentWeatherByCoordinatesResponse>> {
+        return object : RunOnceLiveData<ApiResult<CurrentWeatherByCoordinatesResponse>>() {
             override fun onActiveRunOnce() {
                 if (!RemoteRepo::serverJobs.isInitialized || !serverJobs.isActive) serverJobs =
                     Job()
@@ -316,15 +384,14 @@ object RemoteRepo {
                         location.longitude.toString()
                     )
                     withContext(Main) {
+                        val body = response.body()
                         value = if (response.isSuccessful) {
-                            Entity(response.body(), true, null)
+                            if (body != null)
+                                succeedRequest(body)
+                            else
+                                failedRequest(response.code().parseHttpCodeToErrorType(), response.message())
                         } else {
-                            Entity(
-                                null,
-                                false,
-                                response.code().toString() + ":" + response.message()
-                            )
-
+                            failedRequest(response.code().parseHttpCodeToErrorType(), response.message())
                         }
                     }
                 }, {
@@ -334,9 +401,14 @@ object RemoteRepo {
         }
     }
 
-    fun getFullReport2(request: GetReportRequest) = apiReq(request, ApiService.client::getFullReport)
-    fun getFullReport(request: GetReportRequest) = mockApiReq(Entity(fakeFullReports(), true, null))
+    fun getFullReport2(request: GetReportRequest) =
+        apiReq(request, ApiService.client::getFullReport)
 
-    fun getSummeryReport(request: GetReportRequest) = mockApiReq(Entity(fakeSummeryReports(), true, null))
-    fun getDrawRoadReport(request: GetReportRequest) = mockApiReq(Entity(fakeDrawRoadReport(), true, null))
+    fun getFullReport(request: GetReportRequest) = mockApiReq(succeedRequest(fakeFullReports()))
+
+    fun getSummeryReport(request: GetReportRequest) =
+        mockApiReq(succeedRequest(fakeSummeryReports()))
+
+    fun getDrawRoadReport(request: GetReportRequest) =
+        mockApiReq(succeedRequest(fakeDrawRoadReport()))
 }

@@ -28,7 +28,7 @@ data class Message(
     @SerializedName("messageType")
     val _isEvent: Int, //is Event Or Message?
     val senderImage: String?, //TODO not implemented server side
-    var userId: String?,
+    var userId: Int?,
     @SerializedName("viewed")
     var viewed: Boolean
 ) : Parcelable {

@@ -7,12 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.behraz.fastermixer.batch.app.LocationCompassProvider
+import com.behraz.fastermixer.batch.app.receivers.isNetworkAvailable
 import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.models.requests.Fence
 import com.behraz.fastermixer.batch.models.requests.PolygonFence
-import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.ui.dialogs.NewMessageDialog
 import com.behraz.fastermixer.batch.ui.fragments.pomp.PompMapFragment
@@ -273,7 +273,7 @@ abstract class VehicleFragment : BaseMapFragment() {
                 }
             } else {
                 println("debux: getRouteResponse null")
-                val networkConnected = ApiService.isNetworkAvailable()
+                val networkConnected = isNetworkAvailable()
                 println("debux: getRouteResponse network:$networkConnected")
                 if (networkConnected) {
                     toast(Constants.SERVER_ERROR)
