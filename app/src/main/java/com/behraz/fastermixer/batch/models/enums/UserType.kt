@@ -1,8 +1,8 @@
 package com.behraz.fastermixer.batch.models.enums
 
 enum class UserType(val roleId: Int) {
-    Pomp(1),
-    Mixer(2),
-    Batch(3),
-    Admin(4)
+    Pomp(4),
+    Mixer(5),
+    Batch(6),
+    Admin(2)
 }

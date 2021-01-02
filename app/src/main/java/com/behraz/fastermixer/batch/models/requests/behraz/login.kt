@@ -15,7 +15,7 @@ class LoginRequest(
 }
 
 
-class LoginResponse(
-    @SerializedName("token")
+class GetTokenResponse(
+    @SerializedName("access_token")
     val token: String?
 )

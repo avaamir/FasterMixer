@@ -34,6 +34,7 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
     private companion object {
         const val user = "root"
         const val password = "4357"
+
         //160 taee, ye dune sms mishe
         /*
         *
@@ -126,43 +127,43 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
 
             //#Home----
             //OnMove Sending Period
-            "10050:5",
+            "10050:10",
             //Data Sending: Min Distance
-            "10051:100",
+            "10051:200",
             //Data Sending: Min Angle
-            "10052:10",
+            "10052:20",
             //Data Sending: Min Speed Delta
             "10053:10",
             //Recorded Data Sending Rate
-            "10054:100",
+            "10054:1",
             //Send Period
-            "10055:5",
+            "10055:1",
             //#Roaming
             //OnMove Sending Period
-            "10150:5",
+            "10150:10",
             //Data Sending: Min Distance
-           // "10151:100",
+            // "10151:100",
             //Data Sending: Min Angle
-            "10152:10",
+            "10152:20",
             //Data Sending: Min Speed Delta
             "10153:10",
             //Recorded Data Sending Rate
-            "10154:100",
+            "10154:1",
             //Send Period
-            "10155:5",
+            "10155:1",
             //#Unknown
             //OnMove Sending Period
-            /*"10250:5",
+            "10250:10",
             //Data Sending: Min Distance
-            "10251:100",
+            "10251:200",
             //Data Sending: Min Angle
-            "10252:10",
+            "10252:20",
             //Data Sending: Min Speed Delta
             "10253:10",
             //Recorded Data Sending Rate
-            "10254:100",
+            "10254:1",
             //Send Period
-            "10255:5",*/
+            "10255:1",
             //----
             //Ignition Source
             //"101:1",
@@ -186,14 +187,25 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
 
         fun createCommand(vararg ids: Int) = createCommand(ids.toList())*/
 
-        fun createCommand(commands: List<String>) : String{
+        fun createCommand(commands: List<String>): List<String> {
+            val commandList = arrayListOf<String>()
             if (commands.isNotEmpty()) {
-                var result = "$user $password setparam "
-                commands.forEach {
-                    result += "$it;"
+                val SET_PARAM_COMMAND = "$user $password setparam "
+                var result = SET_PARAM_COMMAND
+                commands.forEachIndexed { index, command ->
+                    if (index != commands.size - 1) {
+                        if ((result.length + command.length + 1) <= 160) {
+                            result += "$command;"
+                        } else {
+                            commandList.add(result)
+                            result = "$SET_PARAM_COMMAND$command;"
+                        }
+                    } else {
+                        result += "$command;"
+                        commandList.add(result)
+                    }
                 }
-                println("dexx:" + result.length.toString())
-                return result
+                return commandList
             } else
                 throw IllegalArgumentException("fuck you")
         }
@@ -238,14 +250,14 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
         savedInstanceState: Bundle?
     ): View? {
 
-        viewModel = ViewModelProvider(activity!!).get(ContactActivityViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(ContactActivityViewModel::class.java)
         mBinding =
             DataBindingUtil.inflate(inflater, R.layout.layout_contacts_fragment, container, false)
 
         initViews()
         subscribeObservers()
 
-        //initContacts()
+        initContacts()
 
         return mBinding.root
     }
@@ -261,8 +273,8 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
             CONTACTS_JAMKARAN
         )
 
-        context!!.createNewContact(CONTACTS_JAMKARAN)
-        context!!.createNewContact(CONTACTS_BAREZ)
+        requireContext().createNewContact(CONTACTS_JAMKARAN)
+        //requireContext().createNewContact(CONTACTS_BAREZ)
     }
 
 
@@ -272,7 +284,7 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
         }
 
         mBinding.btnSendSettings.setOnClickListener {
-            val progressDialog = MyProgressDialog(context!!, R.style.my_alert_dialog, true)
+            val progressDialog = MyProgressDialog(requireContext(), R.style.my_alert_dialog, true)
 
             val allContacts = viewModel.allContacts.value
             if (allContacts != null) {
@@ -283,7 +295,8 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
                 if (contacts.isNotEmpty()) {
                     CoroutineScope(Dispatchers.Main).launch {
                         progressDialog.show()
-                        val isSendSomething = sendCommandsAsync(createCommand(teltonikaCommands), contacts) {
+                        val isSendSomething =
+                            sendCommandsAsync(createCommand(teltonikaCommands), contacts) {
                                 println("debug:progress:$it")
                                 progressDialog.setProgress(it)
                             }.await()
@@ -345,7 +358,7 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
         viewModel.organizations.observe(viewLifecycleOwner, Observer {
             if ((it.size + 1) != mBinding.spinnerOrganization.adapter?.count) { //+1 be khater ezafe kardan `همه`
                 mBinding.spinnerOrganization.adapter = MySimpleSpinnerAdapter(
-                    context!!,
+                    requireContext(),
                     android.R.layout.simple_spinner_dropdown_item,
                     listOf("همه") + (it)
                 )
@@ -411,7 +424,7 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
             toast("Message Sent $phoneNo")
         } catch (ex: java.lang.Exception) {
             Toast.makeText(
-                context!!.applicationContext, ex.message.toString(),
+                requireContext().applicationContext, ex.message.toString(),
                 Toast.LENGTH_LONG
             ).show()
             ex.printStackTrace()

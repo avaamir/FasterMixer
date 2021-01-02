@@ -3,23 +3,14 @@ package com.behraz.fastermixer.batch.models.requests.behraz
 import com.google.gson.annotations.SerializedName
 
 data class GetUserInfoResponse(
-    @SerializedName("id")
+    @SerializedName("userId")
     val id: Int,
-    @SerializedName("fullName")
+    @SerializedName("name")
     val name: String,
-    @SerializedName("mobile")
-    val mobile: String?,
-    @SerializedName("role")
-    val role: String,
+    @SerializedName("personalCode")
+    val personalCode: String?,
     @SerializedName("roleId")
-    val roleId: Int, //TODO not yet implemented server side
-    @SerializedName("address")
-    val address: String?,
-    @SerializedName("isActive")
-    val isActive: Boolean,
-    @SerializedName("userName")
-    val username: String?,
+    val roleId: Int,
     @SerializedName("equipmentId")
-    val equipmentId: Int //TODO not yet implemented server side
-) {
-}
+    val equipmentId: Int
+)

@@ -21,14 +21,14 @@ class ApiResultCall<T : Any>(
         delegate.enqueue(object : Callback<ApiResult<T>> {
             override fun onResponse(call: Call<ApiResult<T>>, response: Response<ApiResult<T>>) {
                 val body = response.body()
-                //val code = response.code()
+                val errorType = response.code().parseHttpCodeToErrorType()
 
                 if (response.isSuccessful) {
                     if (body != null) {
                         callback.onResponse(
                             this@ApiResultCall,
                             Response.success(body.also {
-                                it.errorType = response.code().parseHttpCodeToErrorType()
+                                it.errorType = errorType
                             })
                         )
                     } else {
@@ -36,23 +36,27 @@ class ApiResultCall<T : Any>(
                             this@ApiResultCall,
                             Response.success(
                                 failedRequest(
-                                    response.code().parseHttpCodeToErrorType()
+                                    errorType
                                 )
                             )
                         )
                     }
                 } else {
                     val errorBody = response.errorBody()
-                    val apiResult = if (errorBody != null) {
-                        errorBodyConverter.convert(errorBody)
-                            ?.also {
-                                it.errorType = response.code().parseHttpCodeToErrorType()
-                            }
-                            ?: failedRequest(
-                                response.code().parseHttpCodeToErrorType()
-                            )
+                    val apiResult = if (errorBody != null && errorBody.contentLength() != -1L) {
+                        try {
+                            errorBodyConverter.convert(errorBody)
+                                ?.also {
+                                    it.errorType = errorType
+                                }
+                                ?: failedRequest(
+                                    errorType
+                                )
+                        } catch (ex: Exception) {
+                            failedRequest(errorType)
+                        }
                     } else {
-                        failedRequest(response.code().parseHttpCodeToErrorType())
+                        failedRequest(errorType)
                     }
                     callback.onResponse(this@ApiResultCall, Response.success(apiResult))
                 }

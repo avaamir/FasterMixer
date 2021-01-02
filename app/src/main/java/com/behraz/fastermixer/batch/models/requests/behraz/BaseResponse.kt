@@ -1,6 +1,7 @@
 package com.behraz.fastermixer.batch.models.requests.behraz
 
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
+import com.behraz.fastermixer.batch.utils.general.getEnumById
 import com.google.gson.annotations.SerializedName
 
 
@@ -14,7 +15,18 @@ data class ApiResult<T : Any> internal constructor(
     @Transient var errorType: ErrorType
 ) {
     val message
-        get() = _message ?: if (isSucceed) Constants.SERVER_SUCCEED else Constants.SERVER_ERROR
+        get() = _message ?: if (isSucceed)
+            Constants.SERVER_SUCCEED
+        else
+            when(errorType) {
+                ErrorType.Unknown -> Constants.SERVER_ERROR
+                ErrorType.NetworkError -> "خطا در اینترنت دستگاه"
+                ErrorType.OK -> "موفق"
+                ErrorType.UnAuthorized -> "نیاز به ورود مجدد"
+                ErrorType.Forbidden -> "عدم دسترسی"
+                ErrorType.NotFound -> "یافت نشد"
+                ErrorType.ServerError -> Constants.SERVER_ERROR
+            }
 }
 
 enum class ErrorType(val code: Int) {
@@ -23,6 +35,7 @@ enum class ErrorType(val code: Int) {
     OK(200),
     UnAuthorized(401),
     Forbidden(403),
+    NotFound(404),
     ServerError(500)
 }
 
@@ -31,16 +44,7 @@ fun Int.parseHttpCodeToErrorType() =
         in 200..299 -> {
             ErrorType.OK
         }
-        401 -> {
-            ErrorType.UnAuthorized
-        }
-        403 -> {
-            ErrorType.Forbidden
-        }
-        500 -> {
-            ErrorType.ServerError
-        }
-        else -> ErrorType.Unknown
+        else -> getEnumById(ErrorType::code, this)
     }
 
 

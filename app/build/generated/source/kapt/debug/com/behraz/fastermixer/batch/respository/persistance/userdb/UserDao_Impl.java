@@ -41,75 +41,85 @@ public final class UserDao_Impl implements UserDao {
     this.__insertionAdapterOfUser = new EntityInsertionAdapter<User>(__db) {
       @Override
       public String createQuery() {
-        return "INSERT OR REPLACE INTO `user_tb` (`personId`,`name`,`token`,`roleId`,`equipmentId`) VALUES (?,?,?,?,?)";
+        return "INSERT OR REPLACE INTO `user_tb` (`id`,`name`,`personalCode`,`token`,`roleId`,`equipmentId`) VALUES (?,?,?,?,?,?)";
       }
 
       @Override
       public void bind(SupportSQLiteStatement stmt, User value) {
-        stmt.bindLong(1, value.getPersonId());
+        stmt.bindLong(1, value.getId());
         if (value.getName() == null) {
           stmt.bindNull(2);
         } else {
           stmt.bindString(2, value.getName());
         }
-        if (value.getToken() == null) {
+        if (value.getPersonalCode() == null) {
           stmt.bindNull(3);
         } else {
-          stmt.bindString(3, value.getToken());
+          stmt.bindString(3, value.getPersonalCode());
         }
-        if (value.getRoleId() == null) {
+        if (value.getToken() == null) {
           stmt.bindNull(4);
         } else {
-          stmt.bindLong(4, value.getRoleId());
+          stmt.bindString(4, value.getToken());
         }
-        if (value.getEquipmentId() == null) {
+        if (value.getRoleId() == null) {
           stmt.bindNull(5);
         } else {
-          stmt.bindLong(5, value.getEquipmentId());
+          stmt.bindLong(5, value.getRoleId());
+        }
+        if (value.getEquipmentId() == null) {
+          stmt.bindNull(6);
+        } else {
+          stmt.bindLong(6, value.getEquipmentId());
         }
       }
     };
     this.__deletionAdapterOfUser = new EntityDeletionOrUpdateAdapter<User>(__db) {
       @Override
       public String createQuery() {
-        return "DELETE FROM `user_tb` WHERE `personId` = ?";
+        return "DELETE FROM `user_tb` WHERE `id` = ?";
       }
 
       @Override
       public void bind(SupportSQLiteStatement stmt, User value) {
-        stmt.bindLong(1, value.getPersonId());
+        stmt.bindLong(1, value.getId());
       }
     };
     this.__updateAdapterOfUser = new EntityDeletionOrUpdateAdapter<User>(__db) {
       @Override
       public String createQuery() {
-        return "UPDATE OR ABORT `user_tb` SET `personId` = ?,`name` = ?,`token` = ?,`roleId` = ?,`equipmentId` = ? WHERE `personId` = ?";
+        return "UPDATE OR ABORT `user_tb` SET `id` = ?,`name` = ?,`personalCode` = ?,`token` = ?,`roleId` = ?,`equipmentId` = ? WHERE `id` = ?";
       }
 
       @Override
       public void bind(SupportSQLiteStatement stmt, User value) {
-        stmt.bindLong(1, value.getPersonId());
+        stmt.bindLong(1, value.getId());
         if (value.getName() == null) {
           stmt.bindNull(2);
         } else {
           stmt.bindString(2, value.getName());
         }
-        if (value.getToken() == null) {
+        if (value.getPersonalCode() == null) {
           stmt.bindNull(3);
         } else {
-          stmt.bindString(3, value.getToken());
+          stmt.bindString(3, value.getPersonalCode());
         }
-        if (value.getRoleId() == null) {
+        if (value.getToken() == null) {
           stmt.bindNull(4);
         } else {
-          stmt.bindLong(4, value.getRoleId());
+          stmt.bindString(4, value.getToken());
         }
-        if (value.getEquipmentId() == null) {
+        if (value.getRoleId() == null) {
           stmt.bindNull(5);
         } else {
-          stmt.bindLong(5, value.getEquipmentId());
+          stmt.bindLong(5, value.getRoleId());
         }
-        stmt.bindLong(6, value.getPersonId());
+        if (value.getEquipmentId() == null) {
+          stmt.bindNull(6);
+        } else {
+          stmt.bindLong(6, value.getEquipmentId());
+        }
+        stmt.bindLong(7, value.getId());
       }
     };
     this.__preparedStmtOfDeleteAll = new SharedSQLiteStatement(__db) {
@@ -226,18 +236,21 @@ public final class UserDao_Impl implements UserDao {
       public List<User> call() throws Exception {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
-          final int _cursorIndexOfPersonId = CursorUtil.getColumnIndexOrThrow(_cursor, "personId");
+          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
           final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
+          final int _cursorIndexOfPersonalCode = CursorUtil.getColumnIndexOrThrow(_cursor, "personalCode");
           final int _cursorIndexOfToken = CursorUtil.getColumnIndexOrThrow(_cursor, "token");
           final int _cursorIndexOfRoleId = CursorUtil.getColumnIndexOrThrow(_cursor, "roleId");
           final int _cursorIndexOfEquipmentId = CursorUtil.getColumnIndexOrThrow(_cursor, "equipmentId");
           final List<User> _result = new ArrayList<User>(_cursor.getCount());
           while(_cursor.moveToNext()) {
             final User _item;
-            final int _tmpPersonId;
-            _tmpPersonId = _cursor.getInt(_cursorIndexOfPersonId);
+            final int _tmpId;
+            _tmpId = _cursor.getInt(_cursorIndexOfId);
             final String _tmpName;
             _tmpName = _cursor.getString(_cursorIndexOfName);
+            final String _tmpPersonalCode;
+            _tmpPersonalCode = _cursor.getString(_cursorIndexOfPersonalCode);
             final String _tmpToken;
             _tmpToken = _cursor.getString(_cursorIndexOfToken);
             final Integer _tmpRoleId;
@@ -252,7 +265,7 @@ public final class UserDao_Impl implements UserDao {
             } else {
               _tmpEquipmentId = _cursor.getInt(_cursorIndexOfEquipmentId);
             }
-            _item = new User(_tmpPersonId,_tmpName,_tmpToken,_tmpRoleId,_tmpEquipmentId);
+            _item = new User(_tmpId,_tmpName,_tmpPersonalCode,_tmpToken,_tmpRoleId,_tmpEquipmentId);
             _result.add(_item);
           }
           return _result;
@@ -270,7 +283,7 @@ public final class UserDao_Impl implements UserDao {
 
   @Override
   public Object exists(final int id, final Continuation<? super User> p1) {
-    final String _sql = "SELECT * FROM user_tb WHERE personId = ?";
+    final String _sql = "SELECT * FROM user_tb WHERE id = ?";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
     _statement.bindLong(_argIndex, id);
@@ -279,17 +292,20 @@ public final class UserDao_Impl implements UserDao {
       public User call() throws Exception {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
-          final int _cursorIndexOfPersonId = CursorUtil.getColumnIndexOrThrow(_cursor, "personId");
+          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
           final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
+          final int _cursorIndexOfPersonalCode = CursorUtil.getColumnIndexOrThrow(_cursor, "personalCode");
           final int _cursorIndexOfToken = CursorUtil.getColumnIndexOrThrow(_cursor, "token");
           final int _cursorIndexOfRoleId = CursorUtil.getColumnIndexOrThrow(_cursor, "roleId");
           final int _cursorIndexOfEquipmentId = CursorUtil.getColumnIndexOrThrow(_cursor, "equipmentId");
           final User _result;
           if(_cursor.moveToFirst()) {
-            final int _tmpPersonId;
-            _tmpPersonId = _cursor.getInt(_cursorIndexOfPersonId);
+            final int _tmpId;
+            _tmpId = _cursor.getInt(_cursorIndexOfId);
             final String _tmpName;
             _tmpName = _cursor.getString(_cursorIndexOfName);
+            final String _tmpPersonalCode;
+            _tmpPersonalCode = _cursor.getString(_cursorIndexOfPersonalCode);
             final String _tmpToken;
             _tmpToken = _cursor.getString(_cursorIndexOfToken);
             final Integer _tmpRoleId;
@@ -304,7 +320,7 @@ public final class UserDao_Impl implements UserDao {
             } else {
               _tmpEquipmentId = _cursor.getInt(_cursorIndexOfEquipmentId);
             }
-            _result = new User(_tmpPersonId,_tmpName,_tmpToken,_tmpRoleId,_tmpEquipmentId);
+            _result = new User(_tmpId,_tmpName,_tmpPersonalCode,_tmpToken,_tmpRoleId,_tmpEquipmentId);
           } else {
             _result = null;
           }

@@ -27,7 +27,7 @@ public final class MessageDatabase_Impl extends MessageDatabase {
 
   @Override
   protected SupportSQLiteOpenHelper createOpenHelper(DatabaseConfiguration configuration) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(configuration, new RoomOpenHelper.Delegate(6) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(configuration, new RoomOpenHelper.Delegate(7) {
       @Override
       public void createAllTables(SupportSQLiteDatabase _db) {
         _db.execSQL("CREATE TABLE IF NOT EXISTS `messages` (`id` TEXT NOT NULL, `sender` TEXT NOT NULL, `senderId` TEXT NOT NULL, `dateTime` TEXT NOT NULL, `content` TEXT NOT NULL, `isDelivered` INTEGER NOT NULL, `priority` INTEGER NOT NULL, `_isEvent` INTEGER NOT NULL, `senderImage` TEXT, `userId` INTEGER, `viewed` INTEGER NOT NULL, PRIMARY KEY(`id`))");

@@ -27,7 +27,7 @@ object MessageRepo {
     val allMessage: LiveData<List<Message>> by lazy {
         dao.allMessage.map { messages ->
             messages.filter {
-                it.userId == UserConfigs.user.value!!.personId
+                it.userId == UserConfigs.user.value!!.id
             }
         }
     }
@@ -38,7 +38,7 @@ object MessageRepo {
         CoroutineScope(IO + job).launch {
             items.forEach { item ->
                 if (item.userId == null)
-                    item.userId = UserConfigs.user.value!!.personId
+                    item.userId = UserConfigs.user.value!!.id
             }
             dao.insertAll(items)
         }
@@ -49,7 +49,7 @@ object MessageRepo {
             job = Job()
         CoroutineScope(IO + job).launch {
             if (item.userId == null)
-                item.userId = UserConfigs.user.value!!.personId
+                item.userId = UserConfigs.user.value!!.id
             dao.insert(item)
         }
     }
@@ -59,7 +59,7 @@ object MessageRepo {
             job = Job()
         CoroutineScope(IO + job).launch {
             if (item.userId == null)
-                item.userId = UserConfigs.user.value!!.personId
+                item.userId = UserConfigs.user.value!!.id
             dao.update(item)
         }
     }

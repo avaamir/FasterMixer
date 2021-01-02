@@ -8,6 +8,7 @@ import com.behraz.fastermixer.batch.models.User
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
 import com.behraz.fastermixer.batch.models.requests.Fence
 import com.behraz.fastermixer.batch.models.requests.behraz.*
+import com.behraz.fastermixer.batch.models.requests.behraz.ErrorType.*
 import com.behraz.fastermixer.batch.models.requests.openweathermap.CurrentWeatherByCoordinatesResponse
 import com.behraz.fastermixer.batch.models.requests.route.GetRouteResponse
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
@@ -19,9 +20,7 @@ import com.behraz.fastermixer.batch.utils.fastermixer.fakeAdminManageAccountPage
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeDrawRoadReport
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeFullReports
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeSummeryReports
-import com.behraz.fastermixer.batch.utils.general.RunOnceLiveData
-import com.behraz.fastermixer.batch.utils.general.RunOnceMutableLiveData
-import com.behraz.fastermixer.batch.utils.general.launchApi
+import com.behraz.fastermixer.batch.utils.general.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -34,32 +33,31 @@ import kotlin.reflect.KSuspendFunction1
 object RemoteRepo {
     private lateinit var serverJobs: CompletableJob
 
-    fun <T: Any> Response<T>.handleError(onHandled: (ApiResult<T>) -> Unit) {
-        onHandled(
-            failedRequest(
-                this.code().parseHttpCodeToErrorType(),
-                try {
-                    when (this.code()) {
-                        401, 403, 500 -> {
-                            val apiResult = this.errorBody()!!.string()
-                                .fromJsonToModel<ApiResult<T>>()
-                            apiResult.message
-                        }
-                        else -> throw IllegalStateException("Unhandled Error Code")
+    private fun <T : Any> Response<T>.handleError(onHandled: ((ApiResult<T>) -> Unit)? = null): ApiResult<T> {
+        return failedRequest<T>(
+            this.code().parseHttpCodeToErrorType(),
+            try {
+                when (this.code().parseHttpCodeToErrorType()) {
+                    ServerError, Forbidden, UnAuthorized ->   {
+                        val apiResult = this.errorBody()!!.string()
+                            .fromJsonToModel<ApiResult<T>>()
+                        apiResult.message
                     }
-                } catch (ex: Exception) {
-                    println("debux:${ex.message} in `RemoteRepo::handleError2`")
-                    null
-                }
-            )
-
-        )
+                    else -> null
+                }?.exhaustiveAsExpression()
+            } catch (ex: Exception) {
+                println("debux:${ex.message} in `RemoteRepo::handleError2`")
+                null
+            }
+        ).also {
+            onHandled?.invoke(it)
+        }
     }
 
-    private fun <ResM: Any, ReqM> apiReq(
+    private fun <ResM : Any, ReqM : Any> apiReq(
         request: ReqM,
-        requestFunction: KSuspendFunction1<ReqM, Response<ApiResult<ResM>>>,
-        repoLevelHandler: ((Response<ApiResult<ResM>>) -> (Unit))? = null
+        requestFunction: KSuspendFunction1<ReqM, ApiResult<ResM>>,
+        repoLevelHandler: ((ApiResult<ResM>) -> (Unit))? = null
     ): RunOnceLiveData<ApiResult<ResM>?> {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         return object : RunOnceMutableLiveData<ApiResult<ResM>?>() {
@@ -67,14 +65,8 @@ object RemoteRepo {
                 CoroutineScope(IO + serverJobs).launchApi({
                     val response = requestFunction(request)
                     repoLevelHandler?.invoke(response)
-
-                    if (response.isSuccessful) {
-                        CoroutineScope(Main).launch {
-                            value = response.body()
-                        }
-                    } else {
-                        //handleError(response)
-                        TODO()
+                    withContext(Main) {
+                        value = response
                     }
                 }) {
                     println("debug:error:RemoteRepo.${requestFunction.name} has exception->${it.message}")
@@ -86,7 +78,7 @@ object RemoteRepo {
         }
     }
 
-    private fun <T: Any> apiReq(
+    /*private fun <T : Any> apiReq(
         apiFunction: suspend () -> ApiResult<T>?,
         repoLevelHandler: ((ApiResult<T>?) -> Unit)? = null
     ): RunOnceLiveData<ApiResult<T>?> {
@@ -107,26 +99,21 @@ object RemoteRepo {
                 }
             }
         }
-    }
+    }*/
 
 
-    private fun <ResM: Any> apiReq(
-        requestFunction: KSuspendFunction0<Response<ApiResult<ResM>>>,
-        repoLevelHandler: ((Response<ApiResult<ResM>>) -> (Unit))? = null  //This will only excute if LiveData has an observer, because it called on active method
+    private fun <ResM : Any> apiReq(
+        requestFunction: KSuspendFunction0<ApiResult<ResM>>,
+        repoLevelHandler: ((ApiResult<ResM>) -> (Unit))? = null  //This will only excute if LiveData has an observer, because it called on active method
     ): RunOnceLiveData<ApiResult<ResM>?> {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         return object : RunOnceMutableLiveData<ApiResult<ResM>?>() {
             override fun onActiveRunOnce() {
                 CoroutineScope(IO + serverJobs).launchApi({
-                    val response = requestFunction()
-                    repoLevelHandler?.invoke(response)
-                    if (response.isSuccessful) {
-                        CoroutineScope(Main).launch {
-                            value = response.body()
-                        }
-                    } else {
-                        //val model = handleError(response)
-                        TODO()
+                    val result = requestFunction()
+                    repoLevelHandler?.invoke(result)
+                    withContext(Main) {
+                        value = result
                     }
                 }) {
                     println("debug:error:RemoteRepo.${requestFunction.name} has exception->${it.message}")
@@ -139,7 +126,7 @@ object RemoteRepo {
     }
 
 
-    private fun <T: Any> mockApiReq(
+    private fun <T : Any> mockApiReq(
         responseApiResult: ApiResult<T>?,
         duration: Long = 1000L
     ): RunOnceLiveData<ApiResult<T>?> {
@@ -155,44 +142,53 @@ object RemoteRepo {
         }
     }
 
+    private suspend fun getToken(
+        loginRequest: LoginRequest
+    ): ApiResult<GetTokenResponse> {
+        val getTokenResponse = ApiService.client.getToken(loginRequest)
+        return if (getTokenResponse.isSuccessful) {
+            val body = getTokenResponse.body()!!
+            succeedRequest(body)
+        } else {
+            return getTokenResponse.handleError()
+        }
+    }
+
     fun login(loginRequest: LoginRequest): RunOnceLiveData<ApiResult<User>?> {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         return object : RunOnceMutableLiveData<ApiResult<User>?>() {
             override fun onActiveRunOnce() {
                 CoroutineScope(IO + serverJobs).launchApi({
-                    val loginResponse = ApiService.client.login(loginRequest)
-                    if (loginResponse.isSuccessful) {
-                        val body = loginResponse.body()
-                        if (body?.token != null) {
-                            ApiService.setToken(body.token)
-                            val userInfoResponse = ApiService.client.getUserInfo()
-                            if (userInfoResponse.isSucceed) {
-                                val userInfo = userInfoResponse.entity!!
-                                val user = User(
-                                    userInfo.id,
-                                    userInfo.name,
-                                    body.token,
-                                    userInfo.roleId,
-                                    userInfo.equipmentId
+                    val tokenResult = getToken(loginRequest)
+                    if (tokenResult.isSucceed) {
+                        val token = tokenResult.entity!!.token!!
+                        ApiService.setToken(token)
+                        val getUserInfoResult = ApiService.client.getUserInfo()
+                        if (getUserInfoResult.isSucceed) {
+                            val userInfo = getUserInfoResult.entity!!
+                            val user = User(
+                                userInfo.id,
+                                userInfo.name,
+                                userInfo.personalCode,
+                                token,
+                                userInfo.roleId,
+                                userInfo.equipmentId
+                            )
+                            UserConfigs.loginUserBlocking(user)
+                            withContext(Main) {
+                                value = succeedRequest(user)
+                            }
+                        } else { //Failed Get UserInfo
+                            withContext(Main) {
+                                value = failedRequest(
+                                    getUserInfoResult.errorType,
+                                    getUserInfoResult.message
                                 )
-                                UserConfigs.loginUser(user, true)
-                                withContext(Main) {
-                                    value = succeedRequest(user)
-                                }
-                            } else {
-                                CoroutineScope(Main).launch {
-                                    value = failedRequest(
-                                        userInfoResponse.errorType,
-                                        userInfoResponse.message
-                                    )
-                                }
                             }
                         }
-                    } else {
-                        loginResponse.handleError {
-                            CoroutineScope(Main).launch {
-                                value = failedRequest(loginResponse.code().parseHttpCodeToErrorType())
-                            }
+                    } else { //Failed Get Token
+                        withContext(Main) {
+                            value = failedRequest(tokenResult.errorType, tokenResult.message)
                         }
                     }
                 }, {
@@ -216,50 +212,44 @@ object RemoteRepo {
 
     fun chooseBatch(chooseEquipmentRequest: ChooseEquipmentRequest) =
         apiReq(chooseEquipmentRequest, ApiService.client::chooseBatch) {
-            if (it.isSuccessful) {
-                if (it.body()?.isSucceed == true) {
-                    UserConfigs.updateUser(chooseEquipmentRequest.equipmentId, blocking = true)
-                    println("debugx: RemoteRepo: blocking finished, User db updated, Now Activity Will Call..")
-                }
+            if (it.isSucceed) {
+                UserConfigs.updateUser(chooseEquipmentRequest.equipmentId)
+                println("debugx: RemoteRepo: blocking finished, User db updated, Now Activity Will Call..")
             }
         }
 
+
     fun choosePomp(chooseEquipmentRequest: ChooseEquipmentRequest) =
         apiReq(chooseEquipmentRequest, ApiService.client::chooseBatch)
-
 
     fun getRequestMixers(batchNotPomp: Boolean) =
         if (batchNotPomp) apiReq(ApiService.client::getBatchMixers) else apiReq(ApiService.client::getPompMixers)
 
     fun getAllMixers() = apiReq(ApiService.client::getAllMixers)
 
-    fun getMessage(onResponse: (ApiResult<List<Message>>?) -> Unit) { //Resonse ro mikhad
+    fun getMessage(onResponse: (ApiResult<List<Message>>?) -> Unit) { //Response ro mikhad
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         CoroutineScope(IO + serverJobs).launchApi({
-            val response = ApiService.client.getMessages()
-            if (response.isSuccessful) {
-                val messages = response.body()?.entity
-                if (response.body()?.isSucceed == true) {
-                    if (messages != null) {
-                        MessageRepo.insert(messages)
-                        val seenMessagesIdList = messages.map { it.id }
-                        seenMessage(seenMessagesIdList)
-                    }
-                    withContext(Main) {
-                        onResponse(response.body())
-                    }
-                } else {
-                    withContext(Main) {
-                        onResponse(response.body())
-                    }
+            val result = ApiService.client.getMessages()
+            if (result.isSucceed) {
+                val messages = result.entity!!
+                if (messages.isNotEmpty()) {
+                    MessageRepo.insert(messages)
+                    val seenMessagesIdList = messages.map { it.id }
+                    seenMessage(seenMessagesIdList)
+                }
+                withContext(Main) {
+                    onResponse(result)
                 }
             } else {
                 withContext(Main) {
-                    onResponse(response.body())
+                    onResponse(result)
                 }
             }
         }) {
-            onResponse(null)
+            CoroutineScope(Main).launch {
+                onResponse(null)
+            }
         }
     }
 
@@ -275,7 +265,7 @@ object RemoteRepo {
         CoroutineScope(IO + serverJobs).launchApi({
             val response = ApiService.client.getBatchLocation(GetEquipmentRequest(equipmentId))
             CoroutineScope(Main).launch {
-                onResponse(response.body()?.entity?.equipmentLocation)
+                onResponse(response.entity?.equipmentLocation)
             }
         }) {
             CoroutineScope(Main).launch {
@@ -290,9 +280,9 @@ object RemoteRepo {
     ) {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         CoroutineScope(IO + serverJobs).launchApi({
-            val response = ApiService.client.getVehicleLocation(GetEquipmentRequest(equipmentId))
+            val result = ApiService.client.getVehicleLocation(GetEquipmentRequest(equipmentId))
             CoroutineScope(Main).launch {
-                onResponse(response.body())
+                onResponse(result)
             }
         }) {
             CoroutineScope(Main).launch {
@@ -309,7 +299,9 @@ object RemoteRepo {
         }) {}
     }
 
-    private fun getMixerMission() = apiReq(ApiService.client::getMixerMission)
+    private fun getMixerMission() = apiReq(ApiService.client::getMixerMission) {
+        println("debux: $it")
+    }
     private fun getPompMission() = apiReq(ApiService.client::getPompMission)
 
     fun getMission(isPomp: Boolean): RunOnceLiveData<ApiResult<Mission>?> {
@@ -389,9 +381,15 @@ object RemoteRepo {
                             if (body != null)
                                 succeedRequest(body)
                             else
-                                failedRequest(response.code().parseHttpCodeToErrorType(), response.message())
+                                failedRequest(
+                                    response.code().parseHttpCodeToErrorType(),
+                                    response.message()
+                                )
                         } else {
-                            failedRequest(response.code().parseHttpCodeToErrorType(), response.message())
+                            failedRequest(
+                                response.code().parseHttpCodeToErrorType(),
+                                response.message()
+                            )
                         }
                     }
                 }, {

@@ -10,11 +10,12 @@ import com.behraz.fastermixer.batch.utils.general.getEnumById
 @Entity(tableName = "user_tb")
 data class User(
     @PrimaryKey
-    var personId: Int,
-    var name: String?,
-    var token: String,
-    var roleId: Int?,
-    var equipmentId: Int?
+    val id: Int,
+    val name: String?,
+    val personalCode: String?,
+    val token: String,
+    val roleId: Int?,
+    val equipmentId: Int?
 )  {
     @Ignore
     val userType: UserType = getEnumById(UserType::roleId, roleId)

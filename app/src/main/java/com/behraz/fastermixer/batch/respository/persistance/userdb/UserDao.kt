@@ -22,7 +22,7 @@ interface UserDao {
     @Query("DELETE FROM user_tb")
     suspend fun deleteAll()
 
-    @Query("SELECT * FROM user_tb WHERE personId = :id")
+    @Query("SELECT * FROM user_tb WHERE id = :id")
     suspend fun exists(id: Int): User?
 
 

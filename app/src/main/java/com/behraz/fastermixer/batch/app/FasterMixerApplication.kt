@@ -11,6 +11,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.receivers.isNetworkAvailable
+import com.behraz.fastermixer.batch.models.requests.behraz.ErrorType
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.respository.apiservice.MapService
@@ -28,7 +29,6 @@ import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.utils.general.Event
 import com.behraz.fastermixer.batch.utils.general.fullScreen
 import com.behraz.fastermixer.batch.utils.general.hideStatusBar
-import java.lang.IllegalStateException
 
 class FasterMixerApplication : Application(), NetworkConnectionInterceptor.NetworkAvailability,
     GlobalErrorHandlerInterceptor.ApiResponseErrorHandler {
@@ -151,17 +151,14 @@ class FasterMixerApplication : Application(), NetworkConnectionInterceptor.Netwo
 
     override fun onInternetUnavailable() {
         onInternetUnavailableEvent.postValue(Event(Unit))
+        println("debux: NetworkError1")
     }
 
-    override fun onHandleError(code: Int, errorBody: String?) {
-        when (code) {
-            401 -> {
-                onAuthorizeEvent.postValue(Event(Unit))
-            }
-            403, 500 -> { }
-            else -> {
-                throw IllegalStateException("http error code not handled:$code")
-            }
+    override fun onHandleError(errorType: ErrorType, errorBody: String?) {
+        if (errorType == ErrorType.UnAuthorized) {
+            onAuthorizeEvent.postValue(Event(Unit))
+        } else if(errorType == ErrorType.NetworkError) {
+            println("debux: NetworkError2")
         }
     }
 

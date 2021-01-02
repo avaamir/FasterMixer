@@ -6,6 +6,7 @@ import com.behraz.fastermixer.batch.models.User
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
 import com.behraz.fastermixer.batch.respository.sharedprefrence.PrefsRepo
+import kotlinx.coroutines.CoroutineDispatcher
 
 object UserConfigs {
     private val userLive = MutableLiveData<User?>(null)
@@ -24,15 +25,16 @@ object UserConfigs {
     }
 
 
-    fun loginUser(user: User, blocking: Boolean = false) {
-        if (!blocking) {
-            if (UserConfigs.user.value != user) {
-                UserRepo.clearAndInsert(user)
-            }
-        } else {
-            UserRepo.clearAndInsertBlocking(user)
+    fun loginUser(user: User) {
+        if (UserConfigs.user.value != user) {
+            UserRepo.clearAndInsert(user)
         }
     }
+
+    suspend fun loginUserBlocking(user: User) {
+        UserRepo.clearAndInsertBlocking(user)
+    }
+
 
     fun logout() {
         userLive.value?.let {
@@ -42,13 +44,17 @@ object UserConfigs {
         userLive.postValue(null)
     }
 
-    fun updateUser(equipmentId: Int, blocking: Boolean) {
+    fun updateUser(equipmentId: Int ) {
         user.value!!.copy(equipmentId = equipmentId).let { user ->
-            if (!blocking) {
+
                 UserRepo.update(user)
-            } else {
+
+        }
+    }
+
+    suspend  fun updateUserBlocking(equipmentId: Int) {
+        user.value!!.copy(equipmentId = equipmentId).let { user ->
                 UserRepo.updateBlocking(user)
-            }
         }
     }
 

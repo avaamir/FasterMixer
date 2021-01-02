@@ -6,7 +6,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 
 object UserRepo {
@@ -40,11 +39,9 @@ object UserRepo {
         }
     }
 
-    fun updateBlocking(user: User) {
-        runBlocking {
-            userDao.update(user)
-            println("debugx: UserRepo: blocking finished, User db updated")
-        }
+    suspend fun updateBlocking(user: User) {
+        userDao.update(user)
+        println("debugx: UserRepo: blocking finished, User db updated")
     }
 
     fun delete(item: User) {
@@ -78,16 +75,14 @@ object UserRepo {
             job.cancel()
     }
 
-    fun clearAndInsertBlocking(user: User) {
-        runBlocking {
-            userDao.deleteAll()
-            userDao.insert(user)
-        }
+    suspend fun clearAndInsertBlocking(user: User) {
+        userDao.deleteAll()
+        userDao.insert(user)
     }
 
     fun clearAndInsertBlocking2(user: User) {
-            userDao.deleteAll1()
-            userDao.insert1(user)
+        userDao.deleteAll1()
+        userDao.insert1(user)
     }
 
 
