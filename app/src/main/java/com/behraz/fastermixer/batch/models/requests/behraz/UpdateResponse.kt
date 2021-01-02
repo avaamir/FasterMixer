@@ -5,12 +5,10 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class UpdateResponse(
-    @SerializedName("appVersionID")
-    private val appVersionID: String,
+data class UpdateResponse(
     @SerializedName("version")
     val version: Long,
-    @SerializedName("link")
+    @SerializedName("url")
     val link: String,
     @SerializedName("fource")
     val isForce: Boolean,
@@ -20,7 +18,7 @@ class UpdateResponse(
     companion object {
         val NoResponse by lazy {
             UpdateResponse(
-                "0", 0, "", false, ""
+                0, "", false, ""
             )
         }
     }

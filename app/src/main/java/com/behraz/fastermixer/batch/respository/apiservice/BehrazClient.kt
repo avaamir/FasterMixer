@@ -8,6 +8,9 @@ import retrofit2.Response
 import retrofit2.http.*
 
 interface BehrazClient {
+    @POST("AppVersion/FindLastAppVersion")
+    suspend fun checkUpdates(): ApiResult<UpdateResponse>
+
 
     @POST("Users/login")
     suspend fun login(@Body loginRequest: LoginRequest): Response<LoginResponse>
@@ -71,8 +74,6 @@ interface BehrazClient {
     @POST("Vehicle/GetMissionPump") //pomp
     suspend fun getPompMission(): Response<ApiResult<Mission>>
 
-    @POST("AppVersion/FindLastAppVersion")
-    suspend fun checkUpdates(): ApiResult<UpdateResponse>
 
     @POST("Breakdown/InsertBreakdown")
     suspend fun insertBreakdown(@Body request: EntityRequest<BreakdownRequest>) : Response<ApiResult<Any>>
