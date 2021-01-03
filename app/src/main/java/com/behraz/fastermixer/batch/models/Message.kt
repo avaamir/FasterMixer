@@ -4,10 +4,9 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.behraz.fastermixer.batch.respository.UserConfigs
-import com.behraz.fastermixer.batch.utils.general.now
+import com.behraz.fastermixer.batch.utils.general.JalaliCalendar
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
-import java.util.*
 
 @Parcelize
 data class MessageDto(
@@ -22,7 +21,7 @@ data class MessageDto(
     @SerializedName("eventName")
     val eventName: String,
     @SerializedName("dateTime")
-    private val  dateTime: String
+    val dateTime: String
 ) : Parcelable {
     fun toMessage() = Message(
         id = id.toString(),
@@ -35,7 +34,6 @@ data class MessageDto(
         userId = UserConfigs.user.value?.id ?: 0
     )
 }
-
 
 
 @Parcelize
@@ -54,14 +52,14 @@ data class Message(
 ) : Parcelable {
 
     companion object {
-        fun newMessage(id: String, senderName: String, content: String): Message {
+        fun newMessage(id: String, senderName: String, content: String, dateTime: String): Message {
             return Message(
                 id = id,
                 senderName = senderName,
                 content = content,
                 senderId = 0,
                 eventName = senderName,
-                dateTime = now().toString() ,
+                dateTime = dateTime,
                 viewed = false,
                 userId = UserConfigs.user.value?.id ?: 0
             )

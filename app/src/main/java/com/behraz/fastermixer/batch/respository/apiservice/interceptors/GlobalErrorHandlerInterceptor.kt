@@ -2,6 +2,7 @@ package com.behraz.fastermixer.batch.respository.apiservice.interceptors
 
 import com.behraz.fastermixer.batch.models.requests.behraz.ErrorType
 import com.behraz.fastermixer.batch.models.requests.behraz.parseHttpCodeToErrorType
+import com.behraz.fastermixer.batch.utils.general.log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.Interceptor
@@ -13,6 +14,7 @@ class GlobalErrorHandlerInterceptor(private val errorHandler: ApiResponseErrorHa
         val response = chain.proceed(chain.request())
         if (!response.isSuccessful) {
             val bodyString = response.body?.toString()
+            log("responseCode:${response.code}::${chain.request().url}")
             errorHandler.onHandleError(response.code.parseHttpCodeToErrorType(), bodyString)
         }
         return response

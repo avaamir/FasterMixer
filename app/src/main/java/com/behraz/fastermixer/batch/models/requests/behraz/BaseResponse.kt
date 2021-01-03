@@ -18,25 +18,18 @@ data class ApiResult<T : Any> internal constructor(
         get() = _message ?: if (isSucceed)
             Constants.SERVER_SUCCEED
         else
-            when(errorType) {
-                ErrorType.Unknown -> Constants.SERVER_ERROR
-                ErrorType.NetworkError -> "خطا در اینترنت دستگاه"
-                ErrorType.OK -> "موفق"
-                ErrorType.UnAuthorized -> "نیاز به ورود مجدد"
-                ErrorType.Forbidden -> "عدم دسترسی"
-                ErrorType.NotFound -> "یافت نشد"
-                ErrorType.ServerError -> Constants.SERVER_ERROR
-            }
+            errorType.message
 }
 
-enum class ErrorType(val code: Int) {
-    Unknown(0),
-    NetworkError(1),
-    OK(200),
-    UnAuthorized(401),
-    Forbidden(403),
-    NotFound(404),
-    ServerError(500)
+enum class ErrorType(val code: Int, val message: String) {
+    Unknown(0, Constants.SERVER_ERROR),
+    NetworkError(1, "خطا در اینترنت دستگاه"),
+    OK(200, "موفق"),
+    BadRequest(400, "پارامترهای ارسالی نادرست است"),
+    UnAuthorized(401, "نیاز به ورود مجدد"),
+    Forbidden(403, "عدم دسترسی"),
+    NotFound(404, "منبع یافت نشد"),
+    ServerError(500, Constants.SERVER_ERROR)
 }
 
 fun Int.parseHttpCodeToErrorType() =

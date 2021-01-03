@@ -49,7 +49,6 @@ abstract class ParentViewModel : ViewModel() {
 
     private val timer: Timer
 
-
     init {
         timer = fixedRateTimer(period = 10000L) {
             user.value?.let { user ->  //TODO albate bazam momkene unauthorized bede chun shyad moghe check kardan login bashe ama bad if logout etefagh biofte, AMA jelo exception ro migire
@@ -68,9 +67,12 @@ abstract class ParentViewModel : ViewModel() {
                     if (!it.isSucceed) {
                         //TODO ???
                     } else {
-                        val lastMessage = it.entity?.get(0)
-                        if (lastMessage != null)
-                            newMessage.value = Event(lastMessage)
+                        it.entity?.let { messages ->
+                            if (messages.isNotEmpty()) {
+                                val lastMessage = messages[0]
+                                newMessage.value = Event(lastMessage)
+                            }
+                        }
                     }
                 } else {
                     //TODO

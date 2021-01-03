@@ -111,9 +111,9 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
             //Response Timeout
             "1001:30",*/
             //Server IP
-            //"2004:2.184.49.133",
+            "2004:78.39.159.41",
             //Server Port
-            //"2005:5027",
+            "2005:5027",
             //APN
             "2001:mtnirancell",
             //Backup Mode //0:Disabled, 2:Duplicated

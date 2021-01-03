@@ -39,6 +39,21 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView7"
                 tools:text="مغایرت بار برای میکسر شماره سه" />
 
+            <TextView
+                android:id="@+id/textView6"
+                style="@style/my_gray_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{message.dateTime}"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView5"
+                tools:text="99/5/6 22:10" />
 
 
             <TextView
@@ -47,12 +62,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                tools:text="باسکول"
+                android:fontFamily="@font/iransans_medium"
                 android:text="@{message.senderName}"
+                android:textColor="@color/red"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:textColor="@color/red"
-                android:fontFamily="@font/iransans_medium"/>
+                tools:text="باسکول" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

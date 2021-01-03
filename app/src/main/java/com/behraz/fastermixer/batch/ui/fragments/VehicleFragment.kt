@@ -217,7 +217,8 @@ abstract class VehicleFragment : BaseMapFragment() {
                     Message.newMessage(
                         mission.missionId,
                         "ماموریت جدید",
-                        "${mission.conditionTitle}\r\nتوضیحات:${mission.description}\r\nنشانی:${mission.address}"
+                        "${mission.missionCondition.title}\r\nتوضیحات:${mission.description}\r\nنشانی:${mission.address}",
+                        mission.startMissionTime.toString()
                     ).also {
                         NewMessageDialog(it, requireContext()).show()
                         MessageRepo.insert(it)

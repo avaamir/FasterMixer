@@ -800,7 +800,10 @@ public class JalaliCalendar extends Calendar {
         }
 
         public String toString() {
-            return getYear() + "/" + getMonth() + "/" + getDate();
+            int date = getDate();
+            if (getDate() != 1)
+                date = getDate() - 1;
+            return getYear() + "/" + getMonth() + "/" + (date);
         }
     }
 }

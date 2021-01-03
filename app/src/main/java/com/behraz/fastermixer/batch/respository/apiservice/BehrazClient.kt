@@ -33,16 +33,14 @@ interface BehrazClient {
     suspend fun insertBreakdown(@Body request: BreakdownRequest): ApiResult<Unit>
     //=========================================
     //VehicleViewModel
-
     @POST("Vehicles/FindLocationById/{id}")
     suspend fun getVehicleLocation(@Path("id") id: Int): ApiResult<GetVehicleLocationResponse>
 
 
-    //TODO mission not migrated, not implemented server side
-    @POST("Vehicle/GetMission") //mixer
+    @POST("Vehicles/GetMissionForMixer") //mixer
     suspend fun getMixerMission(): ApiResult<Mission>
 
-    @POST("Vehicle/GetMissionPump") //pomp
+    @POST("Vehicles/GetAllMixerForPump") //pomp
     suspend fun getPompMission(): ApiResult<Mission>
     //=========================================
     //Batch
