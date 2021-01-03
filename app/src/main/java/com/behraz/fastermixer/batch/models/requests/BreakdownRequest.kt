@@ -3,9 +3,15 @@ package com.behraz.fastermixer.batch.models.requests
 import com.google.gson.annotations.SerializedName
 
 class BreakdownRequest private constructor(
-    @SerializedName("Description")
-    val description: String
+    @SerializedName("title")
+    val title: String,
 ) {
+    @SerializedName("description")
+    val description: String = title
+
+    @SerializedName("id")
+    private val id = 0 //needed by server
+
     companion object {
         val FIXED = BreakdownRequest("تجهیز درست شد")
         val LAB = BreakdownRequest("حضور آزمایشگاه")

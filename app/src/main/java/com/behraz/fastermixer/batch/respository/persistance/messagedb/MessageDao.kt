@@ -28,6 +28,6 @@ interface MessageDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(items: List<Message>)
 
-    @Query("UPDATE messages SET viewed=1 WHERE viewed=0")
+    @Query("UPDATE messages SET  viewed=1 WHERE viewed=0")
     fun seenAllMessages()
 }

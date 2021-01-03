@@ -15,7 +15,7 @@ class NewMessageDialog(private val message: Message, context: Context, themeResI
         val tvContent = findViewById<TextView>(R.id.textView5)
         val btnOk = findViewById<Button>(R.id.btnOk)
 
-        tvTitle.text = message.sender
+        tvTitle.text = message.senderName
         tvContent.text = message.content
         btnOk.setOnClickListener { dismiss() }
     }

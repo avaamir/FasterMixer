@@ -20,7 +20,10 @@ import com.behraz.fastermixer.batch.utils.fastermixer.fakeAdminManageAccountPage
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeDrawRoadReport
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeFullReports
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeSummeryReports
-import com.behraz.fastermixer.batch.utils.general.*
+import com.behraz.fastermixer.batch.utils.general.RunOnceLiveData
+import com.behraz.fastermixer.batch.utils.general.RunOnceMutableLiveData
+import com.behraz.fastermixer.batch.utils.general.exhaustiveAsExpression
+import com.behraz.fastermixer.batch.utils.general.launchApi
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -38,7 +41,7 @@ object RemoteRepo {
             this.code().parseHttpCodeToErrorType(),
             try {
                 when (this.code().parseHttpCodeToErrorType()) {
-                    ServerError, Forbidden, UnAuthorized ->   {
+                    ServerError, Forbidden, UnAuthorized -> {
                         val apiResult = this.errorBody()!!.string()
                             .fromJsonToModel<ApiResult<T>>()
                         apiResult.message
@@ -204,7 +207,7 @@ object RemoteRepo {
     }
 
     fun insertBreakdownRequest(description: BreakdownRequest) =
-        apiReq(EntityRequest(description), ApiService.client::insertBreakdown)
+        apiReq(description, ApiService.client::insertBreakdown)
 
 
     fun getBatches() = apiReq(ApiService.client::getBatches)
@@ -232,18 +235,22 @@ object RemoteRepo {
         CoroutineScope(IO + serverJobs).launchApi({
             val result = ApiService.client.getMessages()
             if (result.isSucceed) {
-                val messages = result.entity!!
+                val messageDtos = result.entity!!
+                val messages = messageDtos.map {
+                    it.toMessage()
+                }
+
                 if (messages.isNotEmpty()) {
                     MessageRepo.insert(messages)
-                    val seenMessagesIdList = messages.map { it.id }
+                    val seenMessagesIdList = messageDtos.map { it.id }
                     seenMessage(seenMessagesIdList)
                 }
                 withContext(Main) {
-                    onResponse(result)
+                    onResponse(succeedRequest(messages))
                 }
             } else {
                 withContext(Main) {
-                    onResponse(result)
+                    onResponse(failedRequest(result.errorType))
                 }
             }
         }) {
@@ -263,7 +270,7 @@ object RemoteRepo {
     ) {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         CoroutineScope(IO + serverJobs).launchApi({
-            val response = ApiService.client.getBatchLocation(GetEquipmentRequest(equipmentId))
+            val response = ApiService.client.getBatchLocation(equipmentId)
             CoroutineScope(Main).launch {
                 onResponse(response.entity?.equipmentLocation)
             }
@@ -280,7 +287,7 @@ object RemoteRepo {
     ) {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         CoroutineScope(IO + serverJobs).launchApi({
-            val result = ApiService.client.getVehicleLocation(GetEquipmentRequest(equipmentId))
+            val result = ApiService.client.getVehicleLocation(equipmentId)
             CoroutineScope(Main).launch {
                 onResponse(result)
             }
@@ -292,16 +299,17 @@ object RemoteRepo {
     }
 
 
-    private fun seenMessage(messageIds: List<String>) {
+    private fun seenMessage(messageIds: List<Int>) {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         CoroutineScope(IO + serverJobs).launchApi({
-            ApiService.client.seenMessage(SeenMessageRequest(messageIds))
+            ApiService.client.seenMessage(messageIds)
         }) {}
     }
 
     private fun getMixerMission() = apiReq(ApiService.client::getMixerMission) {
         println("debux: $it")
     }
+
     private fun getPompMission() = apiReq(ApiService.client::getPompMission)
 
     fun getMission(isPomp: Boolean): RunOnceLiveData<ApiResult<Mission>?> {

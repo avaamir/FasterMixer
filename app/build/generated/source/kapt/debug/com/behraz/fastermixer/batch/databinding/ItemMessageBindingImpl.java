@@ -92,8 +92,8 @@ public class ItemMessageBindingImpl extends ItemMessageBinding  {
             mDirtyFlags = 0;
         }
         java.lang.String messageContent = null;
+        java.lang.String messageSenderName = null;
         com.behraz.fastermixer.batch.models.Message message = mMessage;
-        java.lang.String messageSender = null;
 
         if ((dirtyFlags & 0x3L) != 0) {
 
@@ -102,8 +102,8 @@ public class ItemMessageBindingImpl extends ItemMessageBinding  {
                 if (message != null) {
                     // read message.content
                     messageContent = message.getContent();
-                    // read message.sender
-                    messageSender = message.getSender();
+                    // read message.senderName
+                    messageSenderName = message.getSenderName();
                 }
         }
         // batch finished
@@ -111,7 +111,7 @@ public class ItemMessageBindingImpl extends ItemMessageBinding  {
             // api target 1
 
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView5, messageContent);
-            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView7, messageSender);
+            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView7, messageSenderName);
         }
     }
     // Listener Stub Implementations

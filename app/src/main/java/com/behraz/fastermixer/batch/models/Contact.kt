@@ -11,6 +11,7 @@ data class Contact(
     @PrimaryKey
     val mobileNumber: String,
     var company: String,
+    val gpsId: String,
     val homeNumber: String? = null,
     val workNumber: String? = null,
     val emailID: String? = null,

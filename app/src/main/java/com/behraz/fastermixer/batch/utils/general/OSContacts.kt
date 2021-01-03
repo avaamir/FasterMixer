@@ -179,6 +179,7 @@ fun Context.readContactList(): ArrayList<Contact> {
                             Contact(
                                 name,
                                 phoneNo,
+                                "",
                                 ""
                             )
                         //println("debug:notNull $name, $phoneNo")

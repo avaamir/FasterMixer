@@ -15,9 +15,6 @@ import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.ui.adapters.MixerAdapter
-import com.behraz.fastermixer.batch.ui.dialogs.NewMessageDialog
-import com.behraz.fastermixer.batch.utils.fastermixer.Constants
-import com.behraz.fastermixer.batch.utils.fastermixer.fakeMessages
 import com.behraz.fastermixer.batch.utils.general.log
 import com.behraz.fastermixer.batch.utils.general.subscribeSignalStrengthChangeListener
 import com.behraz.fastermixer.batch.utils.general.toast

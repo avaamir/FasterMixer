@@ -96,7 +96,6 @@ class FasterMixerApplication : Application(), NetworkConnectionInterceptor.Netwo
 
             override fun onActivityResumed(activity: Activity) {
                 fullScreen(activity)
-                consumeOnAuthorizeEvent(activity)
             }
 
         })
@@ -117,14 +116,6 @@ class FasterMixerApplication : Application(), NetworkConnectionInterceptor.Netwo
         }
     }
 
-    private fun consumeOnAuthorizeEvent(activity: Activity) {
-        if (activity is LoginActivity) {
-            val event =
-                Event(Unit).also { it.getEventIfNotHandled() } //dar loginActivity in event hatman bayad consume shode bashe ke hey safhe ha baste nashe
-            onAuthorizeEvent.postValue(event)
-        }
-    }
-
     private fun fullScreen(activity: Activity) {
         if (activity !is LoginActivity && activity !is AdminActivity && activity !is ContactActivity && activity !is AdminActivity) {
             activity.fullScreen()
@@ -142,6 +133,12 @@ class FasterMixerApplication : Application(), NetworkConnectionInterceptor.Netwo
                     activity.finish()
                 }
             }
+        } else {
+            onAuthorizeEvent.observe(activity) {
+                it.getEventIfNotHandled()?.let {
+                    UserConfigs.logout()
+                }
+            }
         }
     }
 
@@ -157,6 +154,7 @@ class FasterMixerApplication : Application(), NetworkConnectionInterceptor.Netwo
     override fun onHandleError(errorType: ErrorType, errorBody: String?) {
         if (errorType == ErrorType.UnAuthorized) {
             onAuthorizeEvent.postValue(Event(Unit))
+            UserConfigs.logout()
         } else if(errorType == ErrorType.NetworkError) {
             println("debux: NetworkError2")
         }

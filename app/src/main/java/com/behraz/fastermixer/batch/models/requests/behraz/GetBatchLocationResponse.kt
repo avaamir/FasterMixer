@@ -1,7 +1,6 @@
 package com.behraz.fastermixer.batch.models.requests.behraz
 
 import android.location.Location
-import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.models.requests.Fence
 import com.behraz.fastermixer.batch.utils.general.now
 import com.google.gson.annotations.SerializedName
@@ -18,41 +17,31 @@ class GetBatchLocationResponse(
         get() = Fence.strToFence(strFence)
 }
 
-class GetEquipmentRequest(@SerializedName("id") val id: Int)
-
 class GetVehicleLocationResponse(
-    @SerializedName("vehicleID")
-    val id: String,
-    @SerializedName("location")
-    private val locationStr: String,
-    @SerializedName("course")
-    val bearing: Float,
-    @SerializedName("azimuth")
-    val azimuth: String,
-    @SerializedName("battery")
-    val battery: Float,
-    @SerializedName("ignition")
-    val ignition: Boolean,
-    @SerializedName("clientDatetime")
+    @SerializedName("id")
+    val id: Int,
+    @SerializedName("inputLastDataLatitude")
+    private val lat: Double,
+    @SerializedName("inputLastDataLongitude")
+    private val lon: Double,
+    @SerializedName("corrupted")
+    val isDamaged: Boolean,
+    @SerializedName("inputLastDataClientTime")
     val dateTime: Date,
-    private val _location: GeoPoint? = null,
-    @SerializedName("isDamaged")
-    val isDamaged: Boolean
+    @SerializedName("inputLastDataIgnition")
+    val ignition: Boolean
 ) {
-    val location: GeoPoint get() = _location ?: CircleFence.strToCircleFence(locationStr).center
+    val location: GeoPoint get() = GeoPoint(lat, lon)
 
 
     companion object {
         fun create(location: Location, isDamaged: Boolean) = GetVehicleLocationResponse(
-            "0",
-            "",
-            location.bearing,
-            location.altitude.toString(),
-            0f,
+            0,
+            0.0,
+            0.0,
             false,
             now(),
-            GeoPoint(location),
-            isDamaged = isDamaged
+            false
         )
     }
 

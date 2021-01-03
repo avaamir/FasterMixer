@@ -37,6 +37,7 @@ object UserConfigs {
 
 
     fun logout() {
+        ApiService.setToken(null)
         userLive.value?.let {
             PrefsRepo.flush()
             UserRepo.deleteAll()

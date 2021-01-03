@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -108,16 +107,18 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
         * */
         val teltonikaCommands = listOf(
             //Open Link Timeout
-            "1000:30",
+            /*"1000:30",
             //Response Timeout
-            "1001:30",
+            "1001:30",*/
             //Server IP
             //"2004:2.184.49.133",
             //Server Port
             //"2005:5027",
-            //Backup Mode
-            //"2010:2",
-            //Backup Port
+            //APN
+            "2001:mtnirancell",
+            //Backup Mode //0:Disabled, 2:Duplicated
+            "2010:0",
+            /*//Backup Port
             //"2008:5027",
             //Backup IP
             //"2007:78.39.159.41",
@@ -171,7 +172,7 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
             //Recorded Data Sending Order
             "1002:0" //0:newest 1:oldest
             //Reset CPU
-            //"$user $password cpureset"
+            //"$user $password cpureset"*/
         )
 
         /*fun createCommand(ids: List<Int>): String {
@@ -211,35 +212,35 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
         }
 
         private val CONTACTS_JAMKARAN = listOf(
-            Contact("سواری شخصی", "09381522686", "jamkaran"),
-            Contact("میکسر یک", "09038516423", "jamkaran"),
-            Contact("میکسر دو", "09038516427", "jamkaran"),
-            Contact("میکسر سه", "09038516523", "jamkaran"),
-            Contact("پمپ 1", "09038516537", "jamkaran"),
-            Contact("کمپرسی 1", "09038516548", "jamkaran"),
-            Contact("jamkaran1", "09010885677", "jamkaran"),
-            Contact("jamkaran2", "09010886081", "jamkaran"),
-            Contact("jamkaran3", "09014806687", "jamkaran"),
-            Contact("jamkaran4", "09014808698", "jamkaran"),
-            Contact("jamkaran5", "09014808978", "jamkaran"),
-            Contact("jamkaran6", "09013484661", "jamkaran"),
-            Contact("jamkaran7", "09013486891", "jamkaran"),
-            Contact("jamkaran8", "09013530891", "jamkaran"),
-            Contact("jamkaran9", "09013572741", "jamkaran"),
-            Contact("jamkaran10", "09013584361", "jamkaran")
+            Contact("میکسر 475ع36", "09038516423", "jamkaran", "359633102220394"),
+            Contact("میکسر 637ع34", "09038516427", "jamkaran", "359633102227480"),
+            Contact("میکسر 636ع34", "09038516523", "jamkaran", "359633102013302"),
+            //TODO Contact("میکسر 22-355ع88", "***", "jamkaran", "358480088040573"),
+            Contact("پمپ یک", "09038516537", "jamkaran", "359633102063083"),
+            Contact("بنز تک 982ع18", "09038516548", "jamkaran", "359633102002594"),
+            Contact("مایلر 655ع38", "09010885677", "jamkaran", "359633102074379"),
+            Contact("Volvo L90F", "09010886081", "jamkaran", "359633102074536"),
+            Contact("بنز تک 855ع45", "09014806687", "jamkaran", "359633100408579"),
+            Contact("مایلر 987ع18", "09014808698", "jamkaran", "359633102016719"),
+            Contact("بنز تک 132ع37", "09014808978", "jamkaran", "359633102232340"),
+            Contact("بنز جرثقیل", "09013484661", "jamkaran", "359633102088114"),
+            Contact("مزدا دوکابین", "09013486891", "jamkaran", "359633102062986"),
+            Contact("لودر کوماتسو W90", "09013530891", "jamkaran", "359633100408553"),
+            Contact("jamkaran9", "09013572741", "jamkaran", "359633102003386"),
+            Contact("بلدوزر کوماتسو", "09013584361", "jamkaran", "359633102074171")
         )
 
         private val CONTACTS_BAREZ = listOf(
-            Contact("بی ام سی زرد", "09925356408", "barez"),
-            Contact("بنز آبی اسمانی", "09925356405", "barez"),
-            Contact("بی ام سی سفید", "09160887340", "barez"),
-            Contact("barez4", "09921603892", "barez"),
-            Contact("پمپ", "09921603893", "barez"),
-            Contact("آمیکو سفید", "09925356431", "barez"),
-            Contact("کامیون", "09921603891", "barez"),
-            Contact("بنز زرد", "09160885890", "barez"),
-            Contact("بی ام سی سفید", "09921603894", "barez"),
-            Contact("بنزا سفید", "09160885872", "barez")
+            Contact("بی ام سی زرد", "09925356408", "barez", "359633101175763"),
+            Contact("بنز آبی اسمانی", "09925356405", "barez", "359633102559221"),
+            Contact("بی ام سی سفید", "09160887340", "barez", "359633101094345"),
+            Contact("barez4", "09921603892", "barez", "359633101093669"),
+            Contact("پمپ", "09921603893", "barez", "359633101404106"),
+            Contact("آمیکو سفید", "09925356431", "barez", "359633102259137"),
+            Contact("کامیون", "09921603891", "barez", "359633101405244"),
+            Contact("بنز زرد", "09160885890", "barez", "359633102599623"),
+            Contact("بی ام سی سفید", "09921603894", "barez", "359633101828932"),
+            Contact("بنزا سفید", "09160885872", "barez", "359633101440423")
         )
 
     }
@@ -257,7 +258,7 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
         initViews()
         subscribeObservers()
 
-        initContacts()
+        //initContacts()
 
         return mBinding.root
     }
@@ -274,7 +275,7 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
         )
 
         requireContext().createNewContact(CONTACTS_JAMKARAN)
-        //requireContext().createNewContact(CONTACTS_BAREZ)
+        requireContext().createNewContact(CONTACTS_BAREZ)
     }
 
 
@@ -351,11 +352,11 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
     }
 
     private fun subscribeObservers() {
-        viewModel.contacts.observe(viewLifecycleOwner, Observer {
+        viewModel.contacts.observe(viewLifecycleOwner) {
             mAdapter.submitList(it)
-        })
+        }
 
-        viewModel.organizations.observe(viewLifecycleOwner, Observer {
+        viewModel.organizations.observe(viewLifecycleOwner) {
             if ((it.size + 1) != mBinding.spinnerOrganization.adapter?.count) { //+1 be khater ezafe kardan `همه`
                 mBinding.spinnerOrganization.adapter = MySimpleSpinnerAdapter(
                     requireContext(),
@@ -363,8 +364,7 @@ class ContactsFragment : Fragment(), ContactAdapter.Interactions {
                     listOf("همه") + (it)
                 )
             }
-        })
-
+        }
     }
 
     override fun onItemSelected(contact: Contact) {

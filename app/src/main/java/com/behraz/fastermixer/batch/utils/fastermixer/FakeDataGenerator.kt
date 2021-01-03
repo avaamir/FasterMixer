@@ -162,6 +162,7 @@ fun fakeBatches() = listOf(
     Equipment(5, "بچ شماره پنج", false)
 )
 
+/*
 
 fun fakeMessages() = listOf(
     Message(
@@ -214,6 +215,7 @@ fun fakeMessages() = listOf(
         userId = null
     )
 )
+*/
 
 
 fun fakeMixers(): List<Mixer> {

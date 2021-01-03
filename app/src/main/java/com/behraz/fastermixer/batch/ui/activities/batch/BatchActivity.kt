@@ -7,20 +7,17 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.databinding.ActivityBatchNewBinding
 import com.behraz.fastermixer.batch.models.Message
-import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.adapters.MessageAdapter
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.FasterMixerUserPanel
 import com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
 import com.behraz.fastermixer.batch.ui.customs.general.TopSheetBehavior
 import com.behraz.fastermixer.batch.ui.dialogs.MyProgressDialog
 import com.behraz.fastermixer.batch.ui.dialogs.NewMessageDialog
-import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.ui.dialogs.RecordingDialogFragment
 import com.behraz.fastermixer.batch.ui.fragments.batch.BatchFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.MessageListFragment
@@ -244,7 +241,7 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction,
     }
 
     override fun onItemClicked(message: Message) {
-        toast(message.sender + ":" + message.content)
+        toast(message.senderName + ":" + message.content)
     }
 
     override fun onLogoutClicked(view: View?) {
