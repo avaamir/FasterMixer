@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.databinding.ActivityMixerBinding
-import com.behraz.fastermixer.batch.models.enums.MissionCondition
+import com.behraz.fastermixer.batch.models.enums.ServiceState
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
 import com.behraz.fastermixer.batch.models.requests.openweathermap.WeatherViewData
 import com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
@@ -312,7 +312,7 @@ class MixerActivity : AppCompatActivity(),
 
         viewModel.newMissionEvent.observe(this, {
 
-            if (it.peekContent().missionCondition == MissionCondition.ToDest) {
+            if (it.peekContent().serviceState == ServiceState.ToDest) {
                 viewModel.mixerTimerValue =
                     (now() - (it.peekContent().startMissionTime ?: now())).toInt()
                 viewModel.mixerTimer = fixedRateTimer(period = 1000L) {

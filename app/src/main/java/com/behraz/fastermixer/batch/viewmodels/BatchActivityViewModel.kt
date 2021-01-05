@@ -4,9 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.User
+import com.behraz.fastermixer.batch.models.normalizeStateByDistance
 import com.behraz.fastermixer.batch.models.requests.Fence
 import com.behraz.fastermixer.batch.respository.RemoteRepo
-import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.utils.general.Event
 
 class BatchActivityViewModel : ParentViewModel() {
@@ -19,14 +19,14 @@ class BatchActivityViewModel : ParentViewModel() {
             val sortedMixers = batchFenceLocation?.let { fence ->
                 response?.entity?.let {
                     if (it.size == 1) {
-                        it[0].normalizeStateByDistance(fence)
+                        it[0].state = it[0].normalizeStateByDistance(fence)
                         it
                     } else {
                         it.sortedWith(
                             compareBy { mixer ->
                                 mixer.location.distanceToAsDouble(fence.center)
                                     .also {
-                                        mixer.normalizeStateByDistance(fence)
+                                        mixer.state = mixer.normalizeStateByDistance(fence)
                                     }
                             }
                         )

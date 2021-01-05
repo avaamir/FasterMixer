@@ -224,23 +224,17 @@ fun fakeMixers(): List<Mixer> {
         mixers.add(
             Mixer(
                 id = i,
-                serviceId = "$i",
                 carName = "امیرحسین مهدی پور$i",
-                phone = "0936216381$i",
                 pelak = "12,ب,234,63",
-                state = "ده دقیقه تا پمپ",
                 _driverName = "حسن جعفری",
                 owner = "بهراز$i",
-                lat = "$i",
-                lng = "42.2${7 - i}",
-                amount = 4f,
+                lat = "$i".toDouble(),
+                lng = "42.2${7 - i}".toDouble(),
                 capacity = 6f,
-                ended = false,
-                productTypeName = "8,2",
-                totalAmount = 300f,
                 lastDataTime = Calendar.getInstance().time,
                 speed = 0.0f,
-                lastDataTimeDiff = 0.0
+                lastDataTimeDiff = 0.0,
+                loadInfo = null
             )
         )
     }

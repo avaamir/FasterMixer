@@ -108,6 +108,7 @@ class MixerListFragment : Fragment(), MixerAdapter.PompAdapterInteraction {
     }
 
     override fun onCallClicked(mixer: Mixer) {
-        startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + mixer.phone)))
+        toast("not implemented")
+        //startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + mixer.phone)))
     }
 }

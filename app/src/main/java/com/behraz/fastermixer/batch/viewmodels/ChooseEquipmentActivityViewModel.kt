@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import com.behraz.fastermixer.batch.models.Equipment
 import com.behraz.fastermixer.batch.models.enums.UserType
 import com.behraz.fastermixer.batch.models.enums.UserType.*
-import com.behraz.fastermixer.batch.models.requests.behraz.ChooseEquipmentRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.ApiResult
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
@@ -25,7 +24,7 @@ class ChooseEquipmentActivityViewModel : ViewModel() {
 
     val user get() = UserConfigs.user
 
-    private val chooseEquipmentRequest = MutableLiveData<ChooseEquipmentRequest>()
+    private val chooseEquipmentRequest = MutableLiveData<Int>()
     val chooseEquipmentResponse = Transformations.switchMap(chooseEquipmentRequest) { request ->
         when (UserConfigs.user.value!!.userType) {
             Pomp -> RemoteRepo.choosePomp(request)
@@ -61,6 +60,6 @@ class ChooseEquipmentActivityViewModel : ViewModel() {
         if (retryLastRequest == true)
             chooseEquipmentRequest.value.let { if (it != null) chooseEquipmentRequest.value = it else throw IllegalStateException("not requested before") }
         else
-            chooseEquipmentRequest.value = ChooseEquipmentRequest(equipmentId!!)
+            chooseEquipmentRequest.value = equipmentId!!
     }
 }

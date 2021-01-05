@@ -1,6 +1,7 @@
 package com.behraz.fastermixer.batch.models.enums
 
-enum class MissionCondition(val id: Int, val title: String) {
+/**state service darun paln ra moshakhas mikonad */
+enum class ServiceState(val id: Int, val title: String) {
     Created(0, "ساخته شده"),
     ToBatch(1, "حرکت به سمت بچینگ"),
     Loading(2, "بارگیری"),

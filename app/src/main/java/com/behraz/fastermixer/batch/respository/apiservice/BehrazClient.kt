@@ -36,61 +36,53 @@ interface BehrazClient {
     @POST("Vehicles/FindLocationById/{id}")
     suspend fun getVehicleLocation(@Path("id") id: Int): ApiResult<GetVehicleLocationResponse>
 
-
     @POST("Vehicles/GetMissionForMixer") //mixer
     suspend fun getMixerMission(): ApiResult<Mission>
 
-    @POST("Vehicles/GetAllMixerForPump") //pomp
+    @POST("Vehicles/GetMissionForPump") //pomp
     suspend fun getPompMission(): ApiResult<Mission>
     //=========================================
-    //Batch
+    //Pomp
+    @POST("Plannings/GetAllPlanServicesForPump")
+    suspend fun getPompMixers(): ApiResult<List<Mixer>>
 
+    @POST("Vehicles/GetAllMixerForPump")
+    suspend fun getAllMixers(): ApiResult<List<Mixer>>
+
+    @POST("Plannings/GetAllRequestForPump")
+    suspend fun getCustomers(): ApiResult<List<Customer>>
+    //=========================================
+    //Batch
     @POST("Equipments/GetBatchLocation/{id}")
     suspend fun getBatchLocation(@Path("id") id: Int): ApiResult<GetBatchLocationResponse>
 
-    //TODO mission not migrated
-    @POST("Equipment/GetBatch")
+    @POST("Equipments/GetAllBacth")
     suspend fun getBatches(): ApiResult<List<Batch>>
 
-    @POST("Equipment/ChoseEquipment")
-    suspend fun chooseBatch(@Body chooseEquipmentRequest: ChooseEquipmentRequest): ApiResult<Unit>
+    @POST("Equipments/ChooseBatch/{id}")
+    suspend fun chooseBatch(@Path("id") id: Int): ApiResult<Unit>
 
-    @POST("Planning/FindAllPlanningForBatch")
+    //TODO not migrated (not tested actually)
+    @POST("Plannings/GetAllPlanServicesForBatch")
     suspend fun getBatchMixers(): ApiResult<List<Mixer>>
-
     //==========================================
+    //TODO Admin
+    @POST("Vehicle/GetVehicleListForCompany")
+    suspend fun getEquipmentsForAdmin(): ApiResult<List<AdminEquipment>>
+    @POST("Planning/FindAllPlanningByDate")
+    suspend fun getPlansForAdmin(): ApiResult<List<Plan>>
+    @POST("not implemented")
+    suspend fun getFullReport(@Body request: GetReportRequest): ApiResult<List<FullReport>>
+    //======================================
 
 
+    
     //TODO hazf shode az scenario
     @POST("Equipment/GetPomp")
     suspend fun getPomps(): ApiResult<List<Pomp>>
 
-    //TODO hazf shode az scenario
-    @POST("Equipment/ChosePomp")//todo not implemented server side check URL
-    suspend fun choosePomp(@Body chooseEquipmentRequest: ChooseEquipmentRequest): ApiResult<Unit>
-
     @Multipart
     @POST("SendMessage/not_implemented")                           //todo not implemented server side check URL
     suspend fun sendVoiceMessage(@Part voice: MultipartBody.Part): ApiResult<Unit>
-
-
-    @POST("Planning/FindAllPlanningForPump")
-    suspend fun getPompMixers(): ApiResult<List<Mixer>>
-
-    @POST("Vehicle/FindAllMixerForPump")
-    suspend fun getAllMixers(): ApiResult<List<Mixer>>
-
-    @POST("Customer/FindAllCustomerWithRequest")
-    suspend fun getCustomers(): ApiResult<List<Customer>>
-
-    @POST("Vehicle/GetVehicleListForCompany")
-    suspend fun getEquipmentsForAdmin(): ApiResult<List<AdminEquipment>>
-
-    @POST("Planning/FindAllPlanningByDate")
-    suspend fun getPlansForAdmin(): ApiResult<List<Plan>>
-
-    @POST("not implemented")
-    suspend fun getFullReport(@Body request: GetReportRequest): ApiResult<List<FullReport>>
-
 }
 

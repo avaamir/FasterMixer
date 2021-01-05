@@ -214,15 +214,8 @@ abstract class VehicleFragment : BaseMapFragment() {
                     mBinding.map.invalidate()
                     toast("شما ماموریت دیگری ندارید")
                 } else {
-                    Message.newMessage(
-                        mission.missionId,
-                        "ماموریت جدید",
-                        "${mission.missionCondition.title}\r\nتوضیحات:${mission.description}\r\nنشانی:${mission.address}",
-                        mission.startMissionTime.toString()
-                    ).also {
-                        NewMessageDialog(it, requireContext()).show()
-                        MessageRepo.insert(it)
-                    }
+                    val missionMessage = vehicleActivityViewModel.insertMission(mission)
+                    NewMessageDialog(missionMessage, requireContext()).show()
                     //
                     println("debux: `newMissionEvent` NewMission")
                     destMarker.position = mission.destFence.center

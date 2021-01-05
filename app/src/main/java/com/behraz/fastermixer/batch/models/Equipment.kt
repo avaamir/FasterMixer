@@ -4,11 +4,11 @@ import com.google.gson.annotations.SerializedName
 import java.util.*
 
 open class Equipment(
-    @SerializedName("equipmentID")
+    @SerializedName("id")
     val id: Int,
     @SerializedName("name")
     val name: String,
-    @SerializedName("isAvailable")
+    @SerializedName("selected")
     val isAvailable: Boolean  // this is for choose equipment
 ) {
     val availabilityMessage get() = if (isAvailable) "در دسترس" else "در حال استفاده"

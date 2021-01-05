@@ -213,17 +213,17 @@ object RemoteRepo {
     fun getBatches() = apiReq(ApiService.client::getBatches)
     fun getPomps() = apiReq(ApiService.client::getPomps)
 
-    fun chooseBatch(chooseEquipmentRequest: ChooseEquipmentRequest) =
-        apiReq(chooseEquipmentRequest, ApiService.client::chooseBatch) {
+    fun chooseBatch(equipmentId: Int) =
+        apiReq(equipmentId, ApiService.client::chooseBatch) {
             if (it.isSucceed) {
-                UserConfigs.updateUser(chooseEquipmentRequest.equipmentId)
+                UserConfigs.updateUser(equipmentId = equipmentId)
                 println("debugx: RemoteRepo: blocking finished, User db updated, Now Activity Will Call..")
             }
         }
 
 
-    fun choosePomp(chooseEquipmentRequest: ChooseEquipmentRequest) =
-        apiReq(chooseEquipmentRequest, ApiService.client::chooseBatch)
+    fun choosePomp(equipmentId: Int) =
+        apiReq(equipmentId, ApiService.client::chooseBatch)
 
     fun getRequestMixers(batchNotPomp: Boolean) =
         if (batchNotPomp) apiReq(ApiService.client::getBatchMixers) else apiReq(ApiService.client::getPompMixers)

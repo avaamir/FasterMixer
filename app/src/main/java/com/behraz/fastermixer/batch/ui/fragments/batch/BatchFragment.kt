@@ -80,12 +80,13 @@ class BatchFragment : Fragment(), MixerAdapter.BatchAdapterInteraction {
     }
 
     override fun onCallClicked(mixer: Mixer) {
-        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + mixer.phone))
-        startActivity(intent)
+        toast("not yet implemented")
+        //val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + mixer.phone))
+        //startActivity(intent)
     }
 
     override fun onEndLoadingClicked(mixer: Mixer) {
         //toast(mixer.carName + " onEnd")
-        toast(mixer.lat + ", " + mixer.lng)
+        toast("${mixer.location}")
     }
 }

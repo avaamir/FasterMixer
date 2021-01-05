@@ -5,20 +5,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.app.LocationCompassProvider
+import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.models.requests.behraz.GetVehicleLocationResponse
 import com.behraz.fastermixer.batch.respository.RemoteRepo
+import com.behraz.fastermixer.batch.respository.UserConfigs
+import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.Event
+import com.behraz.fastermixer.batch.utils.general.now
+import com.behraz.fastermixer.batch.utils.general.toJalali
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
-import java.lang.IllegalStateException
 
 abstract class VehicleActivityViewModel : ParentViewModel() {
 
-    private val _isDamaged  = MutableLiveData<Boolean>()
+    private val _isDamaged = MutableLiveData<Boolean>()
     val isDamaged: LiveData<Boolean> = _isDamaged
 
     var isServerLocationProvider: Boolean = false
@@ -96,7 +100,8 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
         LocationCompassProvider.location.observeForever { location ->
             if (!isServerLocationProvider) {
                 //TODO age location va lastLocation kheli fasele dasht dg animate nashe va mostaghim bere un noghte
-                getUserLocationResponse.value = GetVehicleLocationResponse.create(location, _isDamaged.value ?: false)
+                getUserLocationResponse.value =
+                    GetVehicleLocationResponse.create(location, _isDamaged.value ?: false)
             }
         }
 
@@ -114,7 +119,8 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
                         _isDamaged.value = it.entity?.isDamaged ?: false
                         lastServerLocationResponse = it.entity
                         if (isServerLocationProvider) {
-                            getUserLocationResponse.value = it.entity//age observer nadashte bashe set nemishe, age scenario avaz shod deghat kon, alan mapFragment Observersh hast
+                            getUserLocationResponse.value =
+                                it.entity//age observer nadashte bashe set nemishe, age scenario avaz shod deghat kon, alan mapFragment Observersh hast
                         }
                     } else {
                         //TODO what should i do?
@@ -136,5 +142,31 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
 
     fun getCurrentWeather() {
         getCurrentWeatherEvent.value = getUserLocationResponse.value!!.location
+    }
+
+    fun insertMission(mission: Mission): Message {
+        val content =
+            "${mission.serviceState.title}\r\n" +
+                    if (!mission.description.isNullOrBlank())
+                        "توضیحات:${mission.description}\r\n"
+                    else
+                        if (!mission.address.isBlank()) {
+                            "نشانی:${mission.address}"
+                        } else
+                            ""
+
+
+        val message = Message(
+            id = mission.missionId,
+            senderName = "ماموریت جدید",
+            content = content,
+            senderId = 0,
+            eventName = "ماموریت جدید",
+            dateTime = (mission.startMissionTime ?: now().toJalali()).toString(),
+            viewed = false,
+            userId = UserConfigs.user.value?.id ?: 0
+        )
+        MessageRepo.insert(message)
+        return message
     }
 }

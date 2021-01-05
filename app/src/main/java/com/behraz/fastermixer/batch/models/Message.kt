@@ -49,20 +49,4 @@ data class Message(
 
     var viewed: Boolean,
     var userId: Int?,
-) : Parcelable {
-
-    companion object {
-        fun newMessage(id: String, senderName: String, content: String, dateTime: String): Message {
-            return Message(
-                id = id,
-                senderName = senderName,
-                content = content,
-                senderId = 0,
-                eventName = senderName,
-                dateTime = dateTime,
-                viewed = false,
-                userId = UserConfigs.user.value?.id ?: 0
-            )
-        }
-    }
-}
+) : Parcelable

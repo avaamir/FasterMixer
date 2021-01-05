@@ -113,19 +113,6 @@
                 app:layout_constraintEnd_toStartOf="@+id/textView9"
                 app:layout_constraintTop_toTopOf="@+id/textView12" />
 
-            <TextView
-                android:id="@+id/textView18"
-                style="@style/my_gray_normal_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:text="@{mixer.loadInfo.amountFromTotal}"
-                android:textColor="@color/material_green"
-                app:layout_constraintBottom_toBottomOf="@+id/textView17"
-                app:layout_constraintEnd_toStartOf="@+id/textView17"
-                app:layout_constraintTop_toTopOf="@+id/textView17"
-                tools:text="305/5" />
-
 
             <com.behraz.fastermixer.batch.ui.customs.general.MyRaisedButton
                 android:id="@+id/btnCall"
@@ -238,7 +225,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:constraint_referenced_ids="textView18,textView15,textView16,textView9,textView12,textView13,textView17,textView14,textView11,textView20"
+                app:constraint_referenced_ids="textView15,textView16,textView9,textView12,textView13,textView17,textView14,textView11,textView20"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="8dp" />
 

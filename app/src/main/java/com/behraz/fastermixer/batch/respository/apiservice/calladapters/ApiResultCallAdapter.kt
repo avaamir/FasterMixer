@@ -4,6 +4,7 @@ import com.behraz.fastermixer.batch.models.requests.behraz.ApiResult
 import com.behraz.fastermixer.batch.models.requests.behraz.ErrorType
 import com.behraz.fastermixer.batch.models.requests.behraz.failedRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.parseHttpCodeToErrorType
+import com.behraz.fastermixer.batch.utils.general.log
 import okhttp3.Request
 import okhttp3.ResponseBody
 import okio.IOException
@@ -53,6 +54,7 @@ class ApiResultCall<T : Any>(
                                     errorType
                                 )
                         } catch (ex: Exception) {
+                            log("${request().url}::${ex.message}")
                             failedRequest(errorType)
                         }
                     } else {
@@ -63,6 +65,7 @@ class ApiResultCall<T : Any>(
             }
 
             override fun onFailure(call: Call<ApiResult<T>>, t: Throwable) {
+                log("${request().url} -> ${t.message}")
                 callback.onResponse(
                     this@ApiResultCall, Response.success(
                         failedRequest(
