@@ -24,6 +24,8 @@ import com.behraz.fastermixer.batch.utils.general.RunOnceLiveData
 import com.behraz.fastermixer.batch.utils.general.RunOnceMutableLiveData
 import com.behraz.fastermixer.batch.utils.general.exhaustiveAsExpression
 import com.behraz.fastermixer.batch.utils.general.launchApi
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -40,14 +42,10 @@ object RemoteRepo {
         return failedRequest<T>(
             this.code().parseHttpCodeToErrorType(),
             try {
-                when (this.code().parseHttpCodeToErrorType()) {
-                    ServerError, Forbidden, UnAuthorized -> {
-                        val apiResult = this.errorBody()!!.string()
-                            .fromJsonToModel<ApiResult<T>>()
-                        apiResult.message
-                    }
-                    else -> null
-                }?.exhaustiveAsExpression()
+                val gson = Gson()
+                val type = object : TypeToken<ApiResult<Unit>>() {}.type
+                val apiResult = gson.fromJson<ApiResult<Unit>>(this.errorBody()!!.string(), type)
+                apiResult.message
             } catch (ex: Exception) {
                 println("debux:${ex.message} in `RemoteRepo::handleError2`")
                 null
@@ -153,7 +151,7 @@ object RemoteRepo {
             val body = getTokenResponse.body()!!
             succeedRequest(body)
         } else {
-            return getTokenResponse.handleError()
+            getTokenResponse.handleError()
         }
     }
 
@@ -272,7 +270,10 @@ object RemoteRepo {
         CoroutineScope(IO + serverJobs).launchApi({
             val response = ApiService.client.getBatchLocation(equipmentId)
             CoroutineScope(Main).launch {
-                onResponse(response.entity?.equipmentLocation)
+                if (response.isSucceed)
+                    onResponse(Fence.strToFence(response.entity!!))
+                else
+                    onResponse(null)
             }
         }) {
             CoroutineScope(Main).launch {

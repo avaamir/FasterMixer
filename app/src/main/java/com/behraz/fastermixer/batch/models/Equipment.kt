@@ -1,7 +1,6 @@
 package com.behraz.fastermixer.batch.models
 
 import com.google.gson.annotations.SerializedName
-import java.util.*
 
 open class Equipment(
     @SerializedName("id")
@@ -9,7 +8,8 @@ open class Equipment(
     @SerializedName("name")
     val name: String,
     @SerializedName("selected")
-    val isAvailable: Boolean  // this is for choose equipment
+    private val isOccupied: Boolean  // this is for choose equipment
 ) {
+    val isAvailable get() = !isOccupied
     val availabilityMessage get() = if (isAvailable) "در دسترس" else "در حال استفاده"
 }

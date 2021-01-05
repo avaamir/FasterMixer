@@ -12,5 +12,5 @@ data class GetUserInfoResponse(
     @SerializedName("roleId")
     val roleId: Int,
     @SerializedName("equipmentId")
-    val equipmentId: Int
+    val equipmentId: Int?
 )

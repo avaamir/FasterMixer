@@ -54,7 +54,7 @@ interface BehrazClient {
     //=========================================
     //Batch
     @POST("Equipments/GetBatchLocation/{id}")
-    suspend fun getBatchLocation(@Path("id") id: Int): ApiResult<GetBatchLocationResponse>
+    suspend fun getBatchLocation(@Path("id") id: Int): ApiResult<String>
 
     @POST("Equipments/GetAllBacth")
     suspend fun getBatches(): ApiResult<List<Batch>>

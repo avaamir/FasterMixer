@@ -7,16 +7,6 @@ import com.google.gson.annotations.SerializedName
 import org.osmdroid.util.GeoPoint
 import java.util.*
 
-class GetBatchLocationResponse(
-    // private val equipmentID: String,
-    // private val geofenceID: String,
-    @SerializedName("geofencepoint")
-    private val strFence: String
-) {
-    val equipmentLocation: Fence
-        get() = Fence.strToFence(strFence)
-}
-
 class GetVehicleLocationResponse(
     @SerializedName("id")
     val id: Int,

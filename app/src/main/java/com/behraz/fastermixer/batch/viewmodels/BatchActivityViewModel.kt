@@ -8,6 +8,7 @@ import com.behraz.fastermixer.batch.models.normalizeStateByDistance
 import com.behraz.fastermixer.batch.models.requests.Fence
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.utils.general.Event
+import com.behraz.fastermixer.batch.utils.general.log
 
 class BatchActivityViewModel : ParentViewModel() {
 
@@ -16,6 +17,7 @@ class BatchActivityViewModel : ParentViewModel() {
     private val getMixersEvent = MutableLiveData(Event(Unit))
     val mixers = Transformations.switchMap(getMixersEvent) {
         RemoteRepo.getRequestMixers(batchNotPomp = true).map { response ->
+            log("getMixerResponse:$response, Fence:${batchFenceLocation}")
             val sortedMixers = batchFenceLocation?.let { fence ->
                 response?.entity?.let {
                     if (it.size == 1) {
@@ -47,9 +49,9 @@ class BatchActivityViewModel : ParentViewModel() {
         }
     }
 
-
     private fun getBatchFenceLocation(user: User) {
         RemoteRepo.getBatchLocation(user.equipmentId!!) {
+            log("getBatchFenceLocation:$it")
             batchFenceLocation = it
         }
     }

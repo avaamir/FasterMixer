@@ -265,8 +265,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
 
                             if (it.entity!!.equipmentId == null) {
                                 when (it.entity.userType) {
-                                    UserType.Pomp -> toast(getString(R.string.driver_equipment_not_found))
-                                    UserType.Mixer -> toast(getString(R.string.driver_equipment_not_found))
+                                    UserType.Pomp, UserType.Mixer -> toast(getString(R.string.driver_equipment_not_found))
                                     UserType.Batch -> startActivity(
                                         Intent(
                                             this,
