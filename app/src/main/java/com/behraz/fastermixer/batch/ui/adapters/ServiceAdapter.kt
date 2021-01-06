@@ -1,34 +1,26 @@
 package com.behraz.fastermixer.batch.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ItemServiceBinding
 import com.behraz.fastermixer.batch.models.Service
 import com.behraz.fastermixer.batch.models.enums.ServiceState.*
 import com.behraz.fastermixer.batch.utils.general.exhaustive
-import java.lang.IllegalStateException
 
-class ServiceAdapter(private val interaction: Interaction? = null) :
-    ListAdapter<Service, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
-
-    companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Service>() {
-            override fun areItemsTheSame(oldItem: Service, newItem: Service) =
-                oldItem.id == newItem.id
-
-            override fun areContentsTheSame(oldItem: Service, newItem: Service) =
-                oldItem == newItem
-        }
-    }
+class ServiceAdapter(
+    private val interaction: Interaction? = null,
+    private val isServiceHistory: Boolean
+) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var layoutInflater: LayoutInflater
 
+    private val currentList = ArrayList<Service>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (!::layoutInflater.isInitialized) {
@@ -51,6 +43,15 @@ class ServiceAdapter(private val interaction: Interaction? = null) :
         }
     }
 
+    override fun getItemCount() = currentList.size
+
+    fun submitList(items: List<Service>) {
+        currentList.clear()
+        currentList.addAll(items)
+        notifyDataSetChanged()
+    }
+
+
     inner class ServiceViewHolder(private val mBinding: ItemServiceBinding) :
         RecyclerView.ViewHolder(mBinding.root) {
 
@@ -68,6 +69,12 @@ class ServiceAdapter(private val interaction: Interaction? = null) :
         fun bindService(item: Service) {
             mBinding.frameHistory.setOnClickListener {
                 interaction?.onServiceHistoryClicked(item)
+            }
+
+            if (isServiceHistory) {
+                mBinding.gpHistory.visibility = View.GONE
+            } else {
+                mBinding.gpHistory.visibility = View.VISIBLE
             }
 
             when (item.serviceState) {
@@ -108,5 +115,7 @@ class ServiceAdapter(private val interaction: Interaction? = null) :
     interface Interaction {
         fun onServiceHistoryClicked(item: Service)
     }
+
+
 }
 

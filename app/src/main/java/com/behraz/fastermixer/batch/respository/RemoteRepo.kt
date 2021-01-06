@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Mission
+import com.behraz.fastermixer.batch.models.Service
 import com.behraz.fastermixer.batch.models.User
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
 import com.behraz.fastermixer.batch.models.requests.Fence
@@ -11,7 +12,6 @@ import com.behraz.fastermixer.batch.models.requests.behraz.*
 import com.behraz.fastermixer.batch.models.requests.openweathermap.CurrentWeatherByCoordinatesResponse
 import com.behraz.fastermixer.batch.models.requests.route.GetRouteResponse
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
-import com.behraz.fastermixer.batch.respository.apiservice.BehrazClient
 import com.behraz.fastermixer.batch.respository.apiservice.MapService
 import com.behraz.fastermixer.batch.respository.apiservice.WeatherService
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
@@ -418,4 +418,18 @@ object RemoteRepo {
         mockApiReq(succeedRequest(fakeDrawRoadReport()))
 
     fun getActiveServices(requestId: Int) = apiReq(requestId, ApiService.client::getActiveServices)
+    fun getServiceHistory(vehicleId: Int, requestId: Int): LiveData<ApiResult<List<Service>>> {
+        return object : RunOnceLiveData<ApiResult<List<Service>>>() {
+            override fun onActiveRunOnce() {
+                if (!RemoteRepo::serverJobs.isInitialized || !serverJobs.isActive)
+                    serverJobs = Job()
+                CoroutineScope(IO + serverJobs).launch {
+                    val result = ApiService.client.getServiceHistory(vehicleId, requestId)
+                    withContext(Main) {
+                        value = result
+                    }
+                }
+            }
+        }
+    }
 }

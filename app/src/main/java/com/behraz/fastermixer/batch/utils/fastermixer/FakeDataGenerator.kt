@@ -17,7 +17,7 @@ fun fakeServices() = listOf(
 
 fun fakeService(id: Int, name: String) =
     Service(
-        id = id,
+        vehicleId = id,
         vehicleName = name,
         _conditionType = com.behraz.fastermixer.batch.models.enums.ServiceState.Loading.id,
         loadingTime = "10:22",

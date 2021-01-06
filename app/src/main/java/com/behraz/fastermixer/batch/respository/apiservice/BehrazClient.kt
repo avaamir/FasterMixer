@@ -31,6 +31,7 @@ interface BehrazClient {
 
     @POST("Breakdowns/Create")
     suspend fun insertBreakdown(@Body request: BreakdownRequest): ApiResult<Unit>
+
     //=========================================
     //VehicleViewModel
     @POST("Vehicles/FindLocationById/{id}")
@@ -41,6 +42,7 @@ interface BehrazClient {
 
     @POST("Vehicles/GetMissionForPump") //pomp
     suspend fun getPompMission(): ApiResult<Mission>
+
     //=========================================
     //Pomp
     @POST("Plannings/GetAllPlanServicesForPump")
@@ -51,6 +53,7 @@ interface BehrazClient {
 
     @POST("Plannings/GetAllRequestForPump")
     suspend fun getCustomers(): ApiResult<List<Customer>>
+
     //=========================================
     //Batch
     @POST("Equipments/GetBatchLocation/{id}")
@@ -65,23 +68,29 @@ interface BehrazClient {
     //TODO not migrated (not tested actually)
     @POST("Plannings/GetAllPlanServicesForBatch")
     suspend fun getBatchMixers(): ApiResult<List<Mixer>>
+
     //==========================================
     //Admin
     @POST("Vehicles/GetAll")
     suspend fun getEquipmentsForAdmin(): ApiResult<List<AdminEquipment>>
+
     @POST("Request/GetRequestNotEnded")
     suspend fun getPlansForAdmin(): ApiResult<List<Plan>>
 
     @POST("Plannings/GetActivePlaningServiceForRequest/{requestId}")
-    suspend fun getActiveServices(@Path("requestId") requestId: Int) : ApiResult<List<Service>>
+    suspend fun getActiveServices(@Path("requestId") requestId: Int): ApiResult<List<Service>>
 
+    @POST("Plannings/GetPlaningServiceForVehicle/{requestId}/{vehicleId}")
+    suspend fun getServiceHistory(
+        @Path("vehicleId") vehicleId: Int,
+        @Path("{requestId}") requestId: Int
+    ): ApiResult<List<Service>>
 
     @POST("not implemented")
     suspend fun getFullReport(@Body request: GetReportRequest): ApiResult<List<FullReport>>
     //======================================
 
 
-    
     //TODO hazf shode az scenario
     @POST("Equipment/GetPomp")
     suspend fun getPomps(): ApiResult<List<Pomp>>

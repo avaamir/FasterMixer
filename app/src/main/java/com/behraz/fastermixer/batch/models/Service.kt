@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Service(
     @SerializedName("vehicleId")
-    val id: Int,
+    val vehicleId: Int,
     @SerializedName("vehicleName")
     val vehicleName: String,
     @SerializedName("conditionType")

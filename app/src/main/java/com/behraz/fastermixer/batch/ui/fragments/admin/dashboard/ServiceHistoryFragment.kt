@@ -10,28 +10,27 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.models.Plan
-import com.behraz.fastermixer.batch.models.Service
 import com.behraz.fastermixer.batch.models.requests.behraz.ErrorType.NetworkError
 import com.behraz.fastermixer.batch.ui.adapters.ServiceAdapter
 import com.behraz.fastermixer.batch.ui.animations.crossfade
-import com.behraz.fastermixer.batch.ui.fragments.navigate
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.snack
 import com.behraz.fastermixer.batch.utils.general.toast
-import com.behraz.fastermixer.batch.viewmodels.ServiceFragmentViewModel
+import com.behraz.fastermixer.batch.viewmodels.ServiceHistoryFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_service.*
 
-class ServiceFragment : Fragment(), ServiceAdapter.Interaction {
-    private lateinit var viewModel: ServiceFragmentViewModel
-    private val mAdapter = ServiceAdapter(this, false)
+class ServiceHistoryFragment : Fragment() {
+    private lateinit var viewModel: ServiceHistoryFragmentViewModel
+    private val mAdapter = ServiceAdapter(null, true)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ServiceFragmentViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ServiceHistoryFragmentViewModel::class.java)
         if (viewModel.plan == null) {
             arguments?.let {
                 val plan: Plan = it.getParcelable(Constants.INTENT_SERVICE_PLAN)!!
-                viewModel.plan = plan
+                val vehicleId = it.getInt(Constants.INTENT_VEHICLE_ID, 0)
+                viewModel.setData(vehicleId, plan)
             }
         }
     }
@@ -58,7 +57,7 @@ class ServiceFragment : Fragment(), ServiceAdapter.Interaction {
 
 
     private fun subscribeObservers() {
-        viewModel.activeServices.observe(viewLifecycleOwner) {
+        viewModel.serviceHistory.observe(viewLifecycleOwner) {
             crossfade(recyclerService, progressBar)
             if (it.isSucceed) {
                 mAdapter.submitList(it.entity!!)
@@ -71,12 +70,5 @@ class ServiceFragment : Fragment(), ServiceAdapter.Interaction {
                 }
             }
         }
-    }
-
-    override fun onServiceHistoryClicked(item: Service) {
-        navigate(R.id.action_serviceFragment_to_serviceHistoryFragment, Bundle().apply {
-            putParcelable(Constants.INTENT_SERVICE_PLAN, viewModel.plan)
-            putInt(Constants.INTENT_VEHICLE_ID, item.vehicleId)
-        })
     }
 }

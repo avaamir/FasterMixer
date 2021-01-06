@@ -28,5 +28,15 @@
         android:id="@+id/serviceFragment"
         android:name="com.behraz.fastermixer.batch.ui.fragments.admin.dashboard.ServiceFragment"
         android:label="سرویس های فعال"
-        tools:layout="@layout/fragment_service" />
+        tools:layout="@layout/fragment_service" >
+        <action
+            android:id="@+id/action_serviceFragment_to_serviceHistoryFragment"
+            app:destination="@id/serviceHistoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/serviceHistoryFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.dashboard.ServiceHistoryFragment"
+        android:label="تاریخچه سرویس"
+        tools:layout="@layout/fragment_service"
+        />
 </navigation>
