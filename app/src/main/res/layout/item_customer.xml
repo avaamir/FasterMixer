@@ -50,7 +50,7 @@
                 style="@style/my_gray_normal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="64dp"
+                android:layout_marginEnd="16dp"
                 android:text="ساعت شروع:"
                 app:layout_constraintEnd_toStartOf="@+id/textView24"
                 app:layout_constraintTop_toTopOf="@+id/textView24" />
@@ -95,7 +95,7 @@
                 style="@style/my_gray_normal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="64dp"
+                android:layout_marginEnd="16dp"
                 android:text="اسلامپ:"
                 app:layout_constraintBottom_toBottomOf="@+id/textView25"
                 app:layout_constraintEnd_toEndOf="@+id/textView34"
@@ -194,10 +194,11 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/btnCustomerList"
+                style="@style/my_clickable_card_style"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginStart="8dp"
-                style="@style/my_clickable_card_style"
+                android:visibility="visible"
                 app:cardCornerRadius="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -206,21 +207,21 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:layout_gravity="center"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <ImageView
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:layout_gravity="center_horizontal"
-                        app:srcCompat="@drawable/ic_factory"/>
+                        app:srcCompat="@drawable/ic_factory" />
+
                     <TextView
+                        style="@style/my_black_bold_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/my_black_bold_text"
-                        android:text="انتخاب پروژه"
-                        />
+                        android:text="انتخاب پروژه" />
 
                 </LinearLayout>
 

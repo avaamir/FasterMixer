@@ -7,39 +7,50 @@ import com.behraz.fastermixer.batch.models.requests.toGeoPoint
 import com.behraz.fastermixer.batch.utils.general.exhaustiveAsExpression
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
+import org.osmdroid.util.GeoPoint
 import java.util.*
 
 @Parcelize
 data class AdminEquipment(
-    @SerializedName("vehicleID")
-    val id: String,
+    @SerializedName("id")
+    val id: Int,
     @SerializedName("name")
     val name: String,
-    @SerializedName("vehicleTypeName")
-    val typeName: String,
     @SerializedName("plaque")
     val carIdStr: String,
-    @SerializedName("isDamaged")
+    @SerializedName("corrupted")
     val isDamaged: Boolean,
-    /*@SerializedName("lat")
-    val lat: String,
-    @SerializedName("lon")
-    val lon: String,*/
-    @SerializedName("inputLastDataLocation")
-    private val inputLastDataLocation: String?,
-    @SerializedName("inputLastDataClientDatetime")
-    val dateTime: Date?,
+    @SerializedName("inputLastDataSpeed")
+    val speed: Float,
+    @SerializedName("inputLastDataBattery")
+    val battery: Float,
     @SerializedName("inputLastDataIgnition")
-    val ignition: Boolean
-) : Parcelable {
+    val ignition: Boolean,
+    @SerializedName("inputLastDataMaxSpeed")
+    val maxSpeed: Float,
+    @SerializedName("userFullName")
+    val driverName: String?,
+    @SerializedName("timeDifference")
+    val lastDataTimeDiff: Double,
+    @SerializedName("inputLastDataClientTime")
+    val dateTime: Date?,
 
-    val location get() = inputLastDataLocation?.toGeoPoint()
+    @SerializedName("vehicleTypeIsPump")
+    private val isPomp: Boolean,
+    @SerializedName("vehicleTypeIsMixer")
+    private val isMixer: Boolean,
+    @SerializedName("inputLastDataLatitude")
+    private val lat: Double,
+    @SerializedName("inputLastDataLongitude")
+    private val lon: Double,
+) : Parcelable {
+    val location get() = GeoPoint(lat, lon)
 
     val type: EquipmentType
         get() = when {
-            typeName.contains("میکسر") -> EquipmentType.Mixer
-            typeName.contains("لودر") -> EquipmentType.Loader
-            typeName.contains("پمپ") -> EquipmentType.Pomp
+            isMixer -> EquipmentType.Mixer
+            isPomp -> EquipmentType.Pomp
+            name.contains("لودر") -> EquipmentType.Loader
             else -> EquipmentType.Other
         }.exhaustiveAsExpression()
 
@@ -50,5 +61,4 @@ data class AdminEquipment(
             ignition -> EquipmentState.Using
             else -> EquipmentState.Other
         }
-
 }

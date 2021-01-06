@@ -8,13 +8,11 @@ import com.behraz.fastermixer.batch.models.User
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
 import com.behraz.fastermixer.batch.models.requests.Fence
 import com.behraz.fastermixer.batch.models.requests.behraz.*
-import com.behraz.fastermixer.batch.models.requests.behraz.ErrorType.*
 import com.behraz.fastermixer.batch.models.requests.openweathermap.CurrentWeatherByCoordinatesResponse
 import com.behraz.fastermixer.batch.models.requests.route.GetRouteResponse
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.respository.apiservice.MapService
 import com.behraz.fastermixer.batch.respository.apiservice.WeatherService
-import com.behraz.fastermixer.batch.respository.apiservice.interceptors.fromJsonToModel
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeAdminManageAccountPage
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeDrawRoadReport
@@ -22,7 +20,6 @@ import com.behraz.fastermixer.batch.utils.fastermixer.fakeFullReports
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeSummeryReports
 import com.behraz.fastermixer.batch.utils.general.RunOnceLiveData
 import com.behraz.fastermixer.batch.utils.general.RunOnceMutableLiveData
-import com.behraz.fastermixer.batch.utils.general.exhaustiveAsExpression
 import com.behraz.fastermixer.batch.utils.general.launchApi
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -59,22 +56,22 @@ object RemoteRepo {
         request: ReqM,
         requestFunction: KSuspendFunction1<ReqM, ApiResult<ResM>>,
         repoLevelHandler: ((ApiResult<ResM>) -> (Unit))? = null
-    ): RunOnceLiveData<ApiResult<ResM>?> {
+    ): RunOnceLiveData<ApiResult<ResM>> {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
-        return object : RunOnceMutableLiveData<ApiResult<ResM>?>() {
+        return object : RunOnceMutableLiveData<ApiResult<ResM>>() {
             override fun onActiveRunOnce() {
-                CoroutineScope(IO + serverJobs).launchApi({
+                CoroutineScope(IO + serverJobs).launch {
                     val response = requestFunction(request)
                     repoLevelHandler?.invoke(response)
                     withContext(Main) {
-                        value = response
+                        setValue(response)
                     }
-                }) {
+                } /*{
                     println("debug:error:RemoteRepo.${requestFunction.name} has exception->${it.message}")
                     CoroutineScope(Main).launch {
                         value = null
                     }
-                }
+                }*/
             }
         }
     }
@@ -106,22 +103,22 @@ object RemoteRepo {
     private fun <ResM : Any> apiReq(
         requestFunction: KSuspendFunction0<ApiResult<ResM>>,
         repoLevelHandler: ((ApiResult<ResM>) -> (Unit))? = null  //This will only excute if LiveData has an observer, because it called on active method
-    ): RunOnceLiveData<ApiResult<ResM>?> {
+    ): RunOnceLiveData<ApiResult<ResM>> {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
-        return object : RunOnceMutableLiveData<ApiResult<ResM>?>() {
+        return object : RunOnceMutableLiveData<ApiResult<ResM>>() {
             override fun onActiveRunOnce() {
-                CoroutineScope(IO + serverJobs).launchApi({
+                CoroutineScope(IO + serverJobs).launch {
                     val result = requestFunction()
                     repoLevelHandler?.invoke(result)
                     withContext(Main) {
-                        value = result
+                        setValue(result)
                     }
-                }) {
+                } /*{
                     println("debug:error:RemoteRepo.${requestFunction.name} has exception->${it.message}")
                     CoroutineScope(Main).launch {
                         value = null
                     }
-                }
+                }*/
             }
         }
     }
@@ -313,7 +310,7 @@ object RemoteRepo {
 
     private fun getPompMission() = apiReq(ApiService.client::getPompMission)
 
-    fun getMission(isPomp: Boolean): RunOnceLiveData<ApiResult<Mission>?> {
+    fun getMission(isPomp: Boolean): RunOnceLiveData<ApiResult<Mission>> {
         return if (isPomp) getPompMission() else getMixerMission()
     }
 

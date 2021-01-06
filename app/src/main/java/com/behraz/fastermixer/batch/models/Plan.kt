@@ -1,42 +1,39 @@
 package com.behraz.fastermixer.batch.models
 
+import com.behraz.fastermixer.batch.models.enums.RequestState
+import com.behraz.fastermixer.batch.models.requests.Fence
+import com.behraz.fastermixer.batch.utils.general.getEnumById
 import com.google.gson.annotations.SerializedName
 
 data class Plan(
-    @SerializedName("planningID")
-    val id: String,
-    @SerializedName("projectName")
-    val ownerName : String,
-    @SerializedName("customerAddress")
-    val address : String,
-    @SerializedName("value")
-    val plannedAmount : Float,
-    @SerializedName("realValue")
-    val sentAmount : Float,
-    @SerializedName("started")
-    val started : Boolean,
-    @SerializedName("dateTime")
-    val dateTime : String,
-    @SerializedName("requestTitle")
-    val requestTitle : String,
-    @SerializedName("productTypeName")
-    val productTypeName : String,
+    @SerializedName("id")
+    val id: Int,
+    @SerializedName("customerFullName")
+    val customerName: String,
+    @SerializedName("address")
+    private val _address: String,
     @SerializedName("deliveryTime")
-    val deliveryTime : String,
-    @SerializedName("requestTypeName")
-    val requestTypeName : String,
-    @SerializedName("requestState")
-    val requestState : Int,
-    @SerializedName("endedDescription")
-    val endedDescription : String,
-    @SerializedName("requestLab")
-    val requestLab : Boolean,
-    @SerializedName("requestAddress")
-    val requestAddress : String,
-    @SerializedName("description")
-    val description : String
+    val startTime: String,
+    @SerializedName("value")
+    val plannedAmount: Float,
+    @SerializedName("islamp")
+    val slump: String,
+    @SerializedName("carat")
+    val density: String,
+    @SerializedName("resistanceCategory")
+    val resistance: String,
+    @SerializedName("sendValue")
+    val sentAmount: Float,
 
+    @SerializedName("requestState")
+    private val _requestState: Int,
+    @SerializedName("geofencePoint")
+    private val _location: String?,
 ) {
+    val address get() = if (_address.isNotBlank()) _address else "نامشخص"
+
+    val location get() = if (_location != null) Fence.strToFence(_location) else null //if requestState == Canceled or Reserved _location could be null
+    val requestState get() = getEnumById(RequestState::id, _requestState)
 
     val waitingAmount get() = plannedAmount - sentAmount
     val progress: Int get() = if (plannedAmount == 0f) 100 else (sentAmount * 100 / plannedAmount).toInt()

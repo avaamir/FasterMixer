@@ -8,18 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.behraz.fastermixer.batch.app.LocationCompassProvider
 import com.behraz.fastermixer.batch.app.receivers.isNetworkAvailable
-import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.Mission
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.models.requests.Fence
 import com.behraz.fastermixer.batch.models.requests.PolygonFence
-import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.ui.dialogs.NewMessageDialog
 import com.behraz.fastermixer.batch.ui.fragments.pomp.PompMapFragment
 import com.behraz.fastermixer.batch.ui.osm.markers.DestMarker
 import com.behraz.fastermixer.batch.ui.osm.markers.MixerMarker
 import com.behraz.fastermixer.batch.ui.osm.markers.PompMarker
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
+import com.behraz.fastermixer.batch.utils.general.log
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.VehicleActivityViewModel
 import com.behraz.fastermixer.batch.viewmodels.VehicleMapFragmentViewModel
@@ -215,6 +214,7 @@ abstract class VehicleFragment : BaseMapFragment() {
                     toast("شما ماموریت دیگری ندارید")
                 } else {
                     val missionMessage = vehicleActivityViewModel.insertMission(mission)
+                    log(missionMessage, "debux1")
                     NewMessageDialog(missionMessage, requireContext()).show()
                     //
                     println("debux: `newMissionEvent` NewMission")
@@ -340,7 +340,6 @@ abstract class VehicleFragment : BaseMapFragment() {
             mBinding.map.overlays.add(0, polygon)
             destMarker.position = fence.center
             destMarker.title = title
-
             mBinding.map.invalidate()
 
             mMapViewModel.getRoute(listOf(mMapViewModel.myLocation!!, fence.center))

@@ -66,11 +66,13 @@ interface BehrazClient {
     @POST("Plannings/GetAllPlanServicesForBatch")
     suspend fun getBatchMixers(): ApiResult<List<Mixer>>
     //==========================================
-    //TODO Admin
-    @POST("Vehicle/GetVehicleListForCompany")
+    //Admin
+    @POST("Vehicles/GetAll")
     suspend fun getEquipmentsForAdmin(): ApiResult<List<AdminEquipment>>
-    @POST("Planning/FindAllPlanningByDate")
+    @POST("Request/GetRequestNotEnded")
     suspend fun getPlansForAdmin(): ApiResult<List<Plan>>
+
+
     @POST("not implemented")
     suspend fun getFullReport(@Body request: GetReportRequest): ApiResult<List<FullReport>>
     //======================================

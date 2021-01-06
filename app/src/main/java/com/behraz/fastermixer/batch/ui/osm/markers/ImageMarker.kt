@@ -33,4 +33,11 @@ open class ImageMarker(drawableId: Int, mapView: MapView, width: Int = 42, heigh
         this.icon = dr
         this.setAnchor(ANCHOR_CENTER, ANCHOR_BOTTOM)
     }
+
+    override fun setTitle(title: String?) {
+        super.setTitle(title)
+        closeInfoWindow()
+        showInfoWindow() //age close va show nakonim age infoWindow baz bashe meghdar dakhelesh update nemishe
+    }
+
 }

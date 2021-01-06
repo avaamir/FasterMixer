@@ -145,21 +145,10 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
     }
 
     fun insertMission(mission: Mission): Message {
-        val content =
-            "${mission.serviceState.title}\r\n" +
-                    if (!mission.description.isNullOrBlank())
-                        "توضیحات:${mission.description}\r\n"
-                    else
-                        if (!mission.address.isBlank()) {
-                            "نشانی:${mission.address}"
-                        } else
-                            ""
-
-
         val message = Message(
             id = mission.missionId,
             senderName = "ماموریت جدید",
-            content = content,
+            content = mission.summery,
             senderId = 0,
             eventName = "ماموریت جدید",
             dateTime = (mission.startMissionTime ?: now().toJalali()).toString(),

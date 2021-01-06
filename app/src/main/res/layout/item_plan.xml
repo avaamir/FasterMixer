@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 android:fontFamily="@font/iransans"
-                android:text="@{plan.ownerName}"
+                android:text="@{plan.customerName}"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/textView41"
                 app:layout_constraintEnd_toStartOf="@+id/textView41"
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 android:fontFamily="@font/iransans"
-                android:text="@{plan.requestAddress}"
+                android:text="@{plan.address}"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/textView43"
                 app:layout_constraintEnd_toStartOf="@+id/textView43"
@@ -179,6 +179,18 @@
                 app:layout_constraintStart_toStartOf="@+id/progressBar2"
                 app:layout_constraintTop_toTopOf="@+id/progressBar2"
                 tools:text="60%" />
+
+            <TextView
+                android:id="@+id/textView35"
+                style="@style/my_gray_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{plan.requestState.title}"
+                android:textColor="@color/blue"
+                app:layout_constraintEnd_toEndOf="@+id/progressBar2"
+                app:layout_constraintStart_toStartOf="@+id/progressBar2"
+                app:layout_constraintTop_toBottomOf="@+id/progressBar2"
+                tools:text="َشروع شده" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

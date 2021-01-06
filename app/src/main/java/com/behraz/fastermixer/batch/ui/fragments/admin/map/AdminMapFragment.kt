@@ -9,7 +9,6 @@ import com.behraz.fastermixer.batch.app.LocationCompassProvider
 import com.behraz.fastermixer.batch.app.receivers.isNetworkAvailable
 import com.behraz.fastermixer.batch.models.AdminEquipment
 import com.behraz.fastermixer.batch.models.enums.EquipmentType
-import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.ui.fragments.BaseMapFragment
 import com.behraz.fastermixer.batch.ui.osm.infowindows.AdminDriverInfoWindow
 import com.behraz.fastermixer.batch.ui.osm.markers.*
@@ -83,9 +82,9 @@ class AdminMapFragment : BaseMapFragment(), AdminDriverInfoWindow.Interactions {
                     mapViewModel.markers.diffSourceFromNewValues(
                         it.entity!!,
                         AdminEquipment::id,
-                        object : OnSourceMapChange<String, VehicleMarker, AdminEquipment> {
+                        object : OnSourceMapChange<Int, VehicleMarker, AdminEquipment> {
                             override fun onAddItem(
-                                key: String,
+                                key: Int,
                                 item: AdminEquipment
                             ): VehicleMarker {
                                 val marker = when (item.type) {
@@ -122,7 +121,7 @@ class AdminMapFragment : BaseMapFragment(), AdminDriverInfoWindow.Interactions {
                             }
 
                             override fun onItemExistInBoth(
-                                keyId: String,
+                                keyId: Int,
                                 marker: VehicleMarker,
                                 item: AdminEquipment
                             ) {
@@ -132,7 +131,7 @@ class AdminMapFragment : BaseMapFragment(), AdminDriverInfoWindow.Interactions {
                                 }
                             }
 
-                            override fun onRemoveItem(keyId: String) {
+                            override fun onRemoveItem(keyId: Int) {
                                 mapViewModel.markers.remove(keyId)
                             }
                         })
