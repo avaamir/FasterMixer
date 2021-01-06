@@ -28,20 +28,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text=""
+                android:text="@{service.vehicleName}"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@+id/linearLayout8"
+                app:layout_constraintBottom_toBottomOf="@+id/frameHistory"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/linearLayout8"
+                app:layout_constraintTop_toTopOf="@+id/frameHistory"
                 tools:text="آمیکو سفید" />
 
             <LinearLayout
-                android:id="@+id/linearLayout8"
+                android:id="@+id/frameHistory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="8dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="?attr/selectableItemBackground"
                 android:orientation="horizontal"
                 android:padding="@dimen/tiny_margin"
                 app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:text="@{service.loadingTime}"
                 app:layout_constraintBottom_toBottomOf="@+id/textView105"
-                app:layout_constraintEnd_toEndOf="@+id/textView100"
+                app:layout_constraintEnd_toEndOf="@+id/tvLoading"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/textView105"
                 app:layout_constraintTop_toTopOf="@+id/textView105"
@@ -111,52 +111,52 @@
                 android:text="@{service.unLoadingCompletedTime}"
                 app:layout_constraintEnd_toStartOf="@+id/textView106"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/textView103"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout8"
+                app:layout_constraintStart_toStartOf="@+id/tvFinished"
+                app:layout_constraintTop_toBottomOf="@+id/frameHistory"
                 tools:text="10:23" />
 
 
             <!---->
 
             <TextView
-                android:id="@+id/textView100"
+                android:id="@+id/tvLoading"
                 style="@style/serviceStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="بارگیری"
-                app:layout_constraintBottom_toBottomOf="@+id/textView101"
+                app:layout_constraintBottom_toBottomOf="@+id/tvToDest"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/textView101"
-                app:layout_constraintTop_toTopOf="@+id/textView101" />
+                app:layout_constraintStart_toEndOf="@+id/tvToDest"
+                app:layout_constraintTop_toTopOf="@+id/tvToDest" />
 
             <TextView
-                android:id="@+id/textView101"
+                android:id="@+id/tvToDest"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="سمت مقصد"
                 style="@style/serviceStyle"
-                app:layout_constraintBottom_toBottomOf="@+id/textView102"
-                app:layout_constraintEnd_toStartOf="@+id/textView100"
+                app:layout_constraintBottom_toBottomOf="@+id/tvUnLoading"
+                app:layout_constraintEnd_toStartOf="@+id/tvLoading"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/textView102"
-                app:layout_constraintTop_toTopOf="@+id/textView102" />
+                app:layout_constraintStart_toEndOf="@+id/tvUnLoading"
+                app:layout_constraintTop_toTopOf="@+id/tvUnLoading" />
 
             <TextView
-                android:id="@+id/textView102"
+                android:id="@+id/tvUnLoading"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="تخلیه"
                 style="@style/serviceStyle"
-                app:layout_constraintBottom_toBottomOf="@+id/textView103"
-                app:layout_constraintEnd_toStartOf="@+id/textView101"
+                app:layout_constraintBottom_toBottomOf="@+id/tvFinished"
+                app:layout_constraintEnd_toStartOf="@+id/tvToDest"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/textView103"
-                app:layout_constraintTop_toTopOf="@+id/textView103" />
+                app:layout_constraintStart_toEndOf="@+id/tvFinished"
+                app:layout_constraintTop_toTopOf="@+id/tvFinished" />
 
             <TextView
-                android:id="@+id/textView103"
+                android:id="@+id/tvFinished"
                 style="@style/serviceStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -164,7 +164,7 @@
                 android:layout_marginBottom="8dp"
                 android:text="بازگشت"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/textView102"
+                app:layout_constraintEnd_toStartOf="@+id/tvUnLoading"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView107" />

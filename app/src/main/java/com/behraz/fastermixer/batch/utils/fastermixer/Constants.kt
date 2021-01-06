@@ -3,6 +3,7 @@ package com.behraz.fastermixer.batch.utils.fastermixer
 import org.osmdroid.util.GeoPoint
 
 object Constants {
+    const val INTENT_SERVICE_PLAN: String = "request-id"
     const val INTENT_REPORT_TYPE = "intent-rep-type"
     const val REPORT_TYPE_SUMMERY = "repsumroad"
     const val REPORT_TYPE_DRAW_ROAD = "drawroad"

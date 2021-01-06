@@ -11,6 +11,7 @@ import com.behraz.fastermixer.batch.models.requests.behraz.*
 import com.behraz.fastermixer.batch.models.requests.openweathermap.CurrentWeatherByCoordinatesResponse
 import com.behraz.fastermixer.batch.models.requests.route.GetRouteResponse
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
+import com.behraz.fastermixer.batch.respository.apiservice.BehrazClient
 import com.behraz.fastermixer.batch.respository.apiservice.MapService
 import com.behraz.fastermixer.batch.respository.apiservice.WeatherService
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
@@ -415,4 +416,6 @@ object RemoteRepo {
 
     fun getDrawRoadReport(request: GetReportRequest) =
         mockApiReq(succeedRequest(fakeDrawRoadReport()))
+
+    fun getActiveServices(requestId: Int) = apiReq(requestId, ApiService.client::getActiveServices)
 }

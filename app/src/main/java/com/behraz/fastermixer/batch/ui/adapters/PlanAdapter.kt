@@ -10,7 +10,7 @@ import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ItemPlanBinding
 import com.behraz.fastermixer.batch.models.Plan
 
-class PlanAdapter : ListAdapter<Plan, PlanAdapter.PlanViewHolder>(DIFF_CALLBACK) {
+class PlanAdapter(private val interactions: Interactions) : ListAdapter<Plan, PlanAdapter.PlanViewHolder>(DIFF_CALLBACK) {
 
 
     companion object {
@@ -47,8 +47,16 @@ class PlanAdapter : ListAdapter<Plan, PlanAdapter.PlanViewHolder>(DIFF_CALLBACK)
         fun bind(item: Plan) {
             mBinding.plan = item
             mBinding.executePendingBindings()
+
+            itemView.setOnClickListener {
+                interactions.onItemClicked(item)
+            }
         }
 
+    }
+
+    interface Interactions {
+        fun onItemClicked(plan: Plan)
     }
 
 

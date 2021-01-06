@@ -14,6 +14,7 @@ import androidx.viewpager.widget.ViewPager
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ActivityAdminBinding
 import com.behraz.fastermixer.batch.models.AdminEquipment
+import com.behraz.fastermixer.batch.models.Plan
 import com.behraz.fastermixer.batch.ui.adapters.ViewPagerAdapter
 import com.behraz.fastermixer.batch.ui.fragments.BaseNavFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
@@ -44,10 +45,7 @@ class AdminActivity : AppCompatActivity(),
 
     // list of base destination containers
     private val fragments = listOf(
-        BaseNavFragment.newInstance(
-            R.layout.layout_base_nav_admin_account,
-            R.id.nav_host_admin_account
-        ),
+        BaseNavFragment.newInstance(R.layout.layout_base_nav_admin_account, R.id.nav_host_admin_account),
         BaseNavFragment.newInstance(R.layout.layout_base_nav_report, R.id.nav_host_report),
         BaseNavFragment.newInstance(R.layout.layout_base_nav_map, R.id.nav_host_admin_map),
         BaseNavFragment.newInstance(R.layout.layout_base_nav_equipments, R.id.nav_host_equipments),
@@ -223,6 +221,10 @@ class AdminActivity : AppCompatActivity(),
             R.id.fullReportFragment -> {
                 val vehicle = arguments?.getParcelable<AdminEquipment>(Constants.INTENT_REPORT_VEHICLE)
                 toolbarTitle = "$toolbarTitle ${vehicle?.name ?: ""}"
+            }
+            R.id.serviceFragment -> {
+                val plan = arguments?.getParcelable<Plan>(Constants.INTENT_SERVICE_PLAN)
+                toolbarTitle = "$toolbarTitle ${plan?.customerName ?: ""}"
             }
         }
 

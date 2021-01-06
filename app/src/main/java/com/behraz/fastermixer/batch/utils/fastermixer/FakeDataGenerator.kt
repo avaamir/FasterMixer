@@ -2,9 +2,30 @@ package com.behraz.fastermixer.batch.utils.fastermixer
 
 import com.behraz.fastermixer.batch.models.*
 import com.behraz.fastermixer.batch.models.requests.behraz.GetAdminAccountPage
-import com.behraz.fastermixer.batch.utils.general.now
 import org.osmdroid.util.GeoPoint
 import java.util.*
+
+fun fakeServices() = listOf(
+    fakeService(1, "آمیکو 1"),
+    fakeService(2, "آمیکو21"),
+    fakeService(3, "آمیکو 13"),
+    fakeService(4, "آمیکو 31"),
+    fakeService(5, "آمیکو 14"),
+
+)
+
+
+fun fakeService(id: Int, name: String) =
+    Service(
+        id = id,
+        vehicleName = name,
+        _conditionType = com.behraz.fastermixer.batch.models.enums.ServiceState.Loading.id,
+        loadingTime = "10:22",
+        toDestTime = "10:26",
+        unLoadingTime = "11:29",
+        unLoadingCompletedTime = "12:00"
+    )
+
 
 fun fakeDrawRoadReport() = listOf(
     GeoPoint(31.891413345001638, 54.35357135720551),
@@ -29,12 +50,72 @@ fun fakeSummeryReports() = listOf(
 )
 
 fun fakeFullReports() = listOf(
-    FullReport(1, "آمیکو سفید", "روشن", "2 ساعت", "120", "89", "100", "11:39 تا 12:49", "99/2/22"),
-    FullReport(2, "آمیکو سفید", "روشن", "2 ساعت", "120", "89", "100", "11:39 تا 12:49", "99/2/22"),
-    FullReport(3, "آمیکو سفید", "روشن", "2 ساعت", "120", "89", "100", "11:39 تا 12:49", "99/2/22"),
-    FullReport(4, "آمیکو سفید", "روشن", "2 ساعت", "120", "89", "100", "11:39 تا 12:49", "99/2/22"),
-    FullReport(5, "آمیکو سفید", "روشن", "2 ساعت", "120", "89", "100", "11:39 تا 12:49", "99/2/22"),
-    FullReport(6, "آمیکو سفید", "روشن", "2 ساعت", "120", "89", "100", "11:39 تا 12:49", "99/2/22"),
+    FullReport(
+        1,
+        "آمیکو سفید",
+        "روشن",
+        "2 ساعت",
+        "120",
+        "89",
+        "100",
+        "11:39 تا 12:49",
+        "99/2/22"
+    ),
+    FullReport(
+        2,
+        "آمیکو سفید",
+        "روشن",
+        "2 ساعت",
+        "120",
+        "89",
+        "100",
+        "11:39 تا 12:49",
+        "99/2/22"
+    ),
+    FullReport(
+        3,
+        "آمیکو سفید",
+        "روشن",
+        "2 ساعت",
+        "120",
+        "89",
+        "100",
+        "11:39 تا 12:49",
+        "99/2/22"
+    ),
+    FullReport(
+        4,
+        "آمیکو سفید",
+        "روشن",
+        "2 ساعت",
+        "120",
+        "89",
+        "100",
+        "11:39 تا 12:49",
+        "99/2/22"
+    ),
+    FullReport(
+        5,
+        "آمیکو سفید",
+        "روشن",
+        "2 ساعت",
+        "120",
+        "89",
+        "100",
+        "11:39 تا 12:49",
+        "99/2/22"
+    ),
+    FullReport(
+        6,
+        "آمیکو سفید",
+        "روشن",
+        "2 ساعت",
+        "120",
+        "89",
+        "100",
+        "11:39 تا 12:49",
+        "99/2/22"
+    ),
 )
 
 

@@ -72,6 +72,9 @@ interface BehrazClient {
     @POST("Request/GetRequestNotEnded")
     suspend fun getPlansForAdmin(): ApiResult<List<Plan>>
 
+    @POST("Plannings/GetActivePlaningServiceForRequest/{requestId}")
+    suspend fun getActiveServices(@Path("requestId") requestId: Int) : ApiResult<List<Service>>
+
 
     @POST("not implemented")
     suspend fun getFullReport(@Body request: GetReportRequest): ApiResult<List<FullReport>>

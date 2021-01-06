@@ -1,10 +1,13 @@
 package com.behraz.fastermixer.batch.models
 
+import android.os.Parcelable
 import com.behraz.fastermixer.batch.models.enums.RequestState
 import com.behraz.fastermixer.batch.models.requests.Fence
 import com.behraz.fastermixer.batch.utils.general.getEnumById
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Plan(
     @SerializedName("id")
     val id: Int,
@@ -29,7 +32,7 @@ data class Plan(
     private val _requestState: Int,
     @SerializedName("geofencePoint")
     private val _location: String?,
-) {
+) : Parcelable {
     val address get() = if (_address.isNotBlank()) _address else "نامشخص"
 
     val locationFence get() = if (_location != null) Fence.strToFence(_location) else null //if requestState == Canceled or Reserved _location could be null

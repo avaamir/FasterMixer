@@ -18,5 +18,15 @@
         android:id="@+id/requestsFragment"
         android:name="com.behraz.fastermixer.batch.ui.fragments.admin.dashboard.RequestsFragment"
         android:label="درخواست های امروز"
-        tools:layout="@layout/layout_fragment_requests" />
+        tools:layout="@layout/layout_fragment_requests" >
+        <action
+            android:id="@+id/action_requestsFragment_to_serviceFragment"
+            app:destination="@id/serviceFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/serviceFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.dashboard.ServiceFragment"
+        android:label="سرویس های فعال"
+        tools:layout="@layout/fragment_service" />
 </navigation>

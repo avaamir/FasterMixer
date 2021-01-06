@@ -125,7 +125,9 @@ class FasterMixerApplication : Application(), NetworkConnectionInterceptor.Netwo
     private fun registerGlobalEventObservers(activity: Activity) {
         activity as LifecycleOwner
         onInternetUnavailableEvent.observe(activity) {
-            NoNetworkDialog(activity, R.style.my_alert_dialog).show()
+            it.getEventIfNotHandled()?.let {
+                NoNetworkDialog(activity, R.style.my_alert_dialog).show()
+            }
         }
         if (activity !is LoginActivity) {
             onAuthorizeEvent.observe(activity) {
