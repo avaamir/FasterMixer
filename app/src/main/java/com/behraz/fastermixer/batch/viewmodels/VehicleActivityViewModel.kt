@@ -11,8 +11,8 @@ import com.behraz.fastermixer.batch.models.requests.behraz.GetVehicleLocationRes
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
-import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.Event
+import com.behraz.fastermixer.batch.utils.general.log
 import com.behraz.fastermixer.batch.utils.general.now
 import com.behraz.fastermixer.batch.utils.general.toJalali
 import kotlinx.coroutines.CoroutineScope
@@ -68,32 +68,25 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
 
     init {
         getMissionResponse.observeForever {
-            println("debux:(MixerActivityViewModel-getMissionResponseForeverObserver) getMissionResponse =====================================")
-            println("debux: `newMission` Come from server")
-            if (it != null) {
-                if (it.isSucceed) {
-                    //Check if serverMission is a new Mission or Already submitted
-                    val serverMission = it.entity
-                    println("debux: `newMissionContent` -> ${it.entity}")
-                    if (serverMission != null) { //NewMission
-                        val currentMission = newMissionEvent.value?.peekContent()
-                        if (serverMission.missionId != currentMission?.missionId) { //serverMission is a NewMission
-                            println("debux: `newMissionEvent happened ")
-                            newMissionEvent.value = Event(serverMission)
-                        } else {
-                            println("debux: `newMissionId` and lastMissionId are same")
+            if (it.isSucceed) {
+                //Check if serverMission is a new Mission or Already submitted
+                val serverMission = it.entity
+                if (serverMission != null) { //NewMission
+                    val currentMission = newMissionEvent.value?.peekContent()
+                    if (serverMission.missionId != currentMission?.missionId) { //serverMission is a NewMission
+                        newMissionEvent.value = Event(serverMission)
+                    } else {
+                        log("`newMissionId` and lastMissionId are same")
+                        if(serverMission != currentMission) {
+                            //TODO age content ha yeki nabud mission feli update behshe, msln benvise address avaz shod ya ..??
                         }
-                    } else { //NoMission
-                        if (newMissionEvent.value?.peekContent() !== Mission.NoMission)
-                            newMissionEvent.value = Event(Mission.NoMission)
                     }
-                } else {
-                    getMissionError.value = Event(it.message)  //TODO?
+                } else { //NoMission
+                    if (newMissionEvent.value?.peekContent() !== Mission.NoMission)
+                        newMissionEvent.value = Event(Mission.NoMission)
                 }
             } else {
-                //TODO check this code , request again to map.ir
-                println("debux: `newMission` SERVER ERROR ")
-                getMissionError.value = Event(Constants.SERVER_ERROR) //TODO?
+                getMissionError.value = Event(it.message)
             }
         }
 
@@ -151,7 +144,7 @@ abstract class VehicleActivityViewModel : ParentViewModel() {
             content = mission.summery,
             senderId = 0,
             eventName = "ماموریت جدید",
-            dateTime = (mission.startMissionTime ?: now().toJalali()).toString(),
+            dateTime = (mission.startMissionTime?.toJalali() ?: now().toJalali()).toString(),
             viewed = false,
             userId = UserConfigs.user.value?.id ?: 0
         )

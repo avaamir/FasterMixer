@@ -32,7 +32,7 @@ data class Plan(
 ) {
     val address get() = if (_address.isNotBlank()) _address else "نامشخص"
 
-    val location get() = if (_location != null) Fence.strToFence(_location) else null //if requestState == Canceled or Reserved _location could be null
+    val locationFence get() = if (_location != null) Fence.strToFence(_location) else null //if requestState == Canceled or Reserved _location could be null
     val requestState get() = getEnumById(RequestState::id, _requestState)
 
     val waitingAmount get() = plannedAmount - sentAmount

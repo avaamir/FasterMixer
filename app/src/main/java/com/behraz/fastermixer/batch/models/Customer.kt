@@ -11,7 +11,7 @@ data class Customer(
     @SerializedName("startedTime")
     val startTime: String,
     @SerializedName("address")
-    val address: String,
+    private val _address: String,
     @SerializedName("islamp")
     val slump: Int,
     @SerializedName("productTypeCarat")
@@ -28,6 +28,7 @@ data class Customer(
     @Transient
     var isSelected: Boolean
 ) {
+    val address get() = if (_address.isNotBlank()) _address else "ندارد"
     val locationFence: Fence get() = Fence.strToFence(areaStr)
     val amount get() = "$_amount متر مکعب"
     val density get() = "$_density"

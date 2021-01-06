@@ -197,14 +197,9 @@ abstract class VehicleFragment : BaseMapFragment() {
             }
         }
 
-
-
-
         vehicleActivityViewModel.newMissionEvent.observe(viewLifecycleOwner) { event ->
             event.getEventIfNotHandled()?.let { mission ->
-                println("debux: (MixerMapFragment-newMissionEventObserver) `newMissionEvent` Handler Routine Start ==================================")
                 if (mission === Mission.NoMission) {
-                    println("debux: `newMissionEvent` NoMission")
                     mBinding.map.overlays.remove(destMarker)
                     isDestMarkerAddedToMap = false
                     mBinding.map.overlays.remove(routePolyline)
@@ -214,10 +209,9 @@ abstract class VehicleFragment : BaseMapFragment() {
                     toast("شما ماموریت دیگری ندارید")
                 } else {
                     val missionMessage = vehicleActivityViewModel.insertMission(mission)
-                    log(missionMessage, "debux1")
+                    log(missionMessage)
                     NewMessageDialog(missionMessage, requireContext()).show()
                     //
-                    println("debux: `newMissionEvent` NewMission")
                     destMarker.position = mission.destFence.center
                     destMarker.title = mission.summery
                     mBinding.map.overlays.remove(polygon)
@@ -231,7 +225,6 @@ abstract class VehicleFragment : BaseMapFragment() {
                     if (mMapViewModel.myLocation != null) {
                         onNewMission(mission)
                     } else {
-                        println("debux: getRoute() will call after userLoc received from server")
                         mMapViewModel.hasNewMission = true
                     }
 
@@ -250,25 +243,19 @@ abstract class VehicleFragment : BaseMapFragment() {
 
         mMapViewModel.getRouteResponse.observe(viewLifecycleOwner, {
             if (it != null) {
-                println("debux: (MixerMapFragment-GetRouteResponseObserver) getRouteResponse Came====================================")
                 if (it.isSuccessful) {
-                    println("debux: getRouteResponse isSuccessful")
                     routePolyline?.let { _routes ->
                         mBinding.map.overlays.remove(_routes)
                     }
                     routePolyline = drawPolyline(it.getRoutePoints())
-                    println("debux: drawPolyline Called: ${routePolyline}, $it ${it.getRoutePoints()}")
                 } else {
-                    println("debux: getRouteResponse unSuccessful")
                     if (it.code == "NoRoute")
                         toast("متاسفانه در این منطقه مسیریابی ممکن نیست")
                     else
                         toast(Constants.SERVER_ERROR)
                 }
             } else {
-                println("debux: getRouteResponse null")
                 val networkConnected = isNetworkAvailable()
-                println("debux: getRouteResponse network:$networkConnected")
                 if (networkConnected) {
                     toast(Constants.SERVER_ERROR)
                 } else {
@@ -307,7 +294,6 @@ abstract class VehicleFragment : BaseMapFragment() {
 
     private fun onNewMission(mission: Mission) {
         if (!mission.destFence.contains(mMapViewModel.myLocation!!)) { //not yet enter in fence
-            println("debux: getRouteCalled")
             mMapViewModel.getRoute(
                 listOf(
                     mMapViewModel.myLocation!!,
@@ -316,15 +302,13 @@ abstract class VehicleFragment : BaseMapFragment() {
             )
             onUserAndDestLocRetrieved?.onShowButtons(true)
         } else {
-            println("debux: Already in DestArea")
             toast("به مقصد رسیدید")
             onUserAndDestLocRetrieved?.onShowButtons(false)
         }
     }
 
     fun routeAgain() { //route destLocation // khode server tashkhis dade koja bere
-        println("debux: routeAgain()============================================")
-        println("debux: routeAgain: ${mMapViewModel.getRouteResponse.value?.getRoutePoints()}")
+        log("routeAgain: ${mMapViewModel.getRouteResponse.value?.getRoutePoints()}")
         //In dokme vaghti visible mishe ke mission ro gerefte bashim va yek bar ham darkhast getRoute ro zade bashim pas niazi nist check konim (startPoint,Dest) reside hast ya na
         mMapViewModel.tryGetRouteAgain()
     }
@@ -334,18 +318,15 @@ abstract class VehicleFragment : BaseMapFragment() {
         val mission = vehicleActivityViewModel.newMissionEvent.value!!.peekContent()
         val fence = if (isHome) mission.batchLocation else mission.requestLocation
         val title = if (isHome) "بچینگ" else "پروژه"
-        if (fence != null) {
-            mBinding.map.overlays.remove(polygon)
-            polygon = preparePolygon(fence)
-            mBinding.map.overlays.add(0, polygon)
-            destMarker.position = fence.center
-            destMarker.title = title
-            mBinding.map.invalidate()
 
-            mMapViewModel.getRoute(listOf(mMapViewModel.myLocation!!, fence.center))
-        } else {
-            toast("آدرس $title نامشخص است")
-        }
+        mBinding.map.overlays.remove(polygon)
+        polygon = preparePolygon(fence)
+        mBinding.map.overlays.add(0, polygon)
+        destMarker.position = fence.center
+        destMarker.title = title
+        mBinding.map.invalidate()
+
+        mMapViewModel.getRoute(listOf(mMapViewModel.myLocation!!, fence.center))
     }
 
     interface OnUserAndDestLocRetrieved {

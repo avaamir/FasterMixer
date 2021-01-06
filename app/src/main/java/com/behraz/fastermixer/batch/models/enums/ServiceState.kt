@@ -2,6 +2,7 @@ package com.behraz.fastermixer.batch.models.enums
 
 /**state service darun paln ra moshakhas mikonad */
 enum class ServiceState(val id: Int, val title: String) {
+    Unknown(-1, "وضعیت سرویس نامشخص"),
     Created(0, "ساخته شده"),
     ToBatch(1, "حرکت به سمت بچینگ"),
     Loading(2, "بارگیری"),

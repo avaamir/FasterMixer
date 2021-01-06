@@ -3,14 +3,15 @@ package com.behraz.fastermixer.batch.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.map
-import com.behraz.fastermixer.batch.models.Customer
-import com.behraz.fastermixer.batch.models.Mixer
-import com.behraz.fastermixer.batch.models.User
-import com.behraz.fastermixer.batch.models.normalizeStateByDistance
+import com.behraz.fastermixer.batch.models.*
 import com.behraz.fastermixer.batch.models.requests.CircleFence
 import com.behraz.fastermixer.batch.models.requests.behraz.ApiResult
 import com.behraz.fastermixer.batch.respository.RemoteRepo
+import com.behraz.fastermixer.batch.respository.UserConfigs
+import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.utils.general.Event
+import com.behraz.fastermixer.batch.utils.general.now
+import com.behraz.fastermixer.batch.utils.general.toJalali
 
 class PompActivityViewModel : VehicleActivityViewModel() {
 
@@ -73,15 +74,19 @@ class PompActivityViewModel : VehicleActivityViewModel() {
             RemoteRepo.getCustomers().map { response ->
                 println("debugx: getCustomerResponse came")
                 isGetCustomerRequestActive = false
-                response?.entity?.let {
-                    if (selectedProjectId == null) {
-                        selectedProjectId = it[0].id
-                        it[0].isSelected = true
-                        lastGetCustomerResponse = response
-                    } else {
-                        val selectedProject =
-                            it.find { customer -> customer.id == selectedProjectId }
-                        selectedProject?.isSelected = true
+
+                if (response.isSucceed) {
+                    val customers = response.entity!!
+                    if (customers.isNotEmpty()) {
+                        if (selectedProjectId == null) {
+                            selectedProjectId = customers[0].id
+                            customers[0].isSelected = true
+                            lastGetCustomerResponse = response
+                        } else {
+                            val selectedProject =
+                                customers.find { customer -> customer.id == selectedProjectId }
+                            selectedProject?.isSelected = true
+                        }
                     }
                 }
                 response
@@ -123,4 +128,19 @@ class PompActivityViewModel : VehicleActivityViewModel() {
             /*todo refresh customer list for recoloring selectedProject*/
         }
     }
+
+    fun insertMessage(message: String): Message = Message(
+        id = now().time.toString(),
+        senderName = "پروژه جدید",
+        content = message,
+        senderId = 0,
+        eventName = "پروژه جدید",
+        dateTime = now().toJalali().toString(),
+        viewed = false,
+        userId = UserConfigs.user.value?.id ?: 0
+    ).let {
+        MessageRepo.insert(it)
+        return it
+    }
+
 }

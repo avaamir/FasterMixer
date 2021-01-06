@@ -355,7 +355,8 @@ class PompActivity : AppCompatActivity(),
                         } else {
                             if (viewModel.shouldShowAllMixers.value == true) { //age prje tarif shode bud mixer proje ro neshun bede
                                 mBinding.btnShowAllMixersToggle.callOnClick()
-                                toast("پروژه جدید تعریف شده است")
+                                val message = viewModel.insertMessage("پروژه جدید تعریف شده است")
+                                NewMessageDialog(message, this@PompActivity).show()
                             }
                         }
                     }

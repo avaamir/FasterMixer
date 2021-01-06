@@ -60,7 +60,7 @@ fun Mixer.normalizeStateByDistance(destArea: Fence): String {
             Loading, UnLoading, ServiceFinished -> {
                 return it.serviceState.title
             }
-            Created ->{ null }
+            Created, Unknown ->{ null }
         }?.exhaustiveAsExpression()
     }
 

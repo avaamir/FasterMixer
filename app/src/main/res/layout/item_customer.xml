@@ -177,8 +177,9 @@
                 style="@style/my_gray_normal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
                 android:text="تعداد میکسر:"
-                app:layout_constraintEnd_toEndOf="@+id/textView25"
+                app:layout_constraintEnd_toStartOf="@+id/textView37"
                 app:layout_constraintTop_toBottomOf="@+id/textView23" />
 
             <TextView
@@ -186,9 +187,10 @@
                 style="@style/faster_mixer_item_data_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
                 android:text="@{customer.mixerCount}"
                 app:layout_constraintBottom_toBottomOf="@+id/textView38"
-                app:layout_constraintEnd_toEndOf="@+id/textView26"
+                app:layout_constraintEnd_toStartOf="@+id/textView38"
                 app:layout_constraintTop_toTopOf="@+id/textView38"
                 tools:text="6" />
 
@@ -198,7 +200,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginStart="8dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:cardCornerRadius="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
