@@ -37,6 +37,7 @@ fun Int.parseHttpCodeToErrorType() =
         in 200..299 -> {
             ErrorType.OK
         }
+        504 -> ErrorType.NetworkError
         else -> getEnumById(ErrorType::code, this)
     }
 
