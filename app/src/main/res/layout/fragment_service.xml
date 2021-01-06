@@ -22,4 +22,17 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"/>
 
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="سرویسی وجود ندارد"
+        android:layout_gravity="center"
+        style="@style/my_black_bold_text"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        tools:visibility="visible"
+
+        />
+
 </FrameLayout>

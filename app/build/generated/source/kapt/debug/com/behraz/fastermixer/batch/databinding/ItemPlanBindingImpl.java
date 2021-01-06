@@ -189,8 +189,8 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
 
             this.progressBar2.setProgress(planProgressInt0PlanProgressInt1);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView35, planRequestStateTitle);
-            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView42, planCustomerName);
-            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView44, planAddress);
+            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView42, planAddress);
+            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView44, planCustomerName);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView46, planPlannedAmountJavaLangString);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView48, planSentAmountJavaLangString);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView50, planWaitingAmountJavaLangString);

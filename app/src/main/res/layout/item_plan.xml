@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="نام مشتری:"
+                android:text="آدرس:"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:fontFamily="@font/iransans"
@@ -35,26 +35,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
+                android:ellipsize="end"
                 android:fontFamily="@font/iransans"
-                android:text="@{plan.customerName}"
+                android:lineSpacingMultiplier="0.8"
+                android:maxLines="2"
+                android:text="@{plan.address}"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@+id/textView41"
                 app:layout_constraintEnd_toStartOf="@+id/textView41"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/progressBar2"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView41"
-                tools:text="امیر امیری" />
+                tools:text="یزد- صفاییه" />
 
             <TextView
                 android:id="@+id/textView43"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="آدرس:"
                 android:fontFamily="@font/iransans"
+                android:text="نام مشتری:"
                 android:textColor="@color/gray700"
                 app:layout_constraintEnd_toEndOf="@+id/textView41"
-                app:layout_constraintTop_toBottomOf="@+id/textView41" />
+                app:layout_constraintTop_toBottomOf="@+id/textView42" />
 
             <TextView
                 android:id="@+id/textView44"
@@ -62,14 +64,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 android:fontFamily="@font/iransans"
-                android:text="@{plan.address}"
+                android:text="@{plan.customerName}"
+                android:maxEms="10"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="امیر امیری"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/textView43"
                 app:layout_constraintEnd_toStartOf="@+id/textView43"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/textView51"
-                app:layout_constraintTop_toTopOf="@+id/textView43"
-                tools:text="یزد- صفاییه" />
+                app:layout_constraintTop_toTopOf="@+id/textView43" />
 
             <TextView
                 android:id="@+id/textView45"
