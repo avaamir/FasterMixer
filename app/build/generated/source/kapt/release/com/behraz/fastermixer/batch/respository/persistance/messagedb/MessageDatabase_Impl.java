@@ -27,12 +27,12 @@ public final class MessageDatabase_Impl extends MessageDatabase {
 
   @Override
   protected SupportSQLiteOpenHelper createOpenHelper(DatabaseConfiguration configuration) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(configuration, new RoomOpenHelper.Delegate(6) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(configuration, new RoomOpenHelper.Delegate(8) {
       @Override
       public void createAllTables(SupportSQLiteDatabase _db) {
-        _db.execSQL("CREATE TABLE IF NOT EXISTS `messages` (`id` TEXT NOT NULL, `sender` TEXT NOT NULL, `senderId` TEXT NOT NULL, `dateTime` TEXT NOT NULL, `content` TEXT NOT NULL, `isDelivered` INTEGER NOT NULL, `priority` INTEGER NOT NULL, `_isEvent` INTEGER NOT NULL, `senderImage` TEXT, `userId` TEXT, `viewed` INTEGER NOT NULL, PRIMARY KEY(`id`))");
+        _db.execSQL("CREATE TABLE IF NOT EXISTS `messages` (`id` TEXT NOT NULL, `content` TEXT NOT NULL, `senderId` INTEGER NOT NULL, `senderName` TEXT NOT NULL, `eventName` TEXT NOT NULL, `dateTime` TEXT NOT NULL, `viewed` INTEGER NOT NULL, `userId` INTEGER, PRIMARY KEY(`id`))");
         _db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '57de3f2fb0ae746cc69a8b9b0ad9a625')");
+        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '58bec1dc9259cf3c701856ffb37b71dc')");
       }
 
       @Override
@@ -76,18 +76,15 @@ public final class MessageDatabase_Impl extends MessageDatabase {
 
       @Override
       protected RoomOpenHelper.ValidationResult onValidateSchema(SupportSQLiteDatabase _db) {
-        final HashMap<String, TableInfo.Column> _columnsMessages = new HashMap<String, TableInfo.Column>(11);
+        final HashMap<String, TableInfo.Column> _columnsMessages = new HashMap<String, TableInfo.Column>(8);
         _columnsMessages.put("id", new TableInfo.Column("id", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsMessages.put("sender", new TableInfo.Column("sender", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsMessages.put("senderId", new TableInfo.Column("senderId", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsMessages.put("dateTime", new TableInfo.Column("dateTime", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsMessages.put("content", new TableInfo.Column("content", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsMessages.put("isDelivered", new TableInfo.Column("isDelivered", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsMessages.put("priority", new TableInfo.Column("priority", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsMessages.put("_isEvent", new TableInfo.Column("_isEvent", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsMessages.put("senderImage", new TableInfo.Column("senderImage", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsMessages.put("userId", new TableInfo.Column("userId", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMessages.put("senderId", new TableInfo.Column("senderId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMessages.put("senderName", new TableInfo.Column("senderName", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMessages.put("eventName", new TableInfo.Column("eventName", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMessages.put("dateTime", new TableInfo.Column("dateTime", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsMessages.put("viewed", new TableInfo.Column("viewed", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsMessages.put("userId", new TableInfo.Column("userId", "INTEGER", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysMessages = new HashSet<TableInfo.ForeignKey>(0);
         final HashSet<TableInfo.Index> _indicesMessages = new HashSet<TableInfo.Index>(0);
         final TableInfo _infoMessages = new TableInfo("messages", _columnsMessages, _foreignKeysMessages, _indicesMessages);
@@ -99,7 +96,7 @@ public final class MessageDatabase_Impl extends MessageDatabase {
         }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "57de3f2fb0ae746cc69a8b9b0ad9a625", "e8b5b291e976272d866c0af12252d241");
+    }, "58bec1dc9259cf3c701856ffb37b71dc", "428e180ec3ef2261a37e05ce0897eca1");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(configuration.context)
         .name(configuration.name)
         .callback(_openCallback)

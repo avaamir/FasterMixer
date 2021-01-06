@@ -22,16 +22,18 @@ public class ItemMessageVerticalBindingImpl extends ItemMessageVerticalBinding  
     // Inverse Binding Event Handlers
 
     public ItemMessageVerticalBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 3, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 4, sIncludes, sViewsWithIds));
     }
     private ItemMessageVerticalBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
             , (androidx.cardview.widget.CardView) bindings[0]
             , (android.widget.TextView) bindings[1]
             , (android.widget.TextView) bindings[2]
+            , (android.widget.TextView) bindings[3]
             );
         this.root.setTag(null);
         this.textView5.setTag(null);
+        this.textView6.setTag(null);
         this.textView7.setTag(null);
         setRootTag(root);
         // listeners
@@ -92,8 +94,9 @@ public class ItemMessageVerticalBindingImpl extends ItemMessageVerticalBinding  
             mDirtyFlags = 0;
         }
         java.lang.String messageContent = null;
+        java.lang.String messageDateTime = null;
+        java.lang.String messageSenderName = null;
         com.behraz.fastermixer.batch.models.Message message = mMessage;
-        java.lang.String messageSender = null;
 
         if ((dirtyFlags & 0x3L) != 0) {
 
@@ -102,8 +105,10 @@ public class ItemMessageVerticalBindingImpl extends ItemMessageVerticalBinding  
                 if (message != null) {
                     // read message.content
                     messageContent = message.getContent();
-                    // read message.sender
-                    messageSender = message.getSender();
+                    // read message.dateTime
+                    messageDateTime = message.getDateTime();
+                    // read message.senderName
+                    messageSenderName = message.getSenderName();
                 }
         }
         // batch finished
@@ -111,7 +116,8 @@ public class ItemMessageVerticalBindingImpl extends ItemMessageVerticalBinding  
             // api target 1
 
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView5, messageContent);
-            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView7, messageSender);
+            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView6, messageDateTime);
+            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView7, messageSenderName);
         }
     }
     // Listener Stub Implementations

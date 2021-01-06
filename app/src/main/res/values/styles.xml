@@ -246,5 +246,19 @@
         <item name="colorControlActivated">@color/red</item>
     </style>
 
+    <style name="serviceStyle" parent="Widget.AppCompat.TextView">
+        <item name="fontFamily">@font/iransans_bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/standard_margin</item>
+        <item name="android:background">@drawable/bg_service_not_filled</item>
+    </style>
+
+    <style name="serviceTimeStyle" parent="Widget.AppCompat.TextView">
+        <item name="fontFamily">@font/iransans_bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:gravity">right</item>
+    </style>
+
 
 </resources>

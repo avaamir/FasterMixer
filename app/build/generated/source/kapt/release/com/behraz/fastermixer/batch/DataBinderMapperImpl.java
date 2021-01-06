@@ -35,6 +35,7 @@ import com.behraz.fastermixer.batch.databinding.ItemPackageBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ItemPlanBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ItemPompMixerBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ItemReportFullBindingImpl;
+import com.behraz.fastermixer.batch.databinding.ItemServiceBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ItemSummeryFullBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ItemTransactionHistoryBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ItemWeatherBindingImpl;
@@ -118,35 +119,37 @@ public class DataBinderMapperImpl extends DataBinderMapper {
 
   private static final int LAYOUT_ITEMREPORTFULL = 29;
 
-  private static final int LAYOUT_ITEMSUMMERYFULL = 30;
+  private static final int LAYOUT_ITEMSERVICE = 30;
 
-  private static final int LAYOUT_ITEMTRANSACTIONHISTORY = 31;
+  private static final int LAYOUT_ITEMSUMMERYFULL = 31;
 
-  private static final int LAYOUT_ITEMWEATHER = 32;
+  private static final int LAYOUT_ITEMTRANSACTIONHISTORY = 32;
 
-  private static final int LAYOUT_LAYOUTADMINMANAGEACCOUNTFRAGMENT = 33;
+  private static final int LAYOUT_ITEMWEATHER = 33;
 
-  private static final int LAYOUT_LAYOUTBATCHFRAGMENT = 34;
+  private static final int LAYOUT_LAYOUTADMINMANAGEACCOUNTFRAGMENT = 34;
 
-  private static final int LAYOUT_LAYOUTCONTACTSFRAGMENT = 35;
+  private static final int LAYOUT_LAYOUTBATCHFRAGMENT = 35;
 
-  private static final int LAYOUT_LAYOUTDASHBOARDFRAGMENT = 36;
+  private static final int LAYOUT_LAYOUTCONTACTSFRAGMENT = 36;
 
-  private static final int LAYOUT_LAYOUTDILAOGWEATHER = 37;
+  private static final int LAYOUT_LAYOUTDASHBOARDFRAGMENT = 37;
 
-  private static final int LAYOUT_LAYOUTFRAGMENTREQUESTS = 38;
+  private static final int LAYOUT_LAYOUTDILAOGWEATHER = 38;
 
-  private static final int LAYOUT_LAYOUTMAP = 39;
+  private static final int LAYOUT_LAYOUTFRAGMENTREQUESTS = 39;
 
-  private static final int LAYOUT_LAYOUTMIXER = 40;
+  private static final int LAYOUT_LAYOUTMAP = 40;
 
-  private static final int LAYOUT_LAYOUTRECORDDIALOG = 41;
+  private static final int LAYOUT_LAYOUTMIXER = 41;
 
-  private static final int LAYOUT_VIEWFASTERMIXERUSERPANEL = 42;
+  private static final int LAYOUT_LAYOUTRECORDDIALOG = 42;
 
-  private static final int LAYOUT_VIEWITEMPROGRESS = 43;
+  private static final int LAYOUT_VIEWFASTERMIXERUSERPANEL = 43;
 
-  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(43);
+  private static final int LAYOUT_VIEWITEMPROGRESS = 44;
+
+  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(44);
 
   static {
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.activity_admin, LAYOUT_ACTIVITYADMIN);
@@ -178,6 +181,7 @@ public class DataBinderMapperImpl extends DataBinderMapper {
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_plan, LAYOUT_ITEMPLAN);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_pomp_mixer, LAYOUT_ITEMPOMPMIXER);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_report_full, LAYOUT_ITEMREPORTFULL);
+    INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_service, LAYOUT_ITEMSERVICE);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_summery_full, LAYOUT_ITEMSUMMERYFULL);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_transaction_history, LAYOUT_ITEMTRANSACTIONHISTORY);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.item_weather, LAYOUT_ITEMWEATHER);
@@ -377,6 +381,12 @@ public class DataBinderMapperImpl extends DataBinderMapper {
           }
           throw new IllegalArgumentException("The tag for item_report_full is invalid. Received: " + tag);
         }
+        case  LAYOUT_ITEMSERVICE: {
+          if ("layout/item_service_0".equals(tag)) {
+            return new ItemServiceBindingImpl(component, view);
+          }
+          throw new IllegalArgumentException("The tag for item_service is invalid. Received: " + tag);
+        }
         case  LAYOUT_ITEMSUMMERYFULL: {
           if ("layout/item_summery_full_0".equals(tag)) {
             return new ItemSummeryFullBindingImpl(component, view);
@@ -506,7 +516,7 @@ public class DataBinderMapperImpl extends DataBinderMapper {
   }
 
   private static class InnerBrLookup {
-    static final SparseArray<String> sKeys = new SparseArray<String>(13);
+    static final SparseArray<String> sKeys = new SparseArray<String>(14);
 
     static {
       sKeys.put(0, "_all");
@@ -519,14 +529,15 @@ public class DataBinderMapperImpl extends DataBinderMapper {
       sKeys.put(7, "mixer");
       sKeys.put(8, "plan");
       sKeys.put(9, "progress");
-      sKeys.put(10, "user");
-      sKeys.put(11, "viewData");
-      sKeys.put(12, "viewModel");
+      sKeys.put(10, "service");
+      sKeys.put(11, "user");
+      sKeys.put(12, "viewData");
+      sKeys.put(13, "viewModel");
     }
   }
 
   private static class InnerLayoutIdLookup {
-    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(43);
+    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(44);
 
     static {
       sKeys.put("layout/activity_admin_0", com.behraz.fastermixer.batch.R.layout.activity_admin);
@@ -558,6 +569,7 @@ public class DataBinderMapperImpl extends DataBinderMapper {
       sKeys.put("layout/item_plan_0", com.behraz.fastermixer.batch.R.layout.item_plan);
       sKeys.put("layout/item_pomp_mixer_0", com.behraz.fastermixer.batch.R.layout.item_pomp_mixer);
       sKeys.put("layout/item_report_full_0", com.behraz.fastermixer.batch.R.layout.item_report_full);
+      sKeys.put("layout/item_service_0", com.behraz.fastermixer.batch.R.layout.item_service);
       sKeys.put("layout/item_summery_full_0", com.behraz.fastermixer.batch.R.layout.item_summery_full);
       sKeys.put("layout/item_transaction_history_0", com.behraz.fastermixer.batch.R.layout.item_transaction_history);
       sKeys.put("layout/item_weather_0", com.behraz.fastermixer.batch.R.layout.item_weather);

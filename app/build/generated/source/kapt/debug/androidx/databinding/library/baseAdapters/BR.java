@@ -21,9 +21,11 @@ public class BR {
 
   public static final int progress = 9;
 
-  public static final int user = 10;
+  public static final int service = 10;
 
-  public static final int viewData = 11;
+  public static final int user = 11;
 
-  public static final int viewModel = 12;
+  public static final int viewData = 12;
+
+  public static final int viewModel = 13;
 }

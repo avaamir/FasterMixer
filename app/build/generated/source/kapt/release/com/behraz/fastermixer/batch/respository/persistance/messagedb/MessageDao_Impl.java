@@ -13,6 +13,7 @@ import androidx.room.util.DBUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
 import com.behraz.fastermixer.batch.models.Message;
 import java.lang.Exception;
+import java.lang.Integer;
 import java.lang.Object;
 import java.lang.Override;
 import java.lang.String;
@@ -42,7 +43,7 @@ public final class MessageDao_Impl implements MessageDao {
     this.__insertionAdapterOfMessage = new EntityInsertionAdapter<Message>(__db) {
       @Override
       public String createQuery() {
-        return "INSERT OR REPLACE INTO `messages` (`id`,`sender`,`senderId`,`dateTime`,`content`,`isDelivered`,`priority`,`_isEvent`,`senderImage`,`userId`,`viewed`) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        return "INSERT OR REPLACE INTO `messages` (`id`,`content`,`senderId`,`senderName`,`eventName`,`dateTime`,`viewed`,`userId`) VALUES (?,?,?,?,?,?,?,?)";
       }
 
       @Override
@@ -52,44 +53,35 @@ public final class MessageDao_Impl implements MessageDao {
         } else {
           stmt.bindString(1, value.getId());
         }
-        if (value.getSender() == null) {
+        if (value.getContent() == null) {
           stmt.bindNull(2);
         } else {
-          stmt.bindString(2, value.getSender());
+          stmt.bindString(2, value.getContent());
         }
-        if (value.getSenderId() == null) {
-          stmt.bindNull(3);
-        } else {
-          stmt.bindString(3, value.getSenderId());
-        }
-        if (value.getDateTime() == null) {
+        stmt.bindLong(3, value.getSenderId());
+        if (value.getSenderName() == null) {
           stmt.bindNull(4);
         } else {
-          stmt.bindString(4, value.getDateTime());
+          stmt.bindString(4, value.getSenderName());
         }
-        if (value.getContent() == null) {
+        if (value.getEventName() == null) {
           stmt.bindNull(5);
         } else {
-          stmt.bindString(5, value.getContent());
+          stmt.bindString(5, value.getEventName());
+        }
+        if (value.getDateTime() == null) {
+          stmt.bindNull(6);
+        } else {
+          stmt.bindString(6, value.getDateTime());
         }
         final int _tmp;
-        _tmp = value.isDelivered() ? 1 : 0;
-        stmt.bindLong(6, _tmp);
-        stmt.bindLong(7, value.getPriority());
-        stmt.bindLong(8, value.get_isEvent());
-        if (value.getSenderImage() == null) {
-          stmt.bindNull(9);
-        } else {
-          stmt.bindString(9, value.getSenderImage());
-        }
+        _tmp = value.getViewed() ? 1 : 0;
+        stmt.bindLong(7, _tmp);
         if (value.getUserId() == null) {
-          stmt.bindNull(10);
+          stmt.bindNull(8);
         } else {
-          stmt.bindString(10, value.getUserId());
+          stmt.bindLong(8, value.getUserId());
         }
-        final int _tmp_1;
-        _tmp_1 = value.getViewed() ? 1 : 0;
-        stmt.bindLong(11, _tmp_1);
       }
     };
     this.__deletionAdapterOfMessage = new EntityDeletionOrUpdateAdapter<Message>(__db) {
@@ -110,7 +102,7 @@ public final class MessageDao_Impl implements MessageDao {
     this.__updateAdapterOfMessage = new EntityDeletionOrUpdateAdapter<Message>(__db) {
       @Override
       public String createQuery() {
-        return "UPDATE OR ABORT `messages` SET `id` = ?,`sender` = ?,`senderId` = ?,`dateTime` = ?,`content` = ?,`isDelivered` = ?,`priority` = ?,`_isEvent` = ?,`senderImage` = ?,`userId` = ?,`viewed` = ? WHERE `id` = ?";
+        return "UPDATE OR ABORT `messages` SET `id` = ?,`content` = ?,`senderId` = ?,`senderName` = ?,`eventName` = ?,`dateTime` = ?,`viewed` = ?,`userId` = ? WHERE `id` = ?";
       }
 
       @Override
@@ -120,48 +112,39 @@ public final class MessageDao_Impl implements MessageDao {
         } else {
           stmt.bindString(1, value.getId());
         }
-        if (value.getSender() == null) {
+        if (value.getContent() == null) {
           stmt.bindNull(2);
         } else {
-          stmt.bindString(2, value.getSender());
+          stmt.bindString(2, value.getContent());
         }
-        if (value.getSenderId() == null) {
-          stmt.bindNull(3);
-        } else {
-          stmt.bindString(3, value.getSenderId());
-        }
-        if (value.getDateTime() == null) {
+        stmt.bindLong(3, value.getSenderId());
+        if (value.getSenderName() == null) {
           stmt.bindNull(4);
         } else {
-          stmt.bindString(4, value.getDateTime());
+          stmt.bindString(4, value.getSenderName());
         }
-        if (value.getContent() == null) {
+        if (value.getEventName() == null) {
           stmt.bindNull(5);
         } else {
-          stmt.bindString(5, value.getContent());
+          stmt.bindString(5, value.getEventName());
+        }
+        if (value.getDateTime() == null) {
+          stmt.bindNull(6);
+        } else {
+          stmt.bindString(6, value.getDateTime());
         }
         final int _tmp;
-        _tmp = value.isDelivered() ? 1 : 0;
-        stmt.bindLong(6, _tmp);
-        stmt.bindLong(7, value.getPriority());
-        stmt.bindLong(8, value.get_isEvent());
-        if (value.getSenderImage() == null) {
+        _tmp = value.getViewed() ? 1 : 0;
+        stmt.bindLong(7, _tmp);
+        if (value.getUserId() == null) {
+          stmt.bindNull(8);
+        } else {
+          stmt.bindLong(8, value.getUserId());
+        }
+        if (value.getId() == null) {
           stmt.bindNull(9);
         } else {
-          stmt.bindString(9, value.getSenderImage());
-        }
-        if (value.getUserId() == null) {
-          stmt.bindNull(10);
-        } else {
-          stmt.bindString(10, value.getUserId());
-        }
-        final int _tmp_1;
-        _tmp_1 = value.getViewed() ? 1 : 0;
-        stmt.bindLong(11, _tmp_1);
-        if (value.getId() == null) {
-          stmt.bindNull(12);
-        } else {
-          stmt.bindString(12, value.getId());
+          stmt.bindString(9, value.getId());
         }
       }
     };
@@ -175,7 +158,7 @@ public final class MessageDao_Impl implements MessageDao {
     this.__preparedStmtOfSeenAllMessages = new SharedSQLiteStatement(__db) {
       @Override
       public String createQuery() {
-        final String _query = "UPDATE messages SET viewed=1 WHERE viewed=0";
+        final String _query = "UPDATE messages SET  viewed=1 WHERE viewed=0";
         return _query;
       }
     };
@@ -292,46 +275,39 @@ public final class MessageDao_Impl implements MessageDao {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
-          final int _cursorIndexOfSender = CursorUtil.getColumnIndexOrThrow(_cursor, "sender");
-          final int _cursorIndexOfSenderId = CursorUtil.getColumnIndexOrThrow(_cursor, "senderId");
-          final int _cursorIndexOfDateTime = CursorUtil.getColumnIndexOrThrow(_cursor, "dateTime");
           final int _cursorIndexOfContent = CursorUtil.getColumnIndexOrThrow(_cursor, "content");
-          final int _cursorIndexOfIsDelivered = CursorUtil.getColumnIndexOrThrow(_cursor, "isDelivered");
-          final int _cursorIndexOfPriority = CursorUtil.getColumnIndexOrThrow(_cursor, "priority");
-          final int _cursorIndexOfIsEvent = CursorUtil.getColumnIndexOrThrow(_cursor, "_isEvent");
-          final int _cursorIndexOfSenderImage = CursorUtil.getColumnIndexOrThrow(_cursor, "senderImage");
-          final int _cursorIndexOfUserId = CursorUtil.getColumnIndexOrThrow(_cursor, "userId");
+          final int _cursorIndexOfSenderId = CursorUtil.getColumnIndexOrThrow(_cursor, "senderId");
+          final int _cursorIndexOfSenderName = CursorUtil.getColumnIndexOrThrow(_cursor, "senderName");
+          final int _cursorIndexOfEventName = CursorUtil.getColumnIndexOrThrow(_cursor, "eventName");
+          final int _cursorIndexOfDateTime = CursorUtil.getColumnIndexOrThrow(_cursor, "dateTime");
           final int _cursorIndexOfViewed = CursorUtil.getColumnIndexOrThrow(_cursor, "viewed");
+          final int _cursorIndexOfUserId = CursorUtil.getColumnIndexOrThrow(_cursor, "userId");
           final List<Message> _result = new ArrayList<Message>(_cursor.getCount());
           while(_cursor.moveToNext()) {
             final Message _item;
             final String _tmpId;
             _tmpId = _cursor.getString(_cursorIndexOfId);
-            final String _tmpSender;
-            _tmpSender = _cursor.getString(_cursorIndexOfSender);
-            final String _tmpSenderId;
-            _tmpSenderId = _cursor.getString(_cursorIndexOfSenderId);
-            final String _tmpDateTime;
-            _tmpDateTime = _cursor.getString(_cursorIndexOfDateTime);
             final String _tmpContent;
             _tmpContent = _cursor.getString(_cursorIndexOfContent);
-            final boolean _tmpIsDelivered;
-            final int _tmp;
-            _tmp = _cursor.getInt(_cursorIndexOfIsDelivered);
-            _tmpIsDelivered = _tmp != 0;
-            final int _tmpPriority;
-            _tmpPriority = _cursor.getInt(_cursorIndexOfPriority);
-            final int _tmp_isEvent;
-            _tmp_isEvent = _cursor.getInt(_cursorIndexOfIsEvent);
-            final String _tmpSenderImage;
-            _tmpSenderImage = _cursor.getString(_cursorIndexOfSenderImage);
-            final String _tmpUserId;
-            _tmpUserId = _cursor.getString(_cursorIndexOfUserId);
+            final int _tmpSenderId;
+            _tmpSenderId = _cursor.getInt(_cursorIndexOfSenderId);
+            final String _tmpSenderName;
+            _tmpSenderName = _cursor.getString(_cursorIndexOfSenderName);
+            final String _tmpEventName;
+            _tmpEventName = _cursor.getString(_cursorIndexOfEventName);
+            final String _tmpDateTime;
+            _tmpDateTime = _cursor.getString(_cursorIndexOfDateTime);
             final boolean _tmpViewed;
-            final int _tmp_1;
-            _tmp_1 = _cursor.getInt(_cursorIndexOfViewed);
-            _tmpViewed = _tmp_1 != 0;
-            _item = new Message(_tmpId,_tmpSender,_tmpSenderId,_tmpDateTime,_tmpContent,_tmpIsDelivered,_tmpPriority,_tmp_isEvent,_tmpSenderImage,_tmpUserId,_tmpViewed);
+            final int _tmp;
+            _tmp = _cursor.getInt(_cursorIndexOfViewed);
+            _tmpViewed = _tmp != 0;
+            final Integer _tmpUserId;
+            if (_cursor.isNull(_cursorIndexOfUserId)) {
+              _tmpUserId = null;
+            } else {
+              _tmpUserId = _cursor.getInt(_cursorIndexOfUserId);
+            }
+            _item = new Message(_tmpId,_tmpContent,_tmpSenderId,_tmpSenderName,_tmpEventName,_tmpDateTime,_tmpViewed,_tmpUserId);
             _result.add(_item);
           }
           return _result;
@@ -359,45 +335,38 @@ public final class MessageDao_Impl implements MessageDao {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
-          final int _cursorIndexOfSender = CursorUtil.getColumnIndexOrThrow(_cursor, "sender");
-          final int _cursorIndexOfSenderId = CursorUtil.getColumnIndexOrThrow(_cursor, "senderId");
-          final int _cursorIndexOfDateTime = CursorUtil.getColumnIndexOrThrow(_cursor, "dateTime");
           final int _cursorIndexOfContent = CursorUtil.getColumnIndexOrThrow(_cursor, "content");
-          final int _cursorIndexOfIsDelivered = CursorUtil.getColumnIndexOrThrow(_cursor, "isDelivered");
-          final int _cursorIndexOfPriority = CursorUtil.getColumnIndexOrThrow(_cursor, "priority");
-          final int _cursorIndexOfIsEvent = CursorUtil.getColumnIndexOrThrow(_cursor, "_isEvent");
-          final int _cursorIndexOfSenderImage = CursorUtil.getColumnIndexOrThrow(_cursor, "senderImage");
-          final int _cursorIndexOfUserId = CursorUtil.getColumnIndexOrThrow(_cursor, "userId");
+          final int _cursorIndexOfSenderId = CursorUtil.getColumnIndexOrThrow(_cursor, "senderId");
+          final int _cursorIndexOfSenderName = CursorUtil.getColumnIndexOrThrow(_cursor, "senderName");
+          final int _cursorIndexOfEventName = CursorUtil.getColumnIndexOrThrow(_cursor, "eventName");
+          final int _cursorIndexOfDateTime = CursorUtil.getColumnIndexOrThrow(_cursor, "dateTime");
           final int _cursorIndexOfViewed = CursorUtil.getColumnIndexOrThrow(_cursor, "viewed");
+          final int _cursorIndexOfUserId = CursorUtil.getColumnIndexOrThrow(_cursor, "userId");
           final Message _result;
           if(_cursor.moveToFirst()) {
             final String _tmpId;
             _tmpId = _cursor.getString(_cursorIndexOfId);
-            final String _tmpSender;
-            _tmpSender = _cursor.getString(_cursorIndexOfSender);
-            final String _tmpSenderId;
-            _tmpSenderId = _cursor.getString(_cursorIndexOfSenderId);
-            final String _tmpDateTime;
-            _tmpDateTime = _cursor.getString(_cursorIndexOfDateTime);
             final String _tmpContent;
             _tmpContent = _cursor.getString(_cursorIndexOfContent);
-            final boolean _tmpIsDelivered;
-            final int _tmp;
-            _tmp = _cursor.getInt(_cursorIndexOfIsDelivered);
-            _tmpIsDelivered = _tmp != 0;
-            final int _tmpPriority;
-            _tmpPriority = _cursor.getInt(_cursorIndexOfPriority);
-            final int _tmp_isEvent;
-            _tmp_isEvent = _cursor.getInt(_cursorIndexOfIsEvent);
-            final String _tmpSenderImage;
-            _tmpSenderImage = _cursor.getString(_cursorIndexOfSenderImage);
-            final String _tmpUserId;
-            _tmpUserId = _cursor.getString(_cursorIndexOfUserId);
+            final int _tmpSenderId;
+            _tmpSenderId = _cursor.getInt(_cursorIndexOfSenderId);
+            final String _tmpSenderName;
+            _tmpSenderName = _cursor.getString(_cursorIndexOfSenderName);
+            final String _tmpEventName;
+            _tmpEventName = _cursor.getString(_cursorIndexOfEventName);
+            final String _tmpDateTime;
+            _tmpDateTime = _cursor.getString(_cursorIndexOfDateTime);
             final boolean _tmpViewed;
-            final int _tmp_1;
-            _tmp_1 = _cursor.getInt(_cursorIndexOfViewed);
-            _tmpViewed = _tmp_1 != 0;
-            _result = new Message(_tmpId,_tmpSender,_tmpSenderId,_tmpDateTime,_tmpContent,_tmpIsDelivered,_tmpPriority,_tmp_isEvent,_tmpSenderImage,_tmpUserId,_tmpViewed);
+            final int _tmp;
+            _tmp = _cursor.getInt(_cursorIndexOfViewed);
+            _tmpViewed = _tmp != 0;
+            final Integer _tmpUserId;
+            if (_cursor.isNull(_cursorIndexOfUserId)) {
+              _tmpUserId = null;
+            } else {
+              _tmpUserId = _cursor.getInt(_cursorIndexOfUserId);
+            }
+            _result = new Message(_tmpId,_tmpContent,_tmpSenderId,_tmpSenderName,_tmpEventName,_tmpDateTime,_tmpViewed,_tmpUserId);
           } else {
             _result = null;
           }
