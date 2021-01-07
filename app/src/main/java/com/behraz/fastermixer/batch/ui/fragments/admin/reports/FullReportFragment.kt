@@ -26,18 +26,16 @@ class FullReportFragment : Fragment() {
     private lateinit var mBinding: FragmentFullReportBinding
 
     private lateinit var vehicle: AdminEquipment
-    private lateinit var startDate: Array<String>
-    private lateinit var endDate: Array<String>
+    private lateinit var request: GetReportRequest
 
     private val mAdapter = FullReportAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!::startDate.isInitialized) {
+        if (!::request.isInitialized) {
             requireArguments().apply {
                 vehicle = getParcelable(Constants.INTENT_REPORT_VEHICLE)!!
-                startDate = getStringArray(Constants.INTENT_REPORT_START_DATE) as Array<String>
-                endDate = getStringArray(Constants.INTENT_REPORT_START_DATE) as Array<String>
+                request = getParcelable(Constants.INTENT_REPORT_GET_REPORT_REQ)!!
             }
         }
     }
@@ -57,13 +55,7 @@ class FullReportFragment : Fragment() {
         initViews()
         subscribeObservers()
 
-        viewModel.getFullReport(
-            GetReportRequest(
-                "${startDate[2]}-${startDate[1]}-${startDate[0]}",
-                "${endDate[2]}-${endDate[1]}-${endDate[0]}",
-                vehicle.id
-            )
-        )
+        viewModel.getFullReport(request)
     }
 
     private fun subscribeObservers() {

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentChooseReportEquipmentBinding
 import com.behraz.fastermixer.batch.models.AdminEquipment
+import com.behraz.fastermixer.batch.models.requests.behraz.GetReportRequest
 import com.behraz.fastermixer.batch.ui.adapters.AdminEquipmentAdapter
 import com.behraz.fastermixer.batch.ui.animations.crossfade
 import com.behraz.fastermixer.batch.ui.fragments.navigate
@@ -22,8 +23,7 @@ import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
 
 class ChooseReportEquipmentFragment : Fragment(), AdminEquipmentAdapter.Interactions {
 
-    private lateinit var startDate: Array<String>
-    private lateinit var endDate: Array<String>
+    private lateinit var request: GetReportRequest
     private lateinit var reportType: String
 
 
@@ -33,10 +33,9 @@ class ChooseReportEquipmentFragment : Fragment(), AdminEquipmentAdapter.Interact
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!::startDate.isInitialized) {
+        if (!::request.isInitialized) {
             requireArguments().apply {
-                startDate = getStringArray(Constants.INTENT_REPORT_START_DATE) as Array<String>
-                endDate = getStringArray(Constants.INTENT_REPORT_START_DATE) as Array<String>
+                request = getParcelable(Constants.INTENT_REPORT_GET_REPORT_REQ) !!
                 reportType = getString(Constants.INTENT_REPORT_TYPE) as String
             }
         }
@@ -104,8 +103,7 @@ class ChooseReportEquipmentFragment : Fragment(), AdminEquipmentAdapter.Interact
                 else -> throw Exception("report Type is not valid: $reportType")
             },
             bundleOf(
-                Constants.INTENT_REPORT_START_DATE to startDate,
-                Constants.INTENT_REPORT_END_DATE to endDate,
+                Constants.INTENT_REPORT_GET_REPORT_REQ to request.also { it.vehicleId = adminEquipment.id },
                 Constants.INTENT_REPORT_VEHICLE to adminEquipment
             )
         )

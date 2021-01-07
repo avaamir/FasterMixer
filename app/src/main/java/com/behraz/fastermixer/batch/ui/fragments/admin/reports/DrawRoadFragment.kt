@@ -23,17 +23,15 @@ class DrawRoadFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
     private lateinit var viewModel: ReportViewModel
 
     private lateinit var vehicle: AdminEquipment
-    private lateinit var startDate: Array<String>
-    private lateinit var endDate: Array<String>
+    private lateinit var request: GetReportRequest
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(ReportViewModel::class.java)
-        if (!::startDate.isInitialized) {
+        if (!::request.isInitialized) {
             requireArguments().apply {
                 vehicle = getParcelable(Constants.INTENT_REPORT_VEHICLE)!!
-                startDate = getStringArray(Constants.INTENT_REPORT_START_DATE) as Array<String>
-                endDate = getStringArray(Constants.INTENT_REPORT_START_DATE) as Array<String>
+                request = getParcelable(Constants.INTENT_REPORT_GET_REPORT_REQ)!!
             }
         }
     }
@@ -50,13 +48,7 @@ class DrawRoadFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         subscribeObservers()
-        viewModel.getDrawRoadReport(
-            GetReportRequest(
-                "${startDate[2]}-${startDate[1]}-${startDate[0]}",
-                "${endDate[2]}-${endDate[1]}-${endDate[0]}",
-                vehicle.id
-            )
-        )
+        viewModel.getDrawRoadReport(request)
     }
 
 

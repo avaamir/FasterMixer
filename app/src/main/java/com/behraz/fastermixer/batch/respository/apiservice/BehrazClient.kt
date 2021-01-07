@@ -12,7 +12,7 @@ interface BehrazClient {
     @POST("AppVersion/FindLastAppVersion")
     suspend fun checkUpdates(): ApiResult<UpdateResponse>
 
-    @POST("Users/login")
+    @POST("Users/loginApp")
     suspend fun getToken(@Body loginRequest: LoginRequest): Response<GetTokenResponse>
 
     @POST("Users/GetUserInfoForApp")

@@ -1,11 +1,11 @@
 package com.behraz.fastermixer.batch.ui.fragments.admin.reports
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,17 +28,15 @@ class SummeryReportFragment : Fragment() {
 
 
     private lateinit var vehicle: AdminEquipment
-    private lateinit var startDate: Array<String>
-    private lateinit var endDate: Array<String>
+    private lateinit var request: GetReportRequest
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!::startDate.isInitialized) {
+        if (!::request.isInitialized) {
             requireArguments().apply {
                 vehicle = getParcelable(Constants.INTENT_REPORT_VEHICLE)!!
-                startDate = getStringArray(Constants.INTENT_REPORT_START_DATE) as Array<String>
-                endDate = getStringArray(Constants.INTENT_REPORT_START_DATE) as Array<String>
+                request = getParcelable(Constants.INTENT_REPORT_GET_REPORT_REQ)!!
             }
         }
     }
@@ -48,7 +46,8 @@ class SummeryReportFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProvider(this).get(ReportViewModel::class.java)
-        mBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_summery_report, container, false)
+        mBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_summery_report, container, false)
         return mBinding.root
     }
 
@@ -56,13 +55,7 @@ class SummeryReportFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         subscribeObservers()
-        viewModel.getSummeryReport(
-            GetReportRequest(
-                "${startDate[2]}-${startDate[1]}-${startDate[0]}",
-                "${endDate[2]}-${endDate[1]}-${endDate[0]}",
-                vehicle.id
-            )
-        )
+        viewModel.getSummeryReport(request)
     }
 
     private fun subscribeObservers() {
