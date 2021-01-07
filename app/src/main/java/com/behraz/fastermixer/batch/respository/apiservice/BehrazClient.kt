@@ -83,7 +83,7 @@ interface BehrazClient {
     @POST("Plannings/GetPlaningServiceForVehicle/{requestId}/{vehicleId}")
     suspend fun getServiceHistory(
         @Path("vehicleId") vehicleId: Int,
-        @Path("{requestId}") requestId: Int
+        @Path("requestId") requestId: Int
     ): ApiResult<List<Service>>
 
     @POST("not implemented")

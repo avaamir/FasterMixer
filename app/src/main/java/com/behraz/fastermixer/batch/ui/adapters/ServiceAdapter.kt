@@ -78,6 +78,12 @@ class ServiceAdapter(
             }
 
             when (item.serviceState) {
+                ToBatch -> {
+                    mBinding.tvLoading.background = bgNotStartedState
+                    mBinding.tvToDest.background = bgNotStartedState
+                    mBinding.tvUnLoading.background = bgNotStartedState
+                    mBinding.tvFinished.background = bgNotStartedState
+                }
                 Loading -> {
                     mBinding.tvLoading.background = bgCurrentState
                     mBinding.tvToDest.background = bgNotStartedState
