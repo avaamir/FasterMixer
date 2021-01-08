@@ -3,6 +3,38 @@ package com.behraz.fastermixer.batch.utils.general
 import java.util.*
 
 
+fun numberToSolarMonthName(number: Int) = when (number) {
+    1 -> "فروردین"
+    2 -> "اردیبهشت"
+    3 -> "خرداد"
+    4 -> "تیر"
+    5 -> "مرداد"
+    6 -> "شهریور"
+    7 -> "مهر"
+    8 -> "آبان"
+    9 -> "آذر"
+    10 -> "دی"
+    11 -> "بهمن"
+    12 -> "اسفند"
+    else -> throw IllegalStateException("$number: does not exist in months")
+}
+fun solarMonthNameToNumber(name: String) = when (name) {
+    "فروردین" -> "01"
+    "اردیبهشت" -> "02"
+    "خرداد" -> "03"
+    "تیر" -> "04"
+    "مرداد" -> "05"
+    "شهریور" -> "06"
+    "مهر" -> "07"
+    "آبان" -> "08"
+    "آذر" -> "09"
+    "دی" -> "10"
+    "بهمن" -> "11"
+    "اسفند" -> "12"
+    else -> throw IllegalStateException("$name: does not exist in months")
+}
+
+
 fun Date.toJalali(): SolarDate {
     var date: Int
     val month: Int
@@ -163,21 +195,7 @@ data class SolarDate internal constructor(
         else -> throw IllegalStateException("$date:: does not exist in day of week")
     }
 
-    val monthName: String = when (month) {
-        1 -> "فروردين"
-        2 -> "ارديبهشت"
-        3 -> "خرداد"
-        4 -> "تير"
-        5 -> "مرداد"
-        6 -> "شهريور"
-        7 -> "مهر"
-        8 -> "آبان"
-        9 -> "آذر"
-        10 -> "دي"
-        11 -> "بهمن"
-        12 -> "اسفند"
-        else -> throw IllegalStateException("$month: does not exist in months")
-    }
+    val monthName: String = numberToSolarMonthName(month)
 
     fun setTime(hour: Int, minute: Int, second: Int? = null) {
         this.hour = hour

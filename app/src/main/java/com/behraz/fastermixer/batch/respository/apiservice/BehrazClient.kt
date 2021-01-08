@@ -86,8 +86,12 @@ interface BehrazClient {
         @Path("requestId") requestId: Int
     ): ApiResult<List<Service>>
 
+
+    @POST("Reports/DrawThePathForApp")
+    suspend fun getDrawRoadReport(@Body getReportRequest: GetReportRequest.Request): ApiResult<List<ReportPoint>>
+
     @POST("not implemented")
-    suspend fun getFullReport(@Body request: GetReportRequest): ApiResult<List<FullReport>>
+    suspend fun getFullReport(@Body request: GetReportRequest.Request): ApiResult<List<FullReport>>
     //======================================
 
 

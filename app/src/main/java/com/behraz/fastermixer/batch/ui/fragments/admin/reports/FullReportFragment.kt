@@ -11,8 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentFullReportBinding
-import com.behraz.fastermixer.batch.models.AdminEquipment
-import com.behraz.fastermixer.batch.models.requests.behraz.GetReportRequest
 import com.behraz.fastermixer.batch.ui.adapters.FullReportAdapter
 import com.behraz.fastermixer.batch.ui.animations.crossfade
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
@@ -25,20 +23,7 @@ class FullReportFragment : Fragment() {
     private lateinit var viewModel: ReportViewModel
     private lateinit var mBinding: FragmentFullReportBinding
 
-    private lateinit var vehicle: AdminEquipment
-    private lateinit var request: GetReportRequest
-
     private val mAdapter = FullReportAdapter()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (!::request.isInitialized) {
-            requireArguments().apply {
-                vehicle = getParcelable(Constants.INTENT_REPORT_VEHICLE)!!
-                request = getParcelable(Constants.INTENT_REPORT_GET_REPORT_REQ)!!
-            }
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,7 +40,7 @@ class FullReportFragment : Fragment() {
         initViews()
         subscribeObservers()
 
-        viewModel.getFullReport(request)
+        viewModel.getFullReport()
     }
 
     private fun subscribeObservers() {

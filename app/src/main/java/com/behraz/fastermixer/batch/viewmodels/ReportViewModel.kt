@@ -4,10 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.behraz.fastermixer.batch.models.ReportPoint
+import com.behraz.fastermixer.batch.models.requests.behraz.ApiResult
 import com.behraz.fastermixer.batch.models.requests.behraz.GetReportRequest
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 
 class ReportViewModel : ViewModel() {
+
+    var request = GetReportRequest()
+
 
     val speed: Long = 1000L //3 ta addad bayad dashte bashe //slow, normal, fast
     var currentPointIndex = MutableLiveData<Int>()
@@ -18,30 +23,34 @@ class ReportViewModel : ViewModel() {
             _isPausedLiveData.value = value
         }
     private val _isPausedLiveData = MutableLiveData<Boolean>()
-    val isPausedLiveData : LiveData<Boolean> = _isPausedLiveData
+    val isPausedLiveData: LiveData<Boolean> = _isPausedLiveData
 
 
-    private val getDrawRoadReportEvent = MutableLiveData<GetReportRequest>()
-    val drawRoadReport = Transformations.switchMap(getDrawRoadReportEvent) {
-        RemoteRepo.getDrawRoadReport(it)
+    private var _drawRoadReport = MutableLiveData<ApiResult<List<ReportPoint>>>()
+    val drawRoadReport  = Transformations.switchMap(_drawRoadReport) {
+        if (it != null) {
+            MutableLiveData(it)
+        } else {
+            MutableLiveData()
+        }
     }
 
     private val getSummeryReportEvent = MutableLiveData<GetReportRequest>()
     val summeryReport = Transformations.switchMap(getSummeryReportEvent) {
-        RemoteRepo.getSummeryReport(it)
+        RemoteRepo.getSummeryReport(it.request)
     }
 
     private val getFullReportEvent = MutableLiveData<GetReportRequest>()
     val fullReport = Transformations.switchMap(getFullReportEvent) {
-        RemoteRepo.getFullReport(it)
+        RemoteRepo.getFullReport(it.request)
     }
 
-    fun getFullReport(getReportRequest: GetReportRequest) {
-        getFullReportEvent.value = getReportRequest
+    fun getFullReport() {
+        getFullReportEvent.value = request
     }
 
-    fun getSummeryReport(getReportRequest: GetReportRequest) {
-        getSummeryReportEvent.value = getReportRequest
+    fun getSummeryReport() {
+        getSummeryReportEvent.value = request
     }
 
     fun tryGetFullReportAgain() {
@@ -52,17 +61,23 @@ class ReportViewModel : ViewModel() {
         getSummeryReportEvent.value = getSummeryReportEvent.value
     }
 
-    fun getDrawRoadReport(getReportRequest: GetReportRequest) {
-        getDrawRoadReportEvent.value = getReportRequest
+    fun getDrawRoadReport() {
+        RemoteRepo.getDrawRoadReport(request.request) {
+            _drawRoadReport.value = it
+        }
     }
 
     fun tryGetDrawRoadAgain() {
-        getDrawRoadReportEvent.value = getDrawRoadReportEvent.value
+        getDrawRoadReport()
     }
 
+    fun clear() {
+        _drawRoadReport.value = null
+    }
 
     override fun onCleared() {
         super.onCleared()
+        _drawRoadReport.value = null
     }
 
 }

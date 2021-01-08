@@ -143,7 +143,7 @@ abstract class BaseMapFragment : Fragment(),
         line.setPoints(points)
         line.outlinePaint.color = ContextCompat.getColor(requireContext(), R.color.btn_blue)
         line.outlinePaint.alpha = 150
-        _mBinding.map.overlays.add(line)
+        _mBinding.map.overlays.add(0, line)
         //moveCamera(GeoPoint(line.bounds.centerLatitude, line.bounds.centerLongitude), 1.0) //todo how move camera to polygon area
         //line.outlinePaint.strokeWidth = 3f
         _mBinding.map.invalidate()

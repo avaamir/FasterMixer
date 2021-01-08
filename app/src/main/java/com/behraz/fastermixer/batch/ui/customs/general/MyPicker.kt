@@ -64,6 +64,16 @@ class MyPicker : NumberPicker {
         }
     }
 
+    fun setValue(value: String?) {
+        if (value != null) {
+            displayedValues.forEachIndexed { index, displayName ->
+                if (displayName == value) {
+                    setValue(index)
+                    return@forEachIndexed
+                }
+            }
+        }
+    }
 
     fun initPicker(items: Array<String>) {
         minValue = 0

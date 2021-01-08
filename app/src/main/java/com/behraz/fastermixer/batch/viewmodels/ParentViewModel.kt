@@ -37,11 +37,7 @@ abstract class ParentViewModel : ViewModel() {
     private var breakdownEvent = MutableLiveData<BreakdownRequest>()
     val breakdownResponse = Transformations.switchMap(breakdownEvent) {
         RemoteRepo.insertBreakdownRequest(it).map { response ->
-            if (response != null) {
-                ApiResult(it, response.isSucceed, response.message, ErrorType.OK)
-            } else {
-                response
-            }
+            ApiResult(it, response.isSucceed, response.message, ErrorType.OK)
         }
     }
 
@@ -50,7 +46,7 @@ abstract class ParentViewModel : ViewModel() {
     private val timer: Timer
 
     init {
-        timer = fixedRateTimer(period = 10000L) {
+        timer = fixedRateTimer(period = 20000L) {
             user.value?.let { user ->  //TODO albate bazam momkene unauthorized bede chun shyad moghe check kardan login bashe ama bad if logout etefagh biofte, AMA jelo exception ro migire
                 getMessages()
                 onTimerTick(user)

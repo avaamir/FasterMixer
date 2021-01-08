@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.behraz.fastermixer.batch.ui.fragments.BaseMapFragment
 import com.behraz.fastermixer.batch.ui.osm.markers.MixerMarker
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
@@ -58,8 +59,11 @@ class DrawRoadMapFragment : BaseMapFragment() {
 
     private fun subscribeObservers() {
         viewModel.drawRoadReport.observe(viewLifecycleOwner) {
-            if (it?.isSucceed == true) {
-                drawPolyline(it.entity!!)
+            if (it.isSucceed) {
+                val points = it.entity!!.map { _data ->
+                    _data.point
+                }
+                drawPolyline(points)
                 //viewModel.isPaused = false
                 resumeAnimation()
             }
@@ -69,10 +73,15 @@ class DrawRoadMapFragment : BaseMapFragment() {
             //Seekbar age avaz beshe va Resume ke hast in observer call mishe
 
             //TODO update marker info window
-            val points = viewModel.drawRoadReport.value!!.entity!!
+            val data = viewModel.drawRoadReport.value!!.entity!!
+            if (data.isEmpty()) {
+                toast("در این بازه هیچ دیتایی ثبت نشده است", true)
+                findNavController().navigateUp()
+                return@observe
+            }
 
+            val point = data[index].point
             if (!viewModel.isPaused) {
-                val point = points[index]
                 if (animator?.isRunning == true) { //age animator running bashe va liveData(currentPointIndex) taghir kone yaani ba seekBar taghir karde pas bayad animation feli stop beshe ta dobare seekbar ro bar nagardune be halat avalesh
                     animator?.cancel()
                     marker.position = point
@@ -82,7 +91,7 @@ class DrawRoadMapFragment : BaseMapFragment() {
                     moveCamera(point, mBinding.map.zoomLevelDouble, true)
                 }
                 animator = animateMarker(marker, point, LinearInterpolator(), viewModel.speed) {
-                    if (index + 1 < points.size) {
+                    if (index + 1 < data.size) {
                         animator = null
                         viewModel.currentPointIndex.value = index + 1
                     } else {
@@ -90,10 +99,10 @@ class DrawRoadMapFragment : BaseMapFragment() {
                     }
                 }
             } else {
-                marker.position = points[index]
+                marker.position = point
                 mBinding.map.invalidate()
                 if (shouldTrackCar) {
-                    moveCamera(points[index], mBinding.map.zoomLevelDouble, true)
+                    moveCamera(point, mBinding.map.zoomLevelDouble, true)
                 }
             }
         }
@@ -135,7 +144,7 @@ class DrawRoadMapFragment : BaseMapFragment() {
         if (points != null) {
             val index = viewModel.currentPointIndex.value!!
             shouldTrackCar = true
-            moveCamera(points[index], mBinding.map.zoomLevelDouble, false)
+            moveCamera(points[index].point, mBinding.map.zoomLevelDouble, false)
         } else {
             toast("در حال دریافت گزارش")
         }

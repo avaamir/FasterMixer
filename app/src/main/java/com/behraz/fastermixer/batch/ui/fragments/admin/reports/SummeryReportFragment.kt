@@ -11,8 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentSummeryReportBinding
-import com.behraz.fastermixer.batch.models.AdminEquipment
-import com.behraz.fastermixer.batch.models.requests.behraz.GetReportRequest
 import com.behraz.fastermixer.batch.ui.adapters.SummeryReportAdapter
 import com.behraz.fastermixer.batch.ui.animations.crossfade
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
@@ -26,20 +24,6 @@ class SummeryReportFragment : Fragment() {
     private lateinit var mBinding: FragmentSummeryReportBinding
     private lateinit var viewModel: ReportViewModel
 
-
-    private lateinit var vehicle: AdminEquipment
-    private lateinit var request: GetReportRequest
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (!::request.isInitialized) {
-            requireArguments().apply {
-                vehicle = getParcelable(Constants.INTENT_REPORT_VEHICLE)!!
-                request = getParcelable(Constants.INTENT_REPORT_GET_REPORT_REQ)!!
-            }
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,7 +39,7 @@ class SummeryReportFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         subscribeObservers()
-        viewModel.getSummeryReport(request)
+        viewModel.getSummeryReport()
     }
 
     private fun subscribeObservers() {

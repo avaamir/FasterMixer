@@ -4,22 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.databinding.FragmentReportBinding
+import com.behraz.fastermixer.batch.models.enums.ReportType
 import com.behraz.fastermixer.batch.ui.fragments.navigate
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
+import com.behraz.fastermixer.batch.viewmodels.ReportViewModel
 
 class ReportFragment : Fragment(), View.OnClickListener {
 
+    private lateinit var viewModel: ReportViewModel
     private lateinit var mBinding: FragmentReportBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        viewModel = ViewModelProvider(requireActivity()).get(ReportViewModel::class.java)
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_report, container, false)
         return mBinding.root
     }
@@ -32,17 +35,13 @@ class ReportFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(view: View) {
-        navigate(
-            R.id.action_reportFragment_to_chooseReportDateFragment,
-            bundleOf(
-                Constants.INTENT_REPORT_TYPE to when (view.id) {
-                    mBinding.frameWorkFullReport.id -> Constants.REPORT_TYPE_FULL
-                    mBinding.frameDrawRoad.id -> Constants.REPORT_TYPE_DRAW_ROAD
-                    mBinding.frameWorkSummeryReport.id -> Constants.REPORT_TYPE_SUMMERY
-                    else -> throw Exception("Illegal State")
-                }
-            )
-        )
+        when (view.id) {
+            mBinding.frameWorkFullReport.id -> viewModel.request.reportType = ReportType.Full
+            mBinding.frameDrawRoad.id -> viewModel.request.reportType = ReportType.DrawRoad
+            mBinding.frameWorkSummeryReport.id -> viewModel.request.reportType = ReportType.Summery
+            else -> throw Exception("Illegal State")
+        }
+        navigate(R.id.action_reportFragment_to_chooseReportDateFragment)
     }
 
 }

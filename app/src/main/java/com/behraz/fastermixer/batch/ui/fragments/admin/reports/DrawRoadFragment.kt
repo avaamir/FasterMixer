@@ -10,8 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentDrawRoadBinding
-import com.behraz.fastermixer.batch.models.AdminEquipment
-import com.behraz.fastermixer.batch.models.requests.behraz.GetReportRequest
 import com.behraz.fastermixer.batch.ui.animations.crossfade
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.snack
@@ -22,24 +20,11 @@ class DrawRoadFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
     private lateinit var mBinding: FragmentDrawRoadBinding
     private lateinit var viewModel: ReportViewModel
 
-    private lateinit var vehicle: AdminEquipment
-    private lateinit var request: GetReportRequest
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity()).get(ReportViewModel::class.java)
-        if (!::request.isInitialized) {
-            requireArguments().apply {
-                vehicle = getParcelable(Constants.INTENT_REPORT_VEHICLE)!!
-                request = getParcelable(Constants.INTENT_REPORT_GET_REPORT_REQ)!!
-            }
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModel = ViewModelProvider(requireActivity()).get(ReportViewModel::class.java)
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_draw_road, container, false)
         return mBinding.root
     }
@@ -48,7 +33,7 @@ class DrawRoadFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         subscribeObservers()
-        viewModel.getDrawRoadReport(request)
+        viewModel.getDrawRoadReport()
     }
 
 

@@ -2,10 +2,7 @@ package com.behraz.fastermixer.batch.respository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.behraz.fastermixer.batch.models.Message
-import com.behraz.fastermixer.batch.models.Mission
-import com.behraz.fastermixer.batch.models.Service
-import com.behraz.fastermixer.batch.models.User
+import com.behraz.fastermixer.batch.models.*
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
 import com.behraz.fastermixer.batch.models.requests.Fence
 import com.behraz.fastermixer.batch.models.requests.behraz.*
@@ -16,7 +13,6 @@ import com.behraz.fastermixer.batch.respository.apiservice.MapService
 import com.behraz.fastermixer.batch.respository.apiservice.WeatherService
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeAdminManageAccountPage
-import com.behraz.fastermixer.batch.utils.fastermixer.fakeDrawRoadReport
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeFullReports
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeSummeryReports
 import com.behraz.fastermixer.batch.utils.general.RunOnceLiveData
@@ -406,16 +402,28 @@ object RemoteRepo {
         }
     }
 
-    fun getFullReport2(request: GetReportRequest) =
+    fun getFullReport2(request: GetReportRequest.Request) =
         apiReq(request, ApiService.client::getFullReport)
 
-    fun getFullReport(request: GetReportRequest) = mockApiReq(succeedRequest(fakeFullReports()))
+    fun getFullReport(request: GetReportRequest.Request) =
+        mockApiReq(succeedRequest(fakeFullReports()))
 
-    fun getSummeryReport(request: GetReportRequest) =
+    fun getSummeryReport(request: GetReportRequest.Request) =
         mockApiReq(succeedRequest(fakeSummeryReports()))
 
-    fun getDrawRoadReport(request: GetReportRequest) =
-        mockApiReq(succeedRequest(fakeDrawRoadReport()))
+
+    fun getDrawRoadReport(request: GetReportRequest.Request, onResponse: (ApiResult<List<ReportPoint>>) -> Unit) {
+        if (!RemoteRepo::serverJobs.isInitialized || !serverJobs.isActive)
+            serverJobs = Job()
+        CoroutineScope(IO + serverJobs).launch {
+            val result = ApiService.client.getDrawRoadReport(request)
+            withContext(Main) {
+                onResponse(result)
+            }
+        }
+    }
+    fun getDrawRoadReport(request: GetReportRequest.Request) =
+        apiReq(request, ApiService.client::getDrawRoadReport)
 
     fun getActiveServices(requestId: Int) = apiReq(requestId, ApiService.client::getActiveServices)
     fun getServiceHistory(vehicleId: Int, requestId: Int): LiveData<ApiResult<List<Service>>> {

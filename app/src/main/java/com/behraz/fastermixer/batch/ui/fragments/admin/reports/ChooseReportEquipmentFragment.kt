@@ -13,39 +13,30 @@ import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentChooseReportEquipmentBinding
 import com.behraz.fastermixer.batch.models.AdminEquipment
-import com.behraz.fastermixer.batch.models.requests.behraz.GetReportRequest
+import com.behraz.fastermixer.batch.models.enums.ReportType
 import com.behraz.fastermixer.batch.ui.adapters.AdminEquipmentAdapter
 import com.behraz.fastermixer.batch.ui.animations.crossfade
 import com.behraz.fastermixer.batch.ui.fragments.navigate
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.snack
 import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
+import com.behraz.fastermixer.batch.viewmodels.ReportViewModel
 
 class ChooseReportEquipmentFragment : Fragment(), AdminEquipmentAdapter.Interactions {
 
-    private lateinit var request: GetReportRequest
-    private lateinit var reportType: String
-
-
     private val mAdapter = AdminEquipmentAdapter(this, false)
-    private lateinit var viewModel: AdminActivityViewModel
+    private lateinit var reportViewModel: ReportViewModel
+    private lateinit var activityViewModel: AdminActivityViewModel
     private lateinit var mBinding: FragmentChooseReportEquipmentBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (!::request.isInitialized) {
-            requireArguments().apply {
-                request = getParcelable(Constants.INTENT_REPORT_GET_REPORT_REQ) !!
-                reportType = getString(Constants.INTENT_REPORT_TYPE) as String
-            }
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this).get(AdminActivityViewModel::class.java)
+        reportViewModel = ViewModelProvider(requireActivity()).get(ReportViewModel::class.java)
+        activityViewModel =
+            ViewModelProvider(requireActivity()).get(AdminActivityViewModel::class.java)
         mBinding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_choose_report_equipment,
@@ -68,7 +59,7 @@ class ChooseReportEquipmentFragment : Fragment(), AdminEquipmentAdapter.Interact
     }
 
     private fun subscribeObservers() {
-        viewModel.equipments.observe(
+        activityViewModel.equipments.observe(
             viewLifecycleOwner, {
                 if (mAdapter.currentList.isEmpty()) {
                     crossfade(mBinding.recycler, mBinding.progressBar)
@@ -81,7 +72,7 @@ class ChooseReportEquipmentFragment : Fragment(), AdminEquipmentAdapter.Interact
                     } else {
                         snack(it?.message ?: Constants.SERVER_ERROR, {
                             mBinding.progressBar.visibility = View.VISIBLE
-                            viewModel.getEquipments()
+                            activityViewModel.getEquipments()
                         })
                     }
                 } else {
@@ -95,16 +86,15 @@ class ChooseReportEquipmentFragment : Fragment(), AdminEquipmentAdapter.Interact
     override fun onBtnShowOnMapClicked(adminEquipment: AdminEquipment) {}
 
     override fun onEquipmentClicked(adminEquipment: AdminEquipment) {
+        reportViewModel.request.vehicleId = adminEquipment.id
         navigate(
-            when (reportType) {
-                Constants.REPORT_TYPE_FULL -> R.id.action_chooseReportEquipmentFragment_to_fullReportFragment
-                Constants.REPORT_TYPE_SUMMERY -> R.id.action_chooseReportEquipmentFragment_to_summeryReportFragment
-                Constants.REPORT_TYPE_DRAW_ROAD -> R.id.action_chooseReportEquipmentFragment_to_drawRoadFragment
-                else -> throw Exception("report Type is not valid: $reportType")
+            when (reportViewModel.request.reportType!!) {
+                ReportType.Full -> R.id.action_chooseReportEquipmentFragment_to_fullReportFragment
+                ReportType.Summery -> R.id.action_chooseReportEquipmentFragment_to_summeryReportFragment
+                ReportType.DrawRoad -> R.id.action_chooseReportEquipmentFragment_to_drawRoadFragment
             },
             bundleOf(
-                Constants.INTENT_REPORT_GET_REPORT_REQ to request.also { it.vehicleId = adminEquipment.id },
-                Constants.INTENT_REPORT_VEHICLE to adminEquipment
+                Constants.INTENT_REPORT_VEHICLE to adminEquipment //used in AdminActivity for setting toolbarTitle
             )
         )
     }
