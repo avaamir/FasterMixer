@@ -75,11 +75,11 @@ class AdminActivity : AppCompatActivity(),
             }
         })
 
-        viewModel.eventOnVehicleSelectedToShowOnMap.observe(this, {
+        viewModel.eventOnVehicleSelectedToShowOnMap.observe(this) {
             if (!it.hasBeenHandled) {
                 mBinding.bottomNav.selectedItemId = R.id.menu_nav_map
             }
-        })
+        }
 
         viewModel.eventOnShowEquipmentsDetails.observe(this, {
             it.getEventIfNotHandled()?.let {

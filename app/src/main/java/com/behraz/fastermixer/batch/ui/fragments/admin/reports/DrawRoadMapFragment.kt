@@ -167,6 +167,7 @@ class DrawRoadMapFragment : BaseMapFragment() {
         MixerMarker(mBinding.map).also {
             addMarkerToMap(it, it.position, "")
             it.infoWindow = DrawRoadInfoMarker(mBinding.map) //add info window, show speed, dateTime, ..
+            it.showInfoWindow()
             it.setOnMarkerClickListener { marker, _ ->
                 shouldTrackCar = true
                 if (!marker.isInfoWindowShown)

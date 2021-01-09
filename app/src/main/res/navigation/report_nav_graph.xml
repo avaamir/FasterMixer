@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/reportFragment"
-        android:name="com.behraz.fastermixer.batch.ReportFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.reports.ReportFragment"
         android:label="گزارشات"
         tools:layout="@layout/fragment_report" >
         <action

@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ReportFragment">
+        tools:context=".ui.fragments.admin.reports.ReportFragment">
 
         <LinearLayout
             android:id="@+id/frameDrawRoad"

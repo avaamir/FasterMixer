@@ -79,14 +79,18 @@ class ChooseReportEquipmentFragment : Fragment(), AdminEquipmentAdapter.Interact
                     mBinding.recycler.visibility = View.VISIBLE
                     mBinding.progressBar.visibility = View.GONE
                 }
-            })
-
+            }
+        )
     }
 
     override fun onBtnShowOnMapClicked(adminEquipment: AdminEquipment) {}
 
     override fun onEquipmentClicked(adminEquipment: AdminEquipment) {
         reportViewModel.request.vehicleId = adminEquipment.id
+        nav(adminEquipment)
+    }
+
+    private fun nav(adminEquipment: AdminEquipment) {
         navigate(
             when (reportViewModel.request.reportType!!) {
                 ReportType.Full -> R.id.action_chooseReportEquipmentFragment_to_fullReportFragment

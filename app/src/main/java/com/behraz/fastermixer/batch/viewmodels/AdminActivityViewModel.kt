@@ -5,6 +5,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.AdminEquipment
 import com.behraz.fastermixer.batch.models.User
+import com.behraz.fastermixer.batch.models.enums.ReportType
 import com.behraz.fastermixer.batch.models.requests.behraz.succeedRequest
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
@@ -13,7 +14,10 @@ import com.behraz.fastermixer.batch.utils.general.Event
 
 class AdminActivityViewModel : ParentViewModel() {
 
+
+
     //UI Events
+    var eventReportEquipment : Event<Pair<AdminEquipment, ReportType>>? = null
 
     val eventOnVehicleSelectedToShowOnMap = MutableLiveData<Event<AdminEquipment>>()
     val eventOnRouteToCarClicked = MutableLiveData<Event<AdminEquipment>>()

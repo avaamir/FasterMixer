@@ -8,20 +8,29 @@ import android.widget.NumberPicker
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentChooseReportDateBinding
+import com.behraz.fastermixer.batch.models.AdminEquipment
+import com.behraz.fastermixer.batch.models.enums.ReportType.*
+import com.behraz.fastermixer.batch.ui.fragments.admin.equipments.AdminEquipmentsFragment
 import com.behraz.fastermixer.batch.ui.fragments.navigate
+import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.*
+import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
 import com.behraz.fastermixer.batch.viewmodels.ReportViewModel
 import java.util.*
 
 class ChooseReportDateFragment : Fragment(), NumberPicker.OnValueChangeListener {
     private lateinit var mBinding: FragmentChooseReportDateBinding
     private lateinit var viewModel: ReportViewModel
+    private lateinit var activityViewModel: AdminActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(ReportViewModel::class.java)
+        activityViewModel =
+            ViewModelProvider(requireActivity()).get(AdminActivityViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -60,19 +69,42 @@ class ChooseReportDateFragment : Fragment(), NumberPicker.OnValueChangeListener 
                         else -> false
                     }
                 }
-                compare(endYear, startYear) ?:
-                compare(endMonth, startMonth) ?:
-                compare(endDate, startDate) ?:
-                compare(endHour, startHour) ?:
-                compare(endMinute, startMinute) ?:
-                compare(endSecond, startSecond) ?: false
+                compare(endYear, startYear) ?: compare(endMonth, startMonth) ?: compare(
+                    endDate,
+                    startDate
+                ) ?: compare(endHour, startHour) ?: compare(endMinute, startMinute) ?: compare(
+                    endSecond,
+                    startSecond
+                ) ?: false
             }
             if (!isEndDateBiggerThanStartDate) {
                 toast("پایان بازه باید از شروع بازه بزرگتر باشد")
                 return@setOnClickListener
             }
 
-            navigate(R.id.action_chooseReportDateFragment_to_chooseReportEquipmentFragment)
+
+
+            if (findNavController().graph.id == R.id.equipments_nav_graph) {
+                val event = activityViewModel.eventReportEquipment
+                //TODO if(event?.hasBeenHandled == false) {
+                event!!.peekContent().let {
+                    viewModel.request.reportType = it.second
+                    viewModel.request.vehicleId = it.first.id
+                    val bundle = Bundle()
+                    bundle.putParcelable(Constants.INTENT_REPORT_VEHICLE, it.first)
+                    navigate(
+                        when (it.second) {
+                            DrawRoad -> R.id.action_chooseReportDateFragment_to_drawRoadFragment
+                            Summery -> R.id.action_chooseReportDateFragment_to_summeryReportFragment
+                            Full -> R.id.action_chooseReportDateFragment_to_fullReportFragment
+                        }, bundle
+                    )
+                }
+            } else {
+                navigate(R.id.action_chooseReportDateFragment_to_chooseReportEquipmentFragment)
+            }
+
+
         }
 
 

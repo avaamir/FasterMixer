@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.FragmentEquipmentsBinding
 import com.behraz.fastermixer.batch.models.AdminEquipment
+import com.behraz.fastermixer.batch.models.enums.ReportType
 import com.behraz.fastermixer.batch.ui.adapters.AdminEquipmentAdapter
 import com.behraz.fastermixer.batch.ui.adapters.MySimpleSpinnerAdapter
 import com.behraz.fastermixer.batch.ui.dialogs.AdminEquipmentDialog
+import com.behraz.fastermixer.batch.ui.fragments.navigate
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.Event
 import com.behraz.fastermixer.batch.utils.general.toast
@@ -95,10 +97,7 @@ class AdminEquipmentsFragment : Fragment(), AdminEquipmentAdapter.Interactions {
 
 
     private fun showEquipmentOnMap(adminEquipment: AdminEquipment) {
-        if (adminEquipment.location != null)
-            adminActivityViewModel.eventOnVehicleSelectedToShowOnMap.postValue(Event(adminEquipment))
-        else
-            toast("موقعیت این تجهیز نامشخص است")
+        adminActivityViewModel.eventOnVehicleSelectedToShowOnMap.postValue(Event(adminEquipment))
     }
 
     override fun onBtnShowOnMapClicked(adminEquipment: AdminEquipment) {
@@ -116,15 +115,18 @@ class AdminEquipmentsFragment : Fragment(), AdminEquipmentAdapter.Interactions {
             }
 
             override fun onDrawRoadReportClicked() {
-                toast(getString(R.string.msg_not_impl))
+                adminActivityViewModel.eventReportEquipment = Event(Pair(adminEquipment, ReportType.DrawRoad))
+                navigate(R.id.action_adminEquipmentsFragment_to_chooseReportDateFragment)
             }
 
             override fun onSummeryReportClicked() {
-                toast(getString(R.string.msg_not_impl))
+                adminActivityViewModel.eventReportEquipment = Event(Pair(adminEquipment, ReportType.Summery))
+                navigate(R.id.action_adminEquipmentsFragment_to_chooseReportDateFragment)
             }
 
             override fun onFullReportClicked() {
-                toast(getString(R.string.msg_not_impl))
+                adminActivityViewModel.eventReportEquipment = Event(Pair(adminEquipment, ReportType.Full))
+                navigate(R.id.action_adminEquipmentsFragment_to_chooseReportDateFragment)
             }
 
         }).show()

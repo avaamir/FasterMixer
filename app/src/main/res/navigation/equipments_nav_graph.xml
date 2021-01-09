@@ -9,5 +9,42 @@
         android:id="@+id/adminEquipmentsFragment"
         android:name="com.behraz.fastermixer.batch.ui.fragments.admin.equipments.AdminEquipmentsFragment"
         android:label="ماشین آلات و تجهیزات"
-        tools:layout="@layout/fragment_equipments"/>
+        tools:layout="@layout/fragment_equipments">
+        <action
+            android:id="@+id/action_adminEquipmentsFragment_to_chooseReportDateFragment"
+            app:destination="@id/chooseReportDateFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chooseReportDateFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.reports.ChooseReportDateFragment"
+        android:label="تعیین بازه گزارش"
+        tools:layout="@layout/fragment_choose_report_date">
+        <action
+            android:id="@+id/action_chooseReportDateFragment_to_fullReportFragment"
+            app:destination="@id/fullReportFragment" />
+        <action
+            android:id="@+id/action_chooseReportDateFragment_to_summeryReportFragment"
+            app:destination="@id/summeryReportFragment" />
+        <action
+            android:id="@+id/action_chooseReportDateFragment_to_drawRoadFragment"
+            app:destination="@id/drawRoadFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fullReportFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.reports.FullReportFragment"
+        android:label="گزارش تفصیلی"
+        tools:layout="@layout/fragment_full_report" />
+
+    <fragment
+        android:id="@+id/summeryReportFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.reports.SummeryReportFragment"
+        android:label="گزارشات خلاصه"
+        tools:layout="@layout/fragment_summery_report"/>
+    <fragment
+        android:id="@+id/drawRoadFragment"
+        android:name="com.behraz.fastermixer.batch.ui.fragments.admin.reports.DrawRoadFragment"
+        android:label="گزارش رسم مسیر"
+        tools:layout="@layout/fragment_draw_road"/>
 </navigation>
