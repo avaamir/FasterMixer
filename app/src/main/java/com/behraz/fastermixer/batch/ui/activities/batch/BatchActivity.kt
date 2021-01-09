@@ -23,7 +23,10 @@ import com.behraz.fastermixer.batch.ui.fragments.batch.BatchFragment
 import com.behraz.fastermixer.batch.ui.fragments.pomp.MessageListFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.fastermixer.logoutAlertMessage
-import com.behraz.fastermixer.batch.utils.general.*
+import com.behraz.fastermixer.batch.utils.general.snack
+import com.behraz.fastermixer.batch.utils.general.subscribeGpsStateChangeListener
+import com.behraz.fastermixer.batch.utils.general.subscribeNetworkStateChangeListener
+import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.BatchActivityViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_batch.*
@@ -94,7 +97,23 @@ class BatchActivity : AppCompatActivity(), MessageAdapter.Interaction,
             }
         }
 
-
+        viewModel.mixers.observe(this) {
+            if (it.isSucceed) {
+                val mixers = it.entity!!
+                if (mixers.isNotEmpty()) {
+                    if (viewModel.shouldShowNewMixerMessage) {
+                        viewModel.shouldShowNewMixerMessage = false
+                        val message =
+                            viewModel.insertMessage("تعداد میکسر برای بارگیری به سمت شما می آیند")
+                        NewMessageDialog(message, this@BatchActivity).show()
+                    }
+                } else {
+                    if (!viewModel.shouldShowNewMixerMessage) {
+                        viewModel.shouldShowNewMixerMessage = true
+                    }
+                }
+            }
+        }
 
         viewModel.logoutResponse.observe(this) {
             progressDialog.dismiss()

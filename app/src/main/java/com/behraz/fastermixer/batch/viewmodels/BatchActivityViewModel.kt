@@ -3,15 +3,22 @@ package com.behraz.fastermixer.batch.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.map
+import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.models.User
 import com.behraz.fastermixer.batch.models.normalizeStateByDistance
 import com.behraz.fastermixer.batch.models.requests.Fence
 import com.behraz.fastermixer.batch.respository.RemoteRepo
+import com.behraz.fastermixer.batch.respository.UserConfigs
+import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.utils.general.Event
 import com.behraz.fastermixer.batch.utils.general.log
+import com.behraz.fastermixer.batch.utils.general.now
+import com.behraz.fastermixer.batch.utils.general.toJalali
+import java.util.*
 
 class BatchActivityViewModel : ParentViewModel() {
 
+    var shouldShowNewMixerMessage: Boolean = true
     private var batchFenceLocation: Fence? = null
 
     private val getMixersEvent = MutableLiveData(Event(Unit))
@@ -58,6 +65,21 @@ class BatchActivityViewModel : ParentViewModel() {
 
     fun refreshMixers() {
         getMixersEvent?.postValue(Event(Unit)) //chun timer dar kelas super call mishe inja hanuz init nashode khater hamin not null budan check mishe
+    }
+
+    fun insertMessage(message: String): Message {
+        val msg = Message(
+            id = UUID.randomUUID().toString(),
+            senderName = "ماموریت جدید",
+            content = message,
+            senderId = 0,
+            eventName = "ماموریت جدید",
+            dateTime = now().toJalali().toString(),
+            viewed = false,
+            userId = UserConfigs.user.value?.id ?: 0
+        )
+        MessageRepo.insert(msg)
+        return msg
     }
 
 }
