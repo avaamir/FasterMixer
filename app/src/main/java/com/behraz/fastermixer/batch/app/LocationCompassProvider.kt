@@ -15,6 +15,7 @@ import android.view.WindowManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.behraz.fastermixer.batch.utils.general.LocationHandler
+import com.behraz.fastermixer.batch.utils.general.log
 import org.osmdroid.views.overlay.compass.IOrientationConsumer
 import org.osmdroid.views.overlay.compass.IOrientationProvider
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
@@ -22,19 +23,17 @@ import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
 
 object LocationCompassProvider : LocationListener, IOrientationConsumer {
 
+
     data class AngleResult(
         val angle: Float,
         val isCompassProvider: Boolean
     )
-
-
-    //val isStarted get() = compass != null
+    // val isStarted get() = compass != null
 
     private val _userAngle = MutableLiveData<AngleResult>()
     private val _northAngle = MutableLiveData<AngleResult>()
     private val _location = MutableLiveData<Location>()
     private val _providerStateChanged = MutableLiveData<String>()
-
 
     val userAngle: LiveData<AngleResult> = _userAngle
     val northAngle: LiveData<AngleResult> = _northAngle
@@ -51,7 +50,7 @@ object LocationCompassProvider : LocationListener, IOrientationConsumer {
     private val lock = Any()
     private var deviceOrientation: Int = -1
         set(value) {
-            println("fuck: $value")
+            log(value)
             field = value
         }
 
@@ -178,7 +177,8 @@ object LocationCompassProvider : LocationListener, IOrientationConsumer {
 
 
         //use gps bearing instead of the compass
-        var t: Float = 360 - gpsbearing //- deviceOrientation //TODO dar halat landscape dorost javab nemidad, hazf ke shod dorost shod, ruye device haye dg ham barrasi shavad
+        var t: Float =
+            360 - gpsbearing //- deviceOrientation //TODO dar halat landscape dorost javab nemidad, hazf ke shod dorost shod, ruye device haye dg ham barrasi shavad
         if (t < 0) {
             t += 360f
         }
@@ -223,7 +223,7 @@ object LocationCompassProvider : LocationListener, IOrientationConsumer {
         t /= 5
         t = t.toInt().toFloat()
         return t * 5
-       // return actualHead //TODO nothing has been smoothed
+        // return actualHead //TODO nothing has been smoothed
     }
 
     fun fixDeviceOrientationForCompassCalculation(activity: Activity) {

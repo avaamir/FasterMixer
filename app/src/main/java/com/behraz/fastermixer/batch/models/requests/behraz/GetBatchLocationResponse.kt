@@ -27,9 +27,9 @@ class GetVehicleLocationResponse(
     companion object {
         fun create(location: Location, isDamaged: Boolean) = GetVehicleLocationResponse(
             0,
-            0.0,
-            0.0,
-            false,
+            location.latitude,
+            location.longitude,
+            isDamaged,
             now(),
             false
         )
