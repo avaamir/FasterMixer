@@ -409,7 +409,9 @@ class MixerActivity : AppCompatActivity(),
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG)!!)
                 mBinding.frameGPSState.visibility = View.VISIBLE
                 mBinding.frameBottomButtons.visibility = View.VISIBLE
-                mBinding.btnBroken.visibility = View.VISIBLE
+                if (viewModel.isDamaged.value == true) {
+                    mBinding.btnBroken.visibility = View.VISIBLE
+                }
                 mBinding.btnMessage.visibility = View.VISIBLE
             }
             mBinding.btnMessages.id -> {

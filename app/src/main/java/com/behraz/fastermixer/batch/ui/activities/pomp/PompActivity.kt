@@ -439,6 +439,7 @@ class PompActivity : AppCompatActivity(),
         }
         mBinding.gpBtns.visibility = View.GONE
         mBinding.btnMessage.visibility = View.GONE
+        mBinding.btnBroken.visibility = View.GONE
 
 
         when (myRaisedButton.id) {
@@ -446,6 +447,9 @@ class PompActivity : AppCompatActivity(),
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG)!!)
                 mBinding.btnMessage.visibility = View.VISIBLE
                 mBinding.gpBtns.visibility = View.VISIBLE
+                if (viewModel.isDamaged.value == true) {
+                    mBinding.btnBroken.visibility = View.VISIBLE
+                }
                 mBinding.btnShowAllMixersToggle.setTextColor(Color.BLACK)
                 mBinding.btnShowAllMixersToggle.backgroundTintList =
                     ColorStateList.valueOf(0x190090ff)
