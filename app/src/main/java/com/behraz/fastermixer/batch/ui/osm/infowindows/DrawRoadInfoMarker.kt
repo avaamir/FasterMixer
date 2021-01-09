@@ -31,11 +31,11 @@ class DrawRoadInfoMarker(mapView: MapView) :
         val viewSignal = view.findViewById<SignalStrengthView>(R.id.viewSignal)
 
         tvSpeed.text = "${data.speed.toInt()} Km/h"
-        tvCarBattery.text = if(data.battery == null) "نامشخص" else "${data.battery.toInt()} ولت"
+        tvCarBattery.text = if(data.carBattery == null) "نامشخص" else "${data.carBattery} ولت"
         tvDelay.text = estimateTime(data.timeDifference.toLong()).substringBefore('پ').trim()
         tvDateTime.text = data.clientTime
-        viewCharge.chargeLevel = data.battery?.toInt() ?: 0
-        viewSignal.signalLevel = data.signal?.toInt() ?: 0
+        viewCharge.chargeLevel = data.charge
+        viewSignal.signalLevel = data.signal
     }
 
 

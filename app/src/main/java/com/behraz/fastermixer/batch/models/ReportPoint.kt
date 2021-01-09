@@ -13,16 +13,25 @@ data class ReportPoint(
     @SerializedName("ignition")
     val ignition: Boolean,
     @SerializedName("timeDifference")
-    val timeDifference : Double,
+    val timeDifference: Double,
 
     @SerializedName("signal")
-    val signal: Float?,
+    private val _signal: Float?,
     @SerializedName("clientTime")
     private val _clientTime: String?,
 
+    @SerializedName("power")
+    private val _battery: Float?,
+
     @SerializedName("battery")
-    val battery: Float?,
+    private val _charge: Float?,
 ) {
     val clientTime get() = _clientTime ?: "نامشخص"
     val point get() = GeoPoint(lat, lon)
+
+    val carBattery get() = _battery?.toInt()
+    val charge get() = (_charge?.div(5))?.times(100)?.toInt() ?: 0
+    val signal get() = (_signal?.div(4))?.times(100)?.toInt() ?: 0
+
+
 }
