@@ -401,12 +401,16 @@ class MixerActivity : AppCompatActivity(),
         }
         mBinding.frameGPSState.visibility = View.INVISIBLE
         mBinding.frameBottomButtons.visibility = View.INVISIBLE
+        mBinding.btnMessage.visibility = View.INVISIBLE
+        mBinding.btnBroken.visibility = View.INVISIBLE
 
         when (myRaisedButton.id) {
             mBinding.btnMap.id -> {
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_MAP_TAG)!!)
                 mBinding.frameGPSState.visibility = View.VISIBLE
                 mBinding.frameBottomButtons.visibility = View.VISIBLE
+                mBinding.btnBroken.visibility = View.VISIBLE
+                mBinding.btnMessage.visibility = View.VISIBLE
             }
             mBinding.btnMessages.id -> {
                 transaction.show(supportFragmentManager.findFragmentByTag(FRAGMENT_MESSAGE_LIST_TAG)!!)
