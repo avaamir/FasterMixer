@@ -1,12 +1,15 @@
 package com.behraz.fastermixer.batch.ui.osm.infowindows
 
-
+import android.annotation.SuppressLint
 import android.view.View
 import android.widget.TextView
 import com.behraz.fastermixer.batch.R
-import com.behraz.fastermixer.batch.ui.customs.fastermixer.CarIdView
+import com.behraz.fastermixer.batch.models.ReportPoint
+import com.behraz.fastermixer.batch.utils.general.estimateTime
+import eo.view.batterymeter.BatteryMeterView
+import eo.view.signalstrength.SignalStrengthView
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.osmdroid.views.MapView
@@ -14,34 +17,27 @@ import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.OverlayWithIW
 import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow
 
+class DrawRoadInfoMarker(mapView: MapView) :
+    MarkerInfoWindow(R.layout.draw_road_info_marker, mapView) {
 
-class DriverInfoWindow(
-    mapView: MapView
-) : MarkerInfoWindow(R.layout.my_map_info, mapView) {
 
-    fun setPelakText(
-        firstPelakText: String,
-        secondText: String,
-        thirdText: String,
-        forthText: String
-    ) {
-        val carIdView: CarIdView = mView.findViewById(R.id.pelakView)
-        if (firstPelakText.isBlank())
-            carIdView.visibility = View.GONE
-        else {
-            carIdView.visibility = View.VISIBLE
-            carIdView.setText(firstPelakText, secondText, thirdText, forthText)
-        }
+    @SuppressLint("SetTextI18n")
+    fun setData(data: ReportPoint) {
+        val tvSpeed = view.findViewById<TextView>(R.id.tvSpeed)
+        val tvCarBattery = view.findViewById<TextView>(R.id.tvCarBattery)
+        val tvDelay = view.findViewById<TextView>(R.id.tvDelay)
+        val tvDateTime = view.findViewById<TextView>(R.id.tvDateTime)
+        val viewCharge = view.findViewById<BatteryMeterView>(R.id.viewCharge)
+        val viewSignal = view.findViewById<SignalStrengthView>(R.id.viewSignal)
+
+        tvSpeed.text = "${data.speed.toInt()} Km/h"
+        tvCarBattery.text = if(data.battery == null) "نامشخص" else "${data.battery.toInt()} ولت"
+        tvDelay.text = estimateTime(data.timeDifference.toLong()).substringBefore('پ').trim()
+        tvDateTime.text = data.clientTime
+        viewCharge.chargeLevel = data.battery?.toInt() ?: 0
+        viewSignal.signalLevel = data.signal?.toInt() ?: 0
     }
 
-    fun shouldShowCadIdView(shouldShow: Boolean) {
-        val carIdView: CarIdView = mView.findViewById(R.id.pelakView)
-        if (shouldShow) {
-            carIdView.visibility = View.VISIBLE
-        } else {
-            carIdView.visibility = View.GONE
-        }
-    }
 
     override fun onOpen(item: Any) {
         super.onOpen(item)
@@ -64,11 +60,11 @@ class DriverInfoWindow(
                 }
             }
         } else { //vase in ke age tedad marker ha ziad bud UI freeze nashe
-            CoroutineScope(Main).launch {
+            CoroutineScope(Dispatchers.Main).launch {
                 mapView.overlays.forEach {
                     if (it is Marker) {
                         if (it.isInfoWindowShown) {
-                            withContext(Main) {
+                            withContext(Dispatchers.Main) {
                                 it.closeInfoWindow()
                             }
                         }
@@ -79,4 +75,5 @@ class DriverInfoWindow(
 
 
     }
+
 }

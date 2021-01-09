@@ -13,10 +13,16 @@ data class ReportPoint(
     @SerializedName("ignition")
     val ignition: Boolean,
     @SerializedName("timeDifference")
-    val timeDifference : Long,
+    val timeDifference : Double,
+
+    @SerializedName("signal")
+    val signal: Float?,
+    @SerializedName("clientTime")
+    private val _clientTime: String?,
 
     @SerializedName("battery")
     val battery: Float?,
 ) {
+    val clientTime get() = _clientTime ?: "نامشخص"
     val point get() = GeoPoint(lat, lon)
 }

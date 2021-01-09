@@ -110,10 +110,11 @@ dependencies {
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
-
     implementation 'com.github.dariushm2:PersianCaldroid:1.0.1'
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
+    implementation 'eo.view:signalstrength:2.0.0'
+    implementation 'eo.view:batterymeter:2.0.0'
     //implementation("io.coil-kt:coil:0.11.0")
 }

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/my_clickable_card_style"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="10dp"
+    app:cardBackgroundColor="@color/gray50">
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/standard_margin">
+
+        <ImageView
+            android:id="@+id/textView101"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_speedometer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvSpeed"
+            style="@style/my_gray_normal_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:text="60 Km/h"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toStartOf="@+id/textView101"
+            app:layout_constraintTop_toTopOf="@+id/textView101" />
+
+        <ImageView
+            android:id="@+id/textView102"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_calendar"
+            android:text="تاریخ داده:"
+
+
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/textView101"
+            app:layout_constraintTop_toBottomOf="@+id/textView103" />
+
+
+        <TextView
+            android:id="@+id/tvDateTime"
+            style="@style/my_gray_normal_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="4dp"
+            android:textSize="12sp"
+            android:text="99/12/12 - 12:12:12"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toStartOf="@+id/textView102"
+            app:layout_constraintTop_toTopOf="@+id/textView102" />
+
+
+        <TextView
+            android:id="@+id/tvDelay"
+            style="@style/my_gray_normal_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:text="3 دقیقه"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toStartOf="@+id/textView103"
+            app:layout_constraintTop_toTopOf="@+id/textView103" />
+
+        <TextView
+            android:id="@+id/tvCarBattery"
+            style="@style/my_gray_normal_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:textSize="12sp"
+            android:text="12 ولت"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toStartOf="@+id/textView105"
+            app:layout_constraintTop_toTopOf="@+id/textView105" />
+
+
+        <ImageView
+            android:id="@+id/textView103"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_clock"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/textView102"
+            app:layout_constraintTop_toBottomOf="@+id/textView105" />
+
+        <ImageView
+            android:id="@+id/textView105"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_accumulator"
+            app:layout_constraintEnd_toEndOf="@+id/textView101"
+            app:layout_constraintTop_toBottomOf="@+id/textView101" />
+
+
+        <eo.view.batterymeter.BatteryMeterView
+            android:id="@+id/viewCharge"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:batteryMeterChargeLevel="80"
+            app:batteryMeterChargingColor="#4caf50"
+            app:batteryMeterColor="#0277bd"
+            app:batteryMeterCriticalChargeLevel="15"
+            app:batteryMeterCriticalColor="#d84315"
+            app:batteryMeterIndicatorColor="@android:color/transparent"
+            app:batteryMeterIsCharging="false"
+            app:batteryMeterTheme="rounded"
+            app:batteryMeterUnknownColor="#e0e0e0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <eo.view.signalstrength.SignalStrengthView
+            android:id="@+id/viewSignal"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="@+id/viewCharge"
+            app:layout_constraintTop_toBottomOf="@+id/viewCharge"
+            app:signalStrengthColor="?colorAccent"
+
+            app:signalStrengthLevel="50"
+            app:signalStrengthTheme="rounded" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--must be for OSM-->
+    <TextView
+        android:id="@+id/bubble_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+    <ImageView
+        android:id="@+id/bubble_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
+    <TextView
+        android:id="@+id/bubble_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"  />
+    <TextView
+        android:id="@+id/bubble_subdescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+</androidx.cardview.widget.CardView>

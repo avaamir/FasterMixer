@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.ui.fragments.BaseMapFragment
+import com.behraz.fastermixer.batch.ui.osm.infowindows.DrawRoadInfoMarker
 import com.behraz.fastermixer.batch.ui.osm.markers.MixerMarker
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.toast
@@ -120,6 +121,7 @@ class DrawRoadMapFragment : BaseMapFragment() {
             //TODO update marker info window
             val data = viewModel.drawRoadReport.value!!.entity!!
 
+            (marker.infoWindow as DrawRoadInfoMarker).setData(data[index])
             val point = data[index].point
             if (!viewModel.isPaused) {
                 if (animator?.isRunning == true) { //age animator running bashe va liveData(currentPointIndex) taghir kone yaani ba seekBar taghir karde pas bayad animation feli stop beshe ta dobare seekbar ro bar nagardune be halat avalesh
@@ -164,7 +166,7 @@ class DrawRoadMapFragment : BaseMapFragment() {
         //todo according to vehicle type must change
         MixerMarker(mBinding.map).also {
             addMarkerToMap(it, it.position, "")
-            //TODO it.infoWindow = CustomInfoWindowForReport() //add info window, show speed, dateTime, ..
+            it.infoWindow = DrawRoadInfoMarker(mBinding.map) //add info window, show speed, dateTime, ..
             it.setOnMarkerClickListener { marker, _ ->
                 shouldTrackCar = true
                 if (!marker.isInfoWindowShown)
