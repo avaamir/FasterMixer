@@ -21,6 +21,9 @@ import org.osmdroid.views.overlay.compass.IOrientationProvider
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
 
 
+fun Context.isGpsEnabled() =
+    LocationCompassProvider.isProviderEnable(this)
+
 object LocationCompassProvider : LocationListener, IOrientationConsumer {
 
 

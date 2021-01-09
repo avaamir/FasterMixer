@@ -12,7 +12,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         app:tint="@color/white"
-        app:srcCompat="@drawable/ic_wifi_off"/>
+        app:srcCompat="@drawable/ic_gps_off"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,20 +22,22 @@
         android:layout_gravity="center"
         style="@style/my_gray_normal_text"
         android:layout_marginTop="16dp"
-        android:textColor="@color/white"
-        android:text="خطا در اتصال به شبکه"/>
+        android:textColor="@color/red"
+        android:text="موقعیت مکانی خاموش است"/>
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true"
         android:textSize="14sp"
         android:layout_gravity="center"
-        style="@style/my_gray_normal_text"
+        android:gravity="center"
+        android:fontFamily="@font/iransans"
         android:textColor="@color/white"
         android:layout_marginTop="8dp"
-        android:text="لطفا وافای یا دیتای خود را روشن کنید"/>
+        android:lines="2"
+        android:maxLines="3"
+        android:text="لطفا موقعیت مکانی خود را روشن کنید یا موقعیت را از سخت افزار خودرو دریافت کنید"/>
 
 
     <LinearLayout
@@ -45,8 +47,7 @@
         android:gravity="center_vertical"
         android:layout_marginTop="@dimen/medium_margin"
         android:padding="8dp"
-        android:orientation="horizontal"
-        android:layout_marginBottom="16dp">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tv_check_network_settings"
@@ -56,7 +57,37 @@
             style="@style/my_gray_medium_text"
             android:textSize="14sp"
             android:textColor="@color/light_blue"
-            android:text="بررسی تنظیمات شبکه" />
+            android:text="بررسی تنظیمات موقعیت مکانی" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="4dp"
+            app:tint="@color/light_blue"
+            app:srcCompat="@drawable/ic_gps" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/frameChangeGpsProvider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_marginTop="8dp"
+        android:padding="8dp"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            style="@style/my_gray_medium_text"
+            android:textSize="14sp"
+            android:textColor="@color/light_blue"
+            android:text="دریافت از سخت افزار خودرو" />
 
         <ImageView
             android:layout_width="24dp"

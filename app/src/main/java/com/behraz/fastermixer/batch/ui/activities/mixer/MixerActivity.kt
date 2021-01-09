@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
+import com.behraz.fastermixer.batch.app.isGpsEnabled
 import com.behraz.fastermixer.batch.databinding.ActivityMixerBinding
 import com.behraz.fastermixer.batch.models.enums.ServiceState
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
@@ -31,6 +32,8 @@ import kotlin.concurrent.fixedRateTimer
 
 class MixerActivity : AppCompatActivity(),
     MixerMessageDialog.Interactions, VehicleFragment.OnUserAndDestLocRetrieved {
+
+    private var gpsErrorDialog: GpsErrorDialog? = null
 
     private companion object {
         private const val FRAGMENT_MESSAGE_LIST_TAG = "msg-list_frag"
@@ -73,11 +76,15 @@ class MixerActivity : AppCompatActivity(),
                 mBinding.ivInternet.setImageResource(R.drawable.ic_error)
             }
         }
-        subscribeGpsStateChangeListener {
-            if (it) {
+        subscribeGpsStateChangeListener { isEnable ->
+            if (isEnable) {
+                hideGpsDialog()
                 mBinding.ivGPS.setImageResource(R.drawable.ic_check)
             } else {
                 mBinding.ivGPS.setImageResource(R.drawable.ic_error)
+                if (!viewModel.isServerLocationProvider) {
+                    showGpsDialog()
+                }
             }
         }
         if (FasterMixerApplication.isDemo) {
@@ -114,15 +121,36 @@ class MixerActivity : AppCompatActivity(),
     override fun onContextItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.from_GPS -> {
+                if (!isGpsEnabled()) {
+                    showGpsDialog()
+                }
                 viewModel.isServerLocationProvider = false
                 true
             }
             R.id.from_Server -> {
+                hideGpsDialog()
                 viewModel.isServerLocationProvider = true
                 true
             }
             else -> super.onContextItemSelected(item)
         }
+    }
+
+    private fun hideGpsDialog() {
+        log("hideGpsDialog called")
+        gpsErrorDialog?.dismiss()
+        gpsErrorDialog = null
+    }
+
+    private fun showGpsDialog() {
+        log("showGpsDialog called")
+        gpsErrorDialog ?: GpsErrorDialog(this, {
+            gpsErrorDialog = null
+        }) {
+            viewModel.isServerLocationProvider = true
+        }.also {
+            gpsErrorDialog = it
+        }.show()
     }
 
     override fun onContextMenuClosed(menu: Menu) {

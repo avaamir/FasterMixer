@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
+import com.behraz.fastermixer.batch.app.isGpsEnabled
 import com.behraz.fastermixer.batch.databinding.ActivityPompBinding
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
 import com.behraz.fastermixer.batch.models.requests.openweathermap.WeatherViewData
@@ -40,6 +41,9 @@ class PompActivity : AppCompatActivity(),
     PompMessageDialog.Interactions,
     VehicleFragment.OnUserAndDestLocRetrieved {
 
+
+    private var gpsErrorDialog: GpsErrorDialog? = null
+
     private var weatherAnimator: ViewPropertyAnimator? = null
     private lateinit var topSheetBehavior: TopSheetBehavior<View>
     private var projectCount = -1 // this variable work like a flag for `onNewProjectIncome`
@@ -49,7 +53,10 @@ class PompActivity : AppCompatActivity(),
             if (intent.action == Constants.ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP) {
                 //TODO put mixer or mixerId in intent from MixerListFragment
                 val mixerId =
-                    intent.getIntExtra(Constants.ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP_MIXER_ID, 0)
+                    intent.getIntExtra(
+                        Constants.ACTION_POMP_MAP_FRAGMENT_LOCATE_MIXER_ON_MAP_MIXER_ID,
+                        0
+                    )
                 val mixer = viewModel.allMixers.value?.entity?.find { it.id == mixerId }
                     ?: viewModel.requestMixers.value?.entity?.find { it.id == mixerId }
                 if (mixer != null) {
@@ -111,16 +118,37 @@ class PompActivity : AppCompatActivity(),
                 mBinding.ivInternet.setImageResource(R.drawable.ic_error)
             }
         }
-        subscribeGpsStateChangeListener {
-            if (it) {
+        subscribeGpsStateChangeListener { isEnable ->
+            if (isEnable) {
+                hideGpsDialog()
                 mBinding.ivGPS.setImageResource(R.drawable.ic_check)
             } else {
                 mBinding.ivGPS.setImageResource(R.drawable.ic_error)
+                if (!viewModel.isServerLocationProvider) {
+                    showGpsDialog()
+                }
             }
         }
         if (FasterMixerApplication.isDemo) {
             mBinding.layoutDemo.visibility = View.VISIBLE
         }
+    }
+
+    private fun hideGpsDialog() {
+        log("hideGpsDialog called")
+        gpsErrorDialog?.dismiss()
+        gpsErrorDialog = null
+    }
+
+    private fun showGpsDialog() {
+        log("showGpsDialog called")
+        gpsErrorDialog ?: GpsErrorDialog(this, {
+            gpsErrorDialog = null
+        }) {
+            viewModel.isServerLocationProvider = true
+        }.also {
+            gpsErrorDialog = it
+        }.show()
     }
 
     private fun registerMenus() {
@@ -152,10 +180,14 @@ class PompActivity : AppCompatActivity(),
     override fun onContextItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.from_GPS -> {
+                if (!isGpsEnabled()) {
+                    showGpsDialog()
+                }
                 viewModel.isServerLocationProvider = false
                 true
             }
             R.id.from_Server -> {
+                hideGpsDialog()
                 viewModel.isServerLocationProvider = true
                 true
             }
