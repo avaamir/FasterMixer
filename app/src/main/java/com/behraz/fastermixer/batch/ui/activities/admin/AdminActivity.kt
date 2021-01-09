@@ -218,7 +218,7 @@ class AdminActivity : AppCompatActivity(),
                     }
                 }
             }
-            R.id.fullReportFragment -> {
+            R.id.fullReportFragment, R.id.summeryReportFragment, R.id.drawRoadFragment -> {
                 val vehicle = arguments?.getParcelable<AdminEquipment>(Constants.INTENT_REPORT_VEHICLE)
                 toolbarTitle = "$toolbarTitle ${vehicle?.name ?: ""}"
             }

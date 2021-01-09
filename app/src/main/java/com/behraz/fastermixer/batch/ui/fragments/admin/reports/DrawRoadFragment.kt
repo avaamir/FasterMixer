@@ -14,17 +14,22 @@ import com.behraz.fastermixer.batch.ui.animations.crossfade
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.snack
 import com.behraz.fastermixer.batch.utils.general.toast
+import com.behraz.fastermixer.batch.viewmodels.DrawRoadFragmentViewModel
 import com.behraz.fastermixer.batch.viewmodels.ReportViewModel
 
 class DrawRoadFragment : Fragment(), SeekBar.OnSeekBarChangeListener {
     private lateinit var mBinding: FragmentDrawRoadBinding
-    private lateinit var viewModel: ReportViewModel
+    private lateinit var reportViewModel: ReportViewModel
+    private lateinit var viewModel: DrawRoadFragmentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(requireActivity()).get(ReportViewModel::class.java)
+        reportViewModel = ViewModelProvider(requireActivity()).get(ReportViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(DrawRoadFragmentViewModel::class.java)
+        viewModel.request = reportViewModel.request
+
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_draw_road, container, false)
         return mBinding.root
     }

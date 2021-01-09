@@ -138,10 +138,10 @@ abstract class BaseMapFragment : Fragment(),
         }
     }
 
-    protected fun drawPolyline(points: List<GeoPoint>): Polyline {
+    protected fun drawPolyline(points: List<GeoPoint>, colorId: Int = R.color.btn_blue): Polyline {
         val line = Polyline()
         line.setPoints(points)
-        line.outlinePaint.color = ContextCompat.getColor(requireContext(), R.color.btn_blue)
+        line.outlinePaint.color = ContextCompat.getColor(requireContext(), colorId)
         line.outlinePaint.alpha = 150
         _mBinding.map.overlays.add(0, line)
         //moveCamera(GeoPoint(line.bounds.centerLatitude, line.bounds.centerLongitude), 1.0) //todo how move camera to polygon area

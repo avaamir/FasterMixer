@@ -8,29 +8,32 @@ import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.ui.fragments.BaseMapFragment
 import com.behraz.fastermixer.batch.ui.osm.markers.MixerMarker
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.toast
+import com.behraz.fastermixer.batch.viewmodels.DrawRoadFragmentViewModel
 import com.behraz.fastermixer.batch.viewmodels.ReportViewModel
 import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent
 import org.osmdroid.events.ZoomEvent
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.overlay.Polyline
 
 class DrawRoadMapFragment : BaseMapFragment() {
 
     private var shouldTrackCar = true
 
     private var animator: ValueAnimator? = null
-    private lateinit var viewModel: ReportViewModel
+    private lateinit var viewModel: DrawRoadFragmentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(requireActivity()).get(ReportViewModel::class.java)
+        viewModel = ViewModelProvider(requireParentFragment()).get(DrawRoadFragmentViewModel::class.java)
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
@@ -58,7 +61,7 @@ class DrawRoadMapFragment : BaseMapFragment() {
     }
 
     private fun subscribeObservers() {
-        viewModel.drawRoadReport.observe(viewLifecycleOwner) {
+        /*viewModel.drawRoadReport.observe(viewLifecycleOwner) {
             if (it.isSucceed) {
                 val points = it.entity!!.map { _data ->
                     _data.point
@@ -67,18 +70,55 @@ class DrawRoadMapFragment : BaseMapFragment() {
                 //viewModel.isPaused = false
                 resumeAnimation()
             }
+        }*/
+
+
+        viewModel.drawRoadReport.observe(viewLifecycleOwner) {
+            if (it.isSucceed) {
+                val data = it.entity!!
+                if (data.isEmpty()) {
+                    toast("در این بازه هیچ دیتایی ثبت نشده است", true)
+                    findNavController().navigateUp()
+                    return@observe
+                }
+
+                val lines = ArrayList<Polyline>()
+                var startIndex = 0
+                var ignition = data[0].ignition
+                var notFullyIterated = true
+                while(notFullyIterated) {
+                    val pointsChunk = ArrayList<GeoPoint>()
+
+                    var lastIteratedIndex = startIndex
+                    for (i in startIndex until data.size) {
+                        lastIteratedIndex = i
+                        val mData = data[i]
+                        if (mData.ignition == ignition) {
+                            pointsChunk.add(mData.point)
+                        } else {
+                            pointsChunk.add(mData.point) //age in khat ro nazaram hame khotut be ham vasl nemishe
+                            startIndex = i
+                            break
+                        }
+                    }
+                    notFullyIterated = lastIteratedIndex != data.lastIndex
+                    val line = drawPolyline(pointsChunk, if (ignition) R.color.btn_blue else R.color.red)
+                    ignition = !ignition
+                    lines.add(line)
+                }
+
+
+                //viewModel.isPaused = false
+                resumeAnimation()
+            }
         }
+
 
         viewModel.currentPointIndex.observe(viewLifecycleOwner) { index ->
             //Seekbar age avaz beshe va Resume ke hast in observer call mishe
 
             //TODO update marker info window
             val data = viewModel.drawRoadReport.value!!.entity!!
-            if (data.isEmpty()) {
-                toast("در این بازه هیچ دیتایی ثبت نشده است", true)
-                findNavController().navigateUp()
-                return@observe
-            }
 
             val point = data[index].point
             if (!viewModel.isPaused) {
