@@ -254,7 +254,7 @@
                 android:fontFamily="@font/belham"
                 android:gravity="center"
                 android:lines="2"
-                android:text="سامانه هوشمند سازی بتن فستر میکسر"
+                android:text="سامانه هوشمند سازی بتن تیام"
                 android:textColor="@color/white"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView5"

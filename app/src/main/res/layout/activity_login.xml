@@ -240,7 +240,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/belham"
-                android:text="سامانه هوشمند سازی بتن فستر میکسر"
+                android:text="سامانه هوشمند سازی بتن تیام"
                 android:textColor="@color/white"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
