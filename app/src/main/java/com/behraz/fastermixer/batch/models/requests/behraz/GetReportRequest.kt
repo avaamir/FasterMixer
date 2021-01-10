@@ -10,7 +10,7 @@ data class GetReportRequest(
     @Transient var startYear: String? = "1399",
     @Transient var startMonth: String? = "10",
     @Transient var startDate: String? = "20",
-    @Transient var startHour: String? = "15",
+    @Transient var startHour: String? = "07",
     @Transient var startMinute: String? = "30",
     @Transient var startSecond: String? = "00",
 
@@ -40,8 +40,8 @@ data class GetReportRequest(
                 || endMinute.isNullOrBlank()
                 || endSecond.isNullOrBlank()
 
-    val request
-        get() = Request(
+    val drawRoadRequest
+        get() = DrawRoadRequest(
             startDate = "$startYear/$startMonth/$startDate",
             startTime = "$startHour:$startMinute:$startSecond",
             endDate = "$endYear/$endMonth/$endDate",
@@ -49,13 +49,46 @@ data class GetReportRequest(
             vehicleId = vehicleId
         )
 
+    val summeryReportRequest get() = SummeryReportRequest(
+        startDate = "$startYear/$startMonth/$startDate",
+        endDate = "$endYear/$endMonth/$endDate",
+        vehicleId = vehicleId
+    )
 
-    inner class Request internal constructor(
+    fun fullReportRequest(page: Int) = FullReportRequest(
+        startDate = "$startYear/$startMonth/$startDate",
+        endDate = "$endYear/$endMonth/$endDate",
+        vehicleId = vehicleId,
+        page = page
+    )
+
+
+    open inner class SummeryReportRequest internal constructor(
         @SerializedName("firstDate") val startDate: String,
-        @SerializedName("firstTime") val startTime: String,
         @SerializedName("lastDate") val endDate: String,
-        @SerializedName("lastTime") val endTime: String,
         @SerializedName("vehicleId") val vehicleId: Int
     )
+
+    inner class FullReportRequest internal constructor(
+        startDate: String,
+        endDate: String,
+        vehicleId: Int,
+        @SerializedName("index")
+        var page: Int,
+    ) : SummeryReportRequest(startDate, endDate, vehicleId)/* {
+        @SerializedName("count")
+        val count = 20 //Need by server , chunk size
+    }*/
+
+
+    inner class DrawRoadRequest internal constructor(
+        startDate: String,
+        @SerializedName("firstTime")
+        val startTime: String,
+        endDate: String,
+        @SerializedName("lastTime")
+        val endTime: String,
+        vehicleId: Int,
+    ) : SummeryReportRequest(startDate, endDate, vehicleId)
 
 }

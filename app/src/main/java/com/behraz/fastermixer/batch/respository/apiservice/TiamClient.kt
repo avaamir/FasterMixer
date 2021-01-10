@@ -7,7 +7,7 @@ import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 
-interface BehrazClient {
+interface TiamClient {
     //First Page
     @POST("AppVersion/FindLastAppVersion")
     suspend fun checkUpdates(): ApiResult<UpdateResponse>
@@ -88,10 +88,13 @@ interface BehrazClient {
 
 
     @POST("Reports/DrawThePathForApp")
-    suspend fun getDrawRoadReport(@Body getReportRequest: GetReportRequest.Request): ApiResult<List<ReportPoint>>
+    suspend fun getDrawRoadReport(@Body getReportDrawRoadRequest: GetReportRequest.DrawRoadRequest): ApiResult<List<ReportPoint>>
 
-    @POST("not implemented")
-    suspend fun getFullReport(@Body request: GetReportRequest.Request): ApiResult<List<FullReport>>
+    @POST("Reports/Reports/getFullReportForApp")
+    suspend fun getFullReport(@Body request: GetReportRequest.FullReportRequest): ApiResult<List<FullReport>>
+
+    @POST("Reports/getSummeryReportForApp")
+    suspend fun getSummeryReport(@Body request: GetReportRequest.SummeryReportRequest): ApiResult<List<SummeryReport>>
     //======================================
 
 

@@ -5,9 +5,12 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.behraz.fastermixer.batch.models.Plan
 import com.behraz.fastermixer.batch.respository.RemoteRepo
+import java.util.*
+import kotlin.concurrent.fixedRateTimer
 
 
-class ServiceHistoryFragmentViewModel: ViewModel() {
+class ServiceHistoryFragmentViewModel : ViewModel() {
+    private var timer: Timer? = null
     private var vehicleId: Int = 0
     var plan: Plan? = null
         private set
@@ -23,14 +26,14 @@ class ServiceHistoryFragmentViewModel: ViewModel() {
     fun setData(vehicleId: Int, plan: Plan) {
         this.vehicleId = vehicleId
         this.plan = plan
-        getServices()
+        if (timer == null) {
+            timer = fixedRateTimer(period = 20000L) {
+                getServices()
+            }
+        }
     }
 
     fun getServices() {
-        getServiceEvent.value = Pair(vehicleId, plan!!)
+        getServiceEvent.postValue(Pair(vehicleId, plan!!))
     }
-
-
-
-
 }

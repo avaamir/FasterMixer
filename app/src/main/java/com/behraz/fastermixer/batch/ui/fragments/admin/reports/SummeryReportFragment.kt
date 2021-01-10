@@ -17,19 +17,23 @@ import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.snack
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.ReportViewModel
+import com.behraz.fastermixer.batch.viewmodels.SummeryReportViewModel
 
 class SummeryReportFragment : Fragment() {
 
     private val mAdapter = SummeryReportAdapter()
     private lateinit var mBinding: FragmentSummeryReportBinding
-    private lateinit var viewModel: ReportViewModel
+    private lateinit var reportViewModel: ReportViewModel
+    private lateinit var viewModel: SummeryReportViewModel
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this).get(ReportViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(SummeryReportViewModel::class.java)
+        reportViewModel = ViewModelProvider(requireActivity()).get(ReportViewModel::class.java)
+        viewModel.request = reportViewModel.request
         mBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_summery_report, container, false)
         return mBinding.root

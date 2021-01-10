@@ -11,8 +11,7 @@ fun fakeServices() = listOf(
     fakeService(3, "آمیکو 13"),
     fakeService(4, "آمیکو 31"),
     fakeService(5, "آمیکو 14"),
-
-)
+    )
 
 
 fun fakeService(id: Int, name: String) =
@@ -41,6 +40,7 @@ fun fakeDrawRoadReport() = listOf(
 )
 
 
+/*
 fun fakeSummeryReports() = listOf(
     SummeryReport("1", "آمیکو سفید", "100 ساعت", "61 ساعت", "50 ساعت", "100 کیلومتر", "100"),
     SummeryReport("2", "آمیکو سفید", "100 ساعت", "62 ساعت", "50 ساعت", "100 کیلومتر", "100"),
@@ -48,74 +48,29 @@ fun fakeSummeryReports() = listOf(
     SummeryReport("4", "آمیکو سفید", "100 ساعت", "64 ساعت", "50 ساعت", "100 کیلومتر", "100"),
     SummeryReport("5", "آمیکو سفید", "100 ساعت", "65 ساعت", "50 ساعت", "100 کیلومتر", "100"),
 )
+*/
+
+fun fullReportItem(id: Int) =
+    FullReport(
+        id = id,
+        carName = "آمیکو سفید",
+        state = "روشن",
+        duration = "2 ساعت",
+        maxSpeed = "120",
+        aveSpeed = "89",
+        distance = "100",
+        _startTime = "11:39",
+        _endTime = "12:49",
+        date = "99/2/22"
+    )
+
 
 fun fakeFullReports() = listOf(
-    FullReport(
-        1,
-        "آمیکو سفید",
-        "روشن",
-        "2 ساعت",
-        "120",
-        "89",
-        "100",
-        "11:39 تا 12:49",
-        "99/2/22"
-    ),
-    FullReport(
-        2,
-        "آمیکو سفید",
-        "روشن",
-        "2 ساعت",
-        "120",
-        "89",
-        "100",
-        "11:39 تا 12:49",
-        "99/2/22"
-    ),
-    FullReport(
-        3,
-        "آمیکو سفید",
-        "روشن",
-        "2 ساعت",
-        "120",
-        "89",
-        "100",
-        "11:39 تا 12:49",
-        "99/2/22"
-    ),
-    FullReport(
-        4,
-        "آمیکو سفید",
-        "روشن",
-        "2 ساعت",
-        "120",
-        "89",
-        "100",
-        "11:39 تا 12:49",
-        "99/2/22"
-    ),
-    FullReport(
-        5,
-        "آمیکو سفید",
-        "روشن",
-        "2 ساعت",
-        "120",
-        "89",
-        "100",
-        "11:39 تا 12:49",
-        "99/2/22"
-    ),
-    FullReport(
-        6,
-        "آمیکو سفید",
-        "روشن",
-        "2 ساعت",
-        "120",
-        "89",
-        "100",
-        "11:39 تا 12:49",
-        "99/2/22"
-    ),
+    fullReportItem(1),
+    fullReportItem(2),
+    fullReportItem(3),
+    fullReportItem(4),
+    fullReportItem(5),
 )
 
 

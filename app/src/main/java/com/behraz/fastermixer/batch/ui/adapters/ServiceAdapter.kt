@@ -78,7 +78,7 @@ class ServiceAdapter(
             }
 
             when (item.serviceState) {
-                ToBatch -> {
+                Created, ToBatch -> {
                     mBinding.tvLoading.background = bgNotStartedState
                     mBinding.tvToDest.background = bgNotStartedState
                     mBinding.tvUnLoading.background = bgNotStartedState
@@ -109,7 +109,7 @@ class ServiceAdapter(
                     mBinding.tvFinished.background = bgFinishedState
                 }
                 else -> {
-                    throw IllegalStateException("state should not be ${item.serviceState} in this api")
+                    throw IllegalStateException("state should not be `${item.serviceState}` in this api")
                 }
             }.exhaustive()
 

@@ -23,8 +23,8 @@ object ApiService {
 
     private var token: String? = null
 
-    val client: BehrazClient by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-        retrofitBuilder.build().create(BehrazClient::class.java)
+    val client: TiamClient by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+        retrofitBuilder.build().create(TiamClient::class.java)
     }
 
 

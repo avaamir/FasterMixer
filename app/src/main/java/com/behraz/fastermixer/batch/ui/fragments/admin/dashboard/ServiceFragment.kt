@@ -59,7 +59,9 @@ class ServiceFragment : Fragment(), ServiceAdapter.Interaction {
 
     private fun subscribeObservers() {
         viewModel.activeServices.observe(viewLifecycleOwner) {
-            crossfade(recyclerService, progressBar)
+            if (progressBar.visibility == View.VISIBLE) {
+                crossfade(recyclerService, progressBar)
+            }
             if (it.isSucceed) {
                 if(it.entity!!.isEmpty()) {
                     tvMessage.visibility = View.VISIBLE
@@ -70,6 +72,7 @@ class ServiceFragment : Fragment(), ServiceAdapter.Interaction {
             } else {
                 when (it.errorType) {
                     NetworkError -> snack(it.message, onAction = {
+                        progressBar.visibility = View.VISIBLE
                         viewModel.getServices()
                     })
                     else -> toast(it.message)

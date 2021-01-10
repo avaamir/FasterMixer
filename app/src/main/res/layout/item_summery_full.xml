@@ -80,6 +80,20 @@
                 tools:text="110" />
 
             <TextView
+                android:id="@+id/textView17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/standard_margin"
+                android:fontFamily="@font/iransans"
+                android:text="@{data.aveSpeed}"
+                android:textColor="@color/black"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/textView198"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView198"
+                tools:text="110" />
+
+            <TextView
                 android:id="@+id/textView88"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -105,6 +119,19 @@
                 app:layout_constraintStart_toEndOf="@+id/textView88"
                 app:layout_constraintTop_toTopOf="@+id/textView82"
                 tools:text="1200 ساعت" />
+
+            <TextView
+                android:id="@+id/textView198"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/iransans"
+                android:text="متوسط سرعت:"
+                android:visibility="gone"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toEndOf="@+id/textView17"
+                app:layout_constraintTop_toBottomOf="@+id/textView88" />
 
             <TextView
                 android:id="@+id/textView95"

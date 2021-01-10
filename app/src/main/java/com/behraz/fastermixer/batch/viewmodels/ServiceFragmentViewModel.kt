@@ -5,6 +5,8 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.behraz.fastermixer.batch.models.Plan
 import com.behraz.fastermixer.batch.respository.RemoteRepo
+import java.util.*
+import kotlin.concurrent.fixedRateTimer
 
 class ServiceFragmentViewModel : ViewModel() {
 
@@ -13,14 +15,21 @@ class ServiceFragmentViewModel : ViewModel() {
         RemoteRepo.getActiveServices(reqId)
     }
 
+
+    private var timer: Timer? = null
+
     var plan: Plan? = null
         set(value) {
             field = value
-            getServices()
+            if (timer == null) {
+                timer = fixedRateTimer(period = 20000L) {
+                    getServices()
+                }
+            }
         }
 
 
     fun getServices() {
-        getServiceEvent.value = plan!!.id
+        getServiceEvent.postValue( plan!!.id)
     }
 }

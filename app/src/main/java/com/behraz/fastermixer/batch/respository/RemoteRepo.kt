@@ -14,7 +14,6 @@ import com.behraz.fastermixer.batch.respository.apiservice.WeatherService
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeAdminManageAccountPage
 import com.behraz.fastermixer.batch.utils.fastermixer.fakeFullReports
-import com.behraz.fastermixer.batch.utils.fastermixer.fakeSummeryReports
 import com.behraz.fastermixer.batch.utils.general.RunOnceLiveData
 import com.behraz.fastermixer.batch.utils.general.RunOnceMutableLiveData
 import com.behraz.fastermixer.batch.utils.general.launchApi
@@ -402,17 +401,20 @@ object RemoteRepo {
         }
     }
 
-    fun getFullReport2(request: GetReportRequest.Request) =
+    fun getFullReport(request: GetReportRequest.FullReportRequest) =
         apiReq(request, ApiService.client::getFullReport)
 
-    fun getFullReport(request: GetReportRequest.Request) =
+    fun getFullReport2(request: GetReportRequest.FullReportRequest) =
         mockApiReq(succeedRequest(fakeFullReports()))
 
-    fun getSummeryReport(request: GetReportRequest.Request) =
-        mockApiReq(succeedRequest(fakeSummeryReports()))
+    fun getSummeryReport(request: GetReportRequest.SummeryReportRequest) =
+        apiReq(request, ApiService.client::getSummeryReport)
 
 
-    fun getDrawRoadReport(request: GetReportRequest.Request, onResponse: (ApiResult<List<ReportPoint>>) -> Unit) {
+    fun getDrawRoadReport(
+        request: GetReportRequest.DrawRoadRequest,
+        onResponse: (ApiResult<List<ReportPoint>>) -> Unit
+    ) {
         if (!RemoteRepo::serverJobs.isInitialized || !serverJobs.isActive)
             serverJobs = Job()
         CoroutineScope(IO + serverJobs).launch {
@@ -422,8 +424,9 @@ object RemoteRepo {
             }
         }
     }
-    fun getDrawRoadReport(request: GetReportRequest.Request) =
-        apiReq(request, ApiService.client::getDrawRoadReport)
+
+    fun getDrawRoadReport(drawRoadRequest: GetReportRequest.DrawRoadRequest) =
+        apiReq(drawRoadRequest, ApiService.client::getDrawRoadReport)
 
     fun getActiveServices(requestId: Int) = apiReq(requestId, ApiService.client::getActiveServices)
     fun getServiceHistory(vehicleId: Int, requestId: Int): LiveData<ApiResult<List<Service>>> {

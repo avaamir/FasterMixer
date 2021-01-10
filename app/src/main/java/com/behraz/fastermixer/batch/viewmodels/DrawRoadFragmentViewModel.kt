@@ -36,7 +36,7 @@ class DrawRoadFragmentViewModel: ViewModel() {
     }
 
     fun getDrawRoadReport() {
-        RemoteRepo.getDrawRoadReport(request!!.request) {
+        RemoteRepo.getDrawRoadReport(request!!.drawRoadRequest) {
             _drawRoadReport.value = it
         }
     }
