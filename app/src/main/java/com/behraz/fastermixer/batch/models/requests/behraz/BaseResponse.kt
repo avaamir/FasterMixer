@@ -19,7 +19,37 @@ data class ApiResult<T : Any> internal constructor(
             Constants.SERVER_SUCCEED
         else
             errorType.message
+
+    /*override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is ApiResult<*>) return false
+        return Objects.equals(entity, other.entity) &&
+                (_message == other._message) &&
+                (isSucceed == other.isSucceed) &&
+                (errorType == other.errorType)
+    }
+
+
+    override fun hashCode(): Int {
+        return Objects.hash(entity, _message, isSucceed, errorType)
+    }
+
+     fun copy(
+        entity: T? = this.entity,
+        isSucceed: Boolean = this.isSucceed,
+        _message: String? = this._message,
+        errorType: ErrorType = this.errorType
+    ) = ApiResult(entity, isSucceed, _message, errorType)
+
+    override fun toString(): String {
+        return "[entity=$entity, isSucceed=$isSucceed, _message=$_message, errorType=$errorType]"
+    }*/
 }
+
+interface DtoMapper<TO> {
+    fun toEntity(): TO
+}
+
 
 enum class ErrorType(val code: Int, val message: String) {
     Unknown(0, Constants.SERVER_ERROR),

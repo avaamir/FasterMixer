@@ -1,5 +1,6 @@
 package com.behraz.fastermixer.batch.ui.activities.admin
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.transition.AutoTransition
@@ -18,16 +19,20 @@ import com.behraz.fastermixer.batch.models.Plan
 import com.behraz.fastermixer.batch.ui.adapters.ViewPagerAdapter
 import com.behraz.fastermixer.batch.ui.fragments.BaseNavFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
-import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.shared_toolbar.view.*
+import java.lang.ref.WeakReference
 
 class AdminActivity : AppCompatActivity(),
     BottomNavigationView.OnNavigationItemReselectedListener,
     BottomNavigationView.OnNavigationItemSelectedListener, ViewPager.OnPageChangeListener,
     BaseNavFragment.OnNavigationChangedListener {
 
+
+    companion object {
+        var reference : WeakReference<AdminActivity>? = null
+    }
 
     private val currentDest get() = fragments[mBinding.mainPager.currentItem].currentDestination
 
@@ -45,7 +50,10 @@ class AdminActivity : AppCompatActivity(),
 
     // list of base destination containers
     private val fragments = listOf(
-        BaseNavFragment.newInstance(R.layout.layout_base_nav_admin_account, R.id.nav_host_admin_account),
+        BaseNavFragment.newInstance(
+            R.layout.layout_base_nav_admin_account,
+            R.id.nav_host_admin_account
+        ),
         BaseNavFragment.newInstance(R.layout.layout_base_nav_report, R.id.nav_host_report),
         BaseNavFragment.newInstance(R.layout.layout_base_nav_map, R.id.nav_host_admin_map),
         BaseNavFragment.newInstance(R.layout.layout_base_nav_equipments, R.id.nav_host_equipments),
@@ -56,11 +64,12 @@ class AdminActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin)
-
         val orientation = resources.configuration.orientation
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) { //age portrait bud bayad baghiye code ejra beshe ta 2ta fragment ijad nashe va code be moshkel nakhore
             return
         }
+
+        reference = WeakReference(this)
 
         viewModel = ViewModelProvider(this).get(AdminActivityViewModel::class.java)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_admin)
@@ -96,6 +105,13 @@ class AdminActivity : AppCompatActivity(),
             }
         })
 
+        viewModel.messages.observe(this) {
+            if (it.isEmpty()) {
+                mBinding.toolbar.frameMessage.viewNewMessage.visibility = View.INVISIBLE
+            } else {
+                mBinding.toolbar.frameMessage.viewNewMessage.visibility = View.VISIBLE
+            }
+        }
     }
 
     // control the backStack when back button is pressed
@@ -106,7 +122,7 @@ class AdminActivity : AppCompatActivity(),
         val navigatedUp = fragment.onBackPressed()        // if no fragments were popped
         if (!navigatedUp) {
             if (currentPage != 4) { //dashboard
-                setItem(4, "onBackPressed")
+                setItem(4)
             } else {
                 super.onBackPressed()
             }
@@ -122,8 +138,9 @@ class AdminActivity : AppCompatActivity(),
         mBinding.mainPager.adapter = ViewPagerAdapter(supportFragmentManager, fragments)
 
         mBinding.toolbar.ivBack.setOnClickListener { onBackPressed() }
-        mBinding.toolbar.frameMessage.setOnClickListener { toast(getString(R.string.msg_not_impl)) }
-
+        mBinding.toolbar.frameMessage.setOnClickListener {
+            startActivity(Intent(this, AdminMessagesActivity::class.java))
+        }
 
         //First is Dashboard so
         mBinding.mainPager.currentItem = 4
@@ -140,7 +157,7 @@ class AdminActivity : AppCompatActivity(),
         val position = pageIndexToNavMenuId.values.indexOf(menuItem.itemId)
         println("debux: onNavigationItemSelected -> $position, curr:${mBinding.mainPager.currentItem}")
         if (mBinding.mainPager.currentItem != position)
-            setItem(position, "onNavigationItemSelected")
+            setItem(position)
         return true
     }
 
@@ -153,8 +170,7 @@ class AdminActivity : AppCompatActivity(),
         }
     }
 
-    private fun setItem(position: Int, caller: String) {
-        println("debux: $caller -> SetItem: $position")
+    private fun setItem(position: Int) {
         mBinding.mainPager.currentItem = position
         setToolbarTitle()
         setToolbarBackButton()
@@ -202,7 +218,6 @@ class AdminActivity : AppCompatActivity(),
         }
     }
 
-
     override fun notifyNavigationChanged(destination: NavDestination, arguments: Bundle?): String {
         var toolbarTitle = destination.label
 
@@ -219,7 +234,8 @@ class AdminActivity : AppCompatActivity(),
                 }
             }
             R.id.fullReportFragment, R.id.summeryReportFragment, R.id.drawRoadFragment -> {
-                val vehicle = arguments?.getParcelable<AdminEquipment>(Constants.INTENT_REPORT_VEHICLE)
+                val vehicle =
+                    arguments?.getParcelable<AdminEquipment>(Constants.INTENT_REPORT_VEHICLE)
                 toolbarTitle = "$toolbarTitle ${vehicle?.name ?: ""}"
             }
             R.id.serviceFragment -> {

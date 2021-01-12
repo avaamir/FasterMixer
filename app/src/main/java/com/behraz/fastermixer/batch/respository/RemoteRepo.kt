@@ -2,6 +2,7 @@ package com.behraz.fastermixer.batch.respository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.*
 import com.behraz.fastermixer.batch.models.requests.BreakdownRequest
 import com.behraz.fastermixer.batch.models.requests.Fence
@@ -221,6 +222,7 @@ object RemoteRepo {
 
     fun getAllMixers() = apiReq(ApiService.client::getAllMixers)
 
+
     fun getMessage(onResponse: (ApiResult<List<Message>>?) -> Unit) { //Response ro mikhad
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         CoroutineScope(IO + serverJobs).launchApi({
@@ -228,7 +230,7 @@ object RemoteRepo {
             if (result.isSucceed) {
                 val messageDtos = result.entity!!
                 val messages = messageDtos.map {
-                    it.toMessage()
+                    it.toEntity()
                 }
 
                 if (messages.isNotEmpty()) {
@@ -300,9 +302,7 @@ object RemoteRepo {
         }) {}
     }
 
-    private fun getMixerMission() = apiReq(ApiService.client::getMixerMission) {
-        println("debux: $it")
-    }
+    private fun getMixerMission() = apiReq(ApiService.client::getMixerMission)
 
     private fun getPompMission() = apiReq(ApiService.client::getPompMission)
 
@@ -321,6 +321,68 @@ object RemoteRepo {
         //TODO not yet implemented
         return MutableLiveData(fakeAdminManageAccountPage())
     }
+
+
+    fun checkUpdates() = apiReq(ApiService.client::checkUpdates) {
+        println("debux:$it")
+    }
+
+    fun getFullReport(request: GetReportRequest.FullReportRequest) =
+        apiReq(request, ApiService.client::getFullReport)
+
+    fun getFullReport2(request: GetReportRequest.FullReportRequest) =
+        mockApiReq(succeedRequest(fakeFullReports()))
+
+    fun getSummeryReport(request: GetReportRequest.SummeryReportRequest) =
+        apiReq(request, ApiService.client::getSummeryReport)
+
+
+    fun getDrawRoadReport(
+        request: GetReportRequest.DrawRoadRequest,
+        onResponse: (ApiResult<List<ReportPoint>>) -> Unit
+    ) {
+        if (!RemoteRepo::serverJobs.isInitialized || !serverJobs.isActive)
+            serverJobs = Job()
+        CoroutineScope(IO + serverJobs).launch {
+            val result = ApiService.client.getDrawRoadReport(request)
+            withContext(Main) {
+                onResponse(result)
+            }
+        }
+    }
+
+    fun getDrawRoadReport(drawRoadRequest: GetReportRequest.DrawRoadRequest) =
+        apiReq(drawRoadRequest, ApiService.client::getDrawRoadReport)
+
+
+
+    fun getAdminMessages() = apiReq(ApiService.client::getAdminMessages).map {
+        ApiResult(
+            entity = it.entity?.map { dto -> dto.toEntity() },
+            isSucceed = it.isSucceed,
+            _message = it.message,
+            errorType = it.errorType
+        )
+    }
+    fun getActiveServices(requestId: Int) = apiReq(requestId, ApiService.client::getActiveServices)
+    fun getServiceHistory(vehicleId: Int, requestId: Int): LiveData<ApiResult<List<Service>>> {
+        return object : RunOnceLiveData<ApiResult<List<Service>>>() {
+            override fun onActiveRunOnce() {
+                if (!RemoteRepo::serverJobs.isInitialized || !serverJobs.isActive)
+                    serverJobs = Job()
+                CoroutineScope(IO + serverJobs).launch {
+                    val result = ApiService.client.getServiceHistory(vehicleId, requestId)
+                    withContext(Main) {
+                        value = result
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
 
 
     fun getRoute(coordinates: List<GeoPoint>): RunOnceLiveData<GetRouteResponse?> {
@@ -363,10 +425,6 @@ object RemoteRepo {
         }
     }
 
-    fun checkUpdates() = apiReq(ApiService.client::checkUpdates) {
-        println("debux:$it")
-    }
-
     fun getCurrentWeatherByCoordinates(location: GeoPoint): RunOnceLiveData<ApiResult<CurrentWeatherByCoordinatesResponse>> {
         return object : RunOnceLiveData<ApiResult<CurrentWeatherByCoordinatesResponse>>() {
             override fun onActiveRunOnce() {
@@ -397,49 +455,6 @@ object RemoteRepo {
                 }, {
                     postValue(null)
                 })
-            }
-        }
-    }
-
-    fun getFullReport(request: GetReportRequest.FullReportRequest) =
-        apiReq(request, ApiService.client::getFullReport)
-
-    fun getFullReport2(request: GetReportRequest.FullReportRequest) =
-        mockApiReq(succeedRequest(fakeFullReports()))
-
-    fun getSummeryReport(request: GetReportRequest.SummeryReportRequest) =
-        apiReq(request, ApiService.client::getSummeryReport)
-
-
-    fun getDrawRoadReport(
-        request: GetReportRequest.DrawRoadRequest,
-        onResponse: (ApiResult<List<ReportPoint>>) -> Unit
-    ) {
-        if (!RemoteRepo::serverJobs.isInitialized || !serverJobs.isActive)
-            serverJobs = Job()
-        CoroutineScope(IO + serverJobs).launch {
-            val result = ApiService.client.getDrawRoadReport(request)
-            withContext(Main) {
-                onResponse(result)
-            }
-        }
-    }
-
-    fun getDrawRoadReport(drawRoadRequest: GetReportRequest.DrawRoadRequest) =
-        apiReq(drawRoadRequest, ApiService.client::getDrawRoadReport)
-
-    fun getActiveServices(requestId: Int) = apiReq(requestId, ApiService.client::getActiveServices)
-    fun getServiceHistory(vehicleId: Int, requestId: Int): LiveData<ApiResult<List<Service>>> {
-        return object : RunOnceLiveData<ApiResult<List<Service>>>() {
-            override fun onActiveRunOnce() {
-                if (!RemoteRepo::serverJobs.isInitialized || !serverJobs.isActive)
-                    serverJobs = Job()
-                CoroutineScope(IO + serverJobs).launch {
-                    val result = ApiService.client.getServiceHistory(vehicleId, requestId)
-                    withContext(Main) {
-                        value = result
-                    }
-                }
             }
         }
     }

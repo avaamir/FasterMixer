@@ -99,6 +99,7 @@ class PompActivityViewModel : VehicleActivityViewModel() {
     }
 
     override fun onTimerTick(user: User) {
+        super.onTimerTick(user)
         refreshCustomers()
         refreshMixers()
         getUserLocation(user.equipmentId!!)

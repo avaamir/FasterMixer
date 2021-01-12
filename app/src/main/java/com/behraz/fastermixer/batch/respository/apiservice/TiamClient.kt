@@ -71,6 +71,9 @@ interface TiamClient {
 
     //==========================================
     //Admin
+    @POST("Messages/GetAllMessageForAdmin")
+    suspend fun getAdminMessages(): ApiResult<List<AdminMessageDto>>
+
     @POST("Vehicles/GetAll")
     suspend fun getEquipmentsForAdmin(): ApiResult<List<AdminEquipment>>
 
@@ -95,6 +98,8 @@ interface TiamClient {
 
     @POST("Reports/getSummeryReportForApp")
     suspend fun getSummeryReport(@Body request: GetReportRequest.SummeryReportRequest): ApiResult<List<SummeryReport>>
+
+
     //======================================
 
 

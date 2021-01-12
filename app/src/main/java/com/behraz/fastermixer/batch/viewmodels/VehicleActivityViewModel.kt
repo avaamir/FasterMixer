@@ -20,7 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
 
-abstract class VehicleActivityViewModel : ParentViewModel() {
+abstract class VehicleActivityViewModel : EquipmentViewModel() {
 
     private val _isDamaged = MutableLiveData<Boolean>()
     val isDamaged: LiveData<Boolean> = _isDamaged

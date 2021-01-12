@@ -10,6 +10,7 @@ class MixerActivityViewModel : VehicleActivityViewModel() {
 
 
     override fun onTimerTick(user: User) {
+        super.onTimerTick(user)
         getUserLocation(user.equipmentId!!) //get location from Car GPS
         getMission()
     }

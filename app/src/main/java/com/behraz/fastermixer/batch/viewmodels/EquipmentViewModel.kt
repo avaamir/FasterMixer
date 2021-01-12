@@ -16,17 +16,11 @@ import com.behraz.fastermixer.batch.utils.general.Event
 import java.util.*
 import kotlin.concurrent.fixedRateTimer
 
-abstract class ParentViewModel : ViewModel() {
+abstract class TimerViewModel : ViewModel() {
 
     protected abstract fun onTimerTick(user: User)
 
     val user get() = UserConfigs.user
-
-    @Volatile
-    private var isGetMessageRequestActive = false
-
-    val messages = MessageRepo.allMessage
-
 
     private val logOutEvent = MutableLiveData<Event<Unit>>()
     val logoutResponse = Transformations.switchMap(logOutEvent) {
@@ -41,17 +35,40 @@ abstract class ParentViewModel : ViewModel() {
         }
     }
 
-    val newMessage = MutableLiveData<Event<Message>>()
-
     private val timer: Timer
 
     init {
         timer = fixedRateTimer(period = 20000L) {
             user.value?.let { user ->  //TODO albate bazam momkene unauthorized bede chun shyad moghe check kardan login bashe ama bad if logout etefagh biofte, AMA jelo exception ro migire
-                getMessages()
                 onTimerTick(user)
             }
         }
+    }
+
+    fun insertBreakdown(breakdownRequest: BreakdownRequest) {
+        breakdownEvent.value = breakdownRequest
+    }
+
+    fun logout() {
+        logOutEvent.value = Event(Unit)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        timer.cancel()
+        timer.purge()
+    }
+}
+
+
+open class EquipmentViewModel : TimerViewModel() {
+    @Volatile
+    private var isGetMessageRequestActive = false
+    val newMessage = MutableLiveData<Event<Message>>()
+    open val messages = MessageRepo.allMessage
+
+    override fun onTimerTick(user: User) {
+        getMessages()
     }
 
     private fun getMessages() {
@@ -77,15 +94,6 @@ abstract class ParentViewModel : ViewModel() {
         }
     }
 
-    fun insertBreakdown(breakdownRequest: BreakdownRequest) {
-        breakdownEvent.value = breakdownRequest
-    }
-
-    fun logout() {
-        logOutEvent.value = Event(Unit)
-    }
-
-
     fun seenMessage(message: Message) {
         MessageRepo.seenMessage(message)
     }
@@ -94,9 +102,4 @@ abstract class ParentViewModel : ViewModel() {
         MessageRepo.seenAllMessages()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        timer.cancel()
-        timer.purge()
-    }
 }

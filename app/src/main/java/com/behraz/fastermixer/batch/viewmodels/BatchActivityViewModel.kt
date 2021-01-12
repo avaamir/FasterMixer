@@ -16,7 +16,7 @@ import com.behraz.fastermixer.batch.utils.general.now
 import com.behraz.fastermixer.batch.utils.general.toJalali
 import java.util.*
 
-class BatchActivityViewModel : ParentViewModel() {
+class BatchActivityViewModel : EquipmentViewModel() {
 
     var shouldShowNewMixerMessage: Boolean = true
     private var batchFenceLocation: Fence? = null
@@ -50,6 +50,7 @@ class BatchActivityViewModel : ParentViewModel() {
     }
 
     override fun onTimerTick(user: User) {
+        super.onTimerTick(user)
         refreshMixers()
         if (batchFenceLocation == null) {
             getBatchFenceLocation(user)

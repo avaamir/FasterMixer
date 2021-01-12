@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="4dp"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -78,7 +78,9 @@
                     android:layout_alignRight="@+id/ivMessage"
                     android:layout_alignParentTop="true"
                     android:background="@drawable/shape_drawer_badge"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"
+                    tools:visibility="visible"
+                    />
 
 
             </RelativeLayout>

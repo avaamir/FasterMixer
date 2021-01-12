@@ -12,12 +12,9 @@ import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.utils.general.DoubleTrigger
 import com.behraz.fastermixer.batch.utils.general.Event
 
-class AdminActivityViewModel : ParentViewModel() {
-
-
-
+class AdminActivityViewModel : EquipmentViewModel() {
     //UI Events
-    var eventReportEquipment : Event<Pair<AdminEquipment, ReportType>>? = null
+    var eventReportEquipment: Event<Pair<AdminEquipment, ReportType>>? = null
 
     val eventOnVehicleSelectedToShowOnMap = MutableLiveData<Event<AdminEquipment>>()
     val eventOnRouteToCarClicked = MutableLiveData<Event<AdminEquipment>>()
@@ -32,6 +29,17 @@ class AdminActivityViewModel : ParentViewModel() {
     }
 
     private var isSortByState = true
+
+    private val getMessagesEvent = MutableLiveData(Event(Unit))
+    override val messages = Transformations.switchMap(getMessagesEvent) {
+        RemoteRepo.getAdminMessages().map {
+            if (it.isSucceed)
+                it.entity!!
+            else
+                ArrayList()
+        }
+    }
+
 
     private val getPlansEvent = MutableLiveData(Event(Unit))
     val plans = Transformations.switchMap(getPlansEvent) {
@@ -82,6 +90,7 @@ class AdminActivityViewModel : ParentViewModel() {
 
 
     override fun onTimerTick(user: User) {
+        getMessagesEvent?.postValue(Event(Unit)) //chun timer dar kelas super call mishe inja hanuz init nashode khater hamin not null budan check mishe
         getPlansEvent?.postValue(Event(Unit)) //chun timer dar kelas super call mishe inja hanuz init nashode khater hamin not null budan check mishe
         getEquipmentsEvent?.postValue(Event(Unit))
     }

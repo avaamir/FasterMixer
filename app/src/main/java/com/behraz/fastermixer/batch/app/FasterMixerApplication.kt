@@ -25,6 +25,7 @@ import com.behraz.fastermixer.batch.ui.activities.ContactActivity
 import com.behraz.fastermixer.batch.ui.activities.LoginActivity
 import com.behraz.fastermixer.batch.ui.activities.TestActivity
 import com.behraz.fastermixer.batch.ui.activities.admin.AdminActivity
+import com.behraz.fastermixer.batch.ui.activities.admin.AdminMessagesActivity
 import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.utils.general.Event
 import com.behraz.fastermixer.batch.utils.general.fullScreen
@@ -106,7 +107,7 @@ class FasterMixerApplication : Application(), NetworkConnectionInterceptor.Netwo
     }
 
     private fun handleScreenOrientation(activity: Activity) {
-        if (activity !is LoginActivity && activity !is TestActivity && activity !is ContactActivity && activity !is AdminActivity) {
+        if (activity !is LoginActivity && activity !is TestActivity && activity !is ContactActivity && activity !is AdminActivity && activity !is AdminMessagesActivity) {
             if (resources.getBoolean(R.bool.landscape_only)) {
                 activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             } else {
