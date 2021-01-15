@@ -26,6 +26,8 @@ class AdminMapFragment : BaseMapFragment(), AdminDriverInfoWindow.Interactions {
     private lateinit var mapViewModel: AdminMapFragmentViewModel
     private lateinit var adminActivityViewModel: AdminActivityViewModel
 
+    val markers = HashMap<Int, VehicleMarker>()
+
     private var routePolyline: Polyline? = null
 
     private val userMarker by lazy {
@@ -51,6 +53,18 @@ class AdminMapFragment : BaseMapFragment(), AdminDriverInfoWindow.Interactions {
 
         subscribeObservers()
         return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        markers.clear()
+        adminActivityViewModel.equipments.value?.entity?.let {
+            if (it.isNotEmpty()) {
+                it.forEach { equipment ->
+                    markers[equipment.id] = makeEquipmentMarker(equipment)
+                }
+            }
+        }
     }
 
     private fun subscribeObservers() {
@@ -79,7 +93,7 @@ class AdminMapFragment : BaseMapFragment(), AdminDriverInfoWindow.Interactions {
                         toast("تجهیزی در سرور تعریف نشده است")
                     }
 
-                    mapViewModel.markers.diffSourceFromNewValues(
+                    markers.diffSourceFromNewValues(
                         it.entity!!,
                         AdminEquipment::id,
                         object : OnSourceMapChange<Int, VehicleMarker, AdminEquipment> {
@@ -87,37 +101,7 @@ class AdminMapFragment : BaseMapFragment(), AdminDriverInfoWindow.Interactions {
                                 key: Int,
                                 item: AdminEquipment
                             ): VehicleMarker {
-                                val marker = when (item.type) {
-                                    EquipmentType.Mixer ->
-                                        MixerMarker(
-                                            mBinding.map,
-                                            interactions = this@AdminMapFragment
-                                        )
-                                    EquipmentType.Pomp ->
-                                        PompMarker(
-                                            mBinding.map,
-                                            interactions = this@AdminMapFragment
-                                        )
-                                    EquipmentType.Loader ->
-                                        LoaderMarker(
-                                            mBinding.map,
-                                            interactions = this@AdminMapFragment
-                                        )
-                                    EquipmentType.Other ->
-                                        LoaderMarker(
-                                            mBinding.map,
-                                            interactions = this@AdminMapFragment
-                                        )
-                                }.exhaustiveAsExpression()
-                                item.carIdStr.split(",").run {
-                                    marker.setPelakText(get(0), get(1), get(2), get(3))
-                                }
-                                item.location.let { loc ->
-                                    if (loc != null) {
-                                        addMarkerToMap(marker, loc, item.name)
-                                    }
-                                }
-                                return marker
+                                return makeEquipmentMarker(item)
                             }
 
                             override fun onItemExistInBoth(
@@ -125,14 +109,12 @@ class AdminMapFragment : BaseMapFragment(), AdminDriverInfoWindow.Interactions {
                                 marker: VehicleMarker,
                                 item: AdminEquipment
                             ) {
-                                item.location?.let { loc ->
-                                    if (marker.position != loc)
-                                        marker.position = loc
-                                }
+                                if (marker.position != item.location)
+                                    marker.position = item.location
                             }
 
                             override fun onRemoveItem(keyId: Int) {
-                                mapViewModel.markers.remove(keyId)
+                                markers.remove(keyId)
                             }
                         })
                     mBinding.map.invalidate()
@@ -149,7 +131,7 @@ class AdminMapFragment : BaseMapFragment(), AdminDriverInfoWindow.Interactions {
             viewLifecycleOwner,
             { event ->
                 event.getEventIfNotHandled()?.let {
-                    mapViewModel.markers[it.id]?.let { marker ->
+                    markers[it.id]?.let { marker ->
                         moveCamera(marker.position, shouldAnimate = false)
                         marker.showInfoWindow()
                     }
@@ -177,6 +159,38 @@ class AdminMapFragment : BaseMapFragment(), AdminDriverInfoWindow.Interactions {
                 }
             }
         })
+    }
+
+    private fun makeEquipmentMarker(equipment: AdminEquipment): VehicleMarker {
+        val marker = when (equipment.type) {
+            EquipmentType.Mixer ->
+                MixerMarker(
+                    mBinding.map,
+                    interactions = this@AdminMapFragment
+                )
+            EquipmentType.Pomp ->
+                PompMarker(
+                    mBinding.map,
+                    interactions = this@AdminMapFragment
+                )
+            EquipmentType.Loader ->
+                LoaderMarker(
+                    mBinding.map,
+                    interactions = this@AdminMapFragment
+                )
+            EquipmentType.Other ->
+                LoaderMarker(
+                    mBinding.map,
+                    interactions = this@AdminMapFragment
+                )
+        }.exhaustiveAsExpression()
+        equipment.carIdStr.split(",").run {
+            marker.setPelakText(get(0), get(1), get(2), get(3))
+        }
+        equipment.location.let { loc ->
+            addMarkerToMap(marker, loc, equipment.name)
+        }
+        return marker
     }
 
     private fun routeToCar(dest: GeoPoint) {

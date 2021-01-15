@@ -13,6 +13,7 @@ import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ActivityTestBinding
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.CircleFence
+import com.behraz.fastermixer.batch.models.requests.behraz.LoginRequest
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.ui.adapters.MixerAdapter
 import com.behraz.fastermixer.batch.utils.general.log
@@ -24,6 +25,9 @@ import com.google.android.gms.common.api.PendingResult
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_test.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 
 
 class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
@@ -79,9 +83,7 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
 
     private fun initViews() {
        btnApiTest.setOnClickListener {
-           RemoteRepo.getMessage {
-               log(it, "debux")
-           }
+
        }
     }
 

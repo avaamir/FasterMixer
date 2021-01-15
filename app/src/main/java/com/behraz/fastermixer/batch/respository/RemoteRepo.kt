@@ -23,9 +23,14 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.osmdroid.util.GeoPoint
 import retrofit2.Response
+import java.io.IOException
 import kotlin.reflect.KSuspendFunction0
 import kotlin.reflect.KSuspendFunction1
 
@@ -137,6 +142,47 @@ object RemoteRepo {
         }
     }
 
+
+
+
+    private fun getServerAddress(
+        loginRequest: LoginRequest,
+        tryOnUnAuthorized: Boolean
+    ): ApiResult<String> {
+        val client = OkHttpClient()
+        val type = object : TypeToken<LoginRequest>() {}.type
+        val data = Gson().toJson(loginRequest, type)
+        val mediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
+        val body = data.toRequestBody(mediaType)
+        val request = Request.Builder()
+            .url("${ApiService.DEFAULT_DOMAIN}/api/v1/Users/Get")
+            .post(body)
+            .build()
+
+        var response: okhttp3.Response? = null
+        return try {
+            response = client.newCall(request).execute()
+            if (response.isSuccessful) {
+                val strResponse = response.body!!.string()
+                val responseType = object : TypeToken<ApiResult<String>>() {}.type
+                val result: ApiResult<String> = Gson().fromJson(strResponse, responseType)
+                result.errorType = ErrorType.OK
+                result
+            } else {
+                val errorType = response.code.parseHttpCodeToErrorType()
+                if (errorType == ErrorType.UnAuthorized) {
+                    UserConfigs.logout()
+                    if (tryOnUnAuthorized) {
+                        return getServerAddress(loginRequest, false)
+                    }
+                }
+                failedRequest(errorType)
+            }
+        } catch (e: IOException) {
+            failedRequest(response?.code?.parseHttpCodeToErrorType() ?: ErrorType.NetworkError)
+        }
+    }
+
     private suspend fun getToken(
         loginRequest: LoginRequest
     ): ApiResult<GetTokenResponse> {
@@ -149,41 +195,52 @@ object RemoteRepo {
         }
     }
 
+
     fun login(loginRequest: LoginRequest): RunOnceLiveData<ApiResult<User>?> {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         return object : RunOnceMutableLiveData<ApiResult<User>?>() {
             override fun onActiveRunOnce() {
                 CoroutineScope(IO + serverJobs).launchApi({
-                    val tokenResult = getToken(loginRequest)
-                    if (tokenResult.isSucceed) {
-                        val token = tokenResult.entity!!.token!!
-                        ApiService.setToken(token)
-                        val getUserInfoResult = ApiService.client.getUserInfo()
-                        if (getUserInfoResult.isSucceed) {
-                            val userInfo = getUserInfoResult.entity!!
-                            val user = User(
-                                userInfo.id,
-                                userInfo.name,
-                                userInfo.personalCode,
-                                token,
-                                userInfo.roleId,
-                                userInfo.equipmentId
-                            )
-                            UserConfigs.loginUserBlocking(user)
-                            withContext(Main) {
-                                value = succeedRequest(user)
-                            }
-                        } else { //Failed Get UserInfo
-                            withContext(Main) {
-                                value = failedRequest(
-                                    getUserInfoResult.errorType,
-                                    getUserInfoResult.message
+                    val addressResult = getServerAddress(loginRequest, true)
+                    if (addressResult.isSucceed) {
+                        ApiService.setAddress(addressResult.entity ?: ApiService.DEFAULT_DOMAIN)
+
+
+                        val tokenResult = getToken(loginRequest)
+                        if (tokenResult.isSucceed) {
+                            val token = tokenResult.entity!!.token!!
+                            ApiService.setToken(token)
+                            val getUserInfoResult = ApiService.client.getUserInfo()
+                            if (getUserInfoResult.isSucceed) {
+                                val userInfo = getUserInfoResult.entity!!
+                                val user = User(
+                                    userInfo.id,
+                                    userInfo.name,
+                                    userInfo.personalCode,
+                                    token,
+                                    userInfo.roleId,
+                                    userInfo.equipmentId
                                 )
+                                UserConfigs.loginUserBlocking(user)
+                                withContext(Main) {
+                                    value = succeedRequest(user)
+                                }
+                            } else { //Failed Get UserInfo
+                                withContext(Main) {
+                                    value = failedRequest(
+                                        getUserInfoResult.errorType,
+                                        getUserInfoResult.message
+                                    )
+                                }
+                            }
+                        } else { //Failed Get Token
+                            withContext(Main) {
+                                value = failedRequest(tokenResult.errorType, tokenResult.message)
                             }
                         }
-                    } else { //Failed Get Token
+                    } else {
                         withContext(Main) {
-                            value = failedRequest(tokenResult.errorType, tokenResult.message)
+                            value = failedRequest(addressResult.errorType, addressResult.message)
                         }
                     }
                 }, {
@@ -323,9 +380,7 @@ object RemoteRepo {
     }
 
 
-    fun checkUpdates() = apiReq(ApiService.client::checkUpdates) {
-        println("debux:$it")
-    }
+    fun checkUpdates() = apiReq(ApiService.client::checkUpdates)
 
     fun getFullReport(request: GetReportRequest.FullReportRequest) =
         apiReq(request, ApiService.client::getFullReport)
@@ -355,7 +410,6 @@ object RemoteRepo {
         apiReq(drawRoadRequest, ApiService.client::getDrawRoadReport)
 
 
-
     fun getAdminMessages() = apiReq(ApiService.client::getAdminMessages).map {
         ApiResult(
             entity = it.entity?.map { dto -> dto.toEntity() },
@@ -364,6 +418,7 @@ object RemoteRepo {
             errorType = it.errorType
         )
     }
+
     fun getActiveServices(requestId: Int) = apiReq(requestId, ApiService.client::getActiveServices)
     fun getServiceHistory(vehicleId: Int, requestId: Int): LiveData<ApiResult<List<Service>>> {
         return object : RunOnceLiveData<ApiResult<List<Service>>>() {
@@ -379,10 +434,6 @@ object RemoteRepo {
             }
         }
     }
-
-
-
-
 
 
     fun getRoute(coordinates: List<GeoPoint>): RunOnceLiveData<GetRouteResponse?> {

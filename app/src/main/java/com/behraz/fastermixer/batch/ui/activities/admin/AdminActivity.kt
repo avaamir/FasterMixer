@@ -146,6 +146,8 @@ class AdminActivity : AppCompatActivity(),
         mBinding.mainPager.currentItem = 4
         mBinding.toolbar.ivBack.visibility = View.GONE
         setToolbarTitle("داشبورد مدیریت")
+
+        mBinding.toolbar.frameMessage.visibility = View.VISIBLE
     }
 
     override fun onNavigationItemReselected(item: MenuItem) {

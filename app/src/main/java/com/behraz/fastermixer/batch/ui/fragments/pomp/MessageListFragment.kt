@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
-import com.behraz.fastermixer.batch.databinding.FragmentMessageListBinding
 import com.behraz.fastermixer.batch.models.Message
 import com.behraz.fastermixer.batch.respository.persistance.messagedb.MessageRepo
 import com.behraz.fastermixer.batch.ui.activities.admin.AdminActivity
@@ -27,8 +26,9 @@ import com.behraz.fastermixer.batch.viewmodels.*
 
 class MessageListFragment : Fragment(), MessageAdapter.Interaction {
 
+
+    private lateinit var gpAnimationView: View
     private val mAdapter = MessageAdapter(true, this)
-    private lateinit var mBinding: FragmentMessageListBinding
     private lateinit var viewModel: EquipmentViewModel
 
     private var isAdmin = false
@@ -60,24 +60,36 @@ class MessageListFragment : Fragment(), MessageAdapter.Interaction {
                 throw IllegalStateException("PompActivity or MixerActivity is valid")
             }
         }
-        mBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_message_list, container, false)
-        initViews()
+        val view = inflater.inflate(
+            if (isAdmin) R.layout.fragment_admin_message_list else R.layout.fragment_message_list,
+            container,
+            false
+        )
+        initViews(view)
         subscribeObservers()
-        return mBinding.root
+        return view
     }
 
     private fun subscribeObservers() {
-        viewModel.messages.observe(viewLifecycleOwner)   {
+        viewModel.messages.observe(viewLifecycleOwner) {
             mAdapter.submitList(it)
             if (it.isEmpty())
-                mBinding.gpAnimationView.visibility = View.VISIBLE
+                gpAnimationView.visibility = View.VISIBLE
             else
-                mBinding.gpAnimationView.visibility = View.GONE
+                gpAnimationView.visibility = View.GONE
         }
     }
 
-    private fun initViews() {
+    private fun initViews(view: View) {
+        if(isAdmin) {
+            view.findViewById<View>(R.id.ivBack).setOnClickListener {
+                requireActivity().onBackPressed()
+            }
+            view.findViewById<TextView>(R.id.tvTitle).text = "پیامها و رویدادها"
+        }
+
+        gpAnimationView = view.findViewById(R.id.gpAnimationView)
+        val messageRecycler = view.findViewById<RecyclerView>(R.id.messageRecycler)
 
         if (!isAdmin) {
             ItemTouchHelper(object :
@@ -96,13 +108,13 @@ class MessageListFragment : Fragment(), MessageAdapter.Interaction {
                     toast("پیام حذف شد")
                 }
 
-            }).attachToRecyclerView(mBinding.messageRecycler)
+            }).attachToRecyclerView(messageRecycler)
         }
 
-        mBinding.messageRecycler.adapter = mAdapter
-        mBinding.messageRecycler.layoutManager =
+        messageRecycler.adapter = mAdapter
+        messageRecycler.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        mBinding.messageRecycler.addItemDecoration(
+        messageRecycler.addItemDecoration(
             DividerItemDecoration(
                 context,
                 RecyclerView.VERTICAL

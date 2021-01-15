@@ -76,6 +76,11 @@ class BaseNavFragment : Fragment() {
         navController.popBackStack(navController.graph.startDestination, false)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        isFirstTimeInit = true
+    }
+
     interface OnNavigationChangedListener {
         fun notifyNavigationChanged(destination: NavDestination, arguments: Bundle?): String //return toolbar title
     }

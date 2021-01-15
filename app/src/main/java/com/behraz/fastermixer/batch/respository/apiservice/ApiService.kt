@@ -15,21 +15,20 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object ApiService {
-    const val Domain = "http://78.39.159.41:9001"
-    private const val BASE_API_URL = "$Domain/api/v1/"
+    const val DEFAULT_DOMAIN = "http://78.39.159.41:9001"
+    var domain = DEFAULT_DOMAIN
+        private set
+    private val BASE_API_URL get() = "$domain/api/v1/"
 
     private lateinit var networkAvailability: NetworkConnectionInterceptor.NetworkAvailability
     private lateinit var errorHandler: GlobalErrorHandlerInterceptor.ApiResponseErrorHandler
 
     private var token: String? = null
 
-    val client: TiamClient by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-        retrofitBuilder.build().create(TiamClient::class.java)
-    }
+    private var mClient: TiamClient? = null
 
-
-    private val retrofitBuilder: Retrofit.Builder by lazy {
-
+    @Synchronized
+    private fun createRetrofit(): Retrofit {
         val client: OkHttpClient = OkHttpClient.Builder()
             //UnsafeOkHttpClient.getUnsafeOkHttpClientBuilder()
             .apply {
@@ -58,12 +57,19 @@ object ApiService {
             }.build()
 
         val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()
-        Retrofit.Builder()
+        return Retrofit.Builder()
             .baseUrl(BASE_API_URL)
             .addCallAdapterFactory(ApiResultCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(client)
+            .build()
     }
+
+    val client: TiamClient
+        get() = mClient ?: createRetrofit().create(TiamClient::class.java).also {
+            mClient = it
+        }
+
 
     fun init(
         networkAvailability: NetworkConnectionInterceptor.NetworkAvailability,
@@ -76,5 +82,13 @@ object ApiService {
     @Synchronized
     fun setToken(token: String?) {
         ApiService.token = token
+    }
+
+    @Synchronized
+    fun setAddress(address: String) {
+        if (address != domain) {
+            mClient = null
+            domain = address
+        }
     }
 }
