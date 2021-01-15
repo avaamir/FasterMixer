@@ -10,7 +10,9 @@ import com.behraz.fastermixer.batch.models.requests.behraz.ErrorType
 import com.behraz.fastermixer.batch.models.requests.behraz.LoginRequest
 import com.behraz.fastermixer.batch.models.requests.behraz.UpdateResponse
 import com.behraz.fastermixer.batch.respository.RemoteRepo
+import com.behraz.fastermixer.batch.respository.sharedprefrence.PrefsRepo
 import com.behraz.fastermixer.batch.utils.general.Event
+import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivityViewModel : ViewModel() {
 
@@ -58,5 +60,17 @@ class LoginActivityViewModel : ViewModel() {
 
     fun checkUpdates() {
         updateRequestEvent.value = Event(Unit)
+    }
+
+    fun saveUserCredential(factoryCode: String, username: String, password: String) {
+        PrefsRepo.saveUserCredentials(factoryCode, username, password)
+    }
+
+    fun clearUserCredentials() {
+        PrefsRepo.clearUserCredentials()
+    }
+
+    fun getUserCredentials(response: (factoryId: String, username: String, password: String) -> Unit) {
+        PrefsRepo.getUserCredentials(response)
     }
 }

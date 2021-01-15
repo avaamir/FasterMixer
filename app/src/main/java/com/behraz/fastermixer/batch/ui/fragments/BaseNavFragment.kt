@@ -12,6 +12,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.behraz.fastermixer.batch.R
+import com.behraz.fastermixer.batch.utils.general.log
 
 
 class BaseNavFragment : Fragment() {
@@ -43,21 +44,24 @@ class BaseNavFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        log("onCreateView:")
         // Inflate the layout for this fragment
         return inflater.inflate(layoutRes, container, false)
     }
 
-
     override fun onStart() {
         super.onStart()
+        isFirstTimeInit = true
         requireActivity().findNavController(navHostId)
             .addOnDestinationChangedListener { controller, destination, arguments ->
                 currentDestination = destination
                 if (!isFirstTimeInit) {
                     toolbarTitle = onNavChangeListener.notifyNavigationChanged(destination, arguments)
+                    log("$isFirstTimeInit $toolbarTitle")
                 } else { //age avalin bar bud ke dasht init mishod chun toolbar beyn hame fragment ha moshtarak hast titr dorost nemikhord va titresh mishod un fragmenti ke akhar az hame init shode be in elat in var ro tarif kardim va bar aval titr ro az label mikhonim
                     toolbarTitle = destination.label.toString()
                     isFirstTimeInit = false
+                    log("$isFirstTimeInit $toolbarTitle")
                 }
             }
     }
@@ -76,13 +80,11 @@ class BaseNavFragment : Fragment() {
         navController.popBackStack(navController.graph.startDestination, false)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        isFirstTimeInit = true
-    }
-
     interface OnNavigationChangedListener {
-        fun notifyNavigationChanged(destination: NavDestination, arguments: Bundle?): String //return toolbar title
+        fun notifyNavigationChanged(
+            destination: NavDestination,
+            arguments: Bundle?
+        ): String //return toolbar title
     }
 
     companion object {

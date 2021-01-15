@@ -6,7 +6,6 @@ import com.behraz.fastermixer.batch.models.User
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.respository.persistance.userdb.UserRepo
 import com.behraz.fastermixer.batch.respository.sharedprefrence.PrefsRepo
-import kotlinx.coroutines.CoroutineDispatcher
 
 object UserConfigs {
     private val userLive = MutableLiveData<User?>(null)
@@ -45,17 +44,15 @@ object UserConfigs {
         userLive.postValue(null)
     }
 
-    fun updateUser(equipmentId: Int ) {
+    fun updateUser(equipmentId: Int) {
         user.value!!.copy(equipmentId = equipmentId).let { user ->
-
-                UserRepo.update(user)
-
+            UserRepo.update(user)
         }
     }
 
-    suspend  fun updateUserBlocking(equipmentId: Int) {
+    suspend fun updateUserBlocking(equipmentId: Int) {
         user.value!!.copy(equipmentId = equipmentId).let { user ->
-                UserRepo.updateBlocking(user)
+            UserRepo.updateBlocking(user)
         }
     }
 

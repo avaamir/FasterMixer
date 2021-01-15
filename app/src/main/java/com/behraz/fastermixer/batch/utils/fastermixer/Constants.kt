@@ -31,12 +31,5 @@ object Constants {
 
     val UNAUTHORIZED_MSG by lazy { "حساب کاربری شما در دستگاه دیگری فعال است. لطفا دوباره وارد شوید" }
 
-    const val PREF_CREDENTIAL_NAME = "credential"
-
-    const val PREF_CREDENTIAL_USER = "username"
-    const val PREF_CREDENTIAL_PASSWORD = "password"
-    const val PREF_CREDENTIAL_FACTORY_ID = "factoryId"
-    const val PREF_CREDENTIAL_REMEMBERED = "remembered"
-
     const val INTENT_UPDATE_ACTIVITY_UPDATE_RESPONSE = "ac-up-obj"
 }

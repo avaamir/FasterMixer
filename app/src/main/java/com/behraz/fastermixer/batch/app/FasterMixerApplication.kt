@@ -30,6 +30,7 @@ import com.behraz.fastermixer.batch.ui.dialogs.NoNetworkDialog
 import com.behraz.fastermixer.batch.utils.general.Event
 import com.behraz.fastermixer.batch.utils.general.fullScreen
 import com.behraz.fastermixer.batch.utils.general.hideStatusBar
+import com.behraz.fastermixer.batch.utils.general.log
 
 class FasterMixerApplication : Application(), NetworkConnectionInterceptor.NetworkAvailability,
     GlobalErrorHandlerInterceptor.ApiResponseErrorHandler {
@@ -118,7 +119,7 @@ class FasterMixerApplication : Application(), NetworkConnectionInterceptor.Netwo
     }
 
     private fun fullScreen(activity: Activity) {
-        if (activity !is LoginActivity && activity !is AdminActivity && activity !is ContactActivity && activity !is AdminActivity) {
+        if (activity !is LoginActivity && activity !is AdminActivity && activity !is ContactActivity && activity !is AdminActivity && activity !is AdminMessagesActivity) {
             activity.fullScreen()
         }
     }
@@ -151,7 +152,7 @@ class FasterMixerApplication : Application(), NetworkConnectionInterceptor.Netwo
 
     override fun onInternetUnavailable() {
         onInternetUnavailableEvent.postValue(Event(Unit))
-        println("debux: NetworkError1")
+        log("debux: NetworkError1")
     }
 
     override fun onHandleError(errorType: ErrorType, errorBody: String?) {
@@ -159,7 +160,7 @@ class FasterMixerApplication : Application(), NetworkConnectionInterceptor.Netwo
             onAuthorizeEvent.postValue(Event(Unit))
             UserConfigs.logout()
         } else if(errorType == ErrorType.NetworkError) {
-            println("debux: NetworkError2")
+            log("debux: NetworkError2")
         }
     }
 

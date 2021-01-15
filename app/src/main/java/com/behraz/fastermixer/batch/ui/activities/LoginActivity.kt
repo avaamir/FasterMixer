@@ -2,7 +2,6 @@ package com.behraz.fastermixer.batch.ui.activities
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
@@ -219,6 +218,15 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
 
     }
 
+    private fun loadCredentialIfExists() {
+        viewModel.getUserCredentials { factoryId, username, password ->
+            checkBoxRememberMe.isChecked = true
+            etFactoryCode.setText(factoryId)
+            etUsername.setText(username)
+            etPassword.setText(password)
+        }
+    }
+
 
     private fun subscribeObservers() {
         viewModel.checkUpdateResponse.observe(this) { event ->
@@ -258,25 +266,23 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
                     if (it != null) {
                         if (it.isSucceed) {
                             if (checkBoxRememberMe.isChecked) {
-                                shouldRememberCredential(true)
+                                viewModel.saveUserCredential(
+                                    etFactoryCode.text.trim().toString(),
+                                    etUsername.text.trim().toString(),
+                                    etPassword.text.trim().toString()
+                                )
                             } else {
-                                shouldRememberCredential(false)
+                                viewModel.clearUserCredentials()
                             }
 
                             if (it.entity!!.equipmentId == null) {
                                 when (it.entity.userType) {
                                     UserType.Pomp, UserType.Mixer -> toast(getString(R.string.driver_equipment_not_found))
                                     UserType.Batch -> startActivity(
-                                        Intent(
-                                            this,
-                                            ChooseEquipmentActivity::class.java
-                                        )
+                                        Intent(this, ChooseEquipmentActivity::class.java)
                                     )
                                     UserType.Admin -> startActivity(
-                                        Intent(
-                                            this,
-                                            AdminActivity::class.java
-                                        )
+                                        Intent(this, AdminActivity::class.java)
                                     )
                                 }.exhaustive()
                             } else {
@@ -318,36 +324,6 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
                     }
                 }
             }
-        }
-    }
-
-    private fun shouldRememberCredential(shouldRemember: Boolean) {
-        val prefs = getSharedPreferences(Constants.PREF_CREDENTIAL_NAME, Context.MODE_PRIVATE)
-        if (shouldRemember) {
-            prefs.edit().putBoolean(Constants.PREF_CREDENTIAL_REMEMBERED, true)
-                .putString(
-                    Constants.PREF_CREDENTIAL_FACTORY_ID,
-                    etFactoryCode.text.trim().toString()
-                )
-                .putString(Constants.PREF_CREDENTIAL_USER, etUsername.text.trim().toString())
-                .putString(Constants.PREF_CREDENTIAL_PASSWORD, etPassword.text.trim().toString())
-                .apply()
-        } else {
-            prefs.edit()
-                .clear()
-                .putBoolean(Constants.PREF_CREDENTIAL_REMEMBERED, false)
-                .apply()
-        }
-    }
-
-    private fun loadCredentialIfExists() {
-        val prefs = getSharedPreferences(Constants.PREF_CREDENTIAL_NAME, Context.MODE_PRIVATE)
-        val remembered = prefs.getBoolean(Constants.PREF_CREDENTIAL_REMEMBERED, false)
-        if (remembered) {
-            checkBoxRememberMe.isChecked = true
-            etFactoryCode.setText(prefs.getString(Constants.PREF_CREDENTIAL_FACTORY_ID, ""))
-            etUsername.setText(prefs.getString(Constants.PREF_CREDENTIAL_USER, ""))
-            etPassword.setText(prefs.getString(Constants.PREF_CREDENTIAL_PASSWORD, ""))
         }
     }
 

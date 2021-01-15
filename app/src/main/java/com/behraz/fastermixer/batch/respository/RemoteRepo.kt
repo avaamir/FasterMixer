@@ -57,7 +57,7 @@ object RemoteRepo {
     private fun <ResM : Any, ReqM : Any> apiReq(
         request: ReqM,
         requestFunction: KSuspendFunction1<ReqM, ApiResult<ResM>>,
-        repoLevelHandler: ((ApiResult<ResM>) -> (Unit))? = null
+        repoLevelHandler: (suspend (ApiResult<ResM>) -> (Unit))? = null
     ): RunOnceLiveData<ApiResult<ResM>> {
         if (!::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         return object : RunOnceMutableLiveData<ApiResult<ResM>>() {
@@ -205,7 +205,6 @@ object RemoteRepo {
                     if (addressResult.isSucceed) {
                         ApiService.setAddress(addressResult.entity ?: ApiService.DEFAULT_DOMAIN)
 
-
                         val tokenResult = getToken(loginRequest)
                         if (tokenResult.isSucceed) {
                             val token = tokenResult.entity!!.token!!
@@ -265,7 +264,7 @@ object RemoteRepo {
     fun chooseBatch(equipmentId: Int) =
         apiReq(equipmentId, ApiService.client::chooseBatch) {
             if (it.isSucceed) {
-                UserConfigs.updateUser(equipmentId = equipmentId)
+                UserConfigs.updateUserBlocking(equipmentId = equipmentId)
                 println("debugx: RemoteRepo: blocking finished, User db updated, Now Activity Will Call..")
             }
         }
