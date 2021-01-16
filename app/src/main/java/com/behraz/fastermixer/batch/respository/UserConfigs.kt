@@ -19,6 +19,8 @@ object UserConfigs {
                 ApiService.setToken(user.token)
                 println("debug: UserConfigs token set: $user")
                 userLive.value = user
+            } else {
+                ApiService.setToken(null)
             }
         }
     }
@@ -38,7 +40,6 @@ object UserConfigs {
     fun logout() {
         ApiService.setToken(null)
         userLive.value?.let {
-            PrefsRepo.flush()
             UserRepo.deleteAll()
         }
         userLive.postValue(null)

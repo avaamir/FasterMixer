@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="پیامی وجود ندارد"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

@@ -9,8 +9,8 @@ import retrofit2.http.*
 
 interface TiamClient {
     //First Page
-    @POST("AppVersion/FindLastAppVersion")
-    suspend fun checkUpdates(): ApiResult<UpdateResponse>
+    /*@POST("AppVersion/FindLastAppVersion")
+    suspend fun checkUpdates(): ApiResult<UpdateResponse>*/
 
     @POST("Users/loginApp")
     suspend fun getToken(@Body loginRequest: LoginRequest): Response<GetTokenResponse>

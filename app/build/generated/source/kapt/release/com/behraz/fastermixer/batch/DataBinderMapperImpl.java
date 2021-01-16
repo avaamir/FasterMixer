@@ -14,13 +14,13 @@ import com.behraz.fastermixer.batch.databinding.ActivityContactBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ActivityMixerBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ActivityPompBindingImpl;
 import com.behraz.fastermixer.batch.databinding.ActivityTestBindingImpl;
+import com.behraz.fastermixer.batch.databinding.FragmentAdminMessageListBindingImpl;
 import com.behraz.fastermixer.batch.databinding.FragmentChooseReportDateBindingImpl;
 import com.behraz.fastermixer.batch.databinding.FragmentChooseReportEquipmentBindingImpl;
 import com.behraz.fastermixer.batch.databinding.FragmentCustomerListBindingImpl;
 import com.behraz.fastermixer.batch.databinding.FragmentDrawRoadBindingImpl;
 import com.behraz.fastermixer.batch.databinding.FragmentEquipmentsBindingImpl;
 import com.behraz.fastermixer.batch.databinding.FragmentFullReportBindingImpl;
-import com.behraz.fastermixer.batch.databinding.FragmentMessageListBindingImpl;
 import com.behraz.fastermixer.batch.databinding.FragmentMixerListBindingImpl;
 import com.behraz.fastermixer.batch.databinding.FragmentReportBindingImpl;
 import com.behraz.fastermixer.batch.databinding.FragmentSummeryReportBindingImpl;
@@ -77,19 +77,19 @@ public class DataBinderMapperImpl extends DataBinderMapper {
 
   private static final int LAYOUT_ACTIVITYTEST = 8;
 
-  private static final int LAYOUT_FRAGMENTCHOOSEREPORTDATE = 9;
+  private static final int LAYOUT_FRAGMENTADMINMESSAGELIST = 9;
 
-  private static final int LAYOUT_FRAGMENTCHOOSEREPORTEQUIPMENT = 10;
+  private static final int LAYOUT_FRAGMENTCHOOSEREPORTDATE = 10;
 
-  private static final int LAYOUT_FRAGMENTCUSTOMERLIST = 11;
+  private static final int LAYOUT_FRAGMENTCHOOSEREPORTEQUIPMENT = 11;
 
-  private static final int LAYOUT_FRAGMENTDRAWROAD = 12;
+  private static final int LAYOUT_FRAGMENTCUSTOMERLIST = 12;
 
-  private static final int LAYOUT_FRAGMENTEQUIPMENTS = 13;
+  private static final int LAYOUT_FRAGMENTDRAWROAD = 13;
 
-  private static final int LAYOUT_FRAGMENTFULLREPORT = 14;
+  private static final int LAYOUT_FRAGMENTEQUIPMENTS = 14;
 
-  private static final int LAYOUT_FRAGMENTMESSAGELIST = 15;
+  private static final int LAYOUT_FRAGMENTFULLREPORT = 15;
 
   private static final int LAYOUT_FRAGMENTMIXERLIST = 16;
 
@@ -160,13 +160,13 @@ public class DataBinderMapperImpl extends DataBinderMapper {
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.activity_mixer, LAYOUT_ACTIVITYMIXER);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.activity_pomp, LAYOUT_ACTIVITYPOMP);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.activity_test, LAYOUT_ACTIVITYTEST);
+    INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.fragment_admin_message_list, LAYOUT_FRAGMENTADMINMESSAGELIST);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.fragment_choose_report_date, LAYOUT_FRAGMENTCHOOSEREPORTDATE);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.fragment_choose_report_equipment, LAYOUT_FRAGMENTCHOOSEREPORTEQUIPMENT);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.fragment_customer_list, LAYOUT_FRAGMENTCUSTOMERLIST);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.fragment_draw_road, LAYOUT_FRAGMENTDRAWROAD);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.fragment_equipments, LAYOUT_FRAGMENTEQUIPMENTS);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.fragment_full_report, LAYOUT_FRAGMENTFULLREPORT);
-    INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.fragment_message_list, LAYOUT_FRAGMENTMESSAGELIST);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.fragment_mixer_list, LAYOUT_FRAGMENTMIXERLIST);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.fragment_report, LAYOUT_FRAGMENTREPORT);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.behraz.fastermixer.batch.R.layout.fragment_summery_report, LAYOUT_FRAGMENTSUMMERYREPORT);
@@ -255,6 +255,12 @@ public class DataBinderMapperImpl extends DataBinderMapper {
           }
           throw new IllegalArgumentException("The tag for activity_test is invalid. Received: " + tag);
         }
+        case  LAYOUT_FRAGMENTADMINMESSAGELIST: {
+          if ("layout/fragment_admin_message_list_0".equals(tag)) {
+            return new FragmentAdminMessageListBindingImpl(component, view);
+          }
+          throw new IllegalArgumentException("The tag for fragment_admin_message_list is invalid. Received: " + tag);
+        }
         case  LAYOUT_FRAGMENTCHOOSEREPORTDATE: {
           if ("layout/fragment_choose_report_date_0".equals(tag)) {
             return new FragmentChooseReportDateBindingImpl(component, view);
@@ -290,12 +296,6 @@ public class DataBinderMapperImpl extends DataBinderMapper {
             return new FragmentFullReportBindingImpl(component, view);
           }
           throw new IllegalArgumentException("The tag for fragment_full_report is invalid. Received: " + tag);
-        }
-        case  LAYOUT_FRAGMENTMESSAGELIST: {
-          if ("layout/fragment_message_list_0".equals(tag)) {
-            return new FragmentMessageListBindingImpl(component, view);
-          }
-          throw new IllegalArgumentException("The tag for fragment_message_list is invalid. Received: " + tag);
         }
         case  LAYOUT_FRAGMENTMIXERLIST: {
           if ("layout/fragment_mixer_list_0".equals(tag)) {
@@ -548,13 +548,13 @@ public class DataBinderMapperImpl extends DataBinderMapper {
       sKeys.put("layout/activity_mixer_0", com.behraz.fastermixer.batch.R.layout.activity_mixer);
       sKeys.put("layout/activity_pomp_0", com.behraz.fastermixer.batch.R.layout.activity_pomp);
       sKeys.put("layout/activity_test_0", com.behraz.fastermixer.batch.R.layout.activity_test);
+      sKeys.put("layout/fragment_admin_message_list_0", com.behraz.fastermixer.batch.R.layout.fragment_admin_message_list);
       sKeys.put("layout/fragment_choose_report_date_0", com.behraz.fastermixer.batch.R.layout.fragment_choose_report_date);
       sKeys.put("layout/fragment_choose_report_equipment_0", com.behraz.fastermixer.batch.R.layout.fragment_choose_report_equipment);
       sKeys.put("layout/fragment_customer_list_0", com.behraz.fastermixer.batch.R.layout.fragment_customer_list);
       sKeys.put("layout/fragment_draw_road_0", com.behraz.fastermixer.batch.R.layout.fragment_draw_road);
       sKeys.put("layout/fragment_equipments_0", com.behraz.fastermixer.batch.R.layout.fragment_equipments);
       sKeys.put("layout/fragment_full_report_0", com.behraz.fastermixer.batch.R.layout.fragment_full_report);
-      sKeys.put("layout/fragment_message_list_0", com.behraz.fastermixer.batch.R.layout.fragment_message_list);
       sKeys.put("layout/fragment_mixer_list_0", com.behraz.fastermixer.batch.R.layout.fragment_mixer_list);
       sKeys.put("layout/fragment_report_0", com.behraz.fastermixer.batch.R.layout.fragment_report);
       sKeys.put("layout/fragment_summery_report_0", com.behraz.fastermixer.batch.R.layout.fragment_summery_report);

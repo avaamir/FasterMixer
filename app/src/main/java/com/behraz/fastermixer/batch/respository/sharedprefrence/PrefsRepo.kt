@@ -5,10 +5,10 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 
 object PrefsRepo {
-    const val PREF_CREDENTIAL_USER = "username"
-    const val PREF_CREDENTIAL_PASSWORD = "password"
-    const val PREF_CREDENTIAL_FACTORY_ID = "factoryId"
-    const val PREF_CREDENTIAL_REMEMBERED = "remembered"
+    private const val PREF_CREDENTIAL_USER = "username"
+    private const val PREF_CREDENTIAL_PASSWORD = "password"
+    private const val PREF_CREDENTIAL_FACTORY_ID = "factoryId"
+    private const val PREF_CREDENTIAL_REMEMBERED = "remembered"
 
 
     private lateinit var prefs: SharedPreferences
@@ -50,7 +50,6 @@ object PrefsRepo {
             .putBoolean(PREF_CREDENTIAL_REMEMBERED, false)
             .apply()
     }
-
 
     fun flush() {
         prefs.edit().clear().apply()

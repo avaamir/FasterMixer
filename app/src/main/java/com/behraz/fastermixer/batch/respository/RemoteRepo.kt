@@ -18,6 +18,7 @@ import com.behraz.fastermixer.batch.utils.fastermixer.fakeFullReports
 import com.behraz.fastermixer.batch.utils.general.RunOnceLiveData
 import com.behraz.fastermixer.batch.utils.general.RunOnceMutableLiveData
 import com.behraz.fastermixer.batch.utils.general.launchApi
+import com.behraz.fastermixer.batch.utils.general.log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -143,9 +144,94 @@ object RemoteRepo {
     }
 
 
+    private fun <Res : Any> post(url: String, clazz: Class<Res>): ApiResult<Res> {
+        val client = OkHttpClient()
 
+        val mediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
+        val body = "{}".toRequestBody(mediaType)
+        val mRequest = Request.Builder()
+            .url(url)
+            .post(body)
+            .build()
+
+        var response: okhttp3.Response? = null
+        return try {
+            response = client.newCall(mRequest).execute()
+            if (response.isSuccessful) {
+                val strResponse = response.body!!.string()
+                log("okhttp:->$url, post:200:$strResponse")
+                //val responseType = object : TypeToken<ApiResult<Res>>() {}.type
+                val responseType = TypeToken.getParameterized(ApiResult::class.java, clazz).type
+                val result: ApiResult<Res> = Gson().fromJson(strResponse, responseType)
+                result.errorType = ErrorType.OK
+                result
+            } else {
+                log("okhttp:->$url,post:${response.code}")
+                val errorType = response.code.parseHttpCodeToErrorType()
+                if (errorType == ErrorType.UnAuthorized) {
+                    UserConfigs.logout()
+                }
+                failedRequest(errorType)
+            }
+        } catch (e: IOException) {
+            failedRequest(response?.code?.parseHttpCodeToErrorType() ?: ErrorType.NetworkError)
+        }
+    }
+
+    private fun <Req : Any, Res : Any> post(url: String, request: Req , clazz: Class<Res>): ApiResult<Res> {
+        val client = OkHttpClient()
+
+        val mediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
+
+        val type = object : TypeToken<Req>() {}.type
+        val data = Gson().toJson(request, type)
+        val body = data.toRequestBody(mediaType)
+        val mRequest = Request.Builder()
+            .url(url)
+            .post(body)
+            .build()
+
+        var response: okhttp3.Response? = null
+        return try {
+            response = client.newCall(mRequest).execute()
+            if (response.isSuccessful) {
+                val strResponse = response.body!!.string()
+                log("okhttp:->$url, post:200:$strResponse")
+                val responseType = object : TypeToken<ApiResult<Res>>() {}.type
+                val result: ApiResult<Res> = Gson().fromJson(strResponse, responseType)
+                result.errorType = ErrorType.OK
+                result
+            } else {
+                log("okhttp:->$url,post:${response.code}")
+                val errorType = response.code.parseHttpCodeToErrorType()
+                if (errorType == ErrorType.UnAuthorized) {
+                    UserConfigs.logout()
+                }
+                failedRequest(errorType)
+            }
+        } catch (e: IOException) {
+            failedRequest(response?.code?.parseHttpCodeToErrorType() ?: ErrorType.NetworkError)
+        }
+    }
 
     private fun getServerAddress(
+        loginRequest: LoginRequest,
+        tryOnUnAuthorized: Boolean
+    ): ApiResult<String> {
+        val result = post(
+            "${ApiService.DEFAULT_DOMAIN}/api/v1/Users/Get",
+            loginRequest,
+            String::class.java
+        )
+        if (result.errorType == ErrorType.UnAuthorized) {
+            if (tryOnUnAuthorized) {
+                return getServerAddress(loginRequest, false)
+            }
+        }
+        return result
+    }
+
+    /*private fun getServerAddress2(
         loginRequest: LoginRequest,
         tryOnUnAuthorized: Boolean
     ): ApiResult<String> {
@@ -164,11 +250,13 @@ object RemoteRepo {
             response = client.newCall(request).execute()
             if (response.isSuccessful) {
                 val strResponse = response.body!!.string()
+                log("okhttp:getServerAddress:200:$strResponse")
                 val responseType = object : TypeToken<ApiResult<String>>() {}.type
                 val result: ApiResult<String> = Gson().fromJson(strResponse, responseType)
                 result.errorType = ErrorType.OK
                 result
             } else {
+                log("okhttp:getServerAddress:${response.code}")
                 val errorType = response.code.parseHttpCodeToErrorType()
                 if (errorType == ErrorType.UnAuthorized) {
                     UserConfigs.logout()
@@ -181,7 +269,7 @@ object RemoteRepo {
         } catch (e: IOException) {
             failedRequest(response?.code?.parseHttpCodeToErrorType() ?: ErrorType.NetworkError)
         }
-    }
+    }*/
 
     private suspend fun getToken(
         loginRequest: LoginRequest
@@ -204,6 +292,12 @@ object RemoteRepo {
                     val addressResult = getServerAddress(loginRequest, true)
                     if (addressResult.isSucceed) {
                         ApiService.setAddress(addressResult.entity ?: ApiService.DEFAULT_DOMAIN)
+
+
+                        if (UserConfigs.isLoggedIn) {
+                            ApiService.setToken(null)
+                            UserConfigs.logout() //token az apiService pak shavad
+                        }
 
                         val tokenResult = getToken(loginRequest)
                         if (tokenResult.isSucceed) {
@@ -379,7 +473,22 @@ object RemoteRepo {
     }
 
 
-    fun checkUpdates() = apiReq(ApiService.client::checkUpdates)
+    //fun checkUpdates2() = apiReq(ApiService.client::checkUpdates)
+
+    fun checkUpdates(): LiveData<ApiResult<UpdateResponse>> {
+        return object : RunOnceLiveData<ApiResult<UpdateResponse>>() {
+            override fun onActiveRunOnce() {
+                Thread {
+                    val result: ApiResult<UpdateResponse> = post(
+                        "${ApiService.DEFAULT_DOMAIN}/api/v1/AppVersion/FindLastAppVersion",
+                        UpdateResponse::class.java
+                    )
+                    postValue(result)
+                }.start()
+            }
+        }
+    }
+
 
     fun getFullReport(request: GetReportRequest.FullReportRequest) =
         apiReq(request, ApiService.client::getFullReport)
