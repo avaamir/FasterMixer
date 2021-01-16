@@ -16,6 +16,7 @@ import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ActivityAdminBinding
 import com.behraz.fastermixer.batch.models.AdminEquipment
 import com.behraz.fastermixer.batch.models.Plan
+import com.behraz.fastermixer.batch.models.Service
 import com.behraz.fastermixer.batch.ui.adapters.ViewPagerAdapter
 import com.behraz.fastermixer.batch.ui.fragments.BaseNavFragment
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
@@ -243,6 +244,10 @@ class AdminActivity : AppCompatActivity(),
             R.id.serviceFragment -> {
                 val plan = arguments?.getParcelable<Plan>(Constants.INTENT_SERVICE_PLAN)
                 toolbarTitle = "$toolbarTitle ${plan?.customerName ?: ""}"
+            }
+            R.id.serviceHistoryFragment -> {
+                val service = arguments?.getParcelable<Service>(Constants.INTENT_SERVICE)
+                toolbarTitle = "$toolbarTitle ${service?.vehicleName ?: ""}"
             }
         }
 

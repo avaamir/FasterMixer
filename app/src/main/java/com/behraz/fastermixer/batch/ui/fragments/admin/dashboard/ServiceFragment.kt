@@ -84,7 +84,7 @@ class ServiceFragment : Fragment(), ServiceAdapter.Interaction {
     override fun onServiceHistoryClicked(item: Service) {
         navigate(R.id.action_serviceFragment_to_serviceHistoryFragment, Bundle().apply {
             putParcelable(Constants.INTENT_SERVICE_PLAN, viewModel.plan)
-            putInt(Constants.INTENT_VEHICLE_ID, item.vehicleId)
+            putParcelable(Constants.INTENT_SERVICE, item)
         })
     }
 }

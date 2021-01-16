@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.models.Plan
+import com.behraz.fastermixer.batch.models.Service
 import com.behraz.fastermixer.batch.models.requests.behraz.ErrorType.NetworkError
 import com.behraz.fastermixer.batch.ui.adapters.ServiceAdapter
 import com.behraz.fastermixer.batch.ui.animations.crossfade
@@ -29,8 +30,8 @@ class ServiceHistoryFragment : Fragment() {
         if (viewModel.plan == null) {
             arguments?.let {
                 val plan: Plan = it.getParcelable(Constants.INTENT_SERVICE_PLAN)!!
-                val vehicleId = it.getInt(Constants.INTENT_VEHICLE_ID, 0)
-                viewModel.setData(vehicleId, plan)
+                val service = it.getParcelable<Service>(Constants.INTENT_SERVICE)!!
+                viewModel.setData(service.vehicleId, plan)
             }
         }
     }
