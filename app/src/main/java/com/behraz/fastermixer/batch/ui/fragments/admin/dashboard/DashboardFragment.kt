@@ -19,6 +19,7 @@ import com.behraz.fastermixer.batch.ui.fragments.navigate
 import com.behraz.fastermixer.batch.utils.general.Event
 import com.behraz.fastermixer.batch.utils.general.createSpannableString
 import com.behraz.fastermixer.batch.utils.general.exhaustive
+import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
@@ -83,9 +84,10 @@ class DashboardFragment : Fragment(), OnChartValueSelectedListener {
 
 
     private fun subscribeObservers() {
-        adminActivityViewModel.plans.observe(viewLifecycleOwner, {
-            if (it != null) {
-                if (it.isSucceed) {
+        adminActivityViewModel.plans.observe(viewLifecycleOwner) {
+            if (it.isSucceed) {
+                val plans = it.entity!!
+                if (plans.isNotEmpty()) {
                     if (mBinding.frameRequests.visibility != View.VISIBLE) {
                         mBinding.frameRequests.visibility = View.VISIBLE
                         TransitionManager.beginDelayedTransition(
@@ -96,14 +98,12 @@ class DashboardFragment : Fragment(), OnChartValueSelectedListener {
                     var sum = 0.0
                     var delivered = 0.0
 
-                    it.entity?.let { plans ->
-                        mBinding.tvRequestCount.text = plans.size.toString()
-                        plans.forEach { plan ->
-                            sum += plan.plannedAmount
-                            delivered += plan.sentAmount
-                        }
-                        mBinding.tvTotalRequestVolume.text = sum.toString()
+                    mBinding.tvRequestCount.text = plans.size.toString()
+                    plans.forEach { plan ->
+                        sum += plan.plannedAmount
+                        delivered += plan.sentAmount
                     }
+                    mBinding.tvTotalRequestVolume.text = sum.toString()
 
                     val remain = sum - delivered
 
@@ -123,56 +123,50 @@ class DashboardFragment : Fragment(), OnChartValueSelectedListener {
                     )
                 }
             } else {
-                //TODO
+                toast(it.message)
             }
-        })
+        }
 
-        adminActivityViewModel.equipments.observe(viewLifecycleOwner, {
-            if (it != null) {
-                if (it.isSucceed) {
-                    it.entity?.let { equipments ->
-                        var fixing = 0
-                        var off = 0
-                        var on = 0
-                        var other = 0
+        adminActivityViewModel.equipments.observe(viewLifecycleOwner) {
+            if (it.isSucceed) {
+                val equipments = it.entity!!
+                var fixing = 0
+                var off = 0
+                var on = 0
+                var other = 0
 
-                        equipments.forEach { equipment ->
-                            when (equipment.state) {
-                                EquipmentState.Fixing -> fixing++
-                                EquipmentState.Off -> off++
-                                EquipmentState.Using -> on++
-                                EquipmentState.Other -> other++
-                            }.exhaustive()
-                        }
-
-                        mBinding.tvOn.text = on.toString()
-                        mBinding.tvOff.text = off.toString()
-                        mBinding.tvRepair.text = fixing.toString()
-
-                        val vehicleChartMap = hashMapOf(
-                            Pair("روشن", on.toFloat()),
-                            Pair("خاموش", off.toFloat()),
-                            Pair("تعمیری", fixing.toFloat())
-                        )
-
-                        if (other != 0) {
-                            vehicleChartMap["دیگر"] = other.toFloat()
-                        }
-
-                        setPieData(
-                            mBinding.vehiclesChart, vehicleChartMap,
-                            shouldAnimate = isFirstEqLoad
-                        )
-                        isFirstEqLoad = false
-                    }
-
-                } else {
-                    //TODO
+                equipments.forEach { equipment ->
+                    when (equipment.state) {
+                        EquipmentState.Fixing -> fixing++
+                        EquipmentState.Off -> off++
+                        EquipmentState.Using -> on++
+                        EquipmentState.Other -> other++
+                    }.exhaustive()
                 }
+
+                mBinding.tvOn.text = on.toString()
+                mBinding.tvOff.text = off.toString()
+                mBinding.tvRepair.text = fixing.toString()
+
+                val vehicleChartMap = hashMapOf(
+                    Pair("روشن", on.toFloat()),
+                    Pair("خاموش", off.toFloat()),
+                    Pair("تعمیری", fixing.toFloat())
+                )
+
+                if (other != 0) {
+                    vehicleChartMap["دیگر"] = other.toFloat()
+                }
+
+                setPieData(
+                    mBinding.vehiclesChart, vehicleChartMap,
+                    shouldAnimate = isFirstEqLoad
+                )
+                isFirstEqLoad = false
             } else {
-                //TODO
+                toast(it.message)
             }
-        })
+        }
     }
 
 
