@@ -178,7 +178,11 @@ object RemoteRepo {
         }
     }
 
-    private fun <Req : Any, Res : Any> post(url: String, request: Req , clazz: Class<Res>): ApiResult<Res> {
+    private fun <Req : Any, Res : Any> post(
+        url: String,
+        request: Req,
+        clazz: Class<Res>
+    ): ApiResult<Res> {
         val client = OkHttpClient()
 
         val mediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
@@ -289,11 +293,26 @@ object RemoteRepo {
         return object : RunOnceMutableLiveData<ApiResult<User>?>() {
             override fun onActiveRunOnce() {
                 CoroutineScope(IO + serverJobs).launchApi({
-                    val addressResult = getServerAddress(loginRequest, true)
-                    if (addressResult.isSucceed) {
-                        ApiService.setAddress(addressResult.entity ?: ApiService.DEFAULT_DOMAIN)
+                    var isClientAddressReady =
+                        ApiService.companyCode == loginRequest.factoryCode.toInt()
 
+                    if (!isClientAddressReady) {
+                        val addressResult = getServerAddress(loginRequest, true)
+                        if (addressResult.isSucceed) {
+                            isClientAddressReady = true
+                            ApiService.setAddress(
+                                addressResult.entity ?: ApiService.DEFAULT_DOMAIN,
+                                loginRequest.factoryCode.toInt()
+                            )
+                        } else {
+                            withContext(Main) {
+                                value = failedRequest(addressResult.errorType, addressResult.message)
+                            }
+                            return@launchApi
+                        }
+                    }
 
+                    if (isClientAddressReady) {
                         if (UserConfigs.isLoggedIn) {
                             ApiService.setToken(null)
                             UserConfigs.logout() //token az apiService pak shavad
@@ -330,10 +349,6 @@ object RemoteRepo {
                             withContext(Main) {
                                 value = failedRequest(tokenResult.errorType, tokenResult.message)
                             }
-                        }
-                    } else {
-                        withContext(Main) {
-                            value = failedRequest(addressResult.errorType, addressResult.message)
                         }
                     }
                 }, {

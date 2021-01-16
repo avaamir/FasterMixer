@@ -53,7 +53,7 @@ interface DtoMapper<TO> {
 
 enum class ErrorType(val code: Int, val message: String) {
     Unknown(0, Constants.SERVER_ERROR),
-    NetworkError(1, "خطا در اینترنت دستگاه"),
+    NetworkError(1, "خطا در اینترنت دستگاه یا اتصال به سرور"),
     OK(200, "موفق"),
     BadRequest(400, "پارامترهای ارسالی نادرست است"),
     UnAuthorized(401, "نیاز به ورود مجدد"),

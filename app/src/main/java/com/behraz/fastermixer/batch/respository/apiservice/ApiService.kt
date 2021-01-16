@@ -15,10 +15,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object ApiService {
+    var companyCode = 0
+        private set
     const val DEFAULT_DOMAIN = "http://78.39.159.41:9001"
     var domain = DEFAULT_DOMAIN
         private set
-    val BASE_API_URL get() = "$domain/api/v1/"
+    private val BASE_API_URL get() = "$domain/api/v1/"
 
     private lateinit var networkAvailability: NetworkConnectionInterceptor.NetworkAvailability
     private lateinit var errorHandler: GlobalErrorHandlerInterceptor.ApiResponseErrorHandler
@@ -85,8 +87,9 @@ object ApiService {
     }
 
     @Synchronized
-    fun setAddress(address: String) {
+    fun setAddress(address: String, companyCode: Int) {
         if (address != domain) {
+            this.companyCode = companyCode
             mClient = null
             domain = address
         }
