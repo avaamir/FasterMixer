@@ -77,7 +77,7 @@ interface TiamClient {
     @POST("Vehicles/GetAll")
     suspend fun getEquipmentsForAdmin(): ApiResult<List<AdminEquipment>>
 
-    @POST("Request/GetRequestNotEnded")
+    @POST("Request/GetAllRequest")
     suspend fun getPlansForAdmin(): ApiResult<List<Plan>>
 
     @POST("Plannings/GetActivePlaningServiceForRequest/{requestId}")
