@@ -480,7 +480,13 @@ object RemoteRepo {
 
     //Admin
     fun getEquipmentsForAdmin() = apiReq(ApiService.client::getEquipmentsForAdmin)
-    fun getPlansForAdmin() = apiReq(ApiService.client::getPlansForAdmin)
+
+    fun getAllPlansForAdmin() = apiReq(ApiService.client::getAllPlansForAdmin)
+    fun getTodayPlansForAdmin() = apiReq(ApiService.client::getTodayPlansForAdmin)
+    fun getFuturePlansForAdmin() = apiReq(ApiService.client::getFuturePlansForAdmin)
+    fun getPastPlansForAdmin() = apiReq(ApiService.client::getPastPlansForAdmin)
+    fun getNotFinishedPlansForAdmin() = apiReq(ApiService.client::getNotFinishedPlansForAdmin)
+
 
     fun getAdminAccountPageData(): LiveData<GetAdminAccountPage> {
         //TODO not yet implemented

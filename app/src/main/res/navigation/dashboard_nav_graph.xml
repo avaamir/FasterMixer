@@ -17,7 +17,7 @@
     <fragment
         android:id="@+id/requestsFragment"
         android:name="com.behraz.fastermixer.batch.ui.fragments.admin.dashboard.RequestsFragment"
-        android:label="درخواست های امروز"
+        android:label="درخواست های"
         tools:layout="@layout/layout_fragment_requests" >
         <action
             android:id="@+id/action_requestsFragment_to_serviceFragment"

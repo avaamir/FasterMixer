@@ -103,7 +103,7 @@ class DashboardFragment : Fragment(), OnChartValueSelectedListener {
                         sum += plan.plannedAmount
                         delivered += plan.sentAmount
                     }
-                    mBinding.tvTotalRequestVolume.text = sum.toString()
+                    mBinding.tvTotalRequestVolume.text = sum.toInt().toString()
 
                     val remain = sum - delivered
 

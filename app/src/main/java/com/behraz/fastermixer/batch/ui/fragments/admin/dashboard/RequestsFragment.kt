@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -13,9 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.LayoutFragmentRequestsBinding
 import com.behraz.fastermixer.batch.models.Plan
+import com.behraz.fastermixer.batch.models.enums.PlanType
+import com.behraz.fastermixer.batch.ui.adapters.MySimpleSpinnerAdapter
 import com.behraz.fastermixer.batch.ui.adapters.PlanAdapter
 import com.behraz.fastermixer.batch.ui.fragments.navigate
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
+import com.behraz.fastermixer.batch.utils.general.getEnumById
 import com.behraz.fastermixer.batch.utils.general.toast
 import com.behraz.fastermixer.batch.viewmodels.AdminActivityViewModel
 
@@ -31,7 +35,8 @@ class RequestsFragment : Fragment(), PlanAdapter.Interactions {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        adminActivityViewModel = ViewModelProvider(requireActivity()).get(AdminActivityViewModel::class.java)
+        adminActivityViewModel =
+            ViewModelProvider(requireActivity()).get(AdminActivityViewModel::class.java)
         mBinding =
             DataBindingUtil.inflate(inflater, R.layout.layout_fragment_requests, container, false)
         initViews()
@@ -49,6 +54,39 @@ class RequestsFragment : Fragment(), PlanAdapter.Interactions {
                 RecyclerView.VERTICAL
             )
         )*/
+
+        mBinding.spinnerSortOrder.adapter = MySimpleSpinnerAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            PlanType.values().map {
+                it.nameFa
+            }
+        )
+
+        mBinding.spinnerSortOrder.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parentView: AdapterView<*>?) {
+
+                }
+
+                override fun onItemSelected(
+                    parentView: AdapterView<*>?,
+                    selectedItemView: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    if (position != -1)
+                        adminActivityViewModel.planType = getEnumById(PlanType::ordinal, position)
+                    /*when (position) {
+                        0 -> adminActivityViewModel.planType = PlanType.Today
+                        1 -> adminActivityViewModel.planType = PlanType.All
+                        2 -> adminActivityViewModel.planType = PlanType.Future
+                        3 -> adminActivityViewModel.planType = PlanType.Past
+                        4 -> adminActivityViewModel.planType = PlanType.NotEnded
+                    }*/
+                }
+
+            }
     }
 
     @SuppressLint("SetTextI18n")

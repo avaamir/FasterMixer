@@ -1,20 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray200">
+        android:background="@color/gray200"
+        android:fillViewport="true">
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerPlans"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:itemCount="2"
-            tools:listitem="@layout/item_plan" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
 
-    </FrameLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="right">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@drawable/bg_spinner" >
+
+                    <Spinner
+                        android:id="@+id/spinner_sort_order"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:gravity="center"/>
+
+
+                </FrameLayout>
+
+
+
+
+            </LinearLayout>
+
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerPlans"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:itemCount="2"
+                tools:listitem="@layout/item_plan" />
+
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
 </layout>

@@ -4,13 +4,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.map
 import com.behraz.fastermixer.batch.models.AdminEquipment
+import com.behraz.fastermixer.batch.models.Plan
 import com.behraz.fastermixer.batch.models.User
+import com.behraz.fastermixer.batch.models.enums.PlanType.*
 import com.behraz.fastermixer.batch.models.enums.ReportType
+import com.behraz.fastermixer.batch.models.requests.behraz.ApiResult
 import com.behraz.fastermixer.batch.models.requests.behraz.succeedRequest
 import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.behraz.fastermixer.batch.utils.general.DoubleTrigger
 import com.behraz.fastermixer.batch.utils.general.Event
+import com.behraz.fastermixer.batch.utils.general.exhaustiveAsExpression
 
 class AdminActivityViewModel : EquipmentViewModel() {
     //UI Events
@@ -40,10 +44,31 @@ class AdminActivityViewModel : EquipmentViewModel() {
         }
     }
 
+    var planType = Today
+        set(value) {
+            field = value
+            getPlansEvent.value = Event(Unit)
+        }
 
+    private var pastRequests: ApiResult<List<Plan>>? = null
     private val getPlansEvent = MutableLiveData(Event(Unit))
     val plans = Transformations.switchMap(getPlansEvent) {
-        RemoteRepo.getPlansForAdmin()
+        when (planType) {
+            Today -> RemoteRepo.getTodayPlansForAdmin()
+            All -> RemoteRepo.getAllPlansForAdmin()
+            Future -> RemoteRepo.getFuturePlansForAdmin()
+            Past -> {
+                //TODO chun darkhast haye gozashte emkan nadarad dar tool ke baname baz hast avaz beshavad (magar in ke az saat 12 shab rad beshavad va vared rooze jadid shavim) yek bar ke req zadim dar memory zakhire mikonim va harbar az haman cache estefade mikonim
+                if (pastRequests != null) MutableLiveData(pastRequests!!) else RemoteRepo.getPastPlansForAdmin()
+                    .map {
+                        if (it.isSucceed) {
+                            pastRequests = it
+                        }
+                        it
+                    }
+            }
+            NotEnded -> RemoteRepo.getNotFinishedPlansForAdmin()
+        }.exhaustiveAsExpression()
     }
 
     private val getEquipmentsEvent = MutableLiveData(Event(Unit))

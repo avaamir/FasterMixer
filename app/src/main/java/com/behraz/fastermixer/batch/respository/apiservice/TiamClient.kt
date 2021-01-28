@@ -78,7 +78,15 @@ interface TiamClient {
     suspend fun getEquipmentsForAdmin(): ApiResult<List<AdminEquipment>>
 
     @POST("Request/GetAllRequest")
-    suspend fun getPlansForAdmin(): ApiResult<List<Plan>>
+    suspend fun getAllPlansForAdmin(): ApiResult<List<Plan>>
+    @POST("Request/GetAllTodayRequestForApp")
+    suspend fun getTodayPlansForAdmin(): ApiResult<List<Plan>>
+    @POST("Request/GetAllFutureRequestForApp")
+    suspend fun getFuturePlansForAdmin(): ApiResult<List<Plan>>
+    @POST("Request/GetAllPastRequestForApp")
+    suspend fun getPastPlansForAdmin(): ApiResult<List<Plan>>
+    @POST("Request/GetAllNotEndedRequestForApp")
+    suspend fun getNotFinishedPlansForAdmin(): ApiResult<List<Plan>>
 
     @POST("Plannings/GetActivePlaningServiceForRequest/{requestId}")
     suspend fun getActiveServices(@Path("requestId") requestId: Int): ApiResult<List<Service>>
