@@ -44,16 +44,10 @@ class AdminActivityViewModel : EquipmentViewModel() {
         }
     }
 
-    var planType = Today
-        set(value) {
-            field = value
-            getPlansEvent.value = Event(Unit)
-        }
-
     private var pastRequests: ApiResult<List<Plan>>? = null
-    private val getPlansEvent = MutableLiveData(Event(Unit))
-    val plans = Transformations.switchMap(getPlansEvent) {
-        when (planType) {
+    val planType = MutableLiveData(Event(Today))
+    val plans = Transformations.switchMap(planType) { _planType ->
+        when (_planType.peekContent()) {
             Today -> RemoteRepo.getTodayPlansForAdmin()
             All -> RemoteRepo.getAllPlansForAdmin()
             Future -> RemoteRepo.getFuturePlansForAdmin()
@@ -116,7 +110,7 @@ class AdminActivityViewModel : EquipmentViewModel() {
 
     override fun onTimerTick(user: User) {
         getMessagesEvent?.postValue(Event(Unit)) //chun timer dar kelas super call mishe inja hanuz init nashode khater hamin not null budan check mishe
-        getPlansEvent?.postValue(Event(Unit)) //chun timer dar kelas super call mishe inja hanuz init nashode khater hamin not null budan check mishe
+        planType?.postValue(planType.value) //chun timer dar kelas super call mishe inja hanuz init nashode khater hamin not null budan check mishe
         getEquipmentsEvent?.postValue(Event(Unit))
     }
 

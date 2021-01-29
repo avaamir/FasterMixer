@@ -28,12 +28,17 @@ data class Plan(
     @SerializedName("sendValue")
     val sentAmount: Float,
 
+    @SerializedName("date")
+    private val _date : String?,
+
     @SerializedName("requestState")
     private val _requestState: Int,
     @SerializedName("geofencePoint")
     private val _location: String?,
 ) : Parcelable {
     val address get() = if (_address.isNotBlank()) _address else "نامشخص"
+
+    val date get() = _date ?: "نامشخص"
 
     val locationFence get() = if (_location != null) Fence.strToFence(_location) else null //if requestState == Canceled or Reserved _location could be null
     val requestState get() = getEnumById(RequestState::id, _requestState)

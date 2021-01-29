@@ -1,5 +1,6 @@
 package com.behraz.fastermixer.batch.ui.fragments.admin.dashboard
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.transition.AutoTransition
@@ -54,7 +55,7 @@ class DashboardFragment : Fragment(), OnChartValueSelectedListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         adminActivityViewModel =
             ViewModelProvider(requireActivity()).get(AdminActivityViewModel::class.java)
         mBinding =
@@ -83,13 +84,20 @@ class DashboardFragment : Fragment(), OnChartValueSelectedListener {
     }
 
 
+    @SuppressLint("SetTextI18n")
     private fun subscribeObservers() {
+        adminActivityViewModel.planType.observe(viewLifecycleOwner) { event ->
+            event.getEventIfNotHandled()?.let { planType ->
+                mBinding.tvRequestTitle.text = "درخواست های ${planType.nameFa}"
+            }
+        }
+
         adminActivityViewModel.plans.observe(viewLifecycleOwner) {
             if (it.isSucceed) {
                 val plans = it.entity!!
                 if (plans.isNotEmpty()) {
-                    if (mBinding.frameRequests.visibility != View.VISIBLE) {
-                        mBinding.frameRequests.visibility = View.VISIBLE
+                    if (mBinding.requestChart.visibility != View.VISIBLE) {
+                        mBinding.requestChart.visibility = View.VISIBLE
                         TransitionManager.beginDelayedTransition(
                             mBinding.frameRequests,
                             AutoTransition()
@@ -116,11 +124,9 @@ class DashboardFragment : Fragment(), OnChartValueSelectedListener {
                     )
                     isFirstReqLoad = false
                 } else {
-                    mBinding.frameRequests.visibility = View.GONE
-                    TransitionManager.beginDelayedTransition(
-                        mBinding.frameRequests,
-                        AutoTransition()
-                    )
+                    mBinding.requestChart.visibility = View.GONE
+                    mBinding.tvRequestCount.text = "0"
+                    mBinding.tvTotalRequestVolume.text = "0"
                 }
             } else {
                 toast(it.message)

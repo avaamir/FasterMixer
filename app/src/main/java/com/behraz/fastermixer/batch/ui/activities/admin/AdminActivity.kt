@@ -101,7 +101,7 @@ class AdminActivity : AppCompatActivity(),
             it?.entity?.size?.let { planCount ->
                 val dest = currentDest!!
                 if (dest.id == R.id.requestsFragment) {
-                    setToolbarTitle("${dest.label} ${viewModel.planType.nameFa} ($planCount)")
+                    setToolbarTitle("${dest.label} ${viewModel.planType.value!!.peekContent().nameFa} ($planCount)")
                 }
             }
         })
@@ -231,7 +231,7 @@ class AdminActivity : AppCompatActivity(),
         when (destination.id) {
             R.id.requestsFragment -> {
                 viewModel.plans.value?.entity?.size?.let { planCount ->
-                        toolbarTitle ="$toolbarTitle ${viewModel.planType.nameFa} ($planCount)"
+                        toolbarTitle ="$toolbarTitle ${viewModel.planType.value!!.peekContent().nameFa} ($planCount)"
                 }
             }
             R.id.fullReportFragment, R.id.summeryReportFragment, R.id.drawRoadFragment -> {

@@ -18,22 +18,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+            <ImageView
                 android:id="@+id/textView41"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:src="@drawable/ic_map"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="آدرس:"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:fontFamily="@font/iransans"
-                android:textColor="@color/gray700" />
+                app:layout_constraintTop_toTopOf="parent"   />
 
             <TextView
                 android:id="@+id/textView42"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp"
                 android:ellipsize="end"
                 android:fontFamily="@font/iransans"
@@ -41,20 +40,20 @@
                 android:maxLines="2"
                 android:text="@{plan.address}"
                 android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/textView41"
                 app:layout_constraintEnd_toStartOf="@+id/textView41"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView41"
                 tools:text="یزد- صفاییه" />
 
-            <TextView
+            <ImageView
                 android:id="@+id/textView43"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:fontFamily="@font/iransans"
-                android:text="نام مشتری:"
-                android:textColor="@color/gray700"
+                android:src="@drawable/ic_person"
+                app:tint="@color/btn_yellow"
                 app:layout_constraintEnd_toEndOf="@+id/textView41"
                 app:layout_constraintTop_toBottomOf="@+id/textView42" />
 
@@ -62,27 +61,28 @@
                 android:id="@+id/textView44"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp"
-                android:fontFamily="@font/iransans"
-                android:text="@{plan.customerName}"
-                android:maxEms="10"
-                android:singleLine="true"
-                android:maxLines="1"
                 android:ellipsize="end"
-                tools:text="امیر امیری"
+                android:fontFamily="@font/iransans"
+                android:maxEms="10"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="@{plan.customerName}"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/textView43"
                 app:layout_constraintEnd_toStartOf="@+id/textView43"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/textView51"
-                app:layout_constraintTop_toTopOf="@+id/textView43" />
+                app:layout_constraintTop_toTopOf="@+id/textView43"
+                tools:text="امیر امیری" />
 
             <TextView
                 android:id="@+id/textView45"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="بتن برنامه ریزی شده:"
+                android:text="برنامه ریزی شده:"
                 android:fontFamily="@font/iransans"
                 android:textColor="@color/gray700"
                 app:layout_constraintEnd_toEndOf="@+id/textView43"
@@ -94,14 +94,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 android:fontFamily="@font/iransans"
-                android:text="@{plan.plannedAmount + ` متر`}"
+                android:text="@{plan.plannedAmount + ` متر مکعب`}"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/textView45"
                 app:layout_constraintEnd_toStartOf="@+id/textView45"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/progressBar2"
                 app:layout_constraintTop_toTopOf="@+id/textView45"
-                tools:text="12 متر" />
+                tools:text="12 متر مکعب" />
 
             <TextView
                 android:id="@+id/textView47"
@@ -110,7 +110,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/iransans"
                 android:textColor="@color/gray700"
-                android:text="بتن ارسال شده:"
+                android:text="ارسال شده:"
                 app:layout_constraintEnd_toEndOf="@+id/textView45"
                 app:layout_constraintTop_toBottomOf="@+id/textView45" />
 
@@ -120,14 +120,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 android:fontFamily="@font/iransans"
-                android:text="@{plan.sentAmount + ` متر`}"
+                android:text="@{plan.sentAmount + ` متر مکعب`}"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/textView47"
                 app:layout_constraintEnd_toStartOf="@+id/textView47"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/progressBar2"
                 app:layout_constraintTop_toTopOf="@+id/textView47"
-                tools:text="4 متر" />
+                tools:text="4 متر مکعب" />
 
             <TextView
                 android:id="@+id/textView49"
@@ -137,8 +137,7 @@
                 android:layout_marginBottom="8dp"
                 android:fontFamily="@font/iransans"
                 android:textColor="@color/gray700"
-                android:text="بتن در انتظار:"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="در انتظار:"
                 app:layout_constraintEnd_toEndOf="@+id/textView47"
                 app:layout_constraintTop_toBottomOf="@+id/textView47" />
 
@@ -148,14 +147,42 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 android:fontFamily="@font/iransans"
-                android:text="@{plan.waitingAmount + ` متر`}"
+                android:text="@{plan.waitingAmount + ` متر مکعب`}"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/textView49"
                 app:layout_constraintEnd_toStartOf="@+id/textView49"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/progressBar2"
                 app:layout_constraintTop_toTopOf="@+id/textView49"
-                tools:text="3 متر" />
+                tools:text="3 متر مکعب" />
+
+            <TextView
+                android:id="@+id/textView73"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:fontFamily="@font/iransans"
+                android:textColor="@color/black"
+                android:text="@{plan.date}"
+                app:layout_constraintBottom_toBottomOf="@+id/textView52"
+                app:layout_constraintEnd_toStartOf="@+id/textView52"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/progressBar2"
+                app:layout_constraintTop_toTopOf="@+id/textView52"
+                tools:text="99/2/3" />
+
+            <ImageView
+                android:id="@+id/textView52"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/ic_calendar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/textView47"
+                app:layout_constraintTop_toBottomOf="@+id/textView49" />
+
+
 
             <ProgressBar
                 android:id="@+id/progressBar2"

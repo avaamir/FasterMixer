@@ -14,11 +14,12 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
     static {
         sIncludes = null;
         sViewsWithIds = new android.util.SparseIntArray();
-        sViewsWithIds.put(R.id.textView41, 9);
-        sViewsWithIds.put(R.id.textView43, 10);
-        sViewsWithIds.put(R.id.textView45, 11);
-        sViewsWithIds.put(R.id.textView47, 12);
-        sViewsWithIds.put(R.id.textView49, 13);
+        sViewsWithIds.put(R.id.textView41, 10);
+        sViewsWithIds.put(R.id.textView43, 11);
+        sViewsWithIds.put(R.id.textView45, 12);
+        sViewsWithIds.put(R.id.textView47, 13);
+        sViewsWithIds.put(R.id.textView49, 14);
+        sViewsWithIds.put(R.id.textView52, 15);
     }
     // views
     @NonNull
@@ -29,23 +30,25 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
     // Inverse Binding Event Handlers
 
     public ItemPlanBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 14, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 16, sIncludes, sViewsWithIds));
     }
     private ItemPlanBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
-            , (android.widget.ProgressBar) bindings[6]
-            , (android.widget.TextView) bindings[8]
+            , (android.widget.ProgressBar) bindings[7]
             , (android.widget.TextView) bindings[9]
+            , (android.widget.ImageView) bindings[10]
             , (android.widget.TextView) bindings[1]
-            , (android.widget.TextView) bindings[10]
+            , (android.widget.ImageView) bindings[11]
             , (android.widget.TextView) bindings[2]
-            , (android.widget.TextView) bindings[11]
-            , (android.widget.TextView) bindings[3]
             , (android.widget.TextView) bindings[12]
-            , (android.widget.TextView) bindings[4]
+            , (android.widget.TextView) bindings[3]
             , (android.widget.TextView) bindings[13]
+            , (android.widget.TextView) bindings[4]
+            , (android.widget.TextView) bindings[14]
             , (android.widget.TextView) bindings[5]
-            , (android.widget.TextView) bindings[7]
+            , (android.widget.TextView) bindings[8]
+            , (android.widget.ImageView) bindings[15]
+            , (android.widget.TextView) bindings[6]
             );
         this.mboundView0 = (androidx.cardview.widget.CardView) bindings[0];
         this.mboundView0.setTag(null);
@@ -57,6 +60,7 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
         this.textView48.setTag(null);
         this.textView50.setTag(null);
         this.textView51.setTag(null);
+        this.textView73.setTag(null);
         setRootTag(root);
         // listeners
         invalidateAll();
@@ -115,20 +119,21 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
             dirtyFlags = mDirtyFlags;
             mDirtyFlags = 0;
         }
-        java.lang.String planPlannedAmountJavaLangString = null;
         com.behraz.fastermixer.batch.models.Plan plan = mPlan;
         java.lang.String planAddress = null;
-        java.lang.String planWaitingAmountJavaLangString = null;
+        java.lang.String planSentAmountJavaLangString = null;
         float planPlannedAmount = 0f;
         boolean planProgressInt0 = false;
         java.lang.String planProgressJavaLangString = null;
         float planWaitingAmount = 0f;
+        java.lang.String planDate = null;
         java.lang.String planRequestStateTitle = null;
         float planSentAmount = 0f;
-        java.lang.String planSentAmountJavaLangString = null;
+        java.lang.String planPlannedAmountJavaLangString = null;
         int planProgress = 0;
         int planProgressInt0PlanProgressInt1 = 0;
         java.lang.String planCustomerName = null;
+        java.lang.String planWaitingAmountJavaLangString = null;
         com.behraz.fastermixer.batch.models.enums.RequestState planRequestState = null;
 
         if ((dirtyFlags & 0x3L) != 0) {
@@ -142,6 +147,8 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
                     planPlannedAmount = plan.getPlannedAmount();
                     // read plan.waitingAmount
                     planWaitingAmount = plan.getWaitingAmount();
+                    // read plan.date
+                    planDate = plan.getDate();
                     // read plan.sentAmount
                     planSentAmount = plan.getSentAmount();
                     // read plan.progress
@@ -153,12 +160,12 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
                 }
 
 
-                // read (plan.plannedAmount) + (" متر")
-                planPlannedAmountJavaLangString = (planPlannedAmount) + (" متر");
-                // read (plan.waitingAmount) + (" متر")
-                planWaitingAmountJavaLangString = (planWaitingAmount) + (" متر");
-                // read (plan.sentAmount) + (" متر")
-                planSentAmountJavaLangString = (planSentAmount) + (" متر");
+                // read (plan.plannedAmount) + (" متر مکعب")
+                planPlannedAmountJavaLangString = (planPlannedAmount) + (" متر مکعب");
+                // read (plan.waitingAmount) + (" متر مکعب")
+                planWaitingAmountJavaLangString = (planWaitingAmount) + (" متر مکعب");
+                // read (plan.sentAmount) + (" متر مکعب")
+                planSentAmountJavaLangString = (planSentAmount) + (" متر مکعب");
                 // read plan.progress != 0
                 planProgressInt0 = (planProgress) != (0);
                 // read (plan.progress) + ("%")
@@ -195,6 +202,7 @@ public class ItemPlanBindingImpl extends ItemPlanBinding  {
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView48, planSentAmountJavaLangString);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView50, planWaitingAmountJavaLangString);
             androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView51, planProgressJavaLangString);
+            androidx.databinding.adapters.TextViewBindingAdapter.setText(this.textView73, planDate);
         }
     }
     // Listener Stub Implementations

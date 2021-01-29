@@ -42,9 +42,9 @@
                             android:gravity="center"
                             android:orientation="horizontal"
                             android:padding="2dp"
-                            app:layout_constraintBottom_toBottomOf="@+id/textView73"
+                            app:layout_constraintBottom_toBottomOf="@+id/tvRequestTitle"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/textView73">
+                            app:layout_constraintTop_toTopOf="@+id/tvRequestTitle">
 
                             <ImageView
                                 android:layout_width="32dp"
@@ -61,7 +61,7 @@
                         </LinearLayout>
 
                         <TextView
-                            android:id="@+id/textView73"
+                            android:id="@+id/tvRequestTitle"
                             style="@style/my_title_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -81,19 +81,22 @@
                             android:layout_marginBottom="8dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView73" />
+                            app:layout_constraintTop_toBottomOf="@+id/tvRequestTitle" />
 
                         <TextView
                             android:id="@+id/textView74"
                             style="@style/my_gray_normal_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
                             android:layout_marginBottom="8dp"
                             android:text="تعداد کل:"
                             android:textColor="@color/black"
                             app:layout_constraintBottom_toTopOf="@+id/textView77"
-                            app:layout_constraintEnd_toEndOf="parent" />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvRequestTitle"
+                            app:layout_constraintVertical_bias="1.0" />
 
 
                         <TextView
@@ -115,9 +118,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
                             android:text="مجموع حجم:"
                             android:textColor="@color/black"
-                            app:layout_constraintBottom_toBottomOf="@+id/requestChart"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent" />
 
 
