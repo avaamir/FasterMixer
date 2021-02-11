@@ -132,7 +132,6 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
 
 
         numericKeyboard?.setInteractions {
-            //toast("هنوز پیاده سازی نشده است. لطفا از کیبرد گوشی خود استفاده کنید")
             when (it) {
                 NumericKeyboard.State.Password.name -> {
                     etPassword.requestFocus()

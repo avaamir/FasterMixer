@@ -38,7 +38,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:supportsRtl">
-        <activity android:name=".ui.activities.admin.AdminMessagesActivity" android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.activities.admin.AdminMessagesActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activities.ContactActivity"
             android:screenOrientation="portrait" />

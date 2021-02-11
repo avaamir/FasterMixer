@@ -4,30 +4,23 @@ package com.behraz.fastermixer.batch.ui.activities
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.IntentSender
+import android.net.wifi.WifiManager
 import android.os.BatteryManager
 import android.os.Bundle
-import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.databinding.ActivityTestBinding
 import com.behraz.fastermixer.batch.models.Mixer
 import com.behraz.fastermixer.batch.models.requests.CircleFence
-import com.behraz.fastermixer.batch.models.requests.behraz.LoginRequest
-import com.behraz.fastermixer.batch.respository.RemoteRepo
 import com.behraz.fastermixer.batch.ui.adapters.MixerAdapter
-import com.behraz.fastermixer.batch.utils.general.log
-import com.behraz.fastermixer.batch.utils.general.subscribeSignalStrengthChangeListener
-import com.behraz.fastermixer.batch.utils.general.toast
+import com.behraz.fastermixer.batch.utils.general.*
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.PendingResult
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_test.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.launch
 
 
 class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
@@ -76,17 +69,18 @@ class TestActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
         }
 
 
+        val wifiManager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
+        snack(getMAC() ?: "null")
         // initProgressChart()
         initViews()
 
     }
 
     private fun initViews() {
-       btnApiTest.setOnClickListener {
+        btnApiTest.setOnClickListener {
 
-       }
+        }
     }
-
 
 
     //enable GPS req by google Play--------------------------------------------
