@@ -36,12 +36,12 @@ object LocationCompassProvider : LocationListener, IOrientationConsumer {
     private val _userAngle = MutableLiveData<AngleResult>()
     private val _northAngle = MutableLiveData<AngleResult>()
     private val _location = MutableLiveData<Location>()
-    private val _providerStateChanged = MutableLiveData<String>()
+    private val _providerStateChanged = MutableLiveData<String?>()
 
     val userAngle: LiveData<AngleResult> = _userAngle
     val northAngle: LiveData<AngleResult> = _northAngle
     val location: LiveData<Location> = _location
-    val providerStateChanged: LiveData<String> = _providerStateChanged
+    val providerStateChanged: LiveData<String?> = _providerStateChanged
 
     private const val TAG = "LocationCompassProvider"
 
