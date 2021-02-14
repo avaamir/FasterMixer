@@ -3,7 +3,6 @@ package com.behraz.fastermixer.batch.models
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.behraz.fastermixer.batch.models.enums.MessageType
 import com.behraz.fastermixer.batch.models.requests.behraz.DtoMapper
 import com.behraz.fastermixer.batch.respository.UserConfigs
 import com.google.gson.annotations.SerializedName
@@ -15,11 +14,11 @@ data class AdminMessageDto(
     @SerializedName("text")
     val content: String,
     @SerializedName("senderId")
-    val senderId: Int,
+    val senderId: Int?,
     @SerializedName("senderName")
-    val senderName: String,
+    val senderName: String?,
     @SerializedName("eventName")
-    val eventName: String,
+    val eventName: String?,
     @SerializedName("dateTime")
     val dateTime: String,
     @SerializedName("equipmentName")
@@ -27,14 +26,14 @@ data class AdminMessageDto(
 
     /*@SerializedName("messageType")
     private val _messageType: Int*/
-): DtoMapper<Message> {
+) : DtoMapper<Message> {
 
     override fun toEntity() = Message(
         id = id.toString(),
-        senderName = ("$senderName " + (equipmentName ?: "")).trim(),
+        senderName = ("${senderName ?: ""} " + (equipmentName ?: "")).trim(),
         content = content,
         senderId = 0,
-        eventName = senderName,
+        eventName = senderName ?: eventName ?: "نامشخص",
         dateTime = dateTime,
         viewed = false,
         userId = UserConfigs.user.value?.id ?: 0
@@ -54,7 +53,7 @@ data class MessageDto(
     val eventName: String,
     @SerializedName("dateTime")
     val dateTime: String
-) :DtoMapper<Message> {
+) : DtoMapper<Message> {
 
     override fun toEntity() = Message(
         id = id.toString(),
