@@ -94,15 +94,17 @@ class FasterMixerApplication : Application(), NetworkConnectionInterceptor.Netwo
 
     @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     fun registerLocationUpdaterIfNeeded() {
-        val mac = deviceMacAddress!!
-        RemoteRepo.isMacValid(mac) {
-            if (it.isSucceed) {
-                if (it.entity?.isValid == true)
-                    pointSubmitter.start()
-            } else {
-                Handler().postDelayed({
-                    registerLocationUpdaterIfNeeded()
-                }, 5000)
+        val mac = deviceMacAddress
+        if (mac != null) {
+            RemoteRepo.isMacValid(mac) {
+                if (it.isSucceed) {
+                    if (it.entity?.isValid == true)
+                        pointSubmitter.start()
+                } else {
+                    Handler().postDelayed({
+                        registerLocationUpdaterIfNeeded()
+                    }, 5000)
+                }
             }
         }
     }
@@ -131,7 +133,7 @@ class FasterMixerApplication : Application(), NetworkConnectionInterceptor.Netwo
                 fullScreen(activity)
                 wakeLock(activity)
                 registerGlobalEventObservers(activity)
-                if(pointSubmitter.isStarted) {
+                if (pointSubmitter.isStarted) {
                     LocationCompassProvider.fixDeviceOrientationForCompassCalculation(activity)
                 }
             }
@@ -223,9 +225,9 @@ class FasterMixerApplication : Application(), NetworkConnectionInterceptor.Netwo
                 timer = fixedRateTimer(period = 10000L) {
                     val point = LocationCompassProvider.lastKnownLocation
                     if (point != null) {
-                        if(point.speed == 0f) {
+                        if (point.speed == 0f) {
                             counter++
-                            if(counter == 6) { //wait 1min when car is stopped
+                            if (counter == 6) { //wait 1min when car is stopped
                                 counter = 0
                                 submitPoint(point)
                             }
