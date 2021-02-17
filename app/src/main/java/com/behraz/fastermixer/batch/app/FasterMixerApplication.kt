@@ -95,7 +95,7 @@ class FasterMixerApplication : Application(), NetworkConnectionInterceptor.Netwo
     @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     fun registerLocationUpdaterIfNeeded() {
         val mac = deviceMacAddress
-        if (mac != null) {
+        if (mac != null) { //TODO bayad assert != null beshe
             RemoteRepo.isMacValid(mac) {
                 if (it.isSucceed) {
                     if (it.entity?.isValid == true)
