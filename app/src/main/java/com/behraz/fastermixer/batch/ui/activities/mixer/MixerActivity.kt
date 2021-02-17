@@ -137,7 +137,6 @@ class MixerActivity : AppCompatActivity(),
     }
 
     private fun hideGpsDialog() {
-        log("hideGpsDialog called")
         gpsErrorDialog?.dismiss()
         gpsErrorDialog = null
     }

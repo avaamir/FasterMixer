@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.BuildConfig
 import com.behraz.fastermixer.batch.R
 import com.behraz.fastermixer.batch.app.FasterMixerApplication
+import com.behraz.fastermixer.batch.app.isGpsEnabled
 import com.behraz.fastermixer.batch.app.receivers.isNetworkAvailable
 import com.behraz.fastermixer.batch.models.enums.UserType
 import com.behraz.fastermixer.batch.models.requests.behraz.UpdateResponse
@@ -23,6 +24,7 @@ import com.behraz.fastermixer.batch.ui.activities.batch.BatchActivity
 import com.behraz.fastermixer.batch.ui.activities.mixer.MixerActivity
 import com.behraz.fastermixer.batch.ui.activities.pomp.PompActivity
 import com.behraz.fastermixer.batch.ui.customs.fastermixer.NumericKeyboard
+import com.behraz.fastermixer.batch.ui.dialogs.GpsErrorDialog
 import com.behraz.fastermixer.batch.ui.dialogs.LocationPermissionDialog
 import com.behraz.fastermixer.batch.utils.fastermixer.Constants
 import com.behraz.fastermixer.batch.utils.general.*
@@ -33,6 +35,8 @@ import kotlinx.android.synthetic.main.gps_internet_status_icons.*
 
 class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
     PermissionHelper.Interactions {
+
+    private var gpsErrorDialog: GpsErrorDialog? = null
 
     companion object {
         private const val REQ_GO_TO_SETTINGS_PERMISSION = 12
@@ -73,8 +77,16 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         initViews()
         subscribeObservers()
 
-        subscribeGpsStateChangeListener {
-            ivGPS.setImageResource(if (it) R.drawable.ic_check else R.drawable.ic_error)
+        subscribeGpsStateChangeListener { isEnabled ->
+            if(permissionHelper.arePermissionsGranted()) {
+                if (isEnabled) {
+                    (application as FasterMixerApplication).registerLocationUpdaterIfNeeded()
+                    hideGpsDialog()
+                } else {
+                    showGpsDialog()
+                }
+            }
+            ivGPS.setImageResource(if (isEnabled) R.drawable.ic_check else R.drawable.ic_error)
         }
         subscribeNetworkStateChangeListener {
             ivInternet.setImageResource(if (it) R.drawable.ic_check else R.drawable.ic_error)
@@ -86,13 +98,28 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
         //TODO UI Test Purpose
         //imageView5?.setOnClickListener { startActivity(Intent(this, AdminActivity::class.java)) }
 
-        if(permissionHelper.arePermissionsGranted()) {
+        if (permissionHelper.arePermissionsGranted()) {
             (application as FasterMixerApplication).registerLocationUpdaterIfNeeded()
         }
 
         permissionHelper.checkPermission()
     }
 
+
+    private fun showGpsDialog() {
+        gpsErrorDialog ?: GpsErrorDialog(
+            context = this, { gpsErrorDialog = null },
+            canChangeProviderSource = false,
+            onChangeProviderClicked = null
+        ).also {
+            gpsErrorDialog = it
+        }.show()
+    }
+
+    private fun hideGpsDialog() {
+        gpsErrorDialog?.dismiss()
+        gpsErrorDialog = null
+    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -386,7 +413,11 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
     override fun onPermissionsGranted() {
         if (isNetworkAvailable())
             viewModel.checkUpdates()
-        (application as FasterMixerApplication).registerLocationUpdaterIfNeeded()
+        if(!isGpsEnabled()) {
+            showGpsDialog()
+        } else {
+            (application as FasterMixerApplication).registerLocationUpdaterIfNeeded()
+        }
     }
 
     override fun onPermissionDenied(deniedPermissions: ArrayList<String>) {

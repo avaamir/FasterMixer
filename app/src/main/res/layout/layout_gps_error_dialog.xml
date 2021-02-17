@@ -37,7 +37,7 @@
         android:layout_marginTop="8dp"
         android:lines="2"
         android:maxLines="3"
-        android:text="لطفا موقعیت مکانی خود را روشن کنید یا موقعیت را از سخت افزار خودرو دریافت کنید"/>
+        android:text="لطفا موقعیت مکانی خود را روشن کنید"/>
 
 
     <LinearLayout
