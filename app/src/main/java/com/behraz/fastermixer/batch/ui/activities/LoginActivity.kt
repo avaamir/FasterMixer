@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.behraz.fastermixer.batch.BuildConfig
 import com.behraz.fastermixer.batch.R
+import com.behraz.fastermixer.batch.app.FasterMixerApplication
 import com.behraz.fastermixer.batch.app.receivers.isNetworkAvailable
 import com.behraz.fastermixer.batch.models.enums.UserType
 import com.behraz.fastermixer.batch.models.requests.behraz.UpdateResponse
@@ -56,6 +57,7 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
             ), this, this
         )
 
+    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
@@ -83,6 +85,10 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
 
         //TODO UI Test Purpose
         //imageView5?.setOnClickListener { startActivity(Intent(this, AdminActivity::class.java)) }
+
+        if(permissionHelper.arePermissionsGranted()) {
+            (application as FasterMixerApplication).registerLocationUpdaterIfNeeded()
+        }
 
         permissionHelper.checkPermission()
     }
@@ -376,9 +382,11 @@ class LoginActivity : AppCompatActivity(), View.OnFocusChangeListener,
 
     }
 
+    @SuppressLint("MissingPermission")
     override fun onPermissionsGranted() {
         if (isNetworkAvailable())
             viewModel.checkUpdates()
+        (application as FasterMixerApplication).registerLocationUpdaterIfNeeded()
     }
 
     override fun onPermissionDenied(deniedPermissions: ArrayList<String>) {

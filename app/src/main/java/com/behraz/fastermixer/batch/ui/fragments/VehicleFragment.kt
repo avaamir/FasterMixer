@@ -103,7 +103,8 @@ abstract class VehicleFragment : BaseMapFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        LocationCompassProvider.stop(requireContext())
+        LocationCompassProvider.stopCompassService(requireContext())
+        LocationCompassProvider.stopLocationService(requireContext())
     }
 
     override fun initViews() {
@@ -131,8 +132,8 @@ abstract class VehicleFragment : BaseMapFragment() {
     }
 
     private fun initLocationCompassProvider() {
-        LocationCompassProvider.fixDeviceOrientationForCompassCalculation(requireActivity())
-        LocationCompassProvider.start(requireContext())
+        LocationCompassProvider.startLocationService(requireContext())
+        LocationCompassProvider.startCompassService(requireActivity())
 
 
         LocationCompassProvider.userAngle.observeForever {

@@ -48,8 +48,8 @@ class AdminMapFragment : BaseMapFragment(), AdminDriverInfoWindow.Interactions {
             ViewModelProvider(requireActivity()).get(AdminActivityViewModel::class.java)
         mapViewModel = ViewModelProvider(this).get(AdminMapFragmentViewModel::class.java)
 
-        LocationCompassProvider.fixDeviceOrientationForCompassCalculation(requireActivity())
-        LocationCompassProvider.start(requireContext())
+        LocationCompassProvider.startLocationService(requireContext())
+        LocationCompassProvider.startCompassService(requireActivity())
 
         subscribeObservers()
         return super.onCreateView(inflater, container, savedInstanceState)
@@ -204,7 +204,8 @@ class AdminMapFragment : BaseMapFragment(), AdminDriverInfoWindow.Interactions {
 
     override fun onDestroy() {
         super.onDestroy()
-        LocationCompassProvider.stop(requireContext())
+        LocationCompassProvider.stopCompassService(requireContext())
+        LocationCompassProvider.stopLocationService(requireContext())
     }
 
     override fun onRouteClicked(marker: VehicleMarker) {

@@ -74,6 +74,8 @@
             android:text="3 دقیقه"
             android:textSize="12sp"
             android:textColor="@color/black"
+            android:visibility="gone"
+            tools:visibility="visible"
             app:layout_constraintEnd_toStartOf="@+id/textView103"
             app:layout_constraintTop_toTopOf="@+id/textView103" />
 
@@ -96,6 +98,8 @@
             android:layout_height="24dp"
             android:src="@drawable/ic_clock"
             android:textColor="@color/black"
+            android:visibility="gone"
+            tools:visibility="visible"
             app:layout_constraintEnd_toEndOf="@+id/textView102"
             app:layout_constraintTop_toBottomOf="@+id/textView105" />
 

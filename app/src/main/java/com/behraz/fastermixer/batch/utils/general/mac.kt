@@ -1,6 +1,6 @@
 package com.behraz.fastermixer.batch.utils.general
 
-import android.app.Activity
+import android.content.Context
 import android.net.wifi.WifiManager
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +10,7 @@ import java.net.NetworkInterface
 import java.util.*
 
 
-fun Activity.getMAC(): String? {
+fun Context.getMAC(): String? {
     val wifiMan = applicationContext.getSystemService(AppCompatActivity.WIFI_SERVICE) as WifiManager
     val wifiInf = wifiMan.connectionInfo
     return if (wifiInf.macAddress == "02:00:00:00:00:00") {

@@ -45,7 +45,7 @@ class BaseMapFragmentImpl : BaseMapFragment() {
     override fun onPause() {
         super.onPause()
         //unlock the orientation
-        activity!!.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
 
     override fun initMapSettings() {
@@ -127,8 +127,8 @@ class BaseMapFragmentImpl : BaseMapFragment() {
         mBinding.map.overlays.add(mRotationGestureOverlay)*/
 
 
-        LocationCompassProvider.fixDeviceOrientationForCompassCalculation(activity!!)
-        LocationCompassProvider.start(context!!)
+        LocationCompassProvider.startLocationService(requireContext())
+        LocationCompassProvider.startCompassService(requireActivity())
 
         LocationCompassProvider.location.observe(viewLifecycleOwner, Observer { location ->
             //TODO age location va lastLocation kheli fasele dasht dg animate nashe va mostaghim bere un noghte
@@ -166,7 +166,8 @@ class BaseMapFragmentImpl : BaseMapFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        LocationCompassProvider.stop(context!!)
+        LocationCompassProvider.stopLocationService(requireContext())
+        LocationCompassProvider.stopCompassService(requireContext())
     }
 
     override fun onMapTapped(geoPoint: GeoPoint) {

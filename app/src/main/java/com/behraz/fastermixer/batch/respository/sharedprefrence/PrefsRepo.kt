@@ -9,6 +9,7 @@ object PrefsRepo {
     private const val PREF_CREDENTIAL_PASSWORD = "password"
     private const val PREF_CREDENTIAL_FACTORY_ID = "factoryId"
     private const val PREF_CREDENTIAL_REMEMBERED = "remembered"
+    private const val PREF_MAC = "mac"
 
 
     private lateinit var prefs: SharedPreferences
@@ -21,6 +22,16 @@ object PrefsRepo {
     }
 
     private const val MY_PREFS_NAME = "prefs"
+
+
+    fun saveMac(mac: String) {
+        prefs.edit()
+            .putString(PREF_MAC, mac)
+            .apply()
+    }
+
+    fun getMac() =
+        prefs.getString(PREF_MAC, null)
 
 
     fun getUserCredentials(response: (factoryId: String, username: String, password: String) -> Unit) {

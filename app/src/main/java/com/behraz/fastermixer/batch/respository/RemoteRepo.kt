@@ -9,6 +9,7 @@ import com.behraz.fastermixer.batch.models.requests.Fence
 import com.behraz.fastermixer.batch.models.requests.behraz.*
 import com.behraz.fastermixer.batch.models.requests.openweathermap.CurrentWeatherByCoordinatesResponse
 import com.behraz.fastermixer.batch.models.requests.route.GetRouteResponse
+import com.behraz.fastermixer.batch.respository.apiservice.AnonymousService
 import com.behraz.fastermixer.batch.respository.apiservice.ApiService
 import com.behraz.fastermixer.batch.respository.apiservice.MapService
 import com.behraz.fastermixer.batch.respository.apiservice.WeatherService
@@ -306,7 +307,8 @@ object RemoteRepo {
                             )
                         } else {
                             withContext(Main) {
-                                value = failedRequest(addressResult.errorType, addressResult.message)
+                                value =
+                                    failedRequest(addressResult.errorType, addressResult.message)
                             }
                             return@launchApi
                         }
@@ -564,7 +566,8 @@ object RemoteRepo {
         }
     }
 
-
+    //==================================================================================================================
+    //Map APIs
     fun getRoute(coordinates: List<GeoPoint>): RunOnceLiveData<GetRouteResponse?> {
         if (!RemoteRepo::serverJobs.isInitialized || !serverJobs.isActive) serverJobs = Job()
         return object : RunOnceLiveData<GetRouteResponse?>() {
@@ -638,4 +641,41 @@ object RemoteRepo {
             }
         }
     }
+
+    //==================================================================================================================
+    //AnonymousAPIS
+    fun isMacValid(mac: String, onResponse: (ApiResult<CheckMacResponse>) -> Unit) {
+        if (!RemoteRepo::serverJobs.isInitialized || !serverJobs.isActive)
+            serverJobs = Job()
+        CoroutineScope(IO + serverJobs).launch {
+            val result = AnonymousService.client.isMacValid(mac)
+            withContext(Main) {
+                onResponse(result)
+            }
+        }
+    }
+
+    fun submitPoint(pointInfo: PointInfo, onResponse: (ApiResult<Unit>) -> Unit) {
+        if (!RemoteRepo::serverJobs.isInitialized || !serverJobs.isActive)
+            serverJobs = Job()
+        CoroutineScope(IO + serverJobs).launch {
+            val result = AnonymousService.client.submitPoint(pointInfo)
+            withContext(Main) {
+                onResponse(result)
+            }
+        }
+    }
+
+    fun submitPoint(submitRecordedPointInfo: SubmitRecordedPointInfo, onResponse: (ApiResult<Unit>) -> Unit) {
+        if (!RemoteRepo::serverJobs.isInitialized || !serverJobs.isActive)
+            serverJobs = Job()
+        CoroutineScope(IO + serverJobs).launch {
+            val result = AnonymousService.client.submitPoint(submitRecordedPointInfo)
+            withContext(Main) {
+                onResponse(result)
+            }
+        }
+    }
+
+
 }

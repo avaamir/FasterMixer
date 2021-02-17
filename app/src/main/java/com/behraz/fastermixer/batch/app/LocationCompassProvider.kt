@@ -26,12 +26,15 @@ fun Context.isGpsEnabled() =
 
 object LocationCompassProvider : LocationListener, IOrientationConsumer {
 
+    private var locationConsumerCount = 0
 
     data class AngleResult(
         val angle: Float,
-        val isCompassProvider: Boolean
+        val isCompassProvider: Boolean //ya mitune az compass provide shode bashe ya az GPS
     )
-    // val isStarted get() = compass != null
+
+    private val isLocationServiceStarted get() = locationConsumerCount > 0
+
 
     private val _userAngle = MutableLiveData<AngleResult>()
     private val _northAngle = MutableLiveData<AngleResult>()
@@ -49,6 +52,7 @@ object LocationCompassProvider : LocationListener, IOrientationConsumer {
 
 
     val lastKnownLocation get() = _location.value //todo ?: Constants.mapStartPoint
+    val lastKnownBearing get() = _userAngle.value
 
     private val lock = Any()
     private var deviceOrientation: Int = -1
@@ -71,73 +75,92 @@ object LocationCompassProvider : LocationListener, IOrientationConsumer {
             LocationManager.GPS_PROVIDER
         )
 
-    @SuppressLint("MissingPermission")
-    fun start(context: Context): Boolean {
-        if (compass != null)
-            throw IllegalStateException("already started")
-
+    @Synchronized
+    fun startCompassService(activity: Activity) {
+        fixDeviceOrientationForCompassCalculation(activity)
         //initial compass
-        val compass = InternalCompassOrientationProvider(context)
-        compass.startOrientationProvider(this)
-        this.compass = compass
-
-
-        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-
-        val providers = ArrayList<String>()
-        // val provider = when {
-        if (locationManager.allProviders.contains(LocationManager.NETWORK_PROVIDER)) {
-            println("debug: allProviders contains NETWORK_PROVIDER")
-            providers.add(LocationManager.NETWORK_PROVIDER)
+        if (compass == null) {
+            val compass = InternalCompassOrientationProvider(activity)
+            compass.startOrientationProvider(this)
+            this.compass = compass
         }
-        if (locationManager.allProviders.contains(LocationManager.GPS_PROVIDER)) {
-            println("debug: allProviders contains GPS_PROVIDER")
-            providers.add(LocationManager.GPS_PROVIDER)
-        }
-        /*locationManager.allProviders.contains(LocationManager.PASSIVE_PROVIDER) -> {
+    }
+
+
+    //@RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+    @SuppressLint("MissingPermission")
+    @Synchronized
+    fun startLocationService(context: Context): Boolean {
+        if (!isLocationServiceStarted) {
+            val locationManager =
+                context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+            val providers = ArrayList<String>()
+            // val provider = when {
+            if (locationManager.allProviders.contains(LocationManager.NETWORK_PROVIDER)) {
+                println("debug: allProviders contains NETWORK_PROVIDER")
+                providers.add(LocationManager.NETWORK_PROVIDER)
+            }
+            if (locationManager.allProviders.contains(LocationManager.GPS_PROVIDER)) {
+                println("debug: allProviders contains GPS_PROVIDER")
+                providers.add(LocationManager.GPS_PROVIDER)
+            }
+            /*locationManager.allProviders.contains(LocationManager.PASSIVE_PROVIDER) -> {
             println("debug: allProviders contains NETWORK_PROVIDER")
             LocationManager.PASSIVE_PROVIDER
         }*/
-        //     else -> null
-        //  }
+            //     else -> null
+            //  }
 
-        if (providers.isNotEmpty()) {
-            providers.forEach {
-                locationManager.requestLocationUpdates(
-                    it,
-                    LocationHandler.MIN_LOCATION_UPDATE_TIME,
-                    0f,
-                    this
-                )
-                val lastKnownLocation = locationManager.getLastKnownLocation(it)
-                if (lastKnownLocation != null) onLocationChanged(lastKnownLocation)
+            if (providers.isNotEmpty()) {
+                providers.forEach {
+                    locationManager.requestLocationUpdates(
+                        it,
+                        LocationHandler.MIN_LOCATION_UPDATE_TIME,
+                        0f,
+                        this
+                    )
+                    val lastKnownLocation = locationManager.getLastKnownLocation(it)
+                    if (lastKnownLocation != null) onLocationChanged(lastKnownLocation)
+                }
+            } else {
+                return false
             }
-        } else {
-            return false
         }
-
+        locationConsumerCount++
         return true
     }
 
-    fun stop(context: Context) {
+    @Synchronized
+    fun stopCompassService(context: Context) {
         if (compass == null)
             throw IllegalStateException("not started")
 
         compass!!.stopOrientationProvider()
         compass!!.destroy()
         compass = null
+    }
 
-        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        locationManager.removeUpdates(this)
+    @Synchronized
+    fun stopLocationService(context: Context) {
+        if (locationConsumerCount > 0) {
+            locationConsumerCount--
+            if (locationConsumerCount == 0) {
+                val locationManager =
+                    context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                locationManager.removeUpdates(this)
+            }
+        }
     }
 
 
     override fun onLocationChanged(location: Location) {
         _location.value = location
-        val angle = calcUserBearingViaGPS(location, deviceOrientation)
-        if (!shouldUseCompass) { //otherwise let the compass take over
-            _userAngle.value = AngleResult(smoothAngle(angle), false)
+        if (deviceOrientation != -1) { //age -1 bud yaani orientation set nashode
+            val angle = calcUserBearingViaGPS(location, deviceOrientation)
+            if (!shouldUseCompass) { //otherwise let the compass take over
+                _userAngle.value = AngleResult(smoothAngle(angle), false)
+            }
         }
     }
 
@@ -161,7 +184,6 @@ object LocationCompassProvider : LocationListener, IOrientationConsumer {
     }
 
     private fun calcUserBearingViaGPS(location: Location, deviceOrientation: Int): Float {
-
         if (!(deviceOrientation == 270 || deviceOrientation == 180 || deviceOrientation == 90 || deviceOrientation == 0)) {
             if (deviceOrientation == -1)
                 throw IllegalStateException("deviceOrientation has not been initialized use `fixDeviceOrientationForCompassCalculation` for initializing it")
